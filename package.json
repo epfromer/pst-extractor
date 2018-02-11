@@ -2,12 +2,11 @@
   "name": "pst-extractor",
   "version": "0.0.1",
   "description": "Extract objects from MS Outlook/Exchange PST files",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
-    "test": "mocha --exit --opts mocha.opts",
-    "test:watch": "mocha --opts mocha.opts --watch",
-    "start": "gulp serve",
-    "build": "gulp compile"
+    "build": "tsc",
+    "test": "npm run mocha --recursive ./src/**/__tests__/*",
+    "mocha": "mocha -r ts-node/register"
   },
   "repository": {
     "type": "git",
@@ -28,14 +27,12 @@
     "@types/node": "^9.4.5",
     "chai": "^4.1.2",
     "debug": "^3.1.0",
-    "gulp": "^3.9.1",
-    "gulp-nodemon": "^2.2.1",
-    "gulp-typescript": "^4.0.1",
     "mocha": "^5.0.0",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.14.12",
     "supports-color": "^5.2.0",
     "ts-node": "^4.1.0",
-    "typescript": "^2.7.1",
-    "morgan": "^1.9.0"
+    "typescript": "^2.7.1"
   },
   "dependencies": {}
 }
