@@ -1,3 +1,4 @@
+import { DescriptorIndexNode } from './../DescriptorIndexNode/DescriptorIndexNode.class';
 import * as fs from 'fs';
 
 export class PSTFile {
@@ -25,30 +26,73 @@ export class PSTFile {
     public static PSETID_AirSync: number = 13;
     public static PSETID_Sharing: number = 14;
 
+    private guidMap = {
+        '00020329-0000-0000-C000-000000000046': 0,
+        '00062008-0000-0000-C000-000000000046': 1,
+        '00062004-0000-0000-C000-000000000046': 2,
+        '00020386-0000-0000-C000-000000000046': 3,
+        '00062002-0000-0000-C000-000000000046': 4,
+        '6ED8DA90-450B-101B-98DA-00AA003F1305': 5,
+        '0006200A-0000-0000-C000-000000000046': 6,
+        '41F28F13-83F4-4114-A584-EEDB5A6B0BFF': 7,
+        '0006200E-0000-0000-C000-000000000046': 8,
+        '00062041-0000-0000-C000-000000000046': 9,
+        '00062003-0000-0000-C000-000000000046': 10,
+        '4442858E-A9E3-4E80-B900-317A210CC15B': 11,
+        '00020328-0000-0000-C000-000000000046': 12,
+        '71035549-0739-4DCB-9163-00F0580DBBDF': 13,
+        '00062040-0000-0000-C000-000000000046': 14
+    };
+
+    private that: PSTFile = this;
+
+    // type of file (e.g. ANSI)
     private _pstFileType = 0;
 
+    // file descriptor
+    private pstFilename: string;
+    private pstFD: number;
+    private pstStream: fs.ReadStream;
+
     public constructor(fileName: string) {
+
+        this.pstFilename = fileName;
+
         // attempt to open file
         // confirm first 4 bytes are !BDN
-        let stream = fs.createReadStream(fileName, { start: 0, end: 514 });
-        stream.on('error', function() {
-            throw new Error('Error opening ' + fileName);
+        this.pstStream = fs.createReadStream(fileName, { start: 0, end: 514 });
+        this.pstStream.on('open', (fd) => {
+            console.log('open')
+            this.pstFD = fd;
         });
-        stream.on('data', function(chunk) {
+        this.pstStream.on('error', () => {
+            console.log('error')
+            throw new Error('Error opening ' + this.pstFilename);
+        });
+        this.pstStream.on('data', (chunk) => {
+            this.pstStream.pause();
+
+            console.log('data')
             let key = '!BDN';
-            if (chunk[0] != key.charCodeAt(0) ||
+            if (
+                chunk[0] != key.charCodeAt(0) ||
                 chunk[1] != key.charCodeAt(1) ||
                 chunk[2] != key.charCodeAt(2) ||
                 chunk[3] != key.charCodeAt(3)
             ) {
-                throw new Error('Invalid file header (expected: "!BDN"): ' + chunk);
+                throw new Error(
+                    'Invalid file header (expected: "!BDN"): ' + chunk
+                );
             }
 
+            console.log('data2')
+            
             // make sure we are using a supported version of a PST...
-            if (chunk[10] ===  PSTFile.PST_TYPE_ANSI_2) {
-                chunk[10] = PSTFile.PST_TYPE_ANSI
+            if (chunk[10] === PSTFile.PST_TYPE_ANSI_2) {
+                chunk[10] = PSTFile.PST_TYPE_ANSI;
             }
-            if (chunk[10] !== PSTFile.PST_TYPE_ANSI &&
+            if (
+                chunk[10] !== PSTFile.PST_TYPE_ANSI &&
                 chunk[10] !== PSTFile.PST_TYPE_UNICODE &&
                 chunk[10] !== PSTFile.PST_TYPE_2013_UNICODE
             ) {
@@ -56,6 +100,8 @@ export class PSTFile {
             }
             this._pstFileType = chunk[10];
 
+            console.log('data3')
+            
             // make sure no encryption
             let encryptionType: number;
             if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
@@ -66,9 +112,106 @@ export class PSTFile {
             if (encryptionType === 0x02) {
                 throw new Error('PST is encrypted');
             }
-        });
 
+            console.log('data4')
+
+            // build out name to id map
+            this.processNameToIDMap();
+            
+        });
     }
 
-    get pstFileType(): number { return this._pstFileType; }
+    get pstFileType(): number {
+        return this._pstFileType;
+    }
+
+    public processNameToIDMap() {
+
+        // // process the name to id map
+        // final DescriptorIndexNode nameToIdMapDescriptorNode = (this.getDescriptorIndexNode(97));
+        // // nameToIdMapDescriptorNode.readData(this);
+
+        // // get the descriptors if we have them
+        // HashMap<Integer, PSTDescriptorItem> localDescriptorItems = null;
+        // if (nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier != 0) {
+        //     // PSTDescriptor descriptor = new PSTDescriptor(this,
+        //     // nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier);
+        //     // localDescriptorItems = descriptor.getChildren();
+        //     localDescriptorItems = this
+        //         .getPSTDescriptorItems(nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier);
+        // }
+
+      let nameToIdMapDescriptorNode = this.getDescriptorIndexNode(97);
+    }
+
+    // navigate the internal descriptor B-Tree and find a specific item
+    private getDescriptorIndexNode(id: number): DescriptorIndexNode {
+      return new DescriptorIndexNode(this.findBtreeItem(id, true), this._pstFileType);
+    }
+
+    private findBtreeItem(index: number, descTree: boolean): number {
+      let btreeStartOffset: number;
+      let fileTypeAdjustment: number;
+
+      // first find the starting point for the offset index
+      if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
+          btreeStartOffset = this.extractLEFileOffset(196);
+          if (descTree) {
+              btreeStartOffset = this.extractLEFileOffset(188);
+          }
+      } else {
+          btreeStartOffset = this.extractLEFileOffset(240);
+          if (descTree) {
+              btreeStartOffset = this.extractLEFileOffset(224);
+          }
+      }
+
+      return 0;
+    }
+
+    /*
+    * Read a file offset from the file
+    * PST Files store file offsets (pointers) in 8 little endian bytes.
+    * Convert this to a long for seeking to.
+    */
+    private extractLEFileOffset(startOffset: number) {
+      let offset = 0;
+      if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
+          const options = {
+            fd: this.pstFD, 
+            start: startOffset, 
+            end: startOffset + 4 
+          }
+          let stream = fs.createReadStream(this.pstFilename, options);
+          stream.on('data', function(chunk) {
+            offset |= chunk[3] & 0xff;
+            offset <<= 8;
+            offset |= chunk[2] & 0xff;
+            offset <<= 8;
+            offset |= chunk[1] & 0xff;
+            offset <<= 8;
+            offset |= chunk[0] & 0xff;
+          })
+      } else {
+          const options = {
+            fd: this.pstFD, 
+            start: startOffset, 
+            end: startOffset + 8 
+          }
+          let stream = fs.createReadStream(this.pstFilename, options);
+          stream.on('data', function(chunk) {
+            offset = chunk[7] & 0xff;
+            let tmpLongValue: number;
+            for (let x = 6; x >= 0; x--) {
+                offset = offset << 8;
+                tmpLongValue = chunk[x] & 0xff;
+                offset |= tmpLongValue;
+            }
+          });
+      }
+
+      console.log("offset = " + offset);
+      return offset;
+    }
+  
 }
