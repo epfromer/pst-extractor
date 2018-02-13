@@ -151,6 +151,7 @@ export class PSTFile {
         );
     }
 
+    // navigate PST B-tree
     private findBtreeItem(index: number, descTree: boolean): number {
         let btreeStartOffset: number;
         let fileTypeAdjustment: number;
@@ -168,23 +169,30 @@ export class PSTFile {
         return 0;
     }
 
-    /*
-    * Read a file offset from the file
-    * PST Files store file offsets (pointers) in 8 little endian bytes.
-    * Convert this to a long for seeking to.
-    */
+    // seek to a specific place in file, and get specific number of bytes
+    // returns a promise of a chunk of bytes
+    private seek(start: number, end: number): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const options = {
+                fd: this.pstFD,
+                start: start,
+                end: end
+            };
+            let stream = fs.createReadStream(this.pstFilename, options);
+            stream.on('data', function(chunk) {
+                resolve(chunk);
+            })
+        })
+    }
+
+   // get file offset, which is sotred in 8 little endian bytes
+   // returns a promise of a number
     private extractLEFileOffset(startOffset: number): Promise<number> {
         console.log('startOffset = ' + startOffset);
         return new Promise((resolve, reject) => {
             let offset = 0;
             if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-                const options = {
-                    fd: this.pstFD,
-                    start: startOffset,
-                    end: startOffset + 4
-                };
-                let stream = fs.createReadStream(this.pstFilename, options);
-                stream.on('data', function(chunk) {
+                this.seek(startOffset, startOffset + 4).then(function(chunk) {
                     offset |= chunk[3] & 0xff;
                     offset <<= 8;
                     offset |= chunk[2] & 0xff;
@@ -192,18 +200,11 @@ export class PSTFile {
                     offset |= chunk[1] & 0xff;
                     offset <<= 8;
                     offset |= chunk[0] & 0xff;
-
                     console.log('resolve with offset = ' + offset);
                     resolve(offset);
-                });
+                })
             } else {
-                const options = {
-                    fd: this.pstFD,
-                    start: startOffset,
-                    end: startOffset + 8
-                };
-                let stream = fs.createReadStream(this.pstFilename, options);
-                stream.on('data', function(chunk) {
+                this.seek(startOffset, startOffset + 8).then(function(chunk) {
                     console.log('chunk[0]: ' + chunk[0]);
                     console.log('chunk[1]: ' + chunk[1]);
                     console.log('chunk[2]: ' + chunk[2]);
@@ -219,7 +220,6 @@ export class PSTFile {
                         tmpLongValue = chunk[x] & 0xff;
                         offset |= tmpLongValue;
                     }
-
                     console.log('resolve with offset = ' + offset);
                     resolve(offset);
                 });
