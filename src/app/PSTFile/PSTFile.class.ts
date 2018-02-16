@@ -1,5 +1,6 @@
 import { DescriptorIndexNode } from './../DescriptorIndexNode/DescriptorIndexNode.class';
 import * as fs from 'fs';
+import * as util from 'util';
 
 export class PSTFile {
     public static ENCRYPTION_TYPE_NONE: number = 0;
@@ -58,67 +59,52 @@ export class PSTFile {
         this.pstFilename = fileName;
     }
 
-    public open(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            // attempt to open file
-            // confirm first 4 bytes are !BDN
-            this.pstStream = fs.createReadStream(this.pstFilename, {
-                start: 0,
-                end: 514
-            });
-            this.pstStream.on('open', fd => {
-                this.pstFD = fd;
-            });
-            this.pstStream.on('error', () => {
-                throw new Error('Error opening ' + this.pstFilename);
-            });
-            this.pstStream.on('data', chunk => {
-                this.pstStream.pause();
+    public open() {
+        // attempt to open file
+        // confirm first 4 bytes are !BDN
+        this.pstFD = fs.openSync(this.pstFilename, 'r');
+        let buffer = new Buffer(514);
+        fs.readSync(this.pstFD, buffer, 0, 514, 0);
+        let key = '!BDN';
+        if (
+            buffer[0] != key.charCodeAt(0) ||
+            buffer[1] != key.charCodeAt(1) ||
+            buffer[2] != key.charCodeAt(2) ||
+            buffer[3] != key.charCodeAt(3)
+        ) {
+            throw new Error(
+                'Invalid file header (expected: "!BDN"): ' + buffer
+            );
+        }
 
-                let key = '!BDN';
-                if (
-                    chunk[0] != key.charCodeAt(0) ||
-                    chunk[1] != key.charCodeAt(1) ||
-                    chunk[2] != key.charCodeAt(2) ||
-                    chunk[3] != key.charCodeAt(3)
-                ) {
-                    throw new Error(
-                        'Invalid file header (expected: "!BDN"): ' + chunk
-                    );
-                }
+        // make sure we are using a supported version of a PST...
+        if (buffer[10] === PSTFile.PST_TYPE_ANSI_2) {
+            buffer[10] = PSTFile.PST_TYPE_ANSI;
+        }
+        if (
+            buffer[10] !== PSTFile.PST_TYPE_ANSI &&
+            buffer[10] !== PSTFile.PST_TYPE_UNICODE &&
+            buffer[10] !== PSTFile.PST_TYPE_2013_UNICODE
+        ) {
+            throw new Error(
+                'Unrecognised PST File version: ' + buffer[10]
+            );
+        }
+        this._pstFileType = buffer[10];
 
-                // make sure we are using a supported version of a PST...
-                if (chunk[10] === PSTFile.PST_TYPE_ANSI_2) {
-                    chunk[10] = PSTFile.PST_TYPE_ANSI;
-                }
-                if (
-                    chunk[10] !== PSTFile.PST_TYPE_ANSI &&
-                    chunk[10] !== PSTFile.PST_TYPE_UNICODE &&
-                    chunk[10] !== PSTFile.PST_TYPE_2013_UNICODE
-                ) {
-                    throw new Error(
-                        'Unrecognised PST File version: ' + chunk[10]
-                    );
-                }
-                this._pstFileType = chunk[10];
+        // make sure no encryption
+        let encryptionType: number;
+        if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+            encryptionType = buffer[461];
+        } else {
+            encryptionType = buffer[513];
+        }
+        if (encryptionType === 0x02) {
+            throw new Error('PST is encrypted');
+        }
 
-                // make sure no encryption
-                let encryptionType: number;
-                if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
-                    encryptionType = chunk[461];
-                } else {
-                    encryptionType = chunk[513];
-                }
-                if (encryptionType === 0x02) {
-                    throw new Error('PST is encrypted');
-                }
-
-                // build out name to id map
-                this.processNameToIDMap();
-
-                resolve('success');
-            });
-        });
+        // build out name to id map
+        this.processNameToIDMap();
     }
 
     get pstFileType(): number {
@@ -157,73 +143,106 @@ export class PSTFile {
         let fileTypeAdjustment: number;
 
         // first find the starting point for the offset index
-        let offset: number;
+        let startOffset: number;
         if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-            offset = descTree ? 188 : 196;
+            startOffset = descTree ? 188 : 196;
+            fileTypeAdjustment = 500;
+        } else if (this._pstFileType == PSTFile.PST_TYPE_2013_UNICODE) {
+            startOffset = descTree ? 224 : 240;
+            fileTypeAdjustment = 0x1000 - 24;
         } else {
-            offset = descTree ? 224 : 240;
+            startOffset = descTree ? 224 : 240;
+            fileTypeAdjustment = 496;
         }
-        this.extractLEFileOffset(offset).then(function(result) {
-            btreeStartOffset = result;
-        });
+        let offset = this.extractLEFileOffset(startOffset);
+        console.log('result = ' + offset);
+        btreeStartOffset = offset;
+
+        let position = 224;  // btreeStartOffset + fileTypeAdjustment;
+        let buffer = new Buffer(2);
+        this.seekAndRead(buffer, position);
+        console.log(buffer[0]);
+        console.log(buffer[1]);
+
+        while ((buffer[0] == 0xffffff80 && buffer[1] == 0xffffff80 && !descTree)
+            || (buffer[0] == 0xffffff81 && buffer[1] == 0xffffff81 && descTree)) {
+
+            start = btreeStartOffset;
+            if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
+                end = start + 496;
+            } else if (this._pstFileType == PSTFile.PST_TYPE_2013_UNICODE) {
+                end = start + 4056;
+            } else {
+                end = start + 488;
+            }
+
+            console.log('start = ' + start);
+            console.log('size = ' + (end - start));
+
+        }
+
         return 0;
     }
 
     // seek to a specific place in file, and get specific number of bytes
     // returns a promise of a chunk of bytes
-    private seek(start: number, end: number): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const options = {
-                fd: this.pstFD,
-                start: start,
-                end: end
-            };
-            let stream = fs.createReadStream(this.pstFilename, options);
-            stream.on('data', function(chunk) {
-                resolve(chunk);
-            })
-        })
+    private seekAndRead(buffer: Buffer, position: number) {
+        console.log('seekAndRead: start = ' + position + ', length = ' + buffer.length);
+        fs.readSync(this.pstFD, buffer, 0, buffer.length, position);
+
+        // const read = util.promisify(fs.read);
+        // const offset = 0;
+        // console.log(this)
+        // return await read(this.pstFD, buffer, offset, length, position);
+
+        // return new Promise((resolve, reject) => {
+        //     const options = {
+        //         fd: this.pstFD,
+        //         start: start,
+        //         end: end
+        //     };
+        //     console.log('seekAndRead: fd = ' + this.pstFD);
+        //     let stream = fs.createReadStream(this.pstFilename, options);
+        //     stream.on('data', function(chunk) {
+        //         console.log('seekAndRead - finished: start = ' + start + ', end = ' + end);
+        //         resolve(chunk);
+        //     })
+        //     stream.on('error', (error) => {
+        //         console.log('seekAndRead error: ' + error);
+        //        // throw new Error('seekAndRead error: ' + error);
+        //        reject(error);
+        //     });
+        // })
     }
 
    // get file offset, which is sotred in 8 little endian bytes
    // returns a promise of a number
-    private extractLEFileOffset(startOffset: number): Promise<number> {
+    private extractLEFileOffset(startOffset: number): number {
         console.log('startOffset = ' + startOffset);
-        return new Promise((resolve, reject) => {
-            let offset = 0;
-            if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-                this.seek(startOffset, startOffset + 4).then(function(chunk) {
-                    offset |= chunk[3] & 0xff;
-                    offset <<= 8;
-                    offset |= chunk[2] & 0xff;
-                    offset <<= 8;
-                    offset |= chunk[1] & 0xff;
-                    offset <<= 8;
-                    offset |= chunk[0] & 0xff;
-                    console.log('resolve with offset = ' + offset);
-                    resolve(offset);
-                })
-            } else {
-                this.seek(startOffset, startOffset + 8).then(function(chunk) {
-                    console.log('chunk[0]: ' + chunk[0]);
-                    console.log('chunk[1]: ' + chunk[1]);
-                    console.log('chunk[2]: ' + chunk[2]);
-                    console.log('chunk[3]: ' + chunk[3]);
-                    console.log('chunk[4]: ' + chunk[4]);
-                    console.log('chunk[5]: ' + chunk[5]);
-                    console.log('chunk[6]: ' + chunk[6]);
-                    console.log('chunk[7]: ' + chunk[7]);
-                    offset = chunk[7] & 0xff;
-                    let tmpLongValue: number;
-                    for (let x = 6; x >= 0; x--) {
-                        offset = offset << 8;
-                        tmpLongValue = chunk[x] & 0xff;
-                        offset |= tmpLongValue;
-                    }
-                    console.log('resolve with offset = ' + offset);
-                    resolve(offset);
-                });
+        let offset = 0;
+        if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
+            let buffer = new Buffer(4);
+            this.seekAndRead(buffer, startOffset);
+            offset |= buffer[3] & 0xff;
+            offset <<= 8;
+            offset |= buffer[2] & 0xff;
+            offset <<= 8;
+            offset |= buffer[1] & 0xff;
+            offset <<= 8;
+            offset |= buffer[0] & 0xff;
+            // console.log('resolve with offset = ' + offset);
+        } else {
+            let buffer = new Buffer(8);
+            this.seekAndRead(buffer, startOffset);
+            offset = buffer[7] & 0xff;
+            let tmpLongValue: number;
+            for (let x = 6; x >= 0; x--) {
+                offset = offset << 8;
+                tmpLongValue = buffer[x] & 0xff;
+                offset |= tmpLongValue;
             }
-        });
+            // console.log('resolve with offset = ' + offset);
+        }
+        return offset;
     }
 }
