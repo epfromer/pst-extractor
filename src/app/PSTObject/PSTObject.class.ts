@@ -1,11 +1,18 @@
 export class PSTObject {
 
     // convert little endian bytes to number (long)
-    public static convertLittleEndianBytesToLong(data: Buffer) {
+    public static convertLittleEndianBytesToLong(data: Buffer, start?: number, end?: number) {
 
-        let offset = data[data.length - 1] & 0xff;
+        if (!start) {
+            start = 0;
+        }
+        if (!end) {
+            end = data.length;
+        }
+
+        let offset = data[end - 1] & 0xff;
         let tmpLongValue;
-        for (let x = data.length - 2; x >= 0; x--) {
+        for (let x = end - 2; x >= start; x--) {
             offset = offset << 8;
             tmpLongValue = data[x] & 0xff;
             offset |= tmpLongValue;
