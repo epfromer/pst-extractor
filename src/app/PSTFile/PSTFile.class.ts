@@ -1,4 +1,7 @@
 import { DescriptorIndexNode } from './../DescriptorIndexNode/DescriptorIndexNode.class';
+import { PSTDescriptorItem } from './../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTNodeInputStream } from './../PSTNodeInputStream/PSTNodeInputStream.class';
+import { OffsetIndexItem } from './../OffsetIndexItem/OffsetIndexItem.class';
 import { PSTObject } from './../PSTObject/PSTObject.class'
 import * as fs from 'fs';
 import * as util from 'util';
@@ -46,10 +49,13 @@ export class PSTFile {
         '00062040-0000-0000-C000-000000000046': 14
     };
 
-    private that: PSTFile = this;
+    // the type of encryption the files uses
+    private _encryptionType = 0;
+    get encryptionType(): number { return this._encryptionType; }
 
     // type of file (e.g. ANSI)
     private _pstFileType = 0;
+    get pstFileType(): number { return this._pstFileType; }
 
     // file descriptor
     private pstFilename: string;
@@ -108,34 +114,41 @@ export class PSTFile {
         this.processNameToIDMap();
     }
 
-    get pstFileType(): number {
-        return this._pstFileType;
-    }
 
     public processNameToIDMap() {
-        // // process the name to id map
-        // final DescriptorIndexNode nameToIdMapDescriptorNode = (this.getDescriptorIndexNode(97));
-        // // nameToIdMapDescriptorNode.readData(this);
 
-        // // get the descriptors if we have them
-        // HashMap<Integer, PSTDescriptorItem> localDescriptorItems = null;
-        // if (nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier != 0) {
-        //     // PSTDescriptor descriptor = new PSTDescriptor(this,
-        //     // nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier);
-        //     // localDescriptorItems = descriptor.getChildren();
-        //     localDescriptorItems = this
-        //         .getPSTDescriptorItems(nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier);
-        // }
-
+        // process the name to id map
         let nameToIdMapDescriptorNode = this.getDescriptorIndexNode(97);
+
+        // get the descriptors if we have them
+        let localDescriptorItems;
+        if (nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier) {
+            localDescriptorItems = this.getPSTDescriptorItems(nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier);
+        }
+    }
+
+    // parse a PSTDescriptor and get all items
+    getPSTDescriptorItems(localDescriptorsOffsetIndexIdentifier: number): Map<number, PSTDescriptorItem> {
+        return this.getPSTDescriptorItems(this.readLeaf(localDescriptorsOffsetIndexIdentifier));
+    }
+
+    readLeaf(bid: number): PSTNodeInputStream {
+        // PSTFileBlock ret = null;
+        let ret: PSTNodeInputStream = null;
+
+        // get the index node for the descriptor index
+        let offsetItem = this.getOffsetIndexNode(bid);
+        return new PSTNodeInputStream(this, offsetItem);
+    }
+
+    // navigate b-tree index and find specific item
+    public getOffsetIndexNode(id: number): OffsetIndexItem {
+        return new OffsetIndexItem(this.findBtreeItem(id, false), this._pstFileType);
     }
 
     // navigate the internal descriptor B-Tree and find a specific item
-    private getDescriptorIndexNode(id: number): DescriptorIndexNode {
-        return new DescriptorIndexNode(
-            this.findBtreeItem(id, true),
-            this._pstFileType
-        );
+    public getDescriptorIndexNode(id: number): DescriptorIndexNode {
+        return new DescriptorIndexNode(this.findBtreeItem(id, true), this._pstFileType);
     }
 
     // navigate PST B-tree
@@ -309,7 +322,7 @@ export class PSTFile {
 
     // seek to a specific place in file, and get specific number of bytes
     // returns a promise of a chunk of bytes
-    private seekAndRead(buffer: Buffer, position: number) {
+    public seekAndRead(buffer: Buffer, position: number) {
         // console.log('seekAndRead: start = ' + position + ', length = ' + buffer.length);
         fs.readSync(this.pstFD, buffer, 0, buffer.length, position);
     }
