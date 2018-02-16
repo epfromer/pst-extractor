@@ -1,4 +1,5 @@
 import { DescriptorIndexNode } from './../DescriptorIndexNode/DescriptorIndexNode.class';
+import { PSTObject } from './../PSTObject/PSTObject.class'
 import * as fs from 'fs';
 import * as util from 'util';
 
@@ -138,7 +139,7 @@ export class PSTFile {
     }
 
     // navigate PST B-tree
-    private findBtreeItem(index: number, descTree: boolean): number {
+    private findBtreeItem(index: number, descTree: boolean): Buffer {
         let btreeStartOffset: number;
         let fileTypeAdjustment: number;
 
@@ -154,71 +155,169 @@ export class PSTFile {
             startOffset = descTree ? 224 : 240;
             fileTypeAdjustment = 496;
         }
-        let offset = this.extractLEFileOffset(startOffset);
-        console.log('result = ' + offset);
-        btreeStartOffset = offset;
+        btreeStartOffset = this.extractLEFileOffset(startOffset);
 
-        let position = 224;  // btreeStartOffset + fileTypeAdjustment;
         let buffer = new Buffer(2);
-        this.seekAndRead(buffer, position);
-        console.log(buffer[0]);
-        console.log(buffer[1]);
+        this.seekAndRead(buffer, btreeStartOffset + fileTypeAdjustment);
 
-        while ((buffer[0] == 0xffffff80 && buffer[1] == 0xffffff80 && !descTree)
-            || (buffer[0] == 0xffffff81 && buffer[1] == 0xffffff81 && descTree)) {
+        let b2 = new Buffer(2);
+        b2[0] = 0xff80;
+        b2[1] = 0xff81;
 
-            start = btreeStartOffset;
+        // ensure apples to apples comparison
+        while ((buffer[0] === b2[0] && buffer[1] === b2[0] && !descTree)
+            || (buffer[0] === b2[1] && buffer[1] === b2[1] && descTree)) {
+
+            // get the rest of the data
+            let len: number;
             if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-                end = start + 496;
+                len = 496;
             } else if (this._pstFileType == PSTFile.PST_TYPE_2013_UNICODE) {
-                end = start + 4056;
+                len = 4056;
             } else {
-                end = start + 488;
+                len = 488;
             }
+            let branchNodeItems = new Buffer(len);
+            this.seekAndRead(branchNodeItems, btreeStartOffset);
+            let filePosition = btreeStartOffset + len;
 
-            console.log('start = ' + start);
-            console.log('size = ' + (end - start));
+            console.log('btreeStartOffset = ' + btreeStartOffset);
 
+            let numberOfItems = 0;
+            if (this._pstFileType == PSTFile.PST_TYPE_2013_UNICODE) {
+                let numberOfItemsBytes = new Buffer(2);
+                this.seekAndRead(numberOfItemsBytes, null);
+                throw new Error('not yet implemented');
+                // numberOfItems = this.convertLittleEndianBytesToLong(numberOfItemsBytes);
+                // in.readCompletely(numberOfItemsBytes);
+                // final long maxNumberOfItems = PSTObject.convertLittleEndianBytesToLong(numberOfItemsBytes);
+            } else {
+                numberOfItems = this.readSingleByte(filePosition++);
+                this.readSingleByte(filePosition++); // maxNumberOfItems
+            }
+            let itemSize = this.readSingleByte(filePosition++); // itemSize
+            let levelsToLeaf = this.readSingleByte(filePosition++);
+
+            if (levelsToLeaf > 0) {
+                let found = false;
+                for (let x = 0; x < numberOfItems; x++) {
+                    if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
+                        let indexIdOfFirstChildNode = this.extractLEFileOffset(btreeStartOffset + (x * 12));
+                        if (indexIdOfFirstChildNode > index) {
+                            // get the address for the child first node in this group
+                            btreeStartOffset = this.extractLEFileOffset(btreeStartOffset + ((x - 1) * 12) + 8);
+                            this.seekAndRead(buffer, btreeStartOffset + 500);
+                            found = true;
+                            break;
+                        }
+                    } else {
+                        let indexIdOfFirstChildNode = this.extractLEFileOffset(btreeStartOffset + (x * 24));
+                        if (indexIdOfFirstChildNode > index) {
+                            // get the address for the child first node in this group
+                            btreeStartOffset = this.extractLEFileOffset(btreeStartOffset + ((x - 1) * 24) + 16);
+                            this.seekAndRead(buffer, btreeStartOffset + fileTypeAdjustment);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    // it must be in the very last branch...
+                    if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
+                        btreeStartOffset = this.extractLEFileOffset(btreeStartOffset + ((numberOfItems - 1) * 12) + 8);
+                        this.seekAndRead(buffer, btreeStartOffset + 500);
+                    } else {
+                        btreeStartOffset = this.extractLEFileOffset(btreeStartOffset + ((numberOfItems - 1) * 24) + 16);
+                        this.seekAndRead(buffer, btreeStartOffset + fileTypeAdjustment);
+                    }
+                }
+            } else {
+                // System.out.println(String.format("At bottom, looking through
+                // %d items", numberOfItems));
+                // we are at the bottom of the tree...
+                // we want to get our file offset!
+                for (let x = 0; x < numberOfItems; x++) {
+
+                    if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
+                        if (descTree) {
+                            // The 32-bit descriptor index b-tree leaf node item
+                            buffer = new Buffer(4);
+                            this.seekAndRead(buffer, btreeStartOffset + (x * 16));
+                            if (PSTObject.convertLittleEndianBytesToLong(buffer) == index) {
+                                // give me the offset index please!
+                                buffer = new Buffer(16);
+                                this.seekAndRead(buffer, btreeStartOffset + (x * 16));
+                                return buffer;
+                            }
+                        } else {
+                            // The 32-bit (file) offset index item
+                            let indexIdOfFirstChildNode = this.extractLEFileOffset(btreeStartOffset + (x * 12));
+
+                            if (indexIdOfFirstChildNode == index) {
+                                // we found it!!!! OMG
+                                // System.out.println("item found as item #"+x);
+                                buffer = new Buffer(12);
+                                this.seekAndRead(buffer, btreeStartOffset + (x * 12));
+                                return buffer;
+                            }
+                        }
+                    } else {
+                        if (descTree) {
+                            // The 64-bit descriptor index b-tree leaf node item
+                            buffer = new Buffer(4);
+                            this.seekAndRead(buffer, btreeStartOffset + (x * 32));
+
+                            if (PSTObject.convertLittleEndianBytesToLong(buffer) == index) {
+                                // give me the offset index please!
+                                buffer = new Buffer(32);
+                                this.seekAndRead(buffer, btreeStartOffset + (x * 32));
+                                
+                                console.log("item found!!!");
+                                // PSTObject.printHexFormatted(temp, true);
+                                return buffer;
+                            }
+                        } else {
+                            // The 64-bit (file) offset index item
+                            let indexIdOfFirstChildNode = this.extractLEFileOffset(btreeStartOffset + (x * 24));
+
+                            if (indexIdOfFirstChildNode == index) {
+                                // we found it!!!! OMG
+                                // System.out.println("item found as item #"+x +
+                                // " size (should be 24): "+itemSize);
+                                buffer = new Buffer(24);
+                                this.seekAndRead(buffer, btreeStartOffset + (x * 24));
+
+                                console.log("item found!!!");
+                                return buffer;
+                            }
+                        }
+                    }
+                }
+                throw new Error("Unable to find " + index + " is desc: " + descTree);
+            }
         }
 
-        return 0;
+        throw new Error("Unable to find node: " + index + " is desc: " + descTree);
+    }
+
+    // reads a single byte from the current file position
+    private readSingleByte(position: number): number {
+        let buffer = new Buffer(1);
+        fs.readSync(this.pstFD, buffer, 0, buffer.length, position);
+        return buffer[0];
     }
 
     // seek to a specific place in file, and get specific number of bytes
     // returns a promise of a chunk of bytes
     private seekAndRead(buffer: Buffer, position: number) {
-        console.log('seekAndRead: start = ' + position + ', length = ' + buffer.length);
+        // console.log('seekAndRead: start = ' + position + ', length = ' + buffer.length);
         fs.readSync(this.pstFD, buffer, 0, buffer.length, position);
-
-        // const read = util.promisify(fs.read);
-        // const offset = 0;
-        // console.log(this)
-        // return await read(this.pstFD, buffer, offset, length, position);
-
-        // return new Promise((resolve, reject) => {
-        //     const options = {
-        //         fd: this.pstFD,
-        //         start: start,
-        //         end: end
-        //     };
-        //     console.log('seekAndRead: fd = ' + this.pstFD);
-        //     let stream = fs.createReadStream(this.pstFilename, options);
-        //     stream.on('data', function(chunk) {
-        //         console.log('seekAndRead - finished: start = ' + start + ', end = ' + end);
-        //         resolve(chunk);
-        //     })
-        //     stream.on('error', (error) => {
-        //         console.log('seekAndRead error: ' + error);
-        //        // throw new Error('seekAndRead error: ' + error);
-        //        reject(error);
-        //     });
-        // })
     }
 
    // get file offset, which is sotred in 8 little endian bytes
    // returns a promise of a number
     private extractLEFileOffset(startOffset: number): number {
-        console.log('startOffset = ' + startOffset);
+        // console.log('startOffset = ' + startOffset);
         let offset = 0;
         if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
             let buffer = new Buffer(4);
