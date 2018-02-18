@@ -4,7 +4,9 @@ import { PSTNodeInputStream } from './../PSTNodeInputStream/PSTNodeInputStream.c
 import { OffsetIndexItem } from './../OffsetIndexItem/OffsetIndexItem.class';
 import { PSTObject } from './../PSTObject/PSTObject.class'
 import * as fs from 'fs';
+import * as fsext from 'fs-ext';
 import * as util from 'util';
+import { PSTFileContent } from '../PSTFileContent/PSTFileContent.class';
 
 export class PSTFile {
     public static ENCRYPTION_TYPE_NONE: number = 0;
@@ -61,6 +63,7 @@ export class PSTFile {
     private pstFilename: string;
     private pstFD: number;
     private pstStream: fs.ReadStream;
+    private pstFileContent: PSTFileContent;
 
     public constructor(fileName: string) {
         this.pstFilename = fileName;
@@ -69,7 +72,8 @@ export class PSTFile {
     public open() {
         // attempt to open file
         // confirm first 4 bytes are !BDN
-        this.pstFD = fs.openSync(this.pstFilename, 'r');
+        this.pstFD = fsext.openSync(this.pstFilename, 'r');
+        this.pstFileContent = new PSTFileContent(this.pstFD);
         let buffer = new Buffer(514);
         fs.readSync(this.pstFD, buffer, 0, 514, 0);
         let key = '!BDN';
@@ -114,9 +118,7 @@ export class PSTFile {
         this.processNameToIDMap();
     }
 
-
     public processNameToIDMap() {
-
         // process the name to id map
         let nameToIdMapDescriptorNode = this.getDescriptorIndexNode(97);
 
@@ -127,15 +129,50 @@ export class PSTFile {
         }
     }
 
-    // parse a PSTDescriptor and get all items
-    getPSTDescriptorItems(localDescriptorsOffsetIndexIdentifier: number): Map<number, PSTDescriptorItem> {
-        return this.getPSTDescriptorItems(this.readLeaf(localDescriptorsOffsetIndexIdentifier));
+    // parse a PSTDescriptor and get all of its items
+    public getPSTDescriptorItems(localDescriptorsOffsetIndexIdentifier: number): Map<number, PSTDescriptorItem>;
+    public getPSTDescriptorItems(inputStream: PSTNodeInputStream): Map<number, PSTDescriptorItem>;
+    public getPSTDescriptorItems(arg: any): Map<number, PSTDescriptorItem> {
+        let inputStream: PSTNodeInputStream = arg;
+        if (typeof arg === 'number') {
+            inputStream = this.readLeaf(arg);
+        }
+
+        // make sure the signature is correct
+        inputStream.seek(0);
+        let sig = inputStream.read();
+        if (sig != 0x2) {
+            throw new Error("Unable to process descriptor node, bad signature: " + sig);
+        }
+
+        let output = new Map();
+        let numberOfItems = inputStream.seekAndReadLong(2, 2);
+        let offset;
+        if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+            offset = 4;
+        } else {
+            offset = 8;
+        }
+
+        let data = new Buffer(inputStream.length);
+        inputStream.seek(0);
+        inputStream.readCompletely(data);
+
+        for (let x = 0; x < numberOfItems; x++) {
+            let item: PSTDescriptorItem = new PSTDescriptorItem(data, offset, this);
+            output.put(item.descriptorIdentifier, item);
+            if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+                offset += 12;
+            } else {
+                offset += 24;
+            }
+        }
+
+        // return output;
+        return new Map();
     }
 
     readLeaf(bid: number): PSTNodeInputStream {
-        // PSTFileBlock ret = null;
-        let ret: PSTNodeInputStream = null;
-
         // get the index node for the descriptor index
         let offsetItem = this.getOffsetIndexNode(bid);
         return new PSTNodeInputStream(this, offsetItem);
