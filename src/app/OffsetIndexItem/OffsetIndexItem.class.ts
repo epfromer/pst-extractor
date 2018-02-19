@@ -1,13 +1,15 @@
 import { PSTFile } from './../PSTFile/PSTFile.class';
 import { PSTObject } from './../PSTObject/PSTObject.class'
 
-export class OffsetIndexItem {
+export class OffsetIndexItem extends PSTObject {
     indexIdentifier: number;
     fileOffset: number;
     size: number;
     cRef: number;
 
     constructor(data: Buffer, pstFileType: number) {
+        super();
+
         if (pstFileType == PSTFile.PST_TYPE_ANSI) {
             this.indexIdentifier = PSTObject.convertLittleEndianBytesToLong(data, 0, 4);
             this.fileOffset = PSTObject.convertLittleEndianBytesToLong(data, 4, 8);

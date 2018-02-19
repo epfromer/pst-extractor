@@ -388,24 +388,19 @@ export class PSTNodeInputStream extends PSTObject {
     //     return false;
     // }
 
-    // /**
-    //  * Get the offsets (block positions) used in the array
-    //  * 
-    //  * @return
-    //  */
-    // public Long[] getBlockOffsets() {
-    //     if (this.skipPoints.size() == 0) {
-    //         final Long[] output = new Long[1];
-    //         output[0] = this.length;
-    //         return output;
-    //     } else {
-    //         final Long[] output = new Long[this.skipPoints.size()];
-    //         for (int x = 0; x < output.length; x++) {
-    //             output[x] = new Long(this.skipPoints.get(x) + this.indexItems.get(x).size);
-    //         }
-    //         return output;
-    //     }
-    // }
+     // Get the offsets (block positions) used in the array
+    public getBlockOffsets(): number[] {
+        if (this.skipPoints.length === 0) {
+            let output: number[] = [this.length];
+            return output;
+        } else {
+            let output: number[];
+            for (let x = 0; x < output.length; x++) {
+                output.push(this.skipPoints[x] + this.indexItems[x].size);
+            }
+            return output;
+        }
+    }
 
     // seek within item
     public seek(location: number) {

@@ -483,15 +483,10 @@ export class PSTObject {
         }
     }
 
-    // /**
-    //  * Output a dump of data in hex format in the order it was read in
-    //  * 
-    //  * @param data
-    //  * @param pretty
-    //  */
-    // public static void printHexFormatted(final byte[] data, final boolean pretty) {
-    //     printHexFormatted(data, pretty, new int[0]);
-    // }
+    // Output a dump of data in hex format in the order it was read in
+    public printHexFormatted(data: Buffer, pretty: boolean) {
+        printHexFormatted(data, pretty, new int[0]);
+    }
 
     // protected static void printHexFormatted(final byte[] data, final boolean pretty, final int[] indexes) {
     //     // groups of two

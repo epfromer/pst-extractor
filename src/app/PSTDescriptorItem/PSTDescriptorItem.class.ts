@@ -1,27 +1,33 @@
 import { PSTFile } from './../PSTFile/PSTFile.class';
+import { PSTObject } from '../PSTObject/PSTObject.class';
 
-export class PSTDescriptorItem {
+export class PSTDescriptorItem extends PSTObject {
 
-    constructor() {
+    descriptorIdentifier: number;
+    offsetIndexIdentifier: number;
+    subNodeOffsetIndexIdentifier: number;
+
+    // These are private to ensure that getData()/getBlockOffets() are used
+    // private PSTFile.PSTFileBlock dataBlock = null;
+    private dataBlockData: Buffer;
+    private dataBlockOffsets: number[] = [];
+    private _pstFile: PSTFile;
+
+    constructor(data: Buffer, offset: number, pstFile: PSTFile) {
+        super();
+
+        this._pstFile = pstFile;
+
+        if (pstFile.pstFileType == PSTFile.PST_TYPE_ANSI) {
+            this.descriptorIdentifier = PSTObject.convertLittleEndianBytesToLong(data, offset, offset + 4);
+            this.offsetIndexIdentifier = (PSTObject.convertLittleEndianBytesToLong(data, offset + 4, offset + 8)) & 0xfffffffe;
+            this.subNodeOffsetIndexIdentifier = PSTObject.convertLittleEndianBytesToLong(data, offset + 8, offset + 12) & 0xfffffffe;
+        } else {
+            this.descriptorIdentifier = PSTObject.convertLittleEndianBytesToLong(data, offset, offset + 4);
+            this.offsetIndexIdentifier = (PSTObject.convertLittleEndianBytesToLong(data, offset + 8, offset + 16)) & 0xfffffffe;
+            this.subNodeOffsetIndexIdentifier = PSTObject.convertLittleEndianBytesToLong(data, offset + 16, offset + 24) & 0xfffffffe;
+        }
     }
-
-    // PSTDescriptorItem(final byte[] data, final int offset, final PSTFile pstFile) {
-    //     this.pstFile = pstFile;
-
-    //     if (pstFile.getPSTFileType() == PSTFile.PST_TYPE_ANSI) {
-    //         this.descriptorIdentifier = (int) PSTObject.convertLittleEndianBytesToLong(data, offset, offset + 4);
-    //         this.offsetIndexIdentifier = ((int) PSTObject.convertLittleEndianBytesToLong(data, offset + 4, offset + 8))
-    //             & 0xfffffffe;
-    //         this.subNodeOffsetIndexIdentifier = (int) PSTObject.convertLittleEndianBytesToLong(data, offset + 8,
-    //             offset + 12) & 0xfffffffe;
-    //     } else {
-    //         this.descriptorIdentifier = (int) PSTObject.convertLittleEndianBytesToLong(data, offset, offset + 4);
-    //         this.offsetIndexIdentifier = ((int) PSTObject.convertLittleEndianBytesToLong(data, offset + 8, offset + 16))
-    //             & 0xfffffffe;
-    //         this.subNodeOffsetIndexIdentifier = (int) PSTObject.convertLittleEndianBytesToLong(data, offset + 16,
-    //             offset + 24) & 0xfffffffe;
-    //     }
-    // }
 
     // public byte[] getData() throws IOException, PSTException {
     //     if (this.dataBlockData != null) {
@@ -52,16 +58,6 @@ export class PSTDescriptorItem {
     //     return this.pstFile.getLeafSize(this.offsetIndexIdentifier);
     // }
 
-    // // Public data
-    // int descriptorIdentifier;
-    // int offsetIndexIdentifier;
-    // int subNodeOffsetIndexIdentifier;
-
-    // // These are private to ensure that getData()/getBlockOffets() are used
-    // // private PSTFile.PSTFileBlock dataBlock = null;
-    // byte[] dataBlockData = null;
-    // int[] dataBlockOffsets = null;
-    // private final PSTFile pstFile;
 
 }
 
