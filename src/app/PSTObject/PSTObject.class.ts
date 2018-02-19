@@ -483,29 +483,35 @@ export class PSTObject {
         }
     }
 
-    // Output a dump of data in hex format in the order it was read in
-    public printHexFormatted(data: Buffer, pretty: boolean) {
-        printHexFormatted(data, pretty, new int[0]);
+    // determine if character is alphanumeric
+    protected isAlphaNumeric = (ch: string) => {
+        return ch.match(/^[a-z0-9]+$/i) !== null;
     }
 
-    protected static void printHexFormatted(data: Buffer, pretty: boolean, indexes: number[]) {
+    // Output a dump of data in hex format in the order it was read in
+    protected printHexFormatted(data: Buffer, pretty: boolean, indexes?: number[]) {
+
+        if (!indexes) {
+            indexes = [0];
+        }
+
         // groups of two
         if (pretty) {
-            System.out.println("---");
+            console.log("---");
         }
-        long tmpLongValue;
-        String line = "";
-        int nextIndex = 0;
-        int indexIndex = 0;
+        let tmpLongValue;
+        let line = "";
+        let nextIndex = 0;
+        let indexIndex = 0;
         if (indexes.length > 0) {
             nextIndex = indexes[0];
             indexIndex++;
         }
-        for (int x = 0; x < data.length; x++) {
-            tmpLongValue = (long) data[x] & 0xff;
+        for (let x = 0; x < data.length; x++) {
+            tmpLongValue = data[x] & 0xff;
 
             if (indexes.length > 0 && x == nextIndex && nextIndex < data.length) {
-                System.out.print("+");
+                console.log("+");
                 line += "+";
                 while (indexIndex < indexes.length - 1 && indexes[indexIndex] <= nextIndex) {
                     indexIndex++;
@@ -514,29 +520,29 @@ export class PSTObject {
                 // indexIndex++;
             }
 
-            if (Character.isLetterOrDigit((char) tmpLongValue)) {
-                line += (char) tmpLongValue;
+            if (this.isAlphaNumeric(tmpLongValue.toString())) {
+                line += tmpLongValue;
             } else {
                 line += ".";
             }
 
-            if (Long.toHexString(tmpLongValue).length() < 2) {
-                System.out.print("0");
-            }
-            System.out.print(Long.toHexString(tmpLongValue));
+            // if (Long.toHexString(tmpLongValue).length() < 2) {
+            //     System.out.print("0");
+            // }
+            console.log(tmpLongValue.toString(16));
             if (x % 2 == 1 && pretty) {
-                System.out.print(" ");
+                console.log(" ");
             }
             if (x % 16 == 15 && pretty) {
-                System.out.print(" " + line);
-                System.out.println("");
+                console.log(" " + line);
+                console.log("");
                 line = "";
             }
         }
         if (pretty) {
-            System.out.println(" " + line);
-            System.out.println("---");
-            System.out.println(data.length);
+            console.log(" " + line);
+            console.log("---");
+            console.log(data.length);
         } else {
         }
     }
