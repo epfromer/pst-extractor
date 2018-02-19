@@ -488,58 +488,58 @@ export class PSTObject {
         printHexFormatted(data, pretty, new int[0]);
     }
 
-    // protected static void printHexFormatted(final byte[] data, final boolean pretty, final int[] indexes) {
-    //     // groups of two
-    //     if (pretty) {
-    //         System.out.println("---");
-    //     }
-    //     long tmpLongValue;
-    //     String line = "";
-    //     int nextIndex = 0;
-    //     int indexIndex = 0;
-    //     if (indexes.length > 0) {
-    //         nextIndex = indexes[0];
-    //         indexIndex++;
-    //     }
-    //     for (int x = 0; x < data.length; x++) {
-    //         tmpLongValue = (long) data[x] & 0xff;
+    protected static void printHexFormatted(data: Buffer, pretty: boolean, indexes: number[]) {
+        // groups of two
+        if (pretty) {
+            System.out.println("---");
+        }
+        long tmpLongValue;
+        String line = "";
+        int nextIndex = 0;
+        int indexIndex = 0;
+        if (indexes.length > 0) {
+            nextIndex = indexes[0];
+            indexIndex++;
+        }
+        for (int x = 0; x < data.length; x++) {
+            tmpLongValue = (long) data[x] & 0xff;
 
-    //         if (indexes.length > 0 && x == nextIndex && nextIndex < data.length) {
-    //             System.out.print("+");
-    //             line += "+";
-    //             while (indexIndex < indexes.length - 1 && indexes[indexIndex] <= nextIndex) {
-    //                 indexIndex++;
-    //             }
-    //             nextIndex = indexes[indexIndex];
-    //             // indexIndex++;
-    //         }
+            if (indexes.length > 0 && x == nextIndex && nextIndex < data.length) {
+                System.out.print("+");
+                line += "+";
+                while (indexIndex < indexes.length - 1 && indexes[indexIndex] <= nextIndex) {
+                    indexIndex++;
+                }
+                nextIndex = indexes[indexIndex];
+                // indexIndex++;
+            }
 
-    //         if (Character.isLetterOrDigit((char) tmpLongValue)) {
-    //             line += (char) tmpLongValue;
-    //         } else {
-    //             line += ".";
-    //         }
+            if (Character.isLetterOrDigit((char) tmpLongValue)) {
+                line += (char) tmpLongValue;
+            } else {
+                line += ".";
+            }
 
-    //         if (Long.toHexString(tmpLongValue).length() < 2) {
-    //             System.out.print("0");
-    //         }
-    //         System.out.print(Long.toHexString(tmpLongValue));
-    //         if (x % 2 == 1 && pretty) {
-    //             System.out.print(" ");
-    //         }
-    //         if (x % 16 == 15 && pretty) {
-    //             System.out.print(" " + line);
-    //             System.out.println("");
-    //             line = "";
-    //         }
-    //     }
-    //     if (pretty) {
-    //         System.out.println(" " + line);
-    //         System.out.println("---");
-    //         System.out.println(data.length);
-    //     } else {
-    //     }
-    // }
+            if (Long.toHexString(tmpLongValue).length() < 2) {
+                System.out.print("0");
+            }
+            System.out.print(Long.toHexString(tmpLongValue));
+            if (x % 2 == 1 && pretty) {
+                System.out.print(" ");
+            }
+            if (x % 16 == 15 && pretty) {
+                System.out.print(" " + line);
+                System.out.println("");
+                line = "";
+            }
+        }
+        if (pretty) {
+            System.out.println(" " + line);
+            System.out.println("---");
+            System.out.println(data.length);
+        } else {
+        }
+    }
 
     // decode a lump of data that has been encrypted with the compressible encryption
     protected decode(data: Buffer): Buffer {
