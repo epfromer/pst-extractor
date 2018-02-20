@@ -118,7 +118,6 @@ export class PSTTable extends PSTObject {
     
         if ((hnid & 0x1F) != 0) {
             // Some kind of external node
-            debugger;
             return null;
         }
     

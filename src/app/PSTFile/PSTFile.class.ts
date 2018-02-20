@@ -141,9 +141,8 @@ export class PSTFile {
             nameToIdMapDescriptorNode.dataOffsetIndexIdentifier
         );
         let nodein = new PSTNodeInputStream(this, off);
-        debugger;
         let bcTable = new PSTTableBC(nodein);
-        console.log('done');
+        debugger;
 
         // final HashMap<Integer, PSTTableBCItem> tableItems = (bcTable.getItems());
         // // Get the guids
@@ -375,7 +374,7 @@ export class PSTFile {
     //     return (int) PSTObject.convertLittleEndianBytesToLong(data, 4, 8);
     // }
 
-    // get file offset, which is sotred in 8 little endian bytes
+    // get file offset, which is sorted in 8 little endian bytes
     // returns a promise of a number
     private extractLEFileOffset(startOffset: number): number {
         // console.log('startOffset = ' + startOffset);

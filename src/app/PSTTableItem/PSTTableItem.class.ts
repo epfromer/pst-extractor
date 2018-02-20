@@ -1,10 +1,9 @@
-import { PSTObject } from "../PSTObject/PSTObject.class";
-import { PSTFile } from "../PSTFile/PSTFile.class";
+import { PSTObject } from '../PSTObject/PSTObject.class';
+import { PSTFile } from '../PSTFile/PSTFile.class';
 
 // Generic table item
 // Provides some basic string functions
 export class PSTTableItem extends PSTObject {
-
     public static VALUE_TYPE_PT_UNICODE = 0x1f;
     public static VALUE_TYPE_PT_STRING8 = 0x1e;
     public static VALUE_TYPE_PT_BIN = 0x102;
@@ -29,25 +28,24 @@ export class PSTTableItem extends PSTObject {
 
     // get a string value of the data
     public getStringValue(stringType: number): string {
-
         if (stringType === PSTTableItem.VALUE_TYPE_PT_UNICODE) {
             // little-endian unicode string
             try {
                 if (this.isExternalValueReference) {
-                    return "External string reference!";
+                    return 'External string reference!';
                 }
                 return this.data.toString();
             } catch (err) {
-                console.log("Error decoding string: " + this.data.toString());
-                return "";
+                console.log('Error decoding string: ' + this.data.toString());
+                return '';
             }
         }
 
         if (stringType == PSTTableItem.VALUE_TYPE_PT_STRING8) {
             return this.data.toString();
         }
-        debugger;
-        throw new Error('not yet implemented');
+
+        return 'hex string';
 
         // final StringBuffer outputBuffer = new StringBuffer();
 
@@ -76,22 +74,22 @@ export class PSTTableItem extends PSTObject {
     }
 
     public toString(): string {
+        let ret = this.getPropertyDescription(
+            this.entryType,
+            this.entryValueType
+        );
 
-        debugger;
+        if (this.entryValueType == 0x000b) {
+            return ret + (this.entryValueReference == 0 ? 'false' : 'true');
+        }
 
-        let ret = this.getPropertyDescription(this.entryType, this.entryValueType);
+        if (this.isExternalValueReference) {
+            // Either a true external reference, or entryValueReference contains the actual data
+            return (ret + this.entryValueReference.toString(16) + '(' + this.entryValueReference + ')');
+        }
 
-        // if (this.entryValueType == 0x000B) {
-        //     return ret + (this.entryValueReference == 0 ? "false" : "true");
-        // }
-
-        // if (this.isExternalValueReference) {
-        //     // Either a true external reference, or entryValueReference contains
-        //     // the actual data
-        //     return ret + String.format("0x%08X (%d)", this.entryValueReference, this.entryValueReference);
-        // }
-
-        // if (this.entryValueType == 0x0005 || this.entryValueType == 0x0014) {
+        if (this.entryValueType == 0x0005 || this.entryValueType == 0x0014) {
+            debugger;
         //     // 64bit data
         //     if (this.data == null) {
         //         return ret + "no data";
@@ -102,9 +100,10 @@ export class PSTTableItem extends PSTObject {
         //     } else {
         //         return String.format("%s invalid data length: %d", ret, this.data.length);
         //     }
-        // }
+        }
 
-        // if (this.entryValueType == 0x0040) {
+        if (this.entryValueType == 0x0040) {
+            debugger;
         //     // It's a date...
         //     final int high = (int) PSTObject.convertLittleEndianBytesToLong(this.data, 4, 8);
         //     final int low = (int) PSTObject.convertLittleEndianBytesToLong(this.data, 0, 4);
@@ -112,9 +111,10 @@ export class PSTTableItem extends PSTObject {
         //     final Date d = PSTObject.filetimeToDate(high, low);
         //     this.dateFormatter.setTimeZone(utcTimeZone);
         //     return ret + this.dateFormatter.format(d);
-        // }
+        }
 
-        // if (this.entryValueType == 0x001F) {
+        if (this.entryValueType == 0x001F) {
+            debugger;
         //     // Unicode string
         //     String s;
         //     try {
@@ -130,10 +130,9 @@ export class PSTTableItem extends PSTObject {
         //     }
 
         //     return ret + s;
-        // }
+        }
 
-        // return ret + this.getStringValue();
-        return ret;
+        return ret + this.getStringValue(this.entryValueType);
     }
 
     // private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");

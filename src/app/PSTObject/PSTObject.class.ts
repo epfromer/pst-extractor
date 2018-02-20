@@ -662,7 +662,6 @@ export class PSTObject {
 
     public getPropertyDescription(entryType: number, entryValueType: number): string {
         let ret = "";
-        debugger;
         if (entryType < 0x8000) {
             let name = this.getPropertyName(entryType, false);
             if (name != null) {
