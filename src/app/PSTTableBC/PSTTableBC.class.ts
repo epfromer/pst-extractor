@@ -31,9 +31,9 @@ export class PSTTableBC extends PSTTable {
         for (let x = 0; x < this.numberOfKeys; x++) {
             let item  = new PSTTableBCItem();
             item.itemIndex = x;
-            item.entryType = PSTObject.convertLittleEndianBytesToLong(keyTableInfo, offset + 0, offset + 2);
-            item.entryValueType = PSTObject.convertLittleEndianBytesToLong(keyTableInfo, offset + 2, offset + 4).toNumber();
-            item.entryValueReference = PSTObject.convertLittleEndianBytesToLong(keyTableInfo, offset + 4, offset + 8).toNumber();
+            item.entryType = this.convertLittleEndianBytesToLong(keyTableInfo, offset + 0, offset + 2);
+            item.entryValueType = this.convertLittleEndianBytesToLong(keyTableInfo, offset + 2, offset + 4).toNumber();
+            item.entryValueReference = this.convertLittleEndianBytesToLong(keyTableInfo, offset + 4, offset + 8).toNumber();
 
             // Data is in entryValueReference for all types <= 4 bytes long
             switch (item.entryValueType) {

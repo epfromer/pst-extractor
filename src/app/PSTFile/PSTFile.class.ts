@@ -12,7 +12,7 @@ import * as fsext from 'fs-ext';
 import * as util from 'util';
 import * as long from 'long';
 
-export class PSTFile {
+export class PSTFile extends PSTObject {
            public static ENCRYPTION_TYPE_NONE: number = 0;
            public static ENCRYPTION_TYPE_COMPRESSIBLE: number = 1;
            public static MESSAGE_STORE_DESCRIPTOR_IDENTIFIER: number = 33;
@@ -63,6 +63,7 @@ export class PSTFile {
            }
 
            public constructor(fileName: string) {
+               super();
                this.pstFilename = fileName;
            }
 
@@ -126,29 +127,16 @@ export class PSTFile {
                // final int[] uuidIndexes = new int[nGuids];
                let offset = 0;
                for (let i = 0; i < nGuids; ++i) {
-                   let leftQuad: long = PSTObject.convertLittleEndianBytesToLong(this.guids, offset, offset + 4);
+                   let leftQuad: long = this.convertLittleEndianBytesToLong(this.guids, offset, offset + 4);
                    leftQuad = leftQuad.shiftLeft(32);
-                   let midQuad: long = PSTObject.convertLittleEndianBytesToLong(this.guids, offset + 4, offset + 6);
+                   let midQuad: long = this.convertLittleEndianBytesToLong(this.guids, offset + 4, offset + 6);
                    midQuad = midQuad.shiftLeft(16);
-                   let rightQuad: long = PSTObject.convertLittleEndianBytesToLong(this.guids, offset + 6, offset + 8);
-                   let mostSigBits: long = leftQuad;
-                   mostSigBits = mostSigBits.or(midQuad).or(rightQuad);
+                   let rightQuad: long = this.convertLittleEndianBytesToLong(this.guids, offset + 6, offset + 8);
+                   let mostSigBits: long = leftQuad.or(midQuad).or(rightQuad);
                    console.log(mostSigBits.toString());
-                   // let leftQuad = long.shiftLeft(PSTObject.convertLittleEndianBytesToLong(this.guids, offset, offset + 4))
-                   // let mostSigBits = PSTObject.convertLittleEndianBytesToLong(this.guids, offset, offset + 4)
-                   //     (PSTObject.convertLittleEndianBytesToLong(this.guids, offset, offset + 4) <<
-                   //         32) |
-                   //     (PSTObject.convertLittleEndianBytesToLong(
-                   //         this.guids,
-                   //         offset + 4,
-                   //         offset + 6
-                   //     ) <<
-                   //         16) |
-                   //     PSTObject.convertLittleEndianBytesToLong(
-                   //         this.guids,
-                   //         offset + 6,
-                   //         offset + 8
-                   //     );
+                   let leastSigBits: long = this.convertBigEndianBytesToLong(this.guids, offset + 8, offset + 16);
+                   console.log(leastSigBits.toString());
+
                    // let leastSigBits = PSTObject.convertBigEndianBytesToLong(
                    //     this.guids,
                    //     offset + 8,
@@ -504,7 +492,7 @@ export class PSTFile {
                                    // The 32-bit descriptor index b-tree leaf node item
                                    buffer = new Buffer(4);
                                    this.seekAndRead(buffer, btreeStartOffset + x * 16);
-                                   if (PSTObject.convertLittleEndianBytesToLong(buffer).toNumber() == index) {
+                                   if (this.convertLittleEndianBytesToLong(buffer).toNumber() == index) {
                                        // give me the offset index please!
                                        buffer = new Buffer(16);
                                        this.seekAndRead(buffer, btreeStartOffset + x * 16);
@@ -528,7 +516,7 @@ export class PSTFile {
                                    buffer = new Buffer(4);
                                    this.seekAndRead(buffer, btreeStartOffset + x * 32);
 
-                                   if (PSTObject.convertLittleEndianBytesToLong(buffer).toNumber() == index) {
+                                   if (this.convertLittleEndianBytesToLong(buffer).toNumber() == index) {
                                        // give me the offset index please!
                                        buffer = new Buffer(32);
                                        this.seekAndRead(buffer, btreeStartOffset + x * 32);

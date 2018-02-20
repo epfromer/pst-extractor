@@ -764,8 +764,9 @@ export class PSTObject {
     //     return data;
     // }
 
-    // convert little endian bytes to number (long)
-    public static convertLittleEndianBytesToLong(data: Buffer, start?: number, end?: number): long {
+    // convert little endian bytes to long
+    // TODO - can this be done by long library?
+    public convertLittleEndianBytesToLong(data: Buffer, start?: number, end?: number): long {
         if (!start) {
             start = 0;
         }
@@ -786,24 +787,28 @@ export class PSTObject {
         return offset;
     }
 
-    // /**
-    //  * Utility function for converting big endian bytes into a usable java long
-    //  * 
-    //  * @param data
-    //  * @param start
-    //  * @param end
-    //  * @return long version of the data
-    //  */
-    // public static long convertBigEndianBytesToLong(final byte[] data, final int start, final int end) {
+    // convert big endian bytes to long
+    // TODO - can this be done by long library?
+    public convertBigEndianBytesToLong(data: Buffer, start?: number, end?: number): long {
+        if (!start) {
+            start = 0;
+        }
+        if (!end) {
+            end = data.length;
+        }
 
-    //     long offset = 0;
-    //     for (int x = start; x < end; ++x) {
-    //         offset = offset << 8;
-    //         offset |= (data[x] & 0xFFL);
-    //     }
+        let offset: long = long.ZERO;
+        for (let x = start; x < end; ++x) {
+            offset = offset.shiftLeft(8);
+            let tmpLongValue = long.fromNumber(data[x] & 0xFF);
+            offset = offset.xor(tmpLongValue);
+        }
 
-    //     return offset;
-    // }
+        console.log("PSTObject: convertBigEndianBytesToLong = " + offset.toString());
+
+        return offset;
+    }
+
     // /*
     //  * protected static boolean isPSTArray(byte[] data) {
     //  * return (data[0] == 1 && data[1] == 1);

@@ -21,13 +21,13 @@ export class PSTDescriptorItem extends PSTObject {
         this._pstFile = pstFile;
 
         if (pstFile.pstFileType == PSTFile.PST_TYPE_ANSI) {
-            this.descriptorIdentifier = PSTObject.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
-            this.offsetIndexIdentifier = (PSTObject.convertLittleEndianBytesToLong(data, offset + 4, offset + 8)).toNumber() & 0xfffffffe;
-            this.subNodeOffsetIndexIdentifier = PSTObject.convertLittleEndianBytesToLong(data, offset + 8, offset + 12).toNumber() & 0xfffffffe;
+            this.descriptorIdentifier = this.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
+            this.offsetIndexIdentifier = (this.convertLittleEndianBytesToLong(data, offset + 4, offset + 8)).toNumber() & 0xfffffffe;
+            this.subNodeOffsetIndexIdentifier = this.convertLittleEndianBytesToLong(data, offset + 8, offset + 12).toNumber() & 0xfffffffe;
         } else {
-            this.descriptorIdentifier = PSTObject.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
-            this.offsetIndexIdentifier = (PSTObject.convertLittleEndianBytesToLong(data, offset + 8, offset + 16)).toNumber() & 0xfffffffe;
-            this.subNodeOffsetIndexIdentifier = PSTObject.convertLittleEndianBytesToLong(data, offset + 16, offset + 24).toNumber() & 0xfffffffe;
+            this.descriptorIdentifier = this.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
+            this.offsetIndexIdentifier = (this.convertLittleEndianBytesToLong(data, offset + 8, offset + 16)).toNumber() & 0xfffffffe;
+            this.subNodeOffsetIndexIdentifier = this.convertLittleEndianBytesToLong(data, offset + 16, offset + 24).toNumber() & 0xfffffffe;
         }
     }
 

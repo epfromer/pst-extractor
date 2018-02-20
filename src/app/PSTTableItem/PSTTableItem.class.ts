@@ -18,7 +18,7 @@ export class PSTTableItem extends PSTObject {
 
     public getLongValue() {
         if (this.data.length > 0) {
-            return PSTObject.convertLittleEndianBytesToLong(this.data);
+            return this.convertLittleEndianBytesToLong(this.data);
         }
         return -1;
     }
