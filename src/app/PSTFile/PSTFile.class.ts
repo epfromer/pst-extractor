@@ -257,16 +257,6 @@ export class PSTFile {
     //     return i;
     // }
 
-    public getNameToIdMapKey(id: number): number {
-        return -1;
-        // let i = idToName.get(id);
-        // if (i == null) {
-        //     // throw new PSTException("Name to Id mapping not found");
-        //     return -1;
-        // }
-        // return i;
-    }
-
     // static private Properties propertyInternetCodePages = null;
     // static private boolean bCPFirstTime = true;
 
@@ -297,64 +287,6 @@ export class PSTFile {
 
     // static private Properties propertyNames = null;
     // static private boolean bFirstTime = true;
-
-    // public getPropertyName(propertyId: number, bNamed: boolean): string {
-
-    //     return propertyId.toString(16);
-
-    //     // if (bFirstTime) {
-    //     //     bFirstTime = false;
-    //     //     propertyNames = new Properties();
-    //     //     try {
-    //     //         final InputStream propertyStream = PSTFile.class.getResourceAsStream("/PropertyNames.txt");
-    //     //         if (propertyStream != null) {
-    //     //             propertyNames.load(propertyStream);
-    //     //         } else {
-    //     //             propertyNames = null;
-    //     //         }
-    //     //     } catch (final FileNotFoundException e) {
-    //     //         propertyNames = null;
-    //     //         e.printStackTrace();
-    //     //     } catch (final IOException e) {
-    //     //         propertyNames = null;
-    //     //         e.printStackTrace();
-    //     //     }
-    //     // }
-
-    //     // if (propertyNames != null) {
-    //     //     final String key = String.format((bNamed ? "%08X" : "%04X"), propertyId);
-    //     //     return propertyNames.getProperty(key);
-    //     // }
-
-    //     // return null;
-    // }
-
-    // public getPropertyDescription(entryType: number, entryValueType: number): string {
-    //     let ret = "";
-    //     debugger;
-    //     if (entryType < 0x8000) {
-    //         let name = this.getPropertyName(entryType, false);
-    //         if (name != null) {
-    //             ret = name + ':' + entryValueType.toString(16) + ':'; // String.format("%s:%04X: ", name, entryValueType);
-    //         } else {
-    //             ret = entryType.toString(16) + ':' + entryValueType.toString(16) + ':'; // String.format("0x%04X:%04X: ", entryType, entryValueType);
-    //         }
-    //     } else {
-    //         let type = PSTFile.getNameToIdMapKey(entryType);
-    //         if (type == -1) {
-    //             ret = '0xFFFF(' + entryType.toString(16) + '):' +  entryValueType.toString(16) + ':'; // String.format("0xFFFF(%04X):%04X: ", entryType, entryValueType);
-    //         } else {
-    //             let name = this.getPropertyName(type, true);
-    //             if (name != null) {
-    //                 ret = name + '(' + entryType.toString(16) + '):' +  entryValueType.toString(16) + ':'; // String.format("%s(%04X):%04X: ", name, entryType, entryValueType);
-    //             } else {
-    //                 ret = '0x' + type.toString(16) + '(' + entryType.toString(16) + '):' +  entryValueType.toString(16) + ':'; // String.format("0x%04X(%04X):%04X: ", type, entryType, entryValueType);
-    //             }
-    //         }
-    //     }
-
-    //     return ret;
-    // }
 
     // /**
     //  * destructor just closes the file handle...

@@ -95,8 +95,6 @@ export class PSTTable extends PSTObject {
 
     public getNodeInfo(hnid: number): NodeInfo {
 
-        debugger;
-
         // Zero-length node?
         if (hnid == 0) {
             return new NodeInfo(0, 0, this.pstNodeInputStream);
@@ -124,8 +122,6 @@ export class PSTTable extends PSTObject {
             return null;
         }
     
-        debugger;
-        
         let whichBlock: number = (hnid >>> 16);
         if (whichBlock > this.arrayBlocks.length) {
             // Block doesn't exist!

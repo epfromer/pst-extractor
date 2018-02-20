@@ -14,8 +14,6 @@ export class PSTTableBC extends PSTTable {
     constructor(pstNodeInputStream: PSTNodeInputStream) {
         super(pstNodeInputStream, new Map<number, PSTDescriptorItem>());
 
-        debugger;
-
         if (this.tableTypeByte != 188) {
             throw new Error("unable to create PSTTableBC, table does not appear to be a bc!");
         }
@@ -60,8 +58,6 @@ export class PSTTableBC extends PSTTable {
                     let nodeInfoNodeInfo = this.getNodeInfo(item.entryValueReference);
                     if (nodeInfoNodeInfo == null) {
                         // It's an external reference that we don't deal with here.
-                        debugger;
-                        throw new Error('not yet implemented');
                     } else {
                         // Make a copy of the data
                         let nodeInfo = new Buffer(nodeInfoNodeInfo.length());

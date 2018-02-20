@@ -21,9 +21,154 @@ export class PSTObject {
         0x93, 0xd8, 0x58, 0x2c, 0xce, 0xfe, 0x24, 0xaf, 0xde, 0xb8, 0x36, 0xc8, 0xa1, 0x80, 0xa6, 0x99, 0x98, 0xa8,
         0x2f, 0x0e, 0x81, 0x65, 0x73, 0xe4, 0xc2, 0xa2, 0x8a, 0xd4, 0xe1, 0x11, 0xd0, 0x08, 0x8b, 0x2a, 0xf2, 0xed,
         0x9a, 0x64, 0x3f, 0xc1, 0x6c, 0xf9, 0xec ];
- 
-    
-        
+
+    public propertyName: Map<number, string> = new Map([
+        [0x0002, 'PidTagAlternateRecipientAllowed'],
+        [0x0003, 'PidTagNameidStreamEntry'],
+        [0x0004, 'PidTagNameidStreamString'],
+        [0x0017, 'PidTagImportance'],
+        [0x001A, 'PidTagMessageClass'],
+        [0x0023, 'PidTagOriginatorDeliveryReportRequested'],
+        [0x0026, 'PidTagPriority'],
+        [0x0029, 'PidLidOldWhenStartWhole'],
+        [0x002B, 'PidTagRecipientReassignmentProhibited'],
+        [0x002E, 'PidTagOriginalSensitivity'],
+        [0x0036, 'PidTagSensitivity'],
+        [0x0037, 'PidTagSubject'],
+        [0x0039, 'PidTagClientSubmitTime'],
+        [0x003B, 'PidTagSentRepresentingSearchKey'],
+        [0x003F, 'PidTagReceivedByEntryId'],
+        [0x0040, 'PidTagReceivedByName'],
+        [0x0041, 'PidTagSentRepresentingEntryId'],
+        [0x0042, 'PidTagSentRepresentingName'],
+        [0x0043, 'PidTagReceivedRepresentingEntryId'],
+        [0x0044, 'PidTagReceivedRepresentingName'],
+        [0x004D, 'PidTagOriginalAuthorName'],
+        [0x0052, 'PidTagReceivedRepresentingSearchKey'],
+        [0x0057, 'PidTagMessageToMe'],
+        [0x0058, 'PidTagMessageCcMe'],
+        [0x0060, 'PidTagStartDate'],
+        [0x0061, 'PidTagEndDate'],
+        [0x0062, 'PidTagOwnerAppointmentId'],
+        [0x0063, 'PidTagResponseRequested'],
+        [0x0064, 'PidTagSentRepresentingAddressType'],
+        [0x0065, 'PidTagSentRepresentingEmailAddress'],
+        [0x0070, 'PidTagConversationTopic'],
+        [0x0071, 'PidTagConversationIndex'],
+        [0x0075, 'PidTagReceivedByAddressType'],
+        [0x0076, 'PidTagReceivedByEmailAddress'],
+        [0x0077, 'PidTagReceivedRepresentingAddressType'],
+        [0x0078, 'PidTagReceivedRepresentingEmailAddress'],
+        [0x007D, 'PidTagTransportMessageHeaders'],
+        [0x0C15, 'PidTagRecipientType'],
+        [0x0C17, 'PidTagReplyRequested'],
+        [0x0C19, 'PidTagSenderEntryId'],
+        [0x0C1A, 'PidTagSenderName'],
+        [0x0C1D, 'PidTagSenderSearchKey'],
+        [0x0C1E, 'PidTagSenderAddressType'],
+        [0x0C1F, 'PidTagSenderEmailAddress'],
+        [0x0E01, 'PidTagDeleteAfterSubmit'],
+        [0x0E02, 'PidTagDisplayBcc'],
+        [0x0E03, 'PidTagDisplayCc'],
+        [0x0E04, 'PidTagDisplayTo'],
+        [0x0E06, 'PidTagMessageDeliveryTime'],
+        [0x0E07, 'PidTagMessageFlags'],
+        [0x0E08, 'PidTagMessageSize'],
+        [0x0E0F, 'PidTagResponsibility'],
+        [0x0E20, 'PidTagAttachSize'],
+        [0x0E23, 'PidTagInternetArticleNumber'],
+        [0x0E38, 'PidTagReplFlags'],
+        [0x0E62, 'PidTagUrlCompNameSet'],
+        [0x0E79, 'PidTagTrustSender'],
+        [0x0FF9, 'PidTagRecordKey'],
+        [0x0FFE, 'PidTagObjectType'],
+        [0x0FFF, 'PidTagEntryId'],
+        [0x1000, 'PidTagBody'],
+        [0x1009, 'PidTagRtfCompressed'],
+        [0x1013, 'PidTagBodyHtml'],
+        [0x1035, 'PidTagInternetMessageId'],
+        [0x1039, 'PidTagInternetReferences'],
+        [0x1042, 'PidTagInReplyToId'],
+        [0x1080, 'PidTagIconIndex'],
+        [0x1081, 'PidTagLastVerbExecuted'],
+        [0x1082, 'PidTagLastVerbExecutionTime'],
+        [0x1096, 'PidTagBlockStatus'],
+        [0x10C3, 'PidTagICalendarStartTime'],
+        [0x10C4, 'PidTagICalendarEndTime'],
+        [0x10F2, 'Unknown_10F2'],
+        [0x10F3, 'PidTagUrlCompName'],
+        [0x10F4, 'PidTagAttributeHidden'],
+        [0x10F5, 'PidTagAttributeSystem'],
+        [0x10F6, 'PidTagAttributeReadOnly'],
+        [0x3001, 'PidTagDisplayName'],
+        [0x3002, 'PidTagAddressType'],
+        [0x3003, 'PidTagEmailAddress'],
+        [0x3007, 'PidTagCreationTime'],
+        [0x3008, 'PidTagLastModificationTime'],
+        [0x300B, 'PidTagSearchKey'],
+        [0x3701, 'PidTagAttachDataBinary'],
+        [0x3702, 'PidTagAttachEncoding'],
+        [0x3703, 'PidTagAttachExtension'],
+        [0x3704, 'PidTagAttachFilename'],
+        [0x3705, 'PidTagAttachMethod'],
+        [0x3709, 'PidTagAttachRendering'],
+        [0x370B, 'PidTagRenderingPosition'],
+        [0x370E, 'PidTagAttachMimeTag'],
+        [0x370A, 'PidTagAttachTag'],
+        [0x3712, 'PidTagAttachContentId'],
+        [0x3714, 'PidTagAttachFlags'],
+        [0x3900, 'PidTagDisplayType'],
+        [0x39FE, 'PidTagPrimarySmtpAddress'],
+        [0x39FF, 'PidTag7BitDisplayName'],
+        [0x3A00, 'PidTagAccount'],
+        [0x3A08, 'PidTagBusinessTelephoneNumber'],
+        [0x3A20, 'PidTagTransmittableDisplayName'],
+        [0x3A40, 'PidTagSendRichInfo'],
+        [0x3A70, 'PidTagUserX509Certificate'],
+        [0x3A71, 'PidTagSendInternetEncoding'],
+        [0x3FDE, 'PidTagInternetCodepage'],
+        [0x3FF1, 'PidTagMessageLocaleId'],
+        [0x3FFD, 'PidTagMessageCodepage'],
+        [0x3ff9, 'PidTagCreatorName'],
+        [0x4019, 'PidTagSenderFlags'],
+        [0x401A, 'PidTagSentRepresentingFlags'],
+        [0x401B, 'PidTagReceivedByFlags'],
+        [0x401C, 'PidTagReceivedRepresentingFlags'],
+        [0x403E, 'Unknown_403E'],
+        [0x4A08, 'Unknown_4A08'],
+        [0x5902, 'PidTagInternetMailOverrideFormat'],
+        [0x5909, 'PidTagMessageEditorFormat'],
+        [0x5FDE, 'PidTagRecipientResourceState'],
+        [0x5FDF, 'PidTagRecipientOrder'],
+        [0x5FEB, 'Unknown_5FEB'],
+        [0x5FEF, 'Unknown_5FEF'],
+        [0x5FF2, 'Unknown_5FF2'],
+        [0x5FF5, 'Unknown_5FF5'],
+        [0x5FF6, 'PidTagRecipientDisplayName'],
+        [0x5FF7, 'PidTagRecipientEntryId'],
+        [0x5FFB, 'PidTagRecipientTrackStatusTime'],
+        [0x5FFD, 'PidTagRecipientFlags'],
+        [0x5FFF, 'PidTagRecipientTrackStatus'],
+        [0x6001, 'PidTagNickname'],
+        [0x6610, 'Unknown_6610'],
+        [0x6614, 'Unknown_6614'],
+        [0x6617, 'Unknown_6617'],
+        [0x6619, 'PidTagUserEntryId'],
+        [0x6743, 'Unknown_6743'],
+        [0x6744, 'Unknown_6744'],
+        [0x67F2, 'PidTagLtpRowId'],
+        [0x67F3, 'PidTagLtpRowVer'],
+        [0x67F4, 'Unknown_67F4'],
+        [0x7FFA, 'PidTagAttachmentLinkId'],
+        [0x7FFB, 'PidTagExceptionStartTime'],
+        [0x7FFC, 'PidTagExceptionEndTime'],
+        [0x7FFD, 'PidTagAttachmentFlags'],
+        [0x7FFE, 'PidTagAttachmentHidden'],
+        [0x7FFF, 'PidTagAttachmentContactPhoto'],
+        [0x3FFA, 'PidTagLastModifiedName_W'],
+        [0x3FFB, 'PidTagLastModifierEntryId']
+    ]);
+
     //     public static final int NID_TYPE_HID = 0x00; // Heap node
     // public static final int NID_TYPE_INTERNAL = 0x01; // Internal node (section
     //                                                   // 2.4.1)
@@ -473,6 +618,76 @@ export class PSTObject {
     //     System.out.println(Long.toBinaryString(number));
     // }
 
+    public getPropertyName(propertyId: number, bNamed: boolean): string {
+
+        return this.propertyName.get(propertyId);
+        // return propertyId.toString(16);
+
+        // if (bFirstTime) {
+        //     bFirstTime = false;
+        //     propertyNames = new Properties();
+        //     try {
+        //         final InputStream propertyStream = PSTFile.class.getResourceAsStream("/PropertyNames.txt");
+        //         if (propertyStream != null) {
+        //             propertyNames.load(propertyStream);
+        //         } else {
+        //             propertyNames = null;
+        //         }
+        //     } catch (final FileNotFoundException e) {
+        //         propertyNames = null;
+        //         e.printStackTrace();
+        //     } catch (final IOException e) {
+        //         propertyNames = null;
+        //         e.printStackTrace();
+        //     }
+        // }
+
+        // if (propertyNames != null) {
+        //     final String key = String.format((bNamed ? "%08X" : "%04X"), propertyId);
+        //     return propertyNames.getProperty(key);
+        // }
+
+        // return null;
+    }
+
+    public getNameToIdMapKey(id: number): number {
+        return -1;
+        // let i = idToName.get(id);
+        // if (i == null) {
+        //     // throw new PSTException("Name to Id mapping not found");
+        //     return -1;
+        // }
+        // return i;
+    }
+
+    public getPropertyDescription(entryType: number, entryValueType: number): string {
+        let ret = "";
+        debugger;
+        if (entryType < 0x8000) {
+            let name = this.getPropertyName(entryType, false);
+            if (name != null) {
+                ret = name + ':' + entryValueType.toString(16) + ':'; // String.format("%s:%04X: ", name, entryValueType);
+            } else {
+                ret = entryType.toString(16) + ':' + entryValueType.toString(16) + ':'; // String.format("0x%04X:%04X: ", entryType, entryValueType);
+            }
+        } else {
+            let type = this.getNameToIdMapKey(entryType);
+            if (type == -1) {
+                ret = '0xFFFF(' + entryType.toString(16) + '):' +  entryValueType.toString(16) + ':'; // String.format("0xFFFF(%04X):%04X: ", entryType, entryValueType);
+            } else {
+                let name = this.getPropertyName(type, true);
+                if (name != null) {
+                    ret = name + '(' + entryType.toString(16) + '):' +  entryValueType.toString(16) + ':'; // String.format("%s(%04X):%04X: ", name, entryType, entryValueType);
+                } else {
+                    ret = '0x' + type.toString(16) + '(' + entryType.toString(16) + '):' +  entryValueType.toString(16) + ':'; // String.format("0x%04X(%04X):%04X: ", type, entryType, entryValueType);
+                }
+            }
+        }
+
+        return ret;
+    }
+
+
     protected arraycopy(src: Buffer, srcPos: number, dest: Buffer, destPos: number, length: number) {
         // FIX THIS - TOO SLOW?
         let s = srcPos;
@@ -593,7 +808,7 @@ export class PSTObject {
             offset |= tmpLongValue;
         }
 
-        console.log("PSTObject: convertLittleEndianBytesToLong = %d", offset);
+        // console.log("PSTObject: convertLittleEndianBytesToLong = %d", offset);
         
         return offset;
     }

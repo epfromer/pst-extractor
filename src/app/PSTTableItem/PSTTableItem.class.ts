@@ -76,7 +76,10 @@ export class PSTTableItem extends PSTObject {
     }
 
     public toString(): string {
-        // let ret = PSTFile.getPropertyDescription(this.entryType, this.entryValueType);
+
+        debugger;
+
+        let ret = this.getPropertyDescription(this.entryType, this.entryValueType);
 
         // if (this.entryValueType == 0x000B) {
         //     return ret + (this.entryValueReference == 0 ? "false" : "true");
@@ -130,6 +133,7 @@ export class PSTTableItem extends PSTObject {
         // }
 
         // return ret + this.getStringValue();
+        return ret;
     }
 
     // private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
