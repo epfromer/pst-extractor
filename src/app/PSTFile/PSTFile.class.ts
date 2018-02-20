@@ -132,10 +132,12 @@ export class PSTFile extends PSTObject {
                    let midQuad: long = this.convertLittleEndianBytesToLong(this.guids, offset + 4, offset + 6);
                    midQuad = midQuad.shiftLeft(16);
                    let rightQuad: long = this.convertLittleEndianBytesToLong(this.guids, offset + 6, offset + 8);
-                   let mostSigBits: long = leftQuad.or(midQuad).or(rightQuad);
-                   console.log(mostSigBits.toString());
+                   let mostSigBits: long = leftQuad
+                       .or(midQuad)
+                       .or(rightQuad);
+                   console.log(mostSigBits.toString(16));
                    let leastSigBits: long = this.convertBigEndianBytesToLong(this.guids, offset + 8, offset + 16);
-                   console.log(leastSigBits.toString());
+                   console.log(leastSigBits.toString(16));
 
                    // let leastSigBits = PSTObject.convertBigEndianBytesToLong(
                    //     this.guids,
