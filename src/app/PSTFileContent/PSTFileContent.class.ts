@@ -42,6 +42,7 @@ export class PSTFileContent {
         if (bytesRead <= 0 || bytesRead === buffer.length) {
             return;
         }
+        debugger;
         throw new Error('not yet implemented');
         // byte[] buffer = new byte[8192];
         // int offset = read;

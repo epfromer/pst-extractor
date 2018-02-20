@@ -9,5 +9,3 @@ file.open();
 // }, 1000);
 
 console.log('exiting');
-
- 

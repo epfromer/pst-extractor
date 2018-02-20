@@ -3,7 +3,7 @@ import { PSTFile } from './../PSTFile/PSTFile.class';
 import { PSTObject } from './../PSTObject/PSTObject.class'
 import { PSTFileContent } from '../PSTFileContent/PSTFileContent.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
-import debug = require('debug');
+import * as long from 'long';
 
 export class PSTNodeInputStream extends PSTObject {
 
@@ -159,7 +159,7 @@ export class PSTNodeInputStream extends PSTObject {
             if (data[0] == 0x1) {
                 bInternal = false;
                 // we are a xblock, or xxblock
-                this._length = PSTObject.convertLittleEndianBytesToLong(data, 4, 8);
+                this._length = PSTObject.convertLittleEndianBytesToLong(data, 4, 8).toNumber();
                 // go through all of the blocks and create skip points.
                 this.getBlockSkipPoints(data);
                 return;
@@ -179,7 +179,7 @@ export class PSTNodeInputStream extends PSTObject {
             throw new Error("Unable to process XBlock, incorrect identifier");
         }
 
-        let numberOfEntries = PSTObject.convertLittleEndianBytesToLong(data, 2, 4);
+        let numberOfEntries = PSTObject.convertLittleEndianBytesToLong(data, 2, 4).toNumber();
 
         let arraySize = 8;
         if (this.pstFile.pstFileType == PSTFile.PST_TYPE_ANSI) {
@@ -189,7 +189,7 @@ export class PSTNodeInputStream extends PSTObject {
             // XXBlock
             let offset = 8;
             for (let x = 0; x < numberOfEntries; x++) {
-                let bid = PSTObject.convertLittleEndianBytesToLong(data, offset, offset + arraySize);
+                let bid = PSTObject.convertLittleEndianBytesToLong(data, offset, offset + arraySize).toNumber();
                 bid &= 0xfffffffe;
                 // get the details in this block and
                 let offsetItem = this.pstFile.getOffsetIndexNode(bid);
@@ -204,7 +204,7 @@ export class PSTNodeInputStream extends PSTObject {
             // normal XBlock
             let offset = 8;
             for (let x = 0; x < numberOfEntries; x++) {
-                let bid = PSTObject.convertLittleEndianBytesToLong(data, offset, offset + arraySize);
+                let bid = PSTObject.convertLittleEndianBytesToLong(data, offset, offset + arraySize).toNumber();
                 bid &= 0xfffffffe;
                 // get the details in this block and add it to the list
                 let offsetItem = this.pstFile.getOffsetIndexNode(bid);
@@ -447,7 +447,7 @@ export class PSTNodeInputStream extends PSTObject {
 
     }
 
-    public seekAndReadLong(location: number, bytes: number): number {
+    public seekAndReadLong(location: number, bytes: number): long {
         this.seek(location);
         let buffer = new Buffer(bytes);
         this.readCompletely(buffer);

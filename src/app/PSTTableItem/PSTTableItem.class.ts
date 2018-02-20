@@ -1,5 +1,6 @@
 import { PSTObject } from '../PSTObject/PSTObject.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
+import * as long from 'long';
 
 // Generic table item
 // Provides some basic string functions
@@ -9,7 +10,7 @@ export class PSTTableItem extends PSTObject {
     public static VALUE_TYPE_PT_BIN = 0x102;
 
     public itemIndex = 0;
-    public entryType = 0;
+    public entryType: long;
     public entryValueType = 0;
     public entryValueReference = 0;
     public data: Buffer = new Buffer(1);
@@ -74,10 +75,7 @@ export class PSTTableItem extends PSTObject {
     }
 
     public toString(): string {
-        let ret = this.getPropertyDescription(
-            this.entryType,
-            this.entryValueType
-        );
+        let ret = this.getPropertyDescription(this.entryType.toNumber(), this.entryValueType);
 
         if (this.entryValueType == 0x000b) {
             return ret + (this.entryValueReference == 0 ? 'false' : 'true');

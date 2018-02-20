@@ -1,4 +1,5 @@
 import { PSTNodeInputStream } from "../PSTNodeInputStream/PSTNodeInputStream.class";
+import * as long from 'long';
 
 export class NodeInfo {
     private _startOffset: number;
@@ -23,7 +24,7 @@ export class NodeInfo {
         return this.endOffset - this.startOffset;
     }
 
-    public seekAndReadLong(offset: number, length: number): number {
+    public seekAndReadLong(offset: number, length: number): long {
         return this.pstNodeInputStream.seekAndReadLong(this.startOffset + offset, length);
     }
 }

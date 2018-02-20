@@ -23,6 +23,7 @@
     "@types/chai": "^4.1.2",
     "@types/debug": "0.0.30",
     "@types/fs-ext": "0.0.29",
+    "@types/long": "^3.0.32",
     "@types/mocha": "^2.2.48",
     "@types/morgan": "^1.7.35",
     "@types/node": "^9.4.6",
@@ -37,6 +38,7 @@
     "typescript": "^2.7.2"
   },
   "dependencies": {
-    "fs-ext": "^1.0.0"
+    "fs-ext": "^1.0.0",
+    "long": "^4.0.0"
   }
 }

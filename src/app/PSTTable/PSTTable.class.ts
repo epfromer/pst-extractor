@@ -56,7 +56,7 @@ export class PSTTable extends PSTObject {
                 throw new Error("Unable to parse table, bad table type.  Unknown identifier: 0x" + headdata[3].toString(16));
         }
 
-        this.hidUserRoot = pstNodeInputStream.seekAndReadLong(4, 4); // hidUserRoot
+        this.hidUserRoot = pstNodeInputStream.seekAndReadLong(4, 4).toNumber(); // hidUserRoot
 
         // all tables should have a BTHHEADER at hnid == 0x20 
         let headerNodeInfo: NodeInfo = this.getNodeInfo(0x20);
@@ -76,7 +76,7 @@ export class PSTTable extends PSTObject {
         this.sizeOfItemKey = headerNodeInfo.pstNodeInputStream.read() & 0xFF; // Size of key in key table
         this.sizeOfItemValue = headerNodeInfo.pstNodeInputStream.read() & 0xFF; // Size of value in key table
         this.numberOfIndexLevels = headerNodeInfo.pstNodeInputStream.read() & 0xFF;
-        this.hidRoot = headerNodeInfo.seekAndReadLong(4, 4);
+        this.hidRoot = headerNodeInfo.seekAndReadLong(4, 4).toNumber();
         this.description += "Table (" + this.tableType + ")\n" + "hidUserRoot: " + this.hidUserRoot + " - 0x"
             + this.hidUserRoot.toString(16) + "\n" + "Size Of Keys: " + this.sizeOfItemKey + " - 0x"
             + this.hidUserRoot.toString(16) + "\n" + "Size Of Values: " + this.sizeOfItemValue + " - 0x"
@@ -137,16 +137,15 @@ export class PSTTable extends PSTObject {
             blockOffset = this.arrayBlocks[whichBlock - 1];
         }
         // Get offset of HN page map
-        let iHeapNodePageMap = this.pstNodeInputStream.seekAndReadLong(blockOffset, 2) + blockOffset;
-        let cAlloc = this.pstNodeInputStream.seekAndReadLong(iHeapNodePageMap, 2);
+        let iHeapNodePageMap = this.pstNodeInputStream.seekAndReadLong(blockOffset, 2).toNumber() + blockOffset;
+        let cAlloc = this.pstNodeInputStream.seekAndReadLong(iHeapNodePageMap, 2).toNumber();
         if (index >= cAlloc + 1) {
             throw new Error("getNodeInfo: node index doesn't exist! nid = " + hnid);
         }
         iHeapNodePageMap += (2 * index) + 2;
-        let start = this.pstNodeInputStream.seekAndReadLong(iHeapNodePageMap, 2) + blockOffset;
-        let end = this.pstNodeInputStream.seekAndReadLong(iHeapNodePageMap + 2, 2) + blockOffset;
+        let start = this.pstNodeInputStream.seekAndReadLong(iHeapNodePageMap, 2).toNumber() + blockOffset;
+        let end = this.pstNodeInputStream.seekAndReadLong(iHeapNodePageMap + 2, 2).toNumber() + blockOffset;
     
-        let out: NodeInfo = new NodeInfo(start, end, this.pstNodeInputStream);
-        return out;
+        return new NodeInfo(start, end, this.pstNodeInputStream);
     }
 }

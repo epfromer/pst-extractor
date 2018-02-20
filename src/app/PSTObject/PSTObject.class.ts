@@ -1,3 +1,5 @@
+import * as long from 'long';
+
 // PST Object is the root class of all PST Items.
 // It also provides a number of static utility functions. The most important is
 // detectAndLoadPSTObject call which allows extraction of a PST Item from the file.
@@ -22,6 +24,7 @@ export class PSTObject {
         0x2f, 0x0e, 0x81, 0x65, 0x73, 0xe4, 0xc2, 0xa2, 0x8a, 0xd4, 0xe1, 0x11, 0xd0, 0x08, 0x8b, 0x2a, 0xf2, 0xed,
         0x9a, 0x64, 0x3f, 0xc1, 0x6c, 0xf9, 0xec ];
 
+    // maps hex codes to names for properties
     public propertyName: Map<number, string> = new Map([
         [0x0002, 'PidTagAlternateRecipientAllowed'],
         [0x0003, 'PidTagNameidStreamEntry'],
@@ -619,39 +622,12 @@ export class PSTObject {
     // }
 
     public getPropertyName(propertyId: number, bNamed: boolean): string {
-
         return this.propertyName.get(propertyId);
-        // return propertyId.toString(16);
-
-        // if (bFirstTime) {
-        //     bFirstTime = false;
-        //     propertyNames = new Properties();
-        //     try {
-        //         final InputStream propertyStream = PSTFile.class.getResourceAsStream("/PropertyNames.txt");
-        //         if (propertyStream != null) {
-        //             propertyNames.load(propertyStream);
-        //         } else {
-        //             propertyNames = null;
-        //         }
-        //     } catch (final FileNotFoundException e) {
-        //         propertyNames = null;
-        //         e.printStackTrace();
-        //     } catch (final IOException e) {
-        //         propertyNames = null;
-        //         e.printStackTrace();
-        //     }
-        // }
-
-        // if (propertyNames != null) {
-        //     final String key = String.format((bNamed ? "%08X" : "%04X"), propertyId);
-        //     return propertyNames.getProperty(key);
-        // }
-
-        // return null;
     }
 
     public getNameToIdMapKey(id: number): number {
         return -1;
+        // TODO
         // let i = idToName.get(id);
         // if (i == null) {
         //     // throw new PSTException("Name to Id mapping not found");
@@ -665,27 +641,26 @@ export class PSTObject {
         if (entryType < 0x8000) {
             let name = this.getPropertyName(entryType, false);
             if (name != null) {
-                ret = name + ':' + entryValueType.toString(16) + ':'; // String.format("%s:%04X: ", name, entryValueType);
+                ret = name + ':' + entryValueType.toString(16) + ':'; 
             } else {
-                ret = entryType.toString(16) + ':' + entryValueType.toString(16) + ':'; // String.format("0x%04X:%04X: ", entryType, entryValueType);
+                ret = entryType.toString(16) + ':' + entryValueType.toString(16) + ':'; 
             }
         } else {
             let type = this.getNameToIdMapKey(entryType);
             if (type == -1) {
-                ret = '0xFFFF(' + entryType.toString(16) + '):' +  entryValueType.toString(16) + ':'; // String.format("0xFFFF(%04X):%04X: ", entryType, entryValueType);
+                ret = '0xFFFF(' + entryType.toString(16) + '):' +  entryValueType.toString(16) + ':'; 
             } else {
                 let name = this.getPropertyName(type, true);
                 if (name != null) {
-                    ret = name + '(' + entryType.toString(16) + '):' +  entryValueType.toString(16) + ':'; // String.format("%s(%04X):%04X: ", name, entryType, entryValueType);
+                    ret = name + '(' + entryType.toString(16) + '):' +  entryValueType.toString(16) + ':'; 
                 } else {
-                    ret = '0x' + type.toString(16) + '(' + entryType.toString(16) + '):' +  entryValueType.toString(16) + ':'; // String.format("0x%04X(%04X):%04X: ", type, entryType, entryValueType);
+                    ret = '0x' + type.toString(16) + '(' + entryType.toString(16) + '):' +  entryValueType.toString(16) + ':'; 
                 }
             }
         }
 
         return ret;
     }
-
 
     protected arraycopy(src: Buffer, srcPos: number, dest: Buffer, destPos: number, length: number) {
         // FIX THIS - TOO SLOW?
@@ -790,8 +765,7 @@ export class PSTObject {
     // }
 
     // convert little endian bytes to number (long)
-    public static convertLittleEndianBytesToLong(data: Buffer, start?: number, end?: number) {
-
+    public static convertLittleEndianBytesToLong(data: Buffer, start?: number, end?: number): long {
         if (!start) {
             start = 0;
         }
@@ -799,15 +773,15 @@ export class PSTObject {
             end = data.length;
         }
 
-        let offset = data[end - 1] & 0xff;
-        let tmpLongValue;
+        let offset: long = long.fromNumber(data[end - 1] & 0xff);
+        let tmpLongValue: long;
         for (let x = end - 2; x >= start; x--) {
-            offset = offset << 8;
-            tmpLongValue = data[x] & 0xff;
-            offset |= tmpLongValue;
+            offset = offset.shiftLeft(8);
+            tmpLongValue = long.fromNumber(data[x] & 0xff);
+            offset = offset.xor(tmpLongValue);
         }
 
-        // console.log("PSTObject: convertLittleEndianBytesToLong = %d", offset);
+        console.log("PSTObject: convertLittleEndianBytesToLong = " + offset.toString());
         
         return offset;
     }

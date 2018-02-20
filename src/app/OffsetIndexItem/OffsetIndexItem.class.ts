@@ -1,5 +1,6 @@
 import { PSTFile } from './../PSTFile/PSTFile.class';
 import { PSTObject } from './../PSTObject/PSTObject.class'
+import * as long from 'long';
 
 export class OffsetIndexItem extends PSTObject {
     indexIdentifier: number;
@@ -11,15 +12,15 @@ export class OffsetIndexItem extends PSTObject {
         super();
 
         if (pstFileType == PSTFile.PST_TYPE_ANSI) {
-            this.indexIdentifier = PSTObject.convertLittleEndianBytesToLong(data, 0, 4);
-            this.fileOffset = PSTObject.convertLittleEndianBytesToLong(data, 4, 8);
-            this.size = PSTObject.convertLittleEndianBytesToLong(data, 8, 10);
-            this.cRef = PSTObject.convertLittleEndianBytesToLong(data, 10, 12);
+            this.indexIdentifier = PSTObject.convertLittleEndianBytesToLong(data, 0, 4).toNumber();
+            this.fileOffset = PSTObject.convertLittleEndianBytesToLong(data, 4, 8).toNumber();
+            this.size = PSTObject.convertLittleEndianBytesToLong(data, 8, 10).toNumber();
+            this.cRef = PSTObject.convertLittleEndianBytesToLong(data, 10, 12).toNumber();
         } else {
-            this.indexIdentifier = PSTObject.convertLittleEndianBytesToLong(data, 0, 8);
-            this.fileOffset = PSTObject.convertLittleEndianBytesToLong(data, 8, 16);
-            this.size = PSTObject.convertLittleEndianBytesToLong(data, 16, 18);
-            this.cRef = PSTObject.convertLittleEndianBytesToLong(data, 16, 18);
+            this.indexIdentifier = PSTObject.convertLittleEndianBytesToLong(data, 0, 8).toNumber();
+            this.fileOffset = PSTObject.convertLittleEndianBytesToLong(data, 8, 16).toNumber();
+            this.size = PSTObject.convertLittleEndianBytesToLong(data, 16, 18).toNumber();
+            this.cRef = PSTObject.convertLittleEndianBytesToLong(data, 16, 18).toNumber();
         }
     }
 }
