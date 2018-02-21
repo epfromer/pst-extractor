@@ -782,7 +782,7 @@ export class PSTObject {
             offset = offset.xor(tmpLongValue);
         }
 
-        console.log("PSTObject: convertLittleEndianBytesToLong = " + offset.toString());
+        // console.log("PSTObject: convertLittleEndianBytesToLong = " + offset.toString());
         
         return offset;
     }
@@ -804,7 +804,7 @@ export class PSTObject {
             offset = offset.xor(tmpLongValue);
         }
 
-        console.log("PSTObject: convertBigEndianBytesToLong = " + offset.toString());
+        // console.log("PSTObject: convertBigEndianBytesToLong = " + offset.toString());
 
         return offset;
     }
