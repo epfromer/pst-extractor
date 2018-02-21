@@ -13,7 +13,7 @@ export class PSTTableItem extends PSTObject {
     public entryType: long;
     public entryValueType = 0;
     public entryValueReference = 0;
-    public data: Buffer = new Buffer(1);
+    public data: Buffer = new Buffer(0);
     public isExternalValueReference = false;
 
     public getLongValue() {

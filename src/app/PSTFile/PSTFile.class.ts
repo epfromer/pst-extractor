@@ -38,7 +38,7 @@ export class PSTFile extends PSTObject {
     public static PSETID_AirSync: number = 13;
     public static PSETID_Sharing: number = 14;
 
-    private guidMap: Map<string, number> = new Map ([
+    private guidMap: Map<string, number> = new Map([
         ['00020329-0000-0000-C000-000000000046', 0],
         ['00062008-0000-0000-C000-000000000046', 1],
         ['00062004-0000-0000-C000-000000000046', 2],
@@ -69,11 +69,16 @@ export class PSTFile extends PSTObject {
         return this._pstFileType;
     }
 
+    // the node tree
+    private nameToId: Map<long, number>  = new Map<>();
+    private stringToId: Map<string, number>  = new Map<>();
+    private idToName: Map<number, long>  = new Map<>();
+    private idToString: Map<number, string>  = new Map<>();
+
     // file descriptor
     private pstFilename: string;
     private pstFD: number;
     private pstStream: fs.ReadStream;
-
     private _pstFileContent: PSTFileContent;
     public get pstFileContent() {
         return this._pstFileContent;
@@ -151,8 +156,7 @@ export class PSTFile extends PSTObject {
         let tableItems: Map<number, PSTTableBCItem> = bcTable.getItems();
 
         // Get the guids
-        debugger;
-        let guidEntry: PSTTableBCItem = tableItems.get(2); 
+        let guidEntry: PSTTableBCItem = tableItems.get(2);
         this.guids = this.getData(guidEntry, localDescriptorItems);
         let nGuids = this.guids.length / 16;
         // final UUID[] uuidArray = new UUID[nGuids];
@@ -187,7 +191,6 @@ export class PSTFile extends PSTObject {
             let arrUID = [].concat(mostBuffer, leastBuffer);
             let strUID: string = uuidparse.unparse(arrUID).toUpperCase();
 
-            debugger;
             if (this.guidMap.has(strUID)) {
                 uuidIndexes[i] = this.guidMap.get(strUID);
             } else {
@@ -197,51 +200,73 @@ export class PSTFile extends PSTObject {
             offset += 16;
         }
 
+        debugger;
+
         // // if we have a reference to an internal descriptor
-        // final PSTTableBCItem mapEntries = tableItems.get(3); //
-        // final byte[] nameToIdByte = this.getData(mapEntries, localDescriptorItems);
+        let mapEntries: PSTTableBCItem = tableItems.get(3);
+        let nameToIdByte: Buffer = this.getData(
+            mapEntries,
+            localDescriptorItems
+        );
 
-        // final PSTTableBCItem stringMapEntries = tableItems.get(4); //
-        // final byte[] stringNameToIdByte = this.getData(stringMapEntries, localDescriptorItems);
+        let stringMapEntries: PSTTableBCItem = tableItems.get(4);
+        let stringNameToIdByte: Buffer = this.getData(
+            stringMapEntries,
+            localDescriptorItems
+        );
 
-        // // process the entries
-        // for (int x = 0; x + 8 < nameToIdByte.length; x += 8) {
-        //     final int dwPropertyId = (int) PSTObject.convertLittleEndianBytesToLong(nameToIdByte, x, x + 4);
-        //     int wGuid = (int) PSTObject.convertLittleEndianBytesToLong(nameToIdByte, x + 4, x + 6);
-        //     int wPropIdx = ((int) PSTObject.convertLittleEndianBytesToLong(nameToIdByte, x + 6, x + 8));
+        // process the entries
+        for (let x = 0; x + 8 < nameToIdByte.length; x += 8) {
+            let dwPropertyId: number = this.convertLittleEndianBytesToLong(
+                nameToIdByte,
+                x,
+                x + 4
+            ).toNumber();
+            let wGuid: number = this.convertLittleEndianBytesToLong(
+                nameToIdByte,
+                x + 4,
+                x + 6
+            ).toNumber();
+            let wPropIdx: number = this.convertLittleEndianBytesToLong(
+                nameToIdByte,
+                x + 6,
+                x + 8
+            ).toNumber();
 
-        //     if ((wGuid & 0x0001) == 0) {
-        //         wPropIdx += 0x8000;
-        //         wGuid >>= 1;
-        //         int guidIndex;
-        //         if (wGuid == 1) {
-        //             guidIndex = PS_MAPI;
-        //         } else if (wGuid == 2) {
-        //             guidIndex = PS_PUBLIC_STRINGS;
-        //         } else {
-        //             guidIndex = uuidIndexes[wGuid - 3];
-        //         }
-        //         this.nameToId.put(dwPropertyId | ((long) guidIndex << 32), wPropIdx);
-        //         idToName.put(wPropIdx, (long) dwPropertyId);
-        //         /*
-        //          * System.out.printf("0x%08X:%04X, 0x%08X\n", dwPropertyId,
-        //          * guidIndex, wPropIdx);
-        //          * /
-        //          **/
-        //     } else {
-        //         // else the identifier is a string
-        //         // dwPropertyId becomes thHke byte offset into the String stream
-        //         // in which the string name of the property is stored.
-        //         final int len = (int) PSTObject.convertLittleEndianBytesToLong(stringNameToIdByte, dwPropertyId,
-        //             dwPropertyId + 4);
-        //         final byte[] keyByteValue = new byte[len];
-        //         System.arraycopy(stringNameToIdByte, dwPropertyId + 4, keyByteValue, 0, keyByteValue.length);
-        //         wPropIdx += 0x8000;
-        //         final String key = new String(keyByteValue, "UTF-16LE");
-        //         this.stringToId.put(key, wPropIdx);
-        //         this.idToString.put(wPropIdx, key);
-        //     }
-        // }
+            if ((wGuid & 0x0001) == 0) {
+                // identifier is numeric
+                wPropIdx += 0x8000;
+                wGuid >>= 1;
+                let guidIndex: number;
+                if (wGuid == 1) {
+                    guidIndex = PSTFile.PS_MAPI;
+                } else if (wGuid == 2) {
+                    guidIndex = PSTFile.PS_PUBLIC_STRINGS;
+                } else {
+                    guidIndex = uuidIndexes[wGuid - 3];
+                }
+                let dwPropertyIdLong: long = long.fromNumber(dwPropertyId);
+                let guidIndexLong: long = long.fromNumber(guidIndex);
+                guidIndexLong = guidIndexLong.shiftLeft(32);
+                dwPropertyIdLong = dwPropertyIdLong.or(guidIndexLong);
+                let foo = dwPropertyIdLong.toString();
+                this.nameToId.set(dwPropertyIdLong, wPropIdx);
+                this.idToName.set(wPropIdx, dwPropertyIdLong);
+                console.log('numeric key: ' + dwPropertyIdLong.toString());
+            } else {
+                // identifier is a string
+                // dwPropertyId becomes thHke byte offset into the String stream
+                // in which the string name of the property is stored.
+                let len = this.convertLittleEndianBytesToLong(stringNameToIdByte, dwPropertyId, dwPropertyId + 4).toNumber();
+                let keyByteValue = new Buffer(len);
+                this.arraycopy(stringNameToIdByte, dwPropertyId + 4, keyByteValue, 0, keyByteValue.length);
+                wPropIdx += 0x8000;
+                let key = keyByteValue.toString('utf16le');
+                this.stringToId.set(key, wPropIdx);
+                this.idToString.set(wPropIdx, key);
+                console.log('string key: ' + key);
+            }
+        }
     }
 
     private getData(
