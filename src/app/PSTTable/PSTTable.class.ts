@@ -2,11 +2,12 @@ import { PSTDescriptorItem } from './../PSTDescriptorItem/PSTDescriptorItem.clas
 import { PSTObject } from './../PSTObject/PSTObject.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import { NodeInfo } from '../NodeInfo/NodeInfo.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 
 // The PST Table is the workhorse of the whole system.
 // It allows for an item to be read and broken down into the individual properties that it consists of.
 // For most PST Objects, it appears that only 7c and bc table types are used.
-export class PSTTable extends PSTObject {
+export class PSTTable {
     protected tableType: string;
     protected tableTypeByte: number;
     protected hidUserRoot: number;
@@ -23,8 +24,6 @@ export class PSTTable extends PSTObject {
     protected description = '';
 
     constructor (pstNodeInputStream: PSTNodeInputStream, subNodeDescriptorItems: Map<number, PSTDescriptorItem>) {
-        super();
-
         this.subNodeDescriptorItems = subNodeDescriptorItems;
         this.pstNodeInputStream = pstNodeInputStream;
         this.arrayBlocks = pstNodeInputStream.getBlockOffsets();
@@ -38,8 +37,8 @@ export class PSTTable extends PSTObject {
               headdata[1] === 30 &&
               headdata[2] === 236 &&
               headdata[3] === 188)) {
-            this.decode(headdata);
-            this.printHexFormatted(headdata, true);
+            PSTUtil.decode(headdata);
+            PSTUtil.printHexFormatted(headdata, true);
             throw new Error("Unable to parse table, bad table type...");
         }
 
@@ -68,7 +67,7 @@ export class PSTTable extends PSTObject {
             headerNodeInfo.pstNodeInputStream.seek(headerNodeInfo.startOffset);
             let tmp = new Buffer(1024);
             headerNodeInfo.pstNodeInputStream.readCompletely(tmp);
-            this.printHexFormatted(tmp, true);
+            PSTUtil.printHexFormatted(tmp, true);
             // System.out.println(PSTObject.compEnc[headerByte]);
             throw new Error("Unable to parse table, can't find BTHHEADER header information: " + headerByte);
         }

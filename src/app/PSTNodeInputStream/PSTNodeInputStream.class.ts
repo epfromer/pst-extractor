@@ -4,8 +4,9 @@ import { PSTObject } from './../PSTObject/PSTObject.class'
 import { PSTFileContent } from '../PSTFileContent/PSTFileContent.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import * as long from 'long';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 
-export class PSTNodeInputStream extends PSTObject {
+export class PSTNodeInputStream {
 
     private pstFileContent: PSTFileContent; // TODO:  remove this and use pstFile.pstFileContent?
     private skipPoints: number[] = [];
@@ -53,7 +54,6 @@ export class PSTNodeInputStream extends PSTObject {
     constructor(pstFile: PSTFile, descriptorItem: PSTDescriptorItem)
     constructor(pstFile: PSTFile, offsetItem: OffsetIndexItem)
     constructor(pstFile: PSTFile, arg: any) {
-        super();
         if (arg instanceof OffsetIndexItem) {
             this._pstFile = pstFile;
             this.pstFileContent = pstFile.pstFileContent;
@@ -159,7 +159,7 @@ export class PSTNodeInputStream extends PSTObject {
             if (data[0] == 0x1) {
                 bInternal = false;
                 // we are a xblock, or xxblock
-                this._length = this.convertLittleEndianBytesToLong(data, 4, 8).toNumber();
+                this._length = PSTUtil.convertLittleEndianBytesToLong(data, 4, 8).toNumber();
                 // go through all of the blocks and create skip points.
                 this.getBlockSkipPoints(data);
                 return;
@@ -179,7 +179,7 @@ export class PSTNodeInputStream extends PSTObject {
             throw new Error("Unable to process XBlock, incorrect identifier");
         }
 
-        let numberOfEntries = this.convertLittleEndianBytesToLong(data, 2, 4).toNumber();
+        let numberOfEntries = PSTUtil.convertLittleEndianBytesToLong(data, 2, 4).toNumber();
 
         let arraySize = 8;
         if (this.pstFile.pstFileType == PSTFile.PST_TYPE_ANSI) {
@@ -189,7 +189,7 @@ export class PSTNodeInputStream extends PSTObject {
             // XXBlock
             let offset = 8;
             for (let x = 0; x < numberOfEntries; x++) {
-                let bid = this.convertLittleEndianBytesToLong(data, offset, offset + arraySize).toNumber();
+                let bid = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + arraySize).toNumber();
                 bid &= 0xfffffffe;
                 // get the details in this block and
                 let offsetItem = this.pstFile.getOffsetIndexNode(bid);
@@ -204,7 +204,7 @@ export class PSTNodeInputStream extends PSTObject {
             // normal XBlock
             let offset = 8;
             for (let x = 0; x < numberOfEntries; x++) {
-                let bid = this.convertLittleEndianBytesToLong(data, offset, offset + arraySize).toNumber();
+                let bid = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + arraySize).toNumber();
                 bid &= 0xfffffffe;
                 // get the details in this block and add it to the list
                 let offsetItem = this.pstFile.getOffsetIndexNode(bid);
@@ -228,7 +228,7 @@ export class PSTNodeInputStream extends PSTObject {
             let value = this.allData[this.currentLocation] & 0xFF;
             this.currentLocation++;
             if (this.encrypted) {
-                value = this.compEnc[value];
+                value = PSTUtil.compEnc[value];
             }
             return value;
         }
@@ -253,7 +253,7 @@ export class PSTNodeInputStream extends PSTObject {
             return -1;
         }
         if (this.encrypted) {
-            output = this.compEnc[output];
+            output = PSTUtil.compEnc[output];
         }
 
         this.currentLocation++;
@@ -293,16 +293,16 @@ export class PSTNodeInputStream extends PSTObject {
         if (this.allData != null) {
             let bytesRemaining = this.length - this.currentLocation;
             if (output.length >= bytesRemaining) {
-                this.arraycopy(this.allData, this.currentLocation, output, 0, bytesRemaining);
+                PSTUtil.arraycopy(this.allData, this.currentLocation, output, 0, bytesRemaining);
                 if (this.encrypted) {
-                    this.decode(output);
+                    PSTUtil.decode(output);
                 }
                 this.currentLocation += bytesRemaining; // should be = to this.length
                 return bytesRemaining;
             } else {
-                this.arraycopy(this.allData, this.currentLocation, output, 0, output.length);
+                PSTUtil.arraycopy(this.allData, this.currentLocation, output, 0, output.length);
                 if (this.encrypted) {
-                    this.decode(output);
+                    PSTUtil.decode(output);
                 }
                 this.currentLocation += output.length;
                 return output.length;
@@ -335,7 +335,7 @@ export class PSTNodeInputStream extends PSTObject {
                 let chunk = new Buffer(bytesRemaining);
                 this.pstFileContent.readCompletely(chunk);
 
-                this.arraycopy(chunk, 0, output, totalBytesFilled, bytesRemaining);
+                PSTUtil.arraycopy(chunk, 0, output, totalBytesFilled, bytesRemaining);
                 totalBytesFilled += bytesRemaining;
                 // we are done!
                 filled = true;
@@ -345,7 +345,7 @@ export class PSTNodeInputStream extends PSTObject {
                 let bytesToRead = offset.size - currentPosInBlock;
                 let chunk = new Buffer(bytesToRead);
                 this.pstFileContent.readCompletely(chunk);
-                this.arraycopy(chunk, 0, output, totalBytesFilled, bytesToRead);
+                PSTUtil.arraycopy(chunk, 0, output, totalBytesFilled, bytesToRead);
                 totalBytesFilled += bytesToRead;
                 this.currentBlock++;
                 this.currentLocation += bytesToRead;
@@ -355,7 +355,7 @@ export class PSTNodeInputStream extends PSTObject {
 
         // decode the array if required
         if (this.encrypted) {
-            this.decode(output);
+            PSTUtil.decode(output);
         }
 
         // fill up our chunk
@@ -376,7 +376,7 @@ export class PSTNodeInputStream extends PSTObject {
         let buf = new Buffer(length);
         let lengthRead = this.readA(buf);
 
-        this.arraycopy(buf, 0, output, offset, lengthRead);
+        PSTUtil.arraycopy(buf, 0, output, offset, lengthRead);
         //System.arraycopy(buf, 0, output, offset, lengthRead);
 
         return lengthRead;
@@ -451,7 +451,7 @@ export class PSTNodeInputStream extends PSTObject {
         this.seek(location);
         let buffer = new Buffer(bytes);
         this.readCompletely(buffer);
-        return this.convertLittleEndianBytesToLong(buffer);
+        return PSTUtil.convertLittleEndianBytesToLong(buffer);
     }
 
 }

@@ -1,3 +1,4 @@
+import { PSTMessageStore } from './../PSTMessageStore/PSTMessageStore.class';
 import { DescriptorIndexNode } from './../DescriptorIndexNode/DescriptorIndexNode.class';
 import { PSTDescriptorItem } from './../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTNodeInputStream } from './../PSTNodeInputStream/PSTNodeInputStream.class';
@@ -7,6 +8,7 @@ import { PSTFileContent } from '../PSTFileContent/PSTFileContent.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as fs from 'fs';
 import * as fsext from 'fs-ext';
 import * as util from 'util';
@@ -70,10 +72,10 @@ export class PSTFile extends PSTObject {
     }
 
     // the node tree
-    private nameToId: Map<long, number>  = new Map<>();
-    private stringToId: Map<string, number>  = new Map<>();
-    private idToName: Map<number, long>  = new Map<>();
-    private idToString: Map<number, string>  = new Map<>();
+    private nameToId: Map<long, number>  = new Map();
+    private stringToId: Map<string, number>  = new Map();
+    private idToName: Map<number, long>  = new Map();
+    private idToString: Map<number, string>  = new Map();
 
     // file descriptor
     private pstFilename: string;
@@ -90,6 +92,7 @@ export class PSTFile extends PSTObject {
     }
 
     public open() {
+
         // attempt to open file
         // confirm first 4 bytes are !BDN
         this.pstFD = fsext.openSync(this.pstFilename, 'r');
@@ -163,25 +166,25 @@ export class PSTFile extends PSTObject {
         let uuidIndexes: number[] = [];
         let offset = 0;
         for (let i = 0; i < nGuids; ++i) {
-            let leftQuad: long = this.convertLittleEndianBytesToLong(
+            let leftQuad: long = PSTUtil.convertLittleEndianBytesToLong(
                 this.guids,
                 offset,
                 offset + 4
             );
             leftQuad = leftQuad.shiftLeft(32);
-            let midQuad: long = this.convertLittleEndianBytesToLong(
+            let midQuad: long = PSTUtil.convertLittleEndianBytesToLong(
                 this.guids,
                 offset + 4,
                 offset + 6
             );
             midQuad = midQuad.shiftLeft(16);
-            let rightQuad: long = this.convertLittleEndianBytesToLong(
+            let rightQuad: long = PSTUtil.convertLittleEndianBytesToLong(
                 this.guids,
                 offset + 6,
                 offset + 8
             );
             let mostSigBits: long = leftQuad.or(midQuad).or(rightQuad);
-            let leastSigBits: long = this.convertBigEndianBytesToLong(
+            let leastSigBits: long = PSTUtil.convertBigEndianBytesToLong(
                 this.guids,
                 offset + 8,
                 offset + 16
@@ -200,9 +203,7 @@ export class PSTFile extends PSTObject {
             offset += 16;
         }
 
-        debugger;
-
-        // // if we have a reference to an internal descriptor
+        // if we have a reference to an internal descriptor
         let mapEntries: PSTTableBCItem = tableItems.get(3);
         let nameToIdByte: Buffer = this.getData(
             mapEntries,
@@ -217,17 +218,17 @@ export class PSTFile extends PSTObject {
 
         // process the entries
         for (let x = 0; x + 8 < nameToIdByte.length; x += 8) {
-            let dwPropertyId: number = this.convertLittleEndianBytesToLong(
+            let dwPropertyId: number = PSTUtil.convertLittleEndianBytesToLong(
                 nameToIdByte,
                 x,
                 x + 4
             ).toNumber();
-            let wGuid: number = this.convertLittleEndianBytesToLong(
+            let wGuid: number = PSTUtil.convertLittleEndianBytesToLong(
                 nameToIdByte,
                 x + 4,
                 x + 6
             ).toNumber();
-            let wPropIdx: number = this.convertLittleEndianBytesToLong(
+            let wPropIdx: number = PSTUtil.convertLittleEndianBytesToLong(
                 nameToIdByte,
                 x + 6,
                 x + 8
@@ -257,9 +258,9 @@ export class PSTFile extends PSTObject {
                 // identifier is a string
                 // dwPropertyId becomes thHke byte offset into the String stream
                 // in which the string name of the property is stored.
-                let len = this.convertLittleEndianBytesToLong(stringNameToIdByte, dwPropertyId, dwPropertyId + 4).toNumber();
+                let len = PSTUtil.convertLittleEndianBytesToLong(stringNameToIdByte, dwPropertyId, dwPropertyId + 4).toNumber();
                 let keyByteValue = new Buffer(len);
-                this.arraycopy(stringNameToIdByte, dwPropertyId + 4, keyByteValue, 0, keyByteValue.length);
+                PSTUtil.arraycopy(stringNameToIdByte, dwPropertyId + 4, keyByteValue, 0, keyByteValue.length);
                 wPropIdx += 0x8000;
                 let key = keyByteValue.toString('utf16le');
                 this.stringToId.set(key, wPropIdx);
@@ -384,19 +385,12 @@ export class PSTFile extends PSTObject {
     //     return this.in;
     // }
 
-    // /**
-    //  * get the message store of the PST file.
-    //  * Note that this doesn't really have much information, better to look under
-    //  * the root folder
-    //  *
-    //  * @throws PSTException
-    //  * @throws IOException
-    //  */
-    // public PSTMessageStore getMessageStore() throws PSTException, IOException {
-    //     final DescriptorIndexNode messageStoreDescriptor = this
-    //         .getDescriptorIndexNode(MESSAGE_STORE_DESCRIPTOR_IDENTIFIER);
-    //     return new PSTMessageStore(this, messageStoreDescriptor);
-    // }
+    // Get the message store of the PST file.  Note that this doesn't really 
+    // have much information, better to look under the root folder.
+    public getMessageStore(): PSTMessageStore {
+        let  messageStoreDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(PSTFile.MESSAGE_STORE_DESCRIPTOR_IDENTIFIER);
+        return new PSTMessageStore(this, messageStoreDescriptor);
+    }
 
     // /**
     //  * get the root folder for the PST file.
@@ -591,7 +585,7 @@ export class PSTFile extends PSTObject {
                             buffer = new Buffer(4);
                             this.seekAndRead(buffer, btreeStartOffset + x * 16);
                             if (
-                                this.convertLittleEndianBytesToLong(
+                                PSTUtil.convertLittleEndianBytesToLong(
                                     buffer
                                 ).toNumber() == index
                             ) {
@@ -627,7 +621,7 @@ export class PSTFile extends PSTObject {
                             this.seekAndRead(buffer, btreeStartOffset + x * 32);
 
                             if (
-                                this.convertLittleEndianBytesToLong(
+                                PSTUtil.convertLittleEndianBytesToLong(
                                     buffer
                                 ).toNumber() == index
                             ) {

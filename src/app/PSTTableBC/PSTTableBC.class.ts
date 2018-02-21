@@ -4,6 +4,7 @@ import { PSTTableBCItem } from "../PSTTableBCItem/PSTTableBCItem.class";
 import { PSTNodeInputStream } from "../PSTNodeInputStream/PSTNodeInputStream.class";
 import { PSTDescriptorItem } from "../PSTDescriptorItem/PSTDescriptorItem.class";
 import { NodeInfo } from "../NodeInfo/NodeInfo.class";
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 
 export class PSTTableBC extends PSTTable {
 
@@ -31,9 +32,9 @@ export class PSTTableBC extends PSTTable {
         for (let x = 0; x < this.numberOfKeys; x++) {
             let item  = new PSTTableBCItem();
             item.itemIndex = x;
-            item.entryType = this.convertLittleEndianBytesToLong(keyTableInfo, offset + 0, offset + 2);
-            item.entryValueType = this.convertLittleEndianBytesToLong(keyTableInfo, offset + 2, offset + 4).toNumber();
-            item.entryValueReference = this.convertLittleEndianBytesToLong(keyTableInfo, offset + 4, offset + 8).toNumber();
+            item.entryType = PSTUtil.convertLittleEndianBytesToLong(keyTableInfo, offset + 0, offset + 2);
+            item.entryValueType = PSTUtil.convertLittleEndianBytesToLong(keyTableInfo, offset + 2, offset + 4).toNumber();
+            item.entryValueReference = PSTUtil.convertLittleEndianBytesToLong(keyTableInfo, offset + 4, offset + 8).toNumber();
 
             // Data is in entryValueReference for all types <= 4 bytes long
             switch (item.entryValueType) {

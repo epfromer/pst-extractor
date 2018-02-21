@@ -1,9 +1,10 @@
 import { PSTFile } from './../PSTFile/PSTFile.class';
 import { PSTObject } from '../PSTObject/PSTObject.class';
-import * as long from 'long';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
+import * as long from 'long';
 
-export class PSTDescriptorItem extends PSTObject {
+export class PSTDescriptorItem {
 
     descriptorIdentifier: number;
     offsetIndexIdentifier: number;
@@ -16,18 +17,16 @@ export class PSTDescriptorItem extends PSTObject {
     private _pstFile: PSTFile;
 
     constructor(data: Buffer, offset: number, pstFile: PSTFile) {
-        super();
-
         this._pstFile = pstFile;
 
         if (pstFile.pstFileType == PSTFile.PST_TYPE_ANSI) {
-            this.descriptorIdentifier = this.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
-            this.offsetIndexIdentifier = (this.convertLittleEndianBytesToLong(data, offset + 4, offset + 8)).toNumber() & 0xfffffffe;
-            this.subNodeOffsetIndexIdentifier = this.convertLittleEndianBytesToLong(data, offset + 8, offset + 12).toNumber() & 0xfffffffe;
+            this.descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
+            this.offsetIndexIdentifier = (PSTUtil.convertLittleEndianBytesToLong(data, offset + 4, offset + 8)).toNumber() & 0xfffffffe;
+            this.subNodeOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset + 8, offset + 12).toNumber() & 0xfffffffe;
         } else {
-            this.descriptorIdentifier = this.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
-            this.offsetIndexIdentifier = (this.convertLittleEndianBytesToLong(data, offset + 8, offset + 16)).toNumber() & 0xfffffffe;
-            this.subNodeOffsetIndexIdentifier = this.convertLittleEndianBytesToLong(data, offset + 16, offset + 24).toNumber() & 0xfffffffe;
+            this.descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
+            this.offsetIndexIdentifier = (PSTUtil.convertLittleEndianBytesToLong(data, offset + 8, offset + 16)).toNumber() & 0xfffffffe;
+            this.subNodeOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset + 16, offset + 24).toNumber() & 0xfffffffe;
         }
     }
 

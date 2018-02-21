@@ -1,10 +1,11 @@
 import { PSTObject } from '../PSTObject/PSTObject.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import * as long from 'long';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 
 // Generic table item
 // Provides some basic string functions
-export class PSTTableItem extends PSTObject {
+export class PSTTableItem {
     public static VALUE_TYPE_PT_UNICODE = 0x1f;
     public static VALUE_TYPE_PT_STRING8 = 0x1e;
     public static VALUE_TYPE_PT_BIN = 0x102;
@@ -18,7 +19,7 @@ export class PSTTableItem extends PSTObject {
 
     public getLongValue() {
         if (this.data.length > 0) {
-            return this.convertLittleEndianBytesToLong(this.data);
+            return PSTUtil.convertLittleEndianBytesToLong(this.data);
         }
         return -1;
     }
@@ -75,7 +76,7 @@ export class PSTTableItem extends PSTObject {
     }
 
     public toString(): string {
-        let ret = this.getPropertyDescription(this.entryType.toNumber(), this.entryValueType);
+        let ret = PSTUtil.getPropertyDescription(this.entryType.toNumber(), this.entryValueType);
 
         if (this.entryValueType == 0x000b) {
             return ret + (this.entryValueReference == 0 ? 'false' : 'true');
