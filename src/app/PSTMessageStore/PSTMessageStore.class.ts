@@ -10,8 +10,8 @@ import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 export class PSTMessageStore extends PSTObject {
 
     constructor(pstFile: PSTFile, descriptorIndexNode: DescriptorIndexNode) {
-        //super(pstFile, descriptorIndexNode);
         super();
+        this.loadDescriptor(pstFile, descriptorIndexNode);
     }
 
     // Get the tag record key, unique to this pst
@@ -37,7 +37,7 @@ export class PSTMessageStore extends PSTObject {
         let displayNameEntryType = 0x3001;
         if (this.pstTableItems.has(displayNameEntryType)) {
             debugger;
-            return ''
+
             //return this.getStringItem(displayNameEntryType);
         }
         return "";

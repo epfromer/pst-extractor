@@ -20,6 +20,44 @@ export class PSTUtil {
         0x2f, 0x0e, 0x81, 0x65, 0x73, 0xe4, 0xc2, 0xa2, 0x8a, 0xd4, 0xe1, 0x11, 0xd0, 0x08, 0x8b, 0x2a, 0xf2, 0xed,
         0x9a, 0x64, 0x3f, 0xc1, 0x6c, 0xf9, 0xec ];
 
+    public static codePages: Map<number, string> = new Map([
+        [28596, 'iso-8859-6'],
+        [1256, 'windows-1256'],
+        [28594, 'iso-8859-4'],
+        [1257, 'windows-1257'],
+        [28592, 'iso-8859-2'],
+        [1250, 'windows-1250'],
+        [936, 'gb2312'],
+        [52936, 'hz-gb-2312'],
+        [54936, 'gb18030'],
+        [950, 'big5'],
+        [28595, 'iso-8859-5'],
+        [20866, 'koi8-r'],
+        [21866, 'koi8-u'],
+        [1251, 'windows-1251'],
+        [28597, 'iso-8859-7'],
+        [1253, 'windows-1253'],
+        [38598, 'iso-8859-8-i'],
+        [1255, 'windows-1255'],
+        [51932, 'euc-jp'],
+        [50220, 'iso-2022-jp'],
+        [50221, 'csISO2022JP'],
+        [932, 'iso-2022-jp'],
+        [949, 'ks_c_5601-1987'],
+        [51949, 'euc-kr'],
+        [28593, 'iso-8859-3'],
+        [28605, 'iso-8859-15'],
+        [874, 'windows-874'],
+        [28599, 'iso-8859-9'],
+        [1254, 'windows-1254'],
+        [65000, 'utf-7'],
+        [65001, 'utf-8'],
+        [20127, 'us-ascii'],
+        [1258, 'windows-1258'],
+        [28591, 'iso-8859-1'],
+        [1252, 'Windows-1252']
+    ]);
+
     // maps hex codes to names for properties
     public static propertyName: Map<number, string> = new Map([
         [0x0002, 'PidTagAlternateRecipientAllowed'],
@@ -278,8 +316,60 @@ export class PSTUtil {
         return offset;
     }
 
+    // Handle strings using codepages.
+    public static getInternetCodePageCharset(propertyId: number) {
+        return this.codePages.get(propertyId);
+    }
+
+    public static createJavascriptString(data: Buffer, stringType: number, codepage: string) {
+        try {
+            if (stringType == 0x1F) {
+                return data.toString('utf16le');
+            }
+            debugger;
+
+    //         if (codepage == null) {
+    //             return new String(data);
+    //         } else {
+    //             codepage = codepage.toUpperCase(Locale.US);
+    //             if (codepage.contentEquals("ISO-8859-8-I")) {   //  Outlook hebrew encoding is not supported by Java
+    //                 codepage = "ISO-8859-8";      // next best thing is hebrew characters with wrong order
+    //             }
+    //             try {
+    //                 return new String(data, codepage);
+    //             } catch (UnsupportedEncodingException e) {
+    //                 return new String(data, "UTF-8");
+    //             }
+    //         }
+    //         /*
+    //          * if (codepage == null || codepage.toUpperCase().equals("UTF-8") ||
+    //          * codepage.toUpperCase().equals("UTF-7")) {
+    //          * // PST UTF-8 strings are not... really UTF-8
+    //          * // it seems that they just don't use multibyte chars at all.
+    //          * // indeed, with some crylic chars in there, the difficult chars
+    //          * are just converted to %3F(?)
+    //          * // I suspect that outlook actually uses RTF to store these
+    //          * problematic strings.
+    //          * StringBuffer sbOut = new StringBuffer();
+    //          * for (int x = 0; x < data.length; x++) {
+    //          * sbOut.append((char)(data[x] & 0xFF)); // just blindly accept the
+    //          * byte as a UTF char, seems right half the time
+    //          * }
+    //          * return new String(sbOut);
+    //          * } else {
+    //          * codepage = codepage.toUpperCase();
+    //          * return new String(data, codepage);
+    //          * }
+    //          */
+        } catch (err) {
+            console.log("Unable to decode string");
+            throw (err);
+        }
+    }
+
+    // copy from one array to another
     public static arraycopy(src: Buffer, srcPos: number, dest: Buffer, destPos: number, length: number) {
-        // FIX THIS - TOO SLOW?
+        // TODO FIX THIS - TOO SLOW?
         let s = srcPos;
         let d = destPos;
         let i = 0;
@@ -417,4 +507,7 @@ export class PSTUtil {
         }
         return ret;
     }
+
+
+
 }

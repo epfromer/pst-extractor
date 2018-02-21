@@ -5,27 +5,25 @@ import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 
-// PST Object is the root class of all PST Items.
+// PST Object is the root class of most PST Items.
 // It also provides a number of static utility functions. The most important is
 // detectAndLoadPSTObject call which allows extraction of a PST Item from the file.
 export class PSTObject {
 
     // protected byte[] data;
     // protected HashMap<Integer, PSTTableBCItem> items;
-    protected localDescriptorItems: Map<number, PSTDescriptorItem> = null;
+    private pstFile: PSTFile;
+    private descriptorIndexNode: DescriptorIndexNode
+    private localDescriptorItems: Map<number, PSTDescriptorItem> = null;
     // protected LinkedHashMap<String, HashMap<DescriptorIndexNode, PSTObject>> children;
-    protected pstFile: PSTFile;
-    protected descriptorIndexNode: DescriptorIndexNode;
-    protected pstTableBC: PSTTableBC;
+    private pstTableBC: PSTTableBC;
     protected pstTableItems: Map<number, PSTTableBCItem>;
 
-    constructor() {
-        
-    }
+    constructor() { }
 
-    foo(pstFile: PSTFile, descriptorIndexNode: DescriptorIndexNode) {
-
+    protected loadDescriptor(pstFile: PSTFile, descriptorIndexNode: DescriptorIndexNode) {
         this.pstFile = pstFile;
         this.descriptorIndexNode = descriptorIndexNode;
 
@@ -151,109 +149,66 @@ export class PSTObject {
     //     return defaultValue;
     // }
 
-    // protected getStringItem(identifier: number, stringType?: number, codepage?: string): string {
-    //     let item: PSTTableBCItem = this.items.get(identifier);
-    //     if (item != null) {
+    protected getStringItem(identifier: number, stringType?: number, codepage?: string): string {
 
-    //         if (codepage == null) {
-    //             codepage = this.getStringCodepage();
-    //         }
+        debugger;
 
-    //         // get the string type from the item if not explicitly set
-    //         if (stringType == 0) {
-    //             stringType = item.entryValueType;
-    //         }
+        let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+        if (item != null) {
 
-    //         // see if there is a descriptor entry
-    //         if (!item.isExternalValueReference) {
-    //             // System.out.println("here: "+new
-    //             // String(item.data)+this.descriptorIndexNode.descriptorIdentifier);
-    //             return PSTObject.createJavaString(item.data, stringType, codepage);
-    //         }
-    //         if (this.localDescriptorItems != null && this.localDescriptorItems.containsKey(item.entryValueReference)) {
-    //             // we have a hit!
-    //             final PSTDescriptorItem descItem = this.localDescriptorItems.get(item.entryValueReference);
+            if (codepage == null) {
+                codepage = this.getStringCodepage();
+            }
 
-    //             try {
-    //                 final byte[] data = descItem.getData();
-    //                 if (data == null) {
-    //                     return "";
-    //                 }
+            // get the string type from the item if not explicitly set
+            if (stringType == 0) {
+                stringType = item.entryValueType;
+            }
 
-    //                 return PSTObject.createJavaString(data, stringType, codepage);
-    //             } catch (final Exception e) {
-    //                 System.err.printf("Exception %s decoding string %s: %s\n", e.toString(),
-    //                     PSTFile.getPropertyDescription(identifier, stringType),
-    //                     this.data != null ? this.data.toString() : "null");
-    //                 return "";
-    //             }
-    //             // System.out.printf("PSTObject.getStringItem - item isn't a
-    //             // string: 0x%08X\n", identifier);
-    //             // return "";
-    //         }
+            // see if there is a descriptor entry
+            if (!item.isExternalValueReference) {
+                // System.out.println("here: "+new
+                // String(item.data)+this.descriptorIndexNode.descriptorIdentifier);
+                return PSTUtil.createJavascriptString(item.data, stringType, codepage);
+            }
+            // if (this.localDescriptorItems != null && this.localDescriptorItems.containsKey(item.entryValueReference)) {
+            //     // we have a hit!
+            //     final PSTDescriptorItem descItem = this.localDescriptorItems.get(item.entryValueReference);
 
-    //         return PSTObject.createJavaString(this.data, stringType, codepage);
-    //     }
-    //     return "";
-    // }
+            //     try {
+            //         final byte[] data = descItem.getData();
+            //         if (data == null) {
+            //             return "";
+            //         }
 
-    // static String createJavaString(final byte[] data, final int stringType, String codepage) {
-    //     try {
-    //         if (stringType == 0x1F) {
-    //             return new String(data, "UTF-16LE");
-    //         }
+            //         return PSTObject.createJavaString(data, stringType, codepage);
+            //     } catch (final Exception e) {
+            //         System.err.printf("Exception %s decoding string %s: %s\n", e.toString(),
+            //             PSTFile.getPropertyDescription(identifier, stringType),
+            //             this.data != null ? this.data.toString() : "null");
+            //         return "";
+            //     }
+            //     // System.out.printf("PSTObject.getStringItem - item isn't a
+            //     // string: 0x%08X\n", identifier);
+            //     // return "";
+            // }
 
-    //         if (codepage == null) {
-    //             return new String(data);
-    //         } else {
-    //             codepage = codepage.toUpperCase(Locale.US);
-    //             if (codepage.contentEquals("ISO-8859-8-I")) {   //  Outlook hebrew encoding is not supported by Java
-    //                 codepage = "ISO-8859-8";      // next best thing is hebrew characters with wrong order
-    //             }
-    //             try {
-    //                 return new String(data, codepage);
-    //             } catch (UnsupportedEncodingException e) {
-    //                 return new String(data, "UTF-8");
-    //             }
-    //         }
-    //         /*
-    //          * if (codepage == null || codepage.toUpperCase().equals("UTF-8") ||
-    //          * codepage.toUpperCase().equals("UTF-7")) {
-    //          * // PST UTF-8 strings are not... really UTF-8
-    //          * // it seems that they just don't use multibyte chars at all.
-    //          * // indeed, with some crylic chars in there, the difficult chars
-    //          * are just converted to %3F(?)
-    //          * // I suspect that outlook actually uses RTF to store these
-    //          * problematic strings.
-    //          * StringBuffer sbOut = new StringBuffer();
-    //          * for (int x = 0; x < data.length; x++) {
-    //          * sbOut.append((char)(data[x] & 0xFF)); // just blindly accept the
-    //          * byte as a UTF char, seems right half the time
-    //          * }
-    //          * return new String(sbOut);
-    //          * } else {
-    //          * codepage = codepage.toUpperCase();
-    //          * return new String(data, codepage);
-    //          * }
-    //          */
-    //     } catch (final Exception err) {
-    //         System.err.println("Unable to decode string");
-    //         err.printStackTrace();
-    //         return "";
-    //     }
-    // }
+            // return PSTUtil.createJavascriptString(this.data, stringType, codepage);
+        }
+        return "";
+    }
 
-    // private String getStringCodepage() {
-    //     // try and get the codepage
-    //     PSTTableBCItem cpItem = this.items.get(0x3FFD); // PidTagMessageCodepage
-    //     if (cpItem == null) {
-    //         cpItem = this.items.get(0x3FDE); // PidTagInternetCodepage
-    //     }
-    //     if (cpItem != null) {
-    //         return PSTFile.getInternetCodePageCharset(cpItem.entryValueReference);
-    //     }
-    //     return null;
-    // }
+    protected getStringCodepage(): string {
+        // try and get the codepage
+        let cpItem: PSTTableBCItem = this.pstTableItems.get(0x3FFD); // PidTagMessageCodepage
+        if (cpItem == null) {
+            cpItem = this.pstTableItems.get(0x3FDE); // PidTagInternetCodepage
+        }
+        if (cpItem != null) {
+            return PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
+        }
+        return null;
+    }
 
     // public Date getDateItem(final int identifier) {
     //     if (this.items.containsKey(identifier)) {

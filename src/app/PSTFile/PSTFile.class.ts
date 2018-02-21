@@ -15,7 +15,7 @@ import * as util from 'util';
 import * as long from 'long';
 import * as uuidparse from 'uuid-parse';
 
-export class PSTFile extends PSTObject {
+export class PSTFile {
     public static ENCRYPTION_TYPE_NONE: number = 0;
     public static ENCRYPTION_TYPE_COMPRESSIBLE: number = 1;
     public static MESSAGE_STORE_DESCRIPTOR_IDENTIFIER: number = 33;
@@ -87,7 +87,6 @@ export class PSTFile extends PSTObject {
     }
 
     public constructor(fileName: string) {
-        super();
         this.pstFilename = fileName;
     }
 
@@ -316,34 +315,6 @@ export class PSTFile extends PSTObject {
     //         return -1;
     //     }
     //     return i;
-    // }
-
-    // static private Properties propertyInternetCodePages = null;
-    // static private boolean bCPFirstTime = true;
-
-    // static String getInternetCodePageCharset(final int propertyId) {
-    //     if (bCPFirstTime) {
-    //         bCPFirstTime = false;
-    //         propertyInternetCodePages = new Properties();
-    //         try {
-    //             final InputStream propertyStream = PSTFile.class.getResourceAsStream("/InternetCodepages.txt");
-    //             if (propertyStream != null) {
-    //                 propertyInternetCodePages.load(propertyStream);
-    //             } else {
-    //                 propertyInternetCodePages = null;
-    //             }
-    //         } catch (final FileNotFoundException e) {
-    //             propertyInternetCodePages = null;
-    //             e.printStackTrace();
-    //         } catch (final IOException e) {
-    //             propertyInternetCodePages = null;
-    //             e.printStackTrace();
-    //         }
-    //     }
-    //     if (propertyInternetCodePages != null) {
-    //         return propertyInternetCodePages.getProperty(propertyId + "");
-    //     }
-    //     return null;
     // }
 
     // static private Properties propertyNames = null;
