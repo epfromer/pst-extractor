@@ -9,15 +9,15 @@ import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 export class PSTNodeInputStream {
 
     private pstFileContent: PSTFileContent; // TODO:  remove this and use pstFile.pstFileContent?
-    private skipPoints: number[] = [];
+    private skipPoints: long[] = [];
     private indexItems: OffsetIndexItem[] = [];
     private currentBlock = 0;
     private allData: Buffer = null;
     private isZlib = false;
 
-    private _currentLocation = 0;
-    private get currentLocation() { return this._currentLocation }
-    private set currentLocation(loc: number) {
+    private _currentLocation: long = long.ZERO;
+    private get currentLocation(): long { return this._currentLocation }
+    private set currentLocation(loc: long) {
         // console.log('currentLocation = ' + this._currentLocation);
         // debugger;
         this._currentLocation = loc;
@@ -26,7 +26,7 @@ export class PSTNodeInputStream {
     private _pstFile: PSTFile;
     public get pstFile() { return this._pstFile; }
     
-    private _length = 0;
+    private _length: long = long.ZERO;
     public get length() { return this._length; }
 
     private _encrypted = false;
@@ -60,7 +60,7 @@ export class PSTNodeInputStream {
             this._encrypted = pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
             this.loadFromOffsetItem(arg);
             this.currentBlock = 0;
-            this.currentLocation = 0;
+            this.currentLocation = long.ZERO;
             this.detectZlib();
         } else if (arg instanceof PSTDescriptorItem) {
             this._pstFile = pstFile;
@@ -69,14 +69,14 @@ export class PSTNodeInputStream {
             // we want to get the first block of data and see what we are dealing with
             this.loadFromOffsetItem(pstFile.getOffsetIndexNode(arg.offsetIndexIdentifier));
             this.currentBlock = 0;
-            this.currentLocation = 0;
+            this.currentLocation = long.ZERO;
             this.detectZlib();
         }
     }
 
     private detectZlib() {
         // not really sure how this is meant to work, kind of going by feel here.
-        if (this.length < 4) {
+        if (this.length.lt(4)) {
             return;
         }
         try {
@@ -159,7 +159,7 @@ export class PSTNodeInputStream {
             if (data[0] == 0x1) {
                 bInternal = false;
                 // we are a xblock, or xxblock
-                this._length = PSTUtil.convertLittleEndianBytesToLong(data, 4, 8).toNumber();
+                this._length = PSTUtil.convertLittleEndianBytesToLong(data, 4, 8);
                 // go through all of the blocks and create skip points.
                 this.getBlockSkipPoints(data);
                 return;
@@ -171,7 +171,7 @@ export class PSTNodeInputStream {
             this._encrypted = false;
         }
         this.allData = data;
-        this._length = this.allData.length;
+        this._length = long.fromValue(this.allData.length);
     }
 
     private getBlockSkipPoints(data: Buffer) {
@@ -209,8 +209,8 @@ export class PSTNodeInputStream {
                 // get the details in this block and add it to the list
                 let offsetItem = this.pstFile.getOffsetIndexNode(bid);
                 this.indexItems.push(offsetItem);
-                this.skipPoints.push(this.currentLocation);
-                this.currentLocation += offsetItem.size;
+                this.skipPoints.push(long.fromValue(this.currentLocation));
+                this.currentLocation = this.currentLocation.add(offsetItem.size);
                 offset += arraySize;
             }
         }
@@ -225,8 +225,8 @@ export class PSTNodeInputStream {
                 // EOF
                 return -1;
             }
-            let value = this.allData[this.currentLocation] & 0xFF;
-            this.currentLocation++;
+            let value = this.allData[this.currentLocation.toNumber()] & 0xFF;
+            this.currentLocation = this.currentLocation.add(1);
             if (this.encrypted) {
                 value = PSTUtil.compEnc[value];
             }
@@ -394,17 +394,19 @@ export class PSTNodeInputStream {
     // }
 
      // Get the offsets (block positions) used in the array
-    public getBlockOffsets(): number[] {
+    public getBlockOffsets(): long[] {
+        let output: long[];
         if (this.skipPoints.length === 0) {
-            let output: number[] = [this.length];
-            return output;
+            let len = long.fromValue(this.length);
+            output.push(len);
         } else {
-            let output: number[] = [];
             for (let x = 0; x < this.skipPoints.length; x++) {
-                output.push(this.skipPoints[x] + this.indexItems[x].size);
+                let size = long.fromValue(this.indexItems[x].size)
+                output.push(this.skipPoints[x].add(size));
             }
-            return output;
         }
+        console.log(output.toString())
+        return output;
     }
 
     // seek within item

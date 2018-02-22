@@ -359,6 +359,7 @@ export class PSTFile {
     // Get the message store of the PST file.  Note that this doesn't really 
     // have much information, better to look under the root folder.
     public getMessageStore(): PSTMessageStore {
+        debugger;
         let  messageStoreDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(PSTFile.MESSAGE_STORE_DESCRIPTOR_IDENTIFIER);
         return new PSTMessageStore(this, messageStoreDescriptor);
     }

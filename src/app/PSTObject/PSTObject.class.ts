@@ -6,6 +6,7 @@ import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
+import { OffsetIndexItem } from '../OffsetIndexItem/OffsetIndexItem.class';
 
 // PST Object is the root class of most PST Items.
 // It also provides a number of static utility functions. The most important is
@@ -28,8 +29,11 @@ export class PSTObject {
         this.descriptorIndexNode = descriptorIndexNode;
 
         // get the table items for this descriptor
-        this.pstTableBC = new PSTTableBC(new PSTNodeInputStream(this.pstFile,
-            this.pstFile.getOffsetIndexNode(descriptorIndexNode.dataOffsetIndexIdentifier)));
+        let offsetIndexItem: OffsetIndexItem = this.pstFile.getOffsetIndexNode(descriptorIndexNode.dataOffsetIndexIdentifier);
+        let pstNodeInputStream: PSTNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem)
+        this.pstTableBC = new PSTTableBC(pstNodeInputStream);
+        
+        debugger;
         this.pstTableItems = this.pstTableBC.getItems();
 
         if (descriptorIndexNode.localDescriptorsOffsetIndexIdentifier != 0) {
