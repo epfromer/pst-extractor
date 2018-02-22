@@ -341,12 +341,11 @@ export class PSTFile {
     // get file offset, which is sorted in 8 little endian bytes
     // returns a promise of a number
     private extractLEFileOffset(startOffset: long): long {
-
         // console.log('startOffset = ' + startOffset.toString());
-        let offset:long = long.ZERO;
+        let offset: long = long.ZERO;
         if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
             debugger;
-            
+
             this.pstFileContent.seek(startOffset);
             let buffer = new Buffer(4);
             this.pstFileContent.readCompletely(buffer);
@@ -428,14 +427,14 @@ export class PSTFile {
             let numberOfItems = 0;
             if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
                 let numberOfItemsBytes = new Buffer(2);
-                this.pstFileContent.readCompletely(numberOfItemsBytes)
+                this.pstFileContent.readCompletely(numberOfItemsBytes);
                 debugger;
                 throw new Error('not yet implemented');
                 // numberOfItems = this.convertLittleEndianBytesToLong(numberOfItemsBytes);
                 // in.readCompletely(numberOfItemsBytes);
                 // final long maxNumberOfItems = PSTObject.convertLittleEndianBytesToLong(numberOfItemsBytes);
             } else {
-                numberOfItems = this.pstFileContent.read(); 
+                numberOfItems = this.pstFileContent.read();
                 this.pstFileContent.read(); // maxNumberOfItems
             }
             let itemSize = this.pstFileContent.read(); // itemSize

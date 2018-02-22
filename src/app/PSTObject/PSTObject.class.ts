@@ -12,17 +12,16 @@ import { OffsetIndexItem } from '../OffsetIndexItem/OffsetIndexItem.class';
 // It also provides a number of static utility functions. The most important is
 // detectAndLoadPSTObject call which allows extraction of a PST Item from the file.
 export class PSTObject {
-
     // protected byte[] data;
     // protected HashMap<Integer, PSTTableBCItem> items;
     private pstFile: PSTFile;
-    private descriptorIndexNode: DescriptorIndexNode
+    private descriptorIndexNode: DescriptorIndexNode;
     private localDescriptorItems: Map<number, PSTDescriptorItem> = null;
     // protected LinkedHashMap<String, HashMap<DescriptorIndexNode, PSTObject>> children;
     private pstTableBC: PSTTableBC;
     protected pstTableItems: Map<number, PSTTableBCItem>;
 
-    constructor() { }
+    constructor() {}
 
     protected loadDescriptor(pstFile: PSTFile, descriptorIndexNode: DescriptorIndexNode) {
         this.pstFile = pstFile;
@@ -30,7 +29,7 @@ export class PSTObject {
 
         // get the table items for this descriptor
         let offsetIndexItem: OffsetIndexItem = this.pstFile.getOffsetIndexNode(descriptorIndexNode.dataOffsetIndexIdentifier);
-        let pstNodeInputStream: PSTNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem)
+        let pstNodeInputStream: PSTNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem);
         this.pstTableBC = new PSTTableBC(pstNodeInputStream);
         this.pstTableItems = this.pstTableBC.getItems();
 
@@ -41,7 +40,7 @@ export class PSTObject {
 
     // /**
     //  * for pre-population
-    //  * 
+    //  *
     //  * @param theFile
     //  * @param folderIndexNode
     //  * @param table
@@ -60,7 +59,7 @@ export class PSTObject {
     // /**
     //  * get the descriptor node for this item
     //  * this identifies the location of the node in the BTree and associated info
-    //  * 
+    //  *
     //  * @return item's descriptor node
     //  */
     // public DescriptorIndexNode getDescriptorNode() {
@@ -71,7 +70,7 @@ export class PSTObject {
     //  * get the descriptor identifier for this item
     //  * can be used for loading objects through detectAndLoadPSTObject(PSTFile
     //  * theFile, long descriptorIndex)
-    //  * 
+    //  *
     //  * @return item's descriptor node identifier
     //  */
     // public long getDescriptorNodeId() {
@@ -152,15 +151,12 @@ export class PSTObject {
     // }
 
     protected getStringItem(identifier: number, stringType?: number, codepage?: string): string {
-
-
         if (!stringType) {
             stringType = 0;
         }
 
         let item: PSTTableBCItem = this.pstTableItems.get(identifier);
         if (item) {
-
             if (!codepage) {
                 codepage = this.getStringCodepage();
             }
@@ -176,7 +172,7 @@ export class PSTObject {
             }
 
             debugger;
-            
+
             // if (this.localDescriptorItems != null && this.localDescriptorItems.containsKey(item.entryValueReference)) {
             //     // we have a hit!
             //     final PSTDescriptorItem descItem = this.localDescriptorItems.get(item.entryValueReference);
@@ -201,14 +197,14 @@ export class PSTObject {
 
             // return PSTUtil.createJavascriptString(this.data, stringType, codepage);
         }
-        return "";
+        return '';
     }
 
     protected getStringCodepage(): string {
         // try and get the codepage
-        let cpItem: PSTTableBCItem = this.pstTableItems.get(0x3FFD); // PidTagMessageCodepage
+        let cpItem: PSTTableBCItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
         if (cpItem == null) {
-            cpItem = this.pstTableItems.get(0x3FDE); // PidTagInternetCodepage
+            cpItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
         }
         if (cpItem != null) {
             return PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
@@ -329,7 +325,7 @@ export class PSTObject {
 
     // /**
     //  * Output a number in a variety of formats for easier consumption
-    //  * 
+    //  *
     //  * @param data
     //  */
     // protected static byte[] encode(final byte[] data) {
@@ -349,7 +345,6 @@ export class PSTObject {
     //     return data;
     // }
 
-
     // /*
     //  * protected static boolean isPSTArray(byte[] data) {
     //  * return (data[0] == 1 && data[1] == 1);
@@ -366,7 +361,7 @@ export class PSTObject {
     //  * throw new
     //  * PSTException("Unable to process array, does not appear to be one!");
     //  * }
-    //  * 
+    //  *
     //  * // we are an array!
     //  * // get the array items and merge them together
     //  * int numberOfEntries = (int)PSTObject.convertLittleEndianBytesToLong(data,
@@ -387,7 +382,7 @@ export class PSTObject {
     //  * output[y] = blockOffset;
     //  * tableOffset += 8;
     //  * }
-    //  * 
+    //  *
     //  * // replace the item data with the stuff from the array...
     //  * return output;
     //  * }
@@ -397,7 +392,7 @@ export class PSTObject {
     // /**
     //  * Detect and load a PST Object from a file with the specified descriptor
     //  * index
-    //  * 
+    //  *
     //  * @param theFile
     //  * @param descriptorIndex
     //  * @return PSTObject with that index
@@ -412,7 +407,7 @@ export class PSTObject {
     // /**
     //  * Detect and load a PST Object from a file with the specified descriptor
     //  * index
-    //  * 
+    //  *
     //  * @param theFile
     //  * @param folderIndexNode
     //  * @return PSTObject with that index

@@ -1,15 +1,21 @@
-import { PSTNodeInputStream } from "../PSTNodeInputStream/PSTNodeInputStream.class";
+import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import * as long from 'long';
 
 export class NodeInfo {
     private _startOffset: number;
-    get startOffset() { return this._startOffset; }
+    get startOffset() {
+        return this._startOffset;
+    }
 
     private _endOffset: number;
-    get endOffset() { return this._endOffset; }
+    get endOffset() {
+        return this._endOffset;
+    }
 
     private _pstNodeInputStream: PSTNodeInputStream;
-    get pstNodeInputStream() { return this._pstNodeInputStream; }
+    get pstNodeInputStream() {
+        return this._pstNodeInputStream;
+    }
 
     constructor(start: number, end: number, pstNodeInputStream: PSTNodeInputStream) {
         if (start > end) {
@@ -28,4 +34,3 @@ export class NodeInfo {
         return this.pstNodeInputStream.seekAndReadLong(offset.add(this.startOffset), length);
     }
 }
-

@@ -8,7 +8,6 @@ import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 // Object that represents the message store.
 // Not much use other than to get the "name" of the PST file.
 export class PSTMessageStore extends PSTObject {
-
     constructor(pstFile: PSTFile, descriptorIndexNode: DescriptorIndexNode) {
         super();
         this.loadDescriptor(pstFile, descriptorIndexNode);
@@ -38,7 +37,7 @@ export class PSTMessageStore extends PSTObject {
         if (this.pstTableItems.has(displayNameEntryType)) {
             return this.getStringItem(displayNameEntryType);
         }
-        return "";
+        return '';
     }
 
     // public String getDetails() {
@@ -47,7 +46,7 @@ export class PSTMessageStore extends PSTObject {
 
     // /**
     //  * Is this pst file is password protected.
-    //  * 
+    //  *
     //  * @throws PSTException
     //  *             on corrupted pst
     //  * @throws IOException
@@ -59,5 +58,4 @@ export class PSTMessageStore extends PSTObject {
     // public boolean isPasswordProtected() throws PSTException, IOException {
     //     return (this.getLongItem(0x67FF) != 0);
     // }
-
 }

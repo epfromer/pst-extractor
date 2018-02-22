@@ -3,11 +3,10 @@ import * as fsext from 'fs-ext';
 import * as long from 'long';
 
 export class PSTFileContent {
-
     constructor(pstFD: number) {
         this._pstFD = pstFD;
     }
-    
+
     // node fs file descriptor
     private _pstFD: number;
     // set pstFD(fd: number) { this._pstFD = fd; }
@@ -22,7 +21,7 @@ export class PSTFileContent {
         if (!position) {
             position = null;
         }
-        
+
         let buffer = new Buffer(1);
         fs.readSync(this._pstFD, buffer, 0, buffer.length, position);
         return buffer[0];

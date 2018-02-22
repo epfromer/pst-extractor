@@ -5,27 +5,31 @@ import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
 
 export class PSTDescriptorItem {
-
-    descriptorIdentifier: number;
-    offsetIndexIdentifier: number;
-    subNodeOffsetIndexIdentifier: number;
-
-    // These are private to ensure that getData()/getBlockOffets() are used
-    // private PSTFile.PSTFileBlock dataBlock = null;
+    private subNodeOffsetIndexIdentifier: number;
     private dataBlockData: Buffer;
     private dataBlockOffsets: number[] = [];
     private _pstFile: PSTFile;
+
+    private _descriptorIdentifier: number;
+    public get descriptorIdentifier(): number {
+        return this._descriptorIdentifier;
+    }
+
+    private _offsetIndexIdentifier: number;
+    public get offsetIndexIdentifier(): number {
+        return this._offsetIndexIdentifier;
+    }
 
     constructor(data: Buffer, offset: number, pstFile: PSTFile) {
         this._pstFile = pstFile;
 
         if (pstFile.pstFileType == PSTFile.PST_TYPE_ANSI) {
-            this.descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
-            this.offsetIndexIdentifier = (PSTUtil.convertLittleEndianBytesToLong(data, offset + 4, offset + 8)).toNumber() & 0xfffffffe;
+            this._descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
+            this._offsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset + 4, offset + 8).toNumber() & 0xfffffffe;
             this.subNodeOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset + 8, offset + 12).toNumber() & 0xfffffffe;
         } else {
-            this.descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
-            this.offsetIndexIdentifier = (PSTUtil.convertLittleEndianBytesToLong(data, offset + 8, offset + 16)).toNumber() & 0xfffffffe;
+            this._descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
+            this._offsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset + 8, offset + 16).toNumber() & 0xfffffffe;
             this.subNodeOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset + 16, offset + 24).toNumber() & 0xfffffffe;
         }
     }
@@ -35,7 +39,7 @@ export class PSTDescriptorItem {
             return this.dataBlockData;
         }
 
-        let pstNodeInputStream: PSTNodeInputStream = this._pstFile.readLeaf(this.offsetIndexIdentifier);
+        let pstNodeInputStream: PSTNodeInputStream = this._pstFile.readLeaf(long.fromValue(this.offsetIndexIdentifier));
         let out = new Buffer(pstNodeInputStream.length.toNumber());
         pstNodeInputStream.readCompletely(out);
         this.dataBlockData = out;
@@ -58,8 +62,4 @@ export class PSTDescriptorItem {
     // public int getDataSize() throws IOException, PSTException {
     //     return this.pstFile.getLeafSize(this.offsetIndexIdentifier);
     // }
-
-
 }
-
-

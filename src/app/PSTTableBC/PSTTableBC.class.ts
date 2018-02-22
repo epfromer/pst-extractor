@@ -1,14 +1,13 @@
 import { PSTObject } from './../PSTObject/PSTObject.class';
-import { PSTTable } from "../PSTTable/PSTTable.class";
-import { PSTTableBCItem } from "../PSTTableBCItem/PSTTableBCItem.class";
-import { PSTNodeInputStream } from "../PSTNodeInputStream/PSTNodeInputStream.class";
-import { PSTDescriptorItem } from "../PSTDescriptorItem/PSTDescriptorItem.class";
-import { NodeInfo } from "../NodeInfo/NodeInfo.class";
+import { PSTTable } from '../PSTTable/PSTTable.class';
+import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
+import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
+import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { NodeInfo } from '../NodeInfo/NodeInfo.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
 
 export class PSTTableBC extends PSTTable {
-
     private items: Map<number, PSTTableBCItem> = new Map();
     private descBuffer = ''; // TODO - make this more efficient than string
     private isDescNotYetInitiated = false;
@@ -17,7 +16,7 @@ export class PSTTableBC extends PSTTable {
         super(pstNodeInputStream, new Map<number, PSTDescriptorItem>());
 
         if (this.tableTypeByte != 188) {
-            throw new Error("unable to create PSTTableBC, table does not appear to be a bc!");
+            throw new Error('unable to create PSTTableBC, table does not appear to be a bc!');
         }
 
         // go through each of the entries
@@ -26,12 +25,12 @@ export class PSTTableBC extends PSTTable {
         keyTableInfoNodeInfo.pstNodeInputStream.seek(long.fromValue(keyTableInfoNodeInfo.startOffset));
         keyTableInfoNodeInfo.pstNodeInputStream.readCompletely(keyTableInfo);
         this.numberOfKeys = keyTableInfo.length / (this.sizeOfItemKey + this.sizeOfItemValue);
-        this.descBuffer += "Number of entries: " + this.numberOfKeys + "\n";
+        this.descBuffer += 'Number of entries: ' + this.numberOfKeys + '\n';
 
         // Read the key table
         let offset = 0;
         for (let x = 0; x < this.numberOfKeys; x++) {
-            let item  = new PSTTableBCItem();
+            let item = new PSTTableBCItem();
             item.itemIndex = x;
             item.entryType = PSTUtil.convertLittleEndianBytesToLong(keyTableInfo, offset + 0, offset + 2);
             item.entryValueType = PSTUtil.convertLittleEndianBytesToLong(keyTableInfo, offset + 2, offset + 4).toNumber();
@@ -40,20 +39,20 @@ export class PSTTableBC extends PSTTable {
             // Data is in entryValueReference for all types <= 4 bytes long
             switch (item.entryValueType) {
                 case 0x0002: // 16bit integer
-                    item.entryValueReference &= 0xFFFF;
+                    item.entryValueReference &= 0xffff;
                 case 0x0003: // 32bit integer
-                case 0x000A: // 32bit error code
+                case 0x000a: // 32bit error code
                 case 0x0001: // Place-holder
                 case 0x0004: // 32bit floating
                     item.isExternalValueReference = true;
                     break;
 
                 case 0x000b: // Boolean - a single byte
-                    item.entryValueReference &= 0xFF;
+                    item.entryValueReference &= 0xff;
                     item.isExternalValueReference = true;
                     break;
 
-                case 0x000D:
+                case 0x000d:
                 default:
                     // Is it in the local heap?
                     item.isExternalValueReference = true; // Assume not
