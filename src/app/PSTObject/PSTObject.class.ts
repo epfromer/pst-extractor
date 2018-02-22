@@ -36,7 +36,7 @@ export class PSTObject {
         debugger;
         this.pstTableItems = this.pstTableBC.getItems();
 
-        if (descriptorIndexNode.localDescriptorsOffsetIndexIdentifier != 0) {
+        if (descriptorIndexNode.localDescriptorsOffsetIndexIdentifier != long.ZERO) {
             this.localDescriptorItems = pstFile.getPSTDescriptorItems(descriptorIndexNode.localDescriptorsOffsetIndexIdentifier);
         }
     }

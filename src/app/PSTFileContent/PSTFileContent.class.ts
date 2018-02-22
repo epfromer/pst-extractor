@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as fsext from 'fs-ext';
+import * as long from 'long';
 
 export class PSTFileContent {
 
@@ -28,8 +29,8 @@ export class PSTFileContent {
     }
 
     // seek to a specific position in file
-    public seek(index: number): number {
-        return fsext.seekSync(this._pstFD, index, 0);
+    public seek(index: long) {
+        fsext.seekSync(this._pstFD, index.toNumber(), 0);
     }
 
     public readCompletely(buffer: Buffer, position?: number) {

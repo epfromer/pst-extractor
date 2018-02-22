@@ -5,6 +5,7 @@ import { PSTNodeInputStream } from "../PSTNodeInputStream/PSTNodeInputStream.cla
 import { PSTDescriptorItem } from "../PSTDescriptorItem/PSTDescriptorItem.class";
 import { NodeInfo } from "../NodeInfo/NodeInfo.class";
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
+import * as long from 'long';
 
 export class PSTTableBC extends PSTTable {
 
@@ -22,7 +23,7 @@ export class PSTTableBC extends PSTTable {
         // go through each of the entries
         let keyTableInfoNodeInfo: NodeInfo = this.getNodeInfo(this.hidRoot);
         let keyTableInfo: Buffer = new Buffer(keyTableInfoNodeInfo.length());
-        keyTableInfoNodeInfo.pstNodeInputStream.seek(keyTableInfoNodeInfo.startOffset);
+        keyTableInfoNodeInfo.pstNodeInputStream.seek(long.fromValue(keyTableInfoNodeInfo.startOffset));
         keyTableInfoNodeInfo.pstNodeInputStream.readCompletely(keyTableInfo);
         this.numberOfKeys = keyTableInfo.length / (this.sizeOfItemKey + this.sizeOfItemValue);
         this.descBuffer += "Number of entries: " + this.numberOfKeys + "\n";
@@ -62,7 +63,7 @@ export class PSTTableBC extends PSTTable {
                     } else {
                         // Make a copy of the data
                         let nodeInfo = new Buffer(nodeInfoNodeInfo.length());
-                        nodeInfoNodeInfo.pstNodeInputStream.seek(nodeInfoNodeInfo.startOffset);
+                        nodeInfoNodeInfo.pstNodeInputStream.seek(long.fromValue(nodeInfoNodeInfo.startOffset));
                         nodeInfoNodeInfo.pstNodeInputStream.readCompletely(nodeInfo);
                         item.data = nodeInfo; // should be new array, so just use it
                         item.isExternalValueReference = false;

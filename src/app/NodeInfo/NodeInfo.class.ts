@@ -24,8 +24,8 @@ export class NodeInfo {
         return this.endOffset - this.startOffset;
     }
 
-    public seekAndReadLong(offset: number, length: number): long {
-        return this.pstNodeInputStream.seekAndReadLong(this.startOffset + offset, length);
+    public seekAndReadLong(offset: long, length: number): long {
+        return this.pstNodeInputStream.seekAndReadLong(offset.add(this.startOffset), length);
     }
 }
 

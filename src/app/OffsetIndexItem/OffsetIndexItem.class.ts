@@ -4,22 +4,22 @@ import * as long from 'long';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 
 export class OffsetIndexItem {
-    indexIdentifier: number;
-    fileOffset: number;
+    indexIdentifier: long;
+    fileOffset: long;
     size: number;
-    cRef: number;
+    cRef: long;
 
     constructor(data: Buffer, pstFileType: number) {
         if (pstFileType == PSTFile.PST_TYPE_ANSI) {
-            this.indexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, 0, 4).toNumber();
-            this.fileOffset = PSTUtil.convertLittleEndianBytesToLong(data, 4, 8).toNumber();
+            this.indexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, 0, 4);
+            this.fileOffset = PSTUtil.convertLittleEndianBytesToLong(data, 4, 8);
             this.size = PSTUtil.convertLittleEndianBytesToLong(data, 8, 10).toNumber();
-            this.cRef = PSTUtil.convertLittleEndianBytesToLong(data, 10, 12).toNumber();
+            this.cRef = PSTUtil.convertLittleEndianBytesToLong(data, 10, 12);
         } else {
-            this.indexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, 0, 8).toNumber();
-            this.fileOffset = PSTUtil.convertLittleEndianBytesToLong(data, 8, 16).toNumber();
+            this.indexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, 0, 8);
+            this.fileOffset = PSTUtil.convertLittleEndianBytesToLong(data, 8, 16);
             this.size = PSTUtil.convertLittleEndianBytesToLong(data, 16, 18).toNumber();
-            this.cRef = PSTUtil.convertLittleEndianBytesToLong(data, 16, 18).toNumber();
+            this.cRef = PSTUtil.convertLittleEndianBytesToLong(data, 16, 18);
         }
     }
 }

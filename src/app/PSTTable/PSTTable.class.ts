@@ -3,6 +3,7 @@ import { PSTObject } from './../PSTObject/PSTObject.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import { NodeInfo } from '../NodeInfo/NodeInfo.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
+import * as long from 'long';
 
 // The PST Table is the workhorse of the whole system.
 // It allows for an item to be read and broken down into the individual properties that it consists of.
@@ -11,7 +12,7 @@ export class PSTTable {
     protected tableType: string;
     protected tableTypeByte: number;
     protected hidUserRoot: number;
-    protected arrayBlocks: number[] = null;
+    protected arrayBlocks: long[];
 
     // info from the b5 header
     protected sizeOfItemKey: number;
@@ -30,17 +31,17 @@ export class PSTTable {
 
         // the next two bytes should be the table type (bSig)
         // 0xEC is HN (Heap-on-Node)
-        pstNodeInputStream.seek(0);
+        pstNodeInputStream.seek(long.ZERO);
         let headdata = new Buffer(4);
         pstNodeInputStream.readCompletely(headdata); // should be 4, 30, 236, 188
-        if (!(headdata[0] === 4 && 
-              headdata[1] === 30 &&
-              headdata[2] === 236 &&
-              headdata[3] === 188)) {
-            PSTUtil.decode(headdata);
-            PSTUtil.printHexFormatted(headdata, true);
-            throw new Error("Unable to parse table, bad table type...");
-        }
+        // if (!(headdata[0] === 4 && 
+        //       headdata[1] === 30 &&
+        //       headdata[2] === 236 &&
+        //       headdata[3] === 188)) {
+        //     PSTUtil.decode(headdata);
+        //     PSTUtil.printHexFormatted(headdata, true);
+        //     throw new Error("Unable to parse table, bad table type...");
+        // }
 
         this.tableTypeByte = headdata[3];
         switch (this.tableTypeByte) { // bClientSig
@@ -55,16 +56,16 @@ export class PSTTable {
                 throw new Error("Unable to parse table, bad table type.  Unknown identifier: 0x" + headdata[3].toString(16));
         }
 
-        this.hidUserRoot = pstNodeInputStream.seekAndReadLong(4, 4).toNumber(); // hidUserRoot
+        this.hidUserRoot = pstNodeInputStream.seekAndReadLong(long.fromValue(4), 4).toNumber(); // hidUserRoot
 
         // all tables should have a BTHHEADER at hnid == 0x20 
         let headerNodeInfo: NodeInfo = this.getNodeInfo(0x20);
-        headerNodeInfo.pstNodeInputStream.seek(headerNodeInfo.startOffset);
+        headerNodeInfo.pstNodeInputStream.seek(long.fromValue(headerNodeInfo.startOffset));
         let headerByte = headerNodeInfo.pstNodeInputStream.read() & 0xFF;
         if (headerByte != 0xb5) {
-            headerNodeInfo.pstNodeInputStream.seek(headerNodeInfo.startOffset);
+            headerNodeInfo.pstNodeInputStream.seek(long.fromValue(headerNodeInfo.startOffset));
             headerByte = headerNodeInfo.pstNodeInputStream.read() & 0xFF;
-            headerNodeInfo.pstNodeInputStream.seek(headerNodeInfo.startOffset);
+            headerNodeInfo.pstNodeInputStream.seek(long.fromValue(headerNodeInfo.startOffset));
             let tmp = new Buffer(1024);
             headerNodeInfo.pstNodeInputStream.readCompletely(tmp);
             PSTUtil.printHexFormatted(tmp, true);
@@ -75,7 +76,7 @@ export class PSTTable {
         this.sizeOfItemKey = headerNodeInfo.pstNodeInputStream.read() & 0xFF; // Size of key in key table
         this.sizeOfItemValue = headerNodeInfo.pstNodeInputStream.read() & 0xFF; // Size of value in key table
         this.numberOfIndexLevels = headerNodeInfo.pstNodeInputStream.read() & 0xFF;
-        this.hidRoot = headerNodeInfo.seekAndReadLong(4, 4).toNumber();
+        this.hidRoot = headerNodeInfo.seekAndReadLong(long.fromValue(4), 4).toNumber();
         this.description += "Table (" + this.tableType + ")\n" + "hidUserRoot: " + this.hidUserRoot + " - 0x"
             + this.hidUserRoot.toString(16) + "\n" + "Size Of Keys: " + this.sizeOfItemKey + " - 0x"
             + this.hidUserRoot.toString(16) + "\n" + "Size Of Values: " + this.sizeOfItemValue + " - 0x"
@@ -106,7 +107,7 @@ export class PSTTable {
     
             try {
                 let subNodeIn: PSTNodeInputStream = new PSTNodeInputStream(this.pstNodeInputStream.pstFile, item);
-                subNodeInfo = new NodeInfo(0, subNodeIn.length, subNodeIn);
+                subNodeInfo = new NodeInfo(0, subNodeIn.length.toNumber(), subNodeIn);
             } catch (err) {
                 throw new Error("IOException reading subNode: " + hnid);
             }
@@ -133,17 +134,17 @@ export class PSTTable {
         let index = (hnid & 0xFFFF) >> 5;
         let blockOffset = 0;
         if (whichBlock > 0) {
-            blockOffset = this.arrayBlocks[whichBlock - 1];
+            blockOffset = this.arrayBlocks[whichBlock - 1].toNumber();
         }
         // Get offset of HN page map
-        let iHeapNodePageMap = this.pstNodeInputStream.seekAndReadLong(blockOffset, 2).toNumber() + blockOffset;
-        let cAlloc = this.pstNodeInputStream.seekAndReadLong(iHeapNodePageMap, 2).toNumber();
+        let iHeapNodePageMap = this.pstNodeInputStream.seekAndReadLong(long.fromValue(blockOffset), 2).toNumber() + blockOffset;
+        let cAlloc = this.pstNodeInputStream.seekAndReadLong(long.fromValue(iHeapNodePageMap), 2).toNumber();
         if (index >= cAlloc + 1) {
             throw new Error("getNodeInfo: node index doesn't exist! nid = " + hnid);
         }
         iHeapNodePageMap += (2 * index) + 2;
-        let start = this.pstNodeInputStream.seekAndReadLong(iHeapNodePageMap, 2).toNumber() + blockOffset;
-        let end = this.pstNodeInputStream.seekAndReadLong(iHeapNodePageMap + 2, 2).toNumber() + blockOffset;
+        let start = this.pstNodeInputStream.seekAndReadLong(long.fromValue(iHeapNodePageMap), 2).toNumber() + blockOffset;
+        let end = this.pstNodeInputStream.seekAndReadLong(long.fromValue(iHeapNodePageMap + 2), 2).toNumber() + blockOffset;
     
         return new NodeInfo(start, end, this.pstNodeInputStream);
     }

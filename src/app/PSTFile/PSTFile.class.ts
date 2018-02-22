@@ -72,10 +72,10 @@ export class PSTFile {
     }
 
     // the node tree
-    private nameToId: Map<long, number>  = new Map();
-    private stringToId: Map<string, number>  = new Map();
-    private idToName: Map<number, long>  = new Map();
-    private idToString: Map<number, string>  = new Map();
+    private nameToId: Map<long, number> = new Map();
+    private stringToId: Map<string, number> = new Map();
+    private idToName: Map<number, long> = new Map();
+    private idToString: Map<number, string> = new Map();
 
     // file descriptor
     private pstFilename: string;
@@ -91,7 +91,6 @@ export class PSTFile {
     }
 
     public open() {
-
         // attempt to open file
         // confirm first 4 bytes are !BDN
         this.pstFD = fsext.openSync(this.pstFilename, 'r');
@@ -99,26 +98,15 @@ export class PSTFile {
         let buffer = new Buffer(514);
         fs.readSync(this.pstFD, buffer, 0, 514, 0);
         let key = '!BDN';
-        if (
-            buffer[0] != key.charCodeAt(0) ||
-            buffer[1] != key.charCodeAt(1) ||
-            buffer[2] != key.charCodeAt(2) ||
-            buffer[3] != key.charCodeAt(3)
-        ) {
-            throw new Error(
-                'Invalid file header (expected: "!BDN"): ' + buffer
-            );
+        if (buffer[0] != key.charCodeAt(0) || buffer[1] != key.charCodeAt(1) || buffer[2] != key.charCodeAt(2) || buffer[3] != key.charCodeAt(3)) {
+            throw new Error('Invalid file header (expected: "!BDN"): ' + buffer);
         }
 
         // make sure we are using a supported version of a PST...
         if (buffer[10] === PSTFile.PST_TYPE_ANSI_2) {
             buffer[10] = PSTFile.PST_TYPE_ANSI;
         }
-        if (
-            buffer[10] !== PSTFile.PST_TYPE_ANSI &&
-            buffer[10] !== PSTFile.PST_TYPE_UNICODE &&
-            buffer[10] !== PSTFile.PST_TYPE_2013_UNICODE
-        ) {
+        if (buffer[10] !== PSTFile.PST_TYPE_ANSI && buffer[10] !== PSTFile.PST_TYPE_UNICODE && buffer[10] !== PSTFile.PST_TYPE_2013_UNICODE) {
             throw new Error('Unrecognised PST File version: ' + buffer[10]);
         }
         this._pstFileType = buffer[10];
@@ -139,20 +127,16 @@ export class PSTFile {
 
     public processNameToIDMap() {
         // process the name to id map
-        let nameToIdMapDescriptorNode = this.getDescriptorIndexNode(97);
+        let nameToIdMapDescriptorNode = this.getDescriptorIndexNode(long.fromNumber(97));
 
         // get the descriptors if we have them
         let localDescriptorItems;
         if (nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier) {
-            localDescriptorItems = this.getPSTDescriptorItems(
-                nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier
-            );
+            localDescriptorItems = this.getPSTDescriptorItems(nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier);
         }
 
         // process the map
-        let off: OffsetIndexItem = this.getOffsetIndexNode(
-            nameToIdMapDescriptorNode.dataOffsetIndexIdentifier
-        );
+        let off: OffsetIndexItem = this.getOffsetIndexNode(nameToIdMapDescriptorNode.dataOffsetIndexIdentifier);
         let nodein = new PSTNodeInputStream(this, off);
         let bcTable = new PSTTableBC(nodein);
         let tableItems: Map<number, PSTTableBCItem> = bcTable.getItems();
@@ -165,29 +149,13 @@ export class PSTFile {
         let uuidIndexes: number[] = [];
         let offset = 0;
         for (let i = 0; i < nGuids; ++i) {
-            let leftQuad: long = PSTUtil.convertLittleEndianBytesToLong(
-                this.guids,
-                offset,
-                offset + 4
-            );
+            let leftQuad: long = PSTUtil.convertLittleEndianBytesToLong(this.guids, offset, offset + 4);
             leftQuad = leftQuad.shiftLeft(32);
-            let midQuad: long = PSTUtil.convertLittleEndianBytesToLong(
-                this.guids,
-                offset + 4,
-                offset + 6
-            );
+            let midQuad: long = PSTUtil.convertLittleEndianBytesToLong(this.guids, offset + 4, offset + 6);
             midQuad = midQuad.shiftLeft(16);
-            let rightQuad: long = PSTUtil.convertLittleEndianBytesToLong(
-                this.guids,
-                offset + 6,
-                offset + 8
-            );
+            let rightQuad: long = PSTUtil.convertLittleEndianBytesToLong(this.guids, offset + 6, offset + 8);
             let mostSigBits: long = leftQuad.or(midQuad).or(rightQuad);
-            let leastSigBits: long = PSTUtil.convertBigEndianBytesToLong(
-                this.guids,
-                offset + 8,
-                offset + 16
-            );
+            let leastSigBits: long = PSTUtil.convertBigEndianBytesToLong(this.guids, offset + 8, offset + 16);
             let mostBuffer: number[] = mostSigBits.toBytes();
             let leastBuffer: number[] = leastSigBits.toBytes();
             let arrUID = [].concat(mostBuffer, leastBuffer);
@@ -204,34 +172,16 @@ export class PSTFile {
 
         // if we have a reference to an internal descriptor
         let mapEntries: PSTTableBCItem = tableItems.get(3);
-        let nameToIdByte: Buffer = this.getData(
-            mapEntries,
-            localDescriptorItems
-        );
+        let nameToIdByte: Buffer = this.getData(mapEntries, localDescriptorItems);
 
         let stringMapEntries: PSTTableBCItem = tableItems.get(4);
-        let stringNameToIdByte: Buffer = this.getData(
-            stringMapEntries,
-            localDescriptorItems
-        );
+        let stringNameToIdByte: Buffer = this.getData(stringMapEntries, localDescriptorItems);
 
         // process the entries
         for (let x = 0; x + 8 < nameToIdByte.length; x += 8) {
-            let dwPropertyId: number = PSTUtil.convertLittleEndianBytesToLong(
-                nameToIdByte,
-                x,
-                x + 4
-            ).toNumber();
-            let wGuid: number = PSTUtil.convertLittleEndianBytesToLong(
-                nameToIdByte,
-                x + 4,
-                x + 6
-            ).toNumber();
-            let wPropIdx: number = PSTUtil.convertLittleEndianBytesToLong(
-                nameToIdByte,
-                x + 6,
-                x + 8
-            ).toNumber();
+            let dwPropertyId: number = PSTUtil.convertLittleEndianBytesToLong(nameToIdByte, x, x + 4).toNumber();
+            let wGuid: number = PSTUtil.convertLittleEndianBytesToLong(nameToIdByte, x + 4, x + 6).toNumber();
+            let wPropIdx: number = PSTUtil.convertLittleEndianBytesToLong(nameToIdByte, x + 6, x + 8).toNumber();
 
             if ((wGuid & 0x0001) == 0) {
                 // identifier is numeric
@@ -249,7 +199,6 @@ export class PSTFile {
                 let guidIndexLong: long = long.fromNumber(guidIndex);
                 guidIndexLong = guidIndexLong.shiftLeft(32);
                 dwPropertyIdLong = dwPropertyIdLong.or(guidIndexLong);
-                let foo = dwPropertyIdLong.toString();
                 this.nameToId.set(dwPropertyIdLong, wPropIdx);
                 this.idToName.set(wPropIdx, dwPropertyIdLong);
                 console.log('numeric key: ' + dwPropertyIdLong.toString());
@@ -269,33 +218,22 @@ export class PSTFile {
         }
     }
 
-    private getData(
-        item: PSTTableItem,
-        localDescriptorItems: Map<number, PSTDescriptorItem>
-    ): Buffer {
+    private getData(item: PSTTableItem, localDescriptorItems: Map<number, PSTDescriptorItem>): Buffer {
         if (item.data.length != 0) {
             return item.data;
         }
 
         if (localDescriptorItems == null) {
-            throw new Error(
-                'External reference but no localDescriptorItems in PSTFile.getData()'
-            );
+            throw new Error('External reference but no localDescriptorItems in PSTFile.getData()');
         }
 
         if (item.entryValueType != 0x0102) {
-            throw new Error(
-                'Attempting to get non-binary data in PSTFile.getData()'
-            );
+            throw new Error('Attempting to get non-binary data in PSTFile.getData()');
         }
 
-        let mapDescriptorItem: PSTDescriptorItem = localDescriptorItems.get(
-            item.entryValueReference
-        );
+        let mapDescriptorItem: PSTDescriptorItem = localDescriptorItems.get(item.entryValueReference);
         if (mapDescriptorItem == null) {
-            throw new Error(
-                'Descriptor not found: ' + item.entryValueReference
-            );
+            throw new Error('Descriptor not found: ' + item.entryValueReference);
         }
         return mapDescriptorItem.getData();
     }
@@ -356,11 +294,10 @@ export class PSTFile {
     //     return this.in;
     // }
 
-    // Get the message store of the PST file.  Note that this doesn't really 
+    // Get the message store of the PST file.  Note that this doesn't really
     // have much information, better to look under the root folder.
     public getMessageStore(): PSTMessageStore {
-        debugger;
-        let  messageStoreDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(PSTFile.MESSAGE_STORE_DESCRIPTOR_IDENTIFIER);
+        let messageStoreDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(long.fromNumber(PSTFile.MESSAGE_STORE_DESCRIPTOR_IDENTIFIER));
         return new PSTMessageStore(this, messageStoreDescriptor);
     }
 
@@ -377,7 +314,7 @@ export class PSTFile {
     //     return output;
     // }
 
-    public readLeaf(bid: number): PSTNodeInputStream {
+    public readLeaf(bid: long): PSTNodeInputStream {
         // get the index node for the descriptor index
         let offsetItem = this.getOffsetIndexNode(bid);
         return new PSTNodeInputStream(this, offsetItem);
@@ -403,66 +340,76 @@ export class PSTFile {
 
     // get file offset, which is sorted in 8 little endian bytes
     // returns a promise of a number
-    private extractLEFileOffset(startOffset: number): number {
-        // console.log('startOffset = ' + startOffset);
-        let offset = 0;
+    private extractLEFileOffset(startOffset: long): long {
+
+        // console.log('startOffset = ' + startOffset.toString());
+        let offset:long = long.ZERO;
         if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
+            debugger;
+            
+            this.pstFileContent.seek(startOffset);
             let buffer = new Buffer(4);
-            this.seekAndRead(buffer, startOffset);
-            offset |= buffer[3] & 0xff;
-            offset <<= 8;
-            offset |= buffer[2] & 0xff;
-            offset <<= 8;
-            offset |= buffer[1] & 0xff;
-            offset <<= 8;
-            offset |= buffer[0] & 0xff;
-            // console.log('resolve with offset = ' + offset);
+            this.pstFileContent.readCompletely(buffer);
+            offset = offset.or(buffer[3] & 0xff);
+            offset = offset.shiftLeft(8);
+            offset = offset.or(buffer[2] & 0xff);
+            offset = offset.shiftLeft(8);
+            offset = offset.or(buffer[1] & 0xff);
+            offset = offset.shiftLeft(8);
+            offset = offset.or(buffer[0] & 0xff);
         } else {
+            this.pstFileContent.seek(startOffset);
             let buffer = new Buffer(8);
-            this.seekAndRead(buffer, startOffset);
-            offset = buffer[7] & 0xff;
+            this.pstFileContent.readCompletely(buffer);
+            offset = offset.or(buffer[7] & 0xff);
             let tmpLongValue: number;
             for (let x = 6; x >= 0; x--) {
-                offset = offset << 8;
+                offset = offset.shiftLeft(8);
                 tmpLongValue = buffer[x] & 0xff;
-                offset |= tmpLongValue;
+                offset = offset.or(tmpLongValue);
             }
-            // console.log('resolve with offset = ' + offset);
         }
+        // console.log('resolve with offset = ' + offset.toString());
         return offset;
     }
 
     // navigate PST B-tree
-    private findBtreeItem(index: number, descTree: boolean): Buffer {
-        let btreeStartOffset: number;
+    private findBtreeItem(index: long, descTree: boolean): Buffer {
+        let btreeStartOffset: long;
         let fileTypeAdjustment: number;
-
         // first find the starting point for the offset index
-        let startOffset: number;
-        if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-            startOffset = descTree ? 188 : 196;
+        if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+            btreeStartOffset = this.extractLEFileOffset(long.fromValue(196));
+            if (descTree) {
+                btreeStartOffset = this.extractLEFileOffset(long.fromValue(188));
+            }
+        } else {
+            btreeStartOffset = this.extractLEFileOffset(long.fromValue(240));
+            if (descTree) {
+                btreeStartOffset = this.extractLEFileOffset(long.fromValue(224));
+            }
+        }
+
+        // okay, what we want to do is navigate the tree until you reach the
+        // bottom....
+        // try and read the index b-tree
+        let buffer = new Buffer(2);
+        if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
             fileTypeAdjustment = 500;
-        } else if (this._pstFileType == PSTFile.PST_TYPE_2013_UNICODE) {
-            startOffset = descTree ? 224 : 240;
+        } else if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
             fileTypeAdjustment = 0x1000 - 24;
         } else {
-            startOffset = descTree ? 224 : 240;
             fileTypeAdjustment = 496;
         }
-        btreeStartOffset = this.extractLEFileOffset(startOffset);
-
-        let buffer = new Buffer(2);
-        this.seekAndRead(buffer, btreeStartOffset + fileTypeAdjustment);
+        this.pstFileContent.seek(btreeStartOffset.add(fileTypeAdjustment));
+        this.pstFileContent.readCompletely(buffer);
 
         let b2 = new Buffer(2);
         b2[0] = 0xff80;
         b2[1] = 0xff81;
 
         // ensure apples to apples comparison
-        while (
-            (buffer[0] === b2[0] && buffer[1] === b2[0] && !descTree) ||
-            (buffer[0] === b2[1] && buffer[1] === b2[1] && descTree)
-        ) {
+        while ((buffer[0] === b2[0] && buffer[1] === b2[0] && !descTree) || (buffer[0] === b2[1] && buffer[1] === b2[1] && descTree)) {
             // get the rest of the data
             let len: number;
             if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
@@ -473,56 +420,47 @@ export class PSTFile {
                 len = 488;
             }
             let branchNodeItems = new Buffer(len);
-            this.seekAndRead(branchNodeItems, btreeStartOffset);
-            let filePosition = btreeStartOffset + len;
+            this.pstFileContent.seek(btreeStartOffset);
+            this.pstFileContent.readCompletely(branchNodeItems);
 
             console.log('btreeStartOffset = ' + btreeStartOffset);
 
             let numberOfItems = 0;
-            if (this._pstFileType == PSTFile.PST_TYPE_2013_UNICODE) {
+            if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
                 let numberOfItemsBytes = new Buffer(2);
-                this.seekAndRead(numberOfItemsBytes, null);
+                this.pstFileContent.readCompletely(numberOfItemsBytes)
                 debugger;
                 throw new Error('not yet implemented');
                 // numberOfItems = this.convertLittleEndianBytesToLong(numberOfItemsBytes);
                 // in.readCompletely(numberOfItemsBytes);
                 // final long maxNumberOfItems = PSTObject.convertLittleEndianBytesToLong(numberOfItemsBytes);
             } else {
-                numberOfItems = this.readSingleByte(filePosition++);
-                this.readSingleByte(filePosition++); // maxNumberOfItems
+                numberOfItems = this.pstFileContent.read(); 
+                this.pstFileContent.read(); // maxNumberOfItems
             }
-            let itemSize = this.readSingleByte(filePosition++); // itemSize
-            let levelsToLeaf = this.readSingleByte(filePosition++);
+            let itemSize = this.pstFileContent.read(); // itemSize
+            let levelsToLeaf = this.pstFileContent.read();
 
             if (levelsToLeaf > 0) {
                 let found = false;
                 for (let x = 0; x < numberOfItems; x++) {
                     if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-                        let indexIdOfFirstChildNode = this.extractLEFileOffset(
-                            btreeStartOffset + x * 12
-                        );
+                        let indexIdOfFirstChildNode = this.extractLEFileOffset(btreeStartOffset.add(x * 12));
                         if (indexIdOfFirstChildNode > index) {
                             // get the address for the child first node in this group
-                            btreeStartOffset = this.extractLEFileOffset(
-                                btreeStartOffset + (x - 1) * 12 + 8
-                            );
-                            this.seekAndRead(buffer, btreeStartOffset + 500);
+                            btreeStartOffset = this.extractLEFileOffset(btreeStartOffset.add((x - 1) * 12 + 8));
+                            this.pstFileContent.seek(btreeStartOffset.add(500));
+                            this.pstFileContent.readCompletely(buffer);
                             found = true;
                             break;
                         }
                     } else {
-                        let indexIdOfFirstChildNode = this.extractLEFileOffset(
-                            btreeStartOffset + x * 24
-                        );
-                        if (indexIdOfFirstChildNode > index) {
+                        let indexIdOfFirstChildNode = this.extractLEFileOffset(btreeStartOffset.add(x * 24));
+                        if (indexIdOfFirstChildNode.greaterThan(index)) {
                             // get the address for the child first node in this group
-                            btreeStartOffset = this.extractLEFileOffset(
-                                btreeStartOffset + (x - 1) * 24 + 16
-                            );
-                            this.seekAndRead(
-                                buffer,
-                                btreeStartOffset + fileTypeAdjustment
-                            );
+                            btreeStartOffset = this.extractLEFileOffset(btreeStartOffset.add((x - 1) * 24 + 16));
+                            this.pstFileContent.seek(btreeStartOffset.add(fileTypeAdjustment));
+                            this.pstFileContent.readCompletely(buffer);
                             found = true;
                             break;
                         }
@@ -531,18 +469,13 @@ export class PSTFile {
                 if (!found) {
                     // it must be in the very last branch...
                     if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-                        btreeStartOffset = this.extractLEFileOffset(
-                            btreeStartOffset + (numberOfItems - 1) * 12 + 8
-                        );
-                        this.seekAndRead(buffer, btreeStartOffset + 500);
+                        btreeStartOffset = this.extractLEFileOffset(btreeStartOffset.add((numberOfItems - 1) * 12 + 8));
+                        this.pstFileContent.seek(btreeStartOffset.add(500));
+                        this.pstFileContent.readCompletely(buffer);
                     } else {
-                        btreeStartOffset = this.extractLEFileOffset(
-                            btreeStartOffset + (numberOfItems - 1) * 24 + 16
-                        );
-                        this.seekAndRead(
-                            buffer,
-                            btreeStartOffset + fileTypeAdjustment
-                        );
+                        btreeStartOffset = this.extractLEFileOffset(btreeStartOffset.add((numberOfItems - 1) * 24 + 16));
+                        this.pstFileContent.seek(btreeStartOffset.add(fileTypeAdjustment));
+                        this.pstFileContent.readCompletely(buffer);
                     }
                 }
             } else {
@@ -555,34 +488,25 @@ export class PSTFile {
                         if (descTree) {
                             // The 32-bit descriptor index b-tree leaf node item
                             buffer = new Buffer(4);
-                            this.seekAndRead(buffer, btreeStartOffset + x * 16);
-                            if (
-                                PSTUtil.convertLittleEndianBytesToLong(
-                                    buffer
-                                ).toNumber() == index
-                            ) {
+                            this.pstFileContent.seek(btreeStartOffset.add(x * 16));
+                            this.pstFileContent.readCompletely(buffer);
+                            if (PSTUtil.convertLittleEndianBytesToLong(buffer).equals(index)) {
                                 // give me the offset index please!
                                 buffer = new Buffer(16);
-                                this.seekAndRead(
-                                    buffer,
-                                    btreeStartOffset + x * 16
-                                );
+                                this.pstFileContent.seek(btreeStartOffset.add(x * 16));
+                                this.pstFileContent.readCompletely(buffer);
                                 return buffer;
                             }
                         } else {
                             // The 32-bit (file) offset index item
-                            let indexIdOfFirstChildNode = this.extractLEFileOffset(
-                                btreeStartOffset + x * 12
-                            );
-
-                            if (indexIdOfFirstChildNode == index) {
+                            let indexIdOfFirstChildNode = this.extractLEFileOffset(btreeStartOffset.add(x * 12));
+                            if (indexIdOfFirstChildNode.equals(index)) {
                                 // we found it!!!! OMG
                                 // System.out.println("item found as item #"+x);
                                 buffer = new Buffer(12);
-                                this.seekAndRead(
-                                    buffer,
-                                    btreeStartOffset + x * 12
-                                );
+                                this.pstFileContent.seek(btreeStartOffset.add(x * 12));
+                                this.pstFileContent.readCompletely(buffer);
+                                console.log('item found!!!');
                                 return buffer;
                             }
                         }
@@ -590,71 +514,48 @@ export class PSTFile {
                         if (descTree) {
                             // The 64-bit descriptor index b-tree leaf node item
                             buffer = new Buffer(4);
-                            this.seekAndRead(buffer, btreeStartOffset + x * 32);
-
-                            if (
-                                PSTUtil.convertLittleEndianBytesToLong(
-                                    buffer
-                                ).toNumber() == index
-                            ) {
+                            this.pstFileContent.seek(btreeStartOffset.add(x * 32));
+                            this.pstFileContent.readCompletely(buffer);
+                            if (PSTUtil.convertLittleEndianBytesToLong(buffer).equals(index)) {
                                 // give me the offset index please!
                                 buffer = new Buffer(32);
-                                this.seekAndRead(
-                                    buffer,
-                                    btreeStartOffset + x * 32
-                                );
-
+                                this.pstFileContent.seek(btreeStartOffset.add(x * 32));
+                                this.pstFileContent.readCompletely(buffer);
                                 console.log('item found!!!');
                                 // PSTObject.printHexFormatted(temp, true);
                                 return buffer;
                             }
                         } else {
                             // The 64-bit (file) offset index item
-                            let indexIdOfFirstChildNode = this.extractLEFileOffset(
-                                btreeStartOffset + x * 24
-                            );
-
-                            if (indexIdOfFirstChildNode == index) {
+                            let indexIdOfFirstChildNode = this.extractLEFileOffset(btreeStartOffset.add(x * 24));
+                            if (indexIdOfFirstChildNode.equals(index)) {
                                 // we found it!!!! OMG
                                 // System.out.println("item found as item #"+x +
                                 // " size (should be 24): "+itemSize);
                                 buffer = new Buffer(24);
-                                this.seekAndRead(
-                                    buffer,
-                                    btreeStartOffset + x * 24
-                                );
-
+                                this.pstFileContent.seek(btreeStartOffset.add(x * 24));
+                                this.pstFileContent.readCompletely(buffer);
                                 console.log('item found!!!');
                                 return buffer;
                             }
                         }
                     }
                 }
-                throw new Error(
-                    'Unable to find ' + index + ' is desc: ' + descTree
-                );
+                throw new Error('Unable to find ' + index + ' is desc: ' + descTree);
             }
         }
 
-        throw new Error(
-            'Unable to find node: ' + index + ' is desc: ' + descTree
-        );
+        throw new Error('Unable to find node: ' + index + ' is desc: ' + descTree);
     }
 
     // navigate the internal descriptor B-Tree and find a specific item
-    public getDescriptorIndexNode(id: number): DescriptorIndexNode {
-        return new DescriptorIndexNode(
-            this.findBtreeItem(id, true),
-            this._pstFileType
-        );
+    public getDescriptorIndexNode(id: long): DescriptorIndexNode {
+        return new DescriptorIndexNode(this.findBtreeItem(id, true), this._pstFileType);
     }
 
     // navigate b-tree index and find specific item
-    public getOffsetIndexNode(id: number): OffsetIndexItem {
-        return new OffsetIndexItem(
-            this.findBtreeItem(id, false),
-            this._pstFileType
-        );
+    public getOffsetIndexNode(id: long): OffsetIndexItem {
+        return new OffsetIndexItem(this.findBtreeItem(id, false), this._pstFileType);
     }
 
     // /**
@@ -828,29 +729,23 @@ export class PSTFile {
     // }
 
     // parse a PSTDescriptor and get all of its items
-    public getPSTDescriptorItems(
-        localDescriptorsOffsetIndexIdentifier: number
-    ): Map<number, PSTDescriptorItem>;
-    public getPSTDescriptorItems(
-        inputStream: PSTNodeInputStream
-    ): Map<number, PSTDescriptorItem>;
+    public getPSTDescriptorItems(localDescriptorsOffsetIndexIdentifier: long): Map<number, PSTDescriptorItem>;
+    public getPSTDescriptorItems(inputStream: PSTNodeInputStream): Map<number, PSTDescriptorItem>;
     public getPSTDescriptorItems(arg: any): Map<number, PSTDescriptorItem> {
         let inputStream: PSTNodeInputStream = arg;
-        if (typeof arg === 'number') {
+        if (arg instanceof long) {
             inputStream = this.readLeaf(arg);
         }
 
         // make sure the signature is correct
-        inputStream.seek(0);
+        inputStream.seek(long.ZERO);
         let sig = inputStream.read();
         if (sig != 0x2) {
-            throw new Error(
-                'Unable to process descriptor node, bad signature: ' + sig
-            );
+            throw new Error('Unable to process descriptor node, bad signature: ' + sig);
         }
 
         let output = new Map();
-        let numberOfItems = inputStream.seekAndReadLong(2, 2);
+        let numberOfItems = inputStream.seekAndReadLong(long.fromValue(2), 2);
         let offset;
         if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
             offset = 4;
@@ -858,16 +753,12 @@ export class PSTFile {
             offset = 8;
         }
 
-        let data = new Buffer(inputStream.length);
-        inputStream.seek(0);
+        let data = new Buffer(inputStream.length.toNumber());
+        inputStream.seek(long.ZERO);
         inputStream.readCompletely(data);
 
         for (let x = 0; x < numberOfItems.toNumber(); x++) {
-            let item: PSTDescriptorItem = new PSTDescriptorItem(
-                data,
-                offset,
-                this
-            );
+            let item: PSTDescriptorItem = new PSTDescriptorItem(data, offset, this);
             output.set(item.descriptorIdentifier, item);
             if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
                 offset += 12;
@@ -880,17 +771,17 @@ export class PSTFile {
         return output;
     }
 
-    // reads a single byte from the current file position
-    private readSingleByte(position: number): number {
-        let buffer = new Buffer(1);
-        fs.readSync(this.pstFD, buffer, 0, buffer.length, position);
-        return buffer[0];
-    }
+    // // reads a single byte from the current file position
+    // private readSingleByte(position: long): number {
+    //     let buffer = new Buffer(1);
+    //     fs.readSync(this.pstFD, buffer, 0, buffer.length, position.toNumber());
+    //     return buffer[0];
+    // }
 
-    // seek to a specific place in file, and get specific number of bytes
-    // returns a promise of a chunk of bytes
-    public seekAndRead(buffer: Buffer, position: number) {
-        // console.log('seekAndRead: start = ' + position + ', length = ' + buffer.length);
-        fs.readSync(this.pstFD, buffer, 0, buffer.length, position);
-    }
+    // // seek to a specific place in file, and get specific number of bytes
+    // // returns a promise of a chunk of bytes
+    // public seekAndRead(buffer: Buffer, position: long) {
+    //     // console.log('seekAndRead: start = ' + position + ', length = ' + buffer.length);
+    //     fs.readSync(this.pstFD, buffer, 0, buffer.length, position.toNumber());
+    // }
 }

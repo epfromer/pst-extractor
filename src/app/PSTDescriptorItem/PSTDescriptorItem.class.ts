@@ -36,7 +36,7 @@ export class PSTDescriptorItem {
         }
 
         let pstNodeInputStream: PSTNodeInputStream = this._pstFile.readLeaf(this.offsetIndexIdentifier);
-        let out = new Buffer(pstNodeInputStream.length);
+        let out = new Buffer(pstNodeInputStream.length.toNumber());
         pstNodeInputStream.readCompletely(out);
         this.dataBlockData = out;
         return this.dataBlockData;

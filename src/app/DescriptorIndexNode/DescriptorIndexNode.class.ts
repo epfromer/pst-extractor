@@ -7,21 +7,21 @@ import * as long from 'long';
 // It is like a pointer to an element in the PST file, everything has one...
 export class DescriptorIndexNode {
     descriptorIdentifier: number;
-    dataOffsetIndexIdentifier: number;
-    localDescriptorsOffsetIndexIdentifier: number;
+    dataOffsetIndexIdentifier: long;
+    localDescriptorsOffsetIndexIdentifier: long;
     parentDescriptorIndexIdentifier: number;
     itemType: number;
 
     constructor(buffer: Buffer, pstFileType: number) {
         if (pstFileType == PSTFile.PST_TYPE_ANSI) {
             this.descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 0, 4).toNumber();
-            this.dataOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 4, 8).toNumber();
-            this.localDescriptorsOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 8, 12).toNumber();
+            this.dataOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 4, 8);
+            this.localDescriptorsOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 8, 12);
             this.parentDescriptorIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 12, 16).toNumber();
         } else {
             this.descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 0, 4).toNumber();
-            this.dataOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 8, 16).toNumber();
-            this.localDescriptorsOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 16, 24).toNumber();
+            this.dataOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 8, 16);
+            this.localDescriptorsOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 16, 24);
             this.parentDescriptorIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 24, 28).toNumber();
             this.itemType = PSTUtil.convertLittleEndianBytesToLong(buffer, 28, 32).toNumber();
         }

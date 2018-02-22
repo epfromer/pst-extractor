@@ -3,8 +3,8 @@ import { PSTFile } from './../PSTFile/PSTFile.class';
 import { PSTObject } from './../PSTObject/PSTObject.class'
 import { PSTFileContent } from '../PSTFileContent/PSTFileContent.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
-import * as long from 'long';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
+import * as long from 'long';
 
 export class PSTNodeInputStream {
 
@@ -67,7 +67,7 @@ export class PSTNodeInputStream {
             this.pstFileContent = pstFile.pstFileContent;
             this._encrypted = pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
             // we want to get the first block of data and see what we are dealing with
-            this.loadFromOffsetItem(pstFile.getOffsetIndexNode(arg.offsetIndexIdentifier));
+            this.loadFromOffsetItem(pstFile.getOffsetIndexNode(long.fromNumber(arg.offsetIndexIdentifier)));
             this.currentBlock = 0;
             this.currentLocation = long.ZERO;
             this.detectZlib();
@@ -138,17 +138,18 @@ export class PSTNodeInputStream {
                 // this.currentBlock = 0;
                 // this.length = this.allData.length;
             }
-            this.seek(0);
+            this.seek(long.ZERO);
         } catch (err) {
             throw new Error("Unable to decompress reportedly compressed block");
         }
     }
 
     private loadFromOffsetItem(offsetItem: OffsetIndexItem) {
-        let bInternal = (offsetItem.indexIdentifier & 0x02) != 0;
+        let bInternal = (offsetItem.indexIdentifier.toNumber() & 0x02) != 0;
 
         let data = new Buffer(offsetItem.size);
-        this.pstFile.seekAndRead(data, offsetItem.fileOffset);
+        this.pstFileContent.seek(offsetItem.fileOffset);
+        this.pstFileContent.readCompletely(data);
         
         if (bInternal) {
             // All internal blocks are at least 8 bytes long...
@@ -189,12 +190,13 @@ export class PSTNodeInputStream {
             // XXBlock
             let offset = 8;
             for (let x = 0; x < numberOfEntries; x++) {
-                let bid = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + arraySize).toNumber();
-                bid &= 0xfffffffe;
+                let bid = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + arraySize);
+                bid = bid.and(0xfffffffe);
                 // get the details in this block and
                 let offsetItem = this.pstFile.getOffsetIndexNode(bid);
                 let blockData = new Buffer(offsetItem.size);
-                this.pstFile.seekAndRead(blockData, offsetItem.fileOffset);
+                this.pstFileContent.seek(offsetItem.fileOffset);
+                this.pstFileContent.readCompletely(blockData);
 
                 // recurse
                 this.getBlockSkipPoints(blockData);
@@ -204,8 +206,8 @@ export class PSTNodeInputStream {
             // normal XBlock
             let offset = 8;
             for (let x = 0; x < numberOfEntries; x++) {
-                let bid = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + arraySize).toNumber();
-                bid &= 0xfffffffe;
+                let bid = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + arraySize);
+                bid = bid.and(0xfffffffe);
                 // get the details in this block and add it to the list
                 let offsetItem = this.pstFile.getOffsetIndexNode(bid);
                 this.indexItems.push(offsetItem);
@@ -218,7 +220,6 @@ export class PSTNodeInputStream {
 
     // read a byte
     public read(): number {
-
         // first deal with items < 8K and we have all the data already
         if (this.allData != null) {
             if (this.currentLocation == this.length) {
@@ -234,7 +235,7 @@ export class PSTNodeInputStream {
         }
         let item: OffsetIndexItem = this.indexItems[this.currentBlock];
         let skipPoint = this.skipPoints[this.currentBlock];
-        if (this.currentLocation + 1 > skipPoint + item.size) {
+        if ((this.currentLocation.add(1)).greaterThan(skipPoint.add(item.size))) {
             // got to move to the next block
             this.currentBlock++;
 
@@ -247,8 +248,9 @@ export class PSTNodeInputStream {
         }
 
         // get the next byte.
-        let pos = item.fileOffset + this.currentLocation - skipPoint;
-        let output = this.pstFileContent.read(pos);
+        let pos = item.fileOffset.add(this.currentLocation).subtract(skipPoint);
+        this.pstFileContent.seek(pos);
+        let output = this.pstFileContent.read();
         if (output < 0) {
             return -1;
         }
@@ -256,7 +258,7 @@ export class PSTNodeInputStream {
             output = PSTUtil.compEnc[output];
         }
 
-        this.currentLocation++;
+        this.currentLocation.add(1);
 
         return output;
     }
@@ -291,20 +293,20 @@ export class PSTNodeInputStream {
 
         // first deal with the small stuff
         if (this.allData != null) {
-            let bytesRemaining = this.length - this.currentLocation;
+            let bytesRemaining = this.length.subtract(this.currentLocation).toNumber();
             if (output.length >= bytesRemaining) {
-                PSTUtil.arraycopy(this.allData, this.currentLocation, output, 0, bytesRemaining);
+                PSTUtil.arraycopy(this.allData, this.currentLocation.toNumber(), output, 0, bytesRemaining);
                 if (this.encrypted) {
                     PSTUtil.decode(output);
                 }
-                this.currentLocation += bytesRemaining; // should be = to this.length
+                this.currentLocation = this.currentLocation.add(bytesRemaining); // should be = to this.length
                 return bytesRemaining;
             } else {
-                PSTUtil.arraycopy(this.allData, this.currentLocation, output, 0, output.length);
+                PSTUtil.arraycopy(this.allData, this.currentLocation.toNumber(), output, 0, output.length);
                 if (this.encrypted) {
                     PSTUtil.decode(output);
                 }
-                this.currentLocation += output.length;
+                this.currentLocation = this.currentLocation.add(output.length);
                 return output.length;
             }
         }
@@ -319,27 +321,26 @@ export class PSTNodeInputStream {
             // the output
             let offset: OffsetIndexItem = this.indexItems[this.currentBlock];
             let skipPoint = this.skipPoints[this.currentBlock];
-            let currentPosInBlock = this.currentLocation - skipPoint;
-            this.pstFileContent.seek(offset.fileOffset + currentPosInBlock);
+            let currentPosInBlock = this.currentLocation.subtract(skipPoint).toNumber();
+            this.pstFileContent.seek(offset.fileOffset.add(currentPosInBlock));
 
-            let nextSkipPoint = skipPoint + offset.size;
+            let nextSkipPoint = skipPoint.add(offset.size);
             let bytesRemaining = output.length - totalBytesFilled;
             // if the total bytes remaining if going to take us past our size
-            if (bytesRemaining > (this.length - this.currentLocation)) {
+            if (bytesRemaining > this.length.subtract(this.currentLocation).toNumber()) {
                 // we only have so much to give
-                bytesRemaining = this.length - this.currentLocation;
+                bytesRemaining = this.length.subtract(this.currentLocation).toNumber();
             }
 
-            if (nextSkipPoint >= this.currentLocation + bytesRemaining) {
+            if (nextSkipPoint.greaterThanOrEqual(this.currentLocation.add(bytesRemaining))) {
                 // we can fill the output with the rest of our current block!
                 let chunk = new Buffer(bytesRemaining);
                 this.pstFileContent.readCompletely(chunk);
-
                 PSTUtil.arraycopy(chunk, 0, output, totalBytesFilled, bytesRemaining);
                 totalBytesFilled += bytesRemaining;
                 // we are done!
                 filled = true;
-                this.currentLocation += bytesRemaining;
+                this.currentLocation = this.currentLocation.add(bytesRemaining);
             } else {
                 // we need to read out a whole chunk and keep going
                 let bytesToRead = offset.size - currentPosInBlock;
@@ -348,7 +349,7 @@ export class PSTNodeInputStream {
                 PSTUtil.arraycopy(chunk, 0, output, totalBytesFilled, bytesToRead);
                 totalBytesFilled += bytesToRead;
                 this.currentBlock++;
-                this.currentLocation += bytesToRead;
+                this.currentLocation = this.currentLocation.add(bytesToRead);
             }
             this.totalLoopCount++;
         }
@@ -395,7 +396,7 @@ export class PSTNodeInputStream {
 
      // Get the offsets (block positions) used in the array
     public getBlockOffsets(): long[] {
-        let output: long[];
+        let output: long[] = [];
         if (this.skipPoints.length === 0) {
             let len = long.fromValue(this.length);
             output.push(len);
@@ -405,28 +406,28 @@ export class PSTNodeInputStream {
                 output.push(this.skipPoints[x].add(size));
             }
         }
-        console.log(output.toString())
+        // console.log(output.toString())
         return output;
     }
 
     // seek within item
-    public seek(location: number) {
+    public seek(location: long) {
         // not past the end!
-        if (location > this.length) {
+        if (location.greaterThan(this.length)) {
             throw new Error("Attempt to seek past end of item! size = " + this.length + ", seeking to:" + location);
         }
 
         // are we already there?
-        if (this.currentLocation === location) {
+        if (this.currentLocation.equals(location)) {
             return;
         }
 
         // get us to the right block
-        let skipPoint = 0;
+        let skipPoint: long = long.ZERO;
         this.currentBlock = 0;
         if (this.allData == null) {
             skipPoint = this.skipPoints[this.currentBlock + 1];
-            while (location >= skipPoint) {
+            while (location.greaterThanOrEqual(skipPoint)) {
                 this.currentBlock++;
                 // is this the last block?
                 if (this.currentBlock == this.skipPoints.length - 1) {
@@ -443,13 +444,13 @@ export class PSTNodeInputStream {
 
         if (this.allData == null) {
             let blockStart = this.indexItems[this.currentBlock].fileOffset;
-            let newFilePos = blockStart + (location - skipPoint);
+            let newFilePos: long = blockStart.add(location).subtract(skipPoint);
             this.pstFileContent.seek(newFilePos);
         }
 
     }
 
-    public seekAndReadLong(location: number, bytes: number): long {
+    public seekAndReadLong(location: long, bytes: number): long {
         this.seek(location);
         let buffer = new Buffer(bytes);
         this.readCompletely(buffer);
