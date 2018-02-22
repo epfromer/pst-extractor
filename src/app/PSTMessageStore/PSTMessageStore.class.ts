@@ -33,8 +33,6 @@ export class PSTMessageStore extends PSTObject {
 
     // get the message store display name
     public getDisplayName(): string {
-        debugger;
-
         // attempt to find in the table.
         let displayNameEntryType = 0x3001;
         if (this.pstTableItems.has(displayNameEntryType)) {

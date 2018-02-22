@@ -32,11 +32,9 @@ export class PSTObject {
         let offsetIndexItem: OffsetIndexItem = this.pstFile.getOffsetIndexNode(descriptorIndexNode.dataOffsetIndexIdentifier);
         let pstNodeInputStream: PSTNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem)
         this.pstTableBC = new PSTTableBC(pstNodeInputStream);
-        
-        debugger;
         this.pstTableItems = this.pstTableBC.getItems();
 
-        if (descriptorIndexNode.localDescriptorsOffsetIndexIdentifier != long.ZERO) {
+        if (descriptorIndexNode.localDescriptorsOffsetIndexIdentifier.notEquals(long.ZERO)) {
             this.localDescriptorItems = pstFile.getPSTDescriptorItems(descriptorIndexNode.localDescriptorsOffsetIndexIdentifier);
         }
     }
@@ -155,26 +153,30 @@ export class PSTObject {
 
     protected getStringItem(identifier: number, stringType?: number, codepage?: string): string {
 
-        debugger;
+
+        if (!stringType) {
+            stringType = 0;
+        }
 
         let item: PSTTableBCItem = this.pstTableItems.get(identifier);
-        if (item != null) {
+        if (item) {
 
-            if (codepage == null) {
+            if (!codepage) {
                 codepage = this.getStringCodepage();
             }
 
             // get the string type from the item if not explicitly set
-            if (stringType == 0) {
+            if (!stringType) {
                 stringType = item.entryValueType;
             }
 
             // see if there is a descriptor entry
             if (!item.isExternalValueReference) {
-                // System.out.println("here: "+new
-                // String(item.data)+this.descriptorIndexNode.descriptorIdentifier);
                 return PSTUtil.createJavascriptString(item.data, stringType, codepage);
             }
+
+            debugger;
+            
             // if (this.localDescriptorItems != null && this.localDescriptorItems.containsKey(item.entryValueReference)) {
             //     // we have a hit!
             //     final PSTDescriptorItem descItem = this.localDescriptorItems.get(item.entryValueReference);
