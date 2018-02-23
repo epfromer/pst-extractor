@@ -8,4 +8,7 @@ debugger;
 console.log(pstFile.getMessageStore().getDisplayName());
 
 debugger;
+this.processFolder(pstFile.getRootFolder());
+
+debugger;
 console.log('exiting');

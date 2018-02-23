@@ -1,3 +1,4 @@
+import { PSTFolder } from './../PSTFolder/PSTFolder.class';
 import { PSTMessageStore } from './../PSTMessageStore/PSTMessageStore.class';
 import { DescriptorIndexNode } from './../DescriptorIndexNode/DescriptorIndexNode.class';
 import { PSTDescriptorItem } from './../PSTDescriptorItem/PSTDescriptorItem.class';
@@ -301,19 +302,14 @@ export class PSTFile {
         return new PSTMessageStore(this, messageStoreDescriptor);
     }
 
-    // /**
-    //  * get the root folder for the PST file.
-    //  * You should find all of your data under here...
-    //  *
-    //  * @throws PSTException
-    //  * @throws IOException
-    //  */
-    // public PSTFolder getRootFolder() throws PSTException, IOException {
-    //     final DescriptorIndexNode rootFolderDescriptor = this.getDescriptorIndexNode(ROOT_FOLDER_DESCRIPTOR_IDENTIFIER);
-    //     final PSTFolder output = new PSTFolder(this, rootFolderDescriptor);
-    //     return output;
-    // }
+    // get the root folder for the PST file
+    public getRootFolder(): PSTFolder {
+        let rootFolderDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(long.fromValue(PSTFile.ROOT_FOLDER_DESCRIPTOR_IDENTIFIER));
+        let output: PSTFolder = new PSTFolder(this, rootFolderDescriptor);
+        return output;
+    }
 
+    
     public readLeaf(bid: long): PSTNodeInputStream {
         // get the index node for the descriptor index
         let offsetItem = this.getOffsetIndexNode(bid);
