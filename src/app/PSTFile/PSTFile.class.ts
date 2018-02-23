@@ -68,7 +68,7 @@ export class PSTFile {
 
     // type of file (e.g. ANSI)
     private _pstFileType = 0;
-    get pstFileType(): number {
+    public get pstFileType(): number {
         return this._pstFileType;
     }
 

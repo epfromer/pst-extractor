@@ -5,6 +5,7 @@ import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTTable7C } from '../PSTTable7C/PSTTable7C.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
+import { PSTTable7CItem } from '../PSTTable7CItem/PSTTable7CItem.class';
 
 // Represents a folder in the PST File.  Allows you to access child folders or items. 
 // Items are accessed through a sort of cursor arrangement.  This allows for 
@@ -48,7 +49,7 @@ export class PSTFolder extends PSTObject {
         let output: PSTFolder[] = [];
         try {
             this.initSubfoldersTable();
-            // final List<HashMap<Integer, PSTTable7CItem>> itemMapSet = this.subfoldersTable.getItems();
+            let itemMapSet: Map<number, PSTTable7CItem>[]  = this.subfoldersTable.getItems();
             // for (final HashMap<Integer, PSTTable7CItem> itemMap : itemMapSet) {
             //     final PSTTable7CItem item = itemMap.get(26610);
             //     final PSTFolder folder = (PSTFolder) PSTObject.detectAndLoadPSTObject(this.pstFile,
@@ -77,8 +78,6 @@ export class PSTFolder extends PSTObject {
     }
 
     private initSubfoldersTable() {
-        debugger;
-        
         if (this.subfoldersTable) {
             return;
         }
