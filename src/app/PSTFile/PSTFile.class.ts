@@ -288,13 +288,6 @@ export class PSTFile {
     //     }
     // }
 
-    // /**
-    //  * get the handle to the file content we are currently accessing
-    //  */
-    // public PSTFileContent getContentHandle() {
-    //     return this.in;
-    // }
-
     // Get the message store of the PST file.  Note that this doesn't really
     // have much information, better to look under the root folder.
     public getMessageStore(): PSTMessageStore {
@@ -309,7 +302,6 @@ export class PSTFile {
         return output;
     }
 
-    
     public readLeaf(bid: long): PSTNodeInputStream {
         // get the index node for the descriptor index
         let offsetItem = this.getOffsetIndexNode(bid);

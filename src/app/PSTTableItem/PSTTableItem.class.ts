@@ -154,7 +154,6 @@ export class PSTTableItem {
         }
 
         if (this.entryValueType == 0x001f) {
-            debugger;
             //     // Unicode string
             //     String s;
             //     try {

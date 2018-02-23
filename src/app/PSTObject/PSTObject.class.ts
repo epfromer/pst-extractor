@@ -1,4 +1,3 @@
-import * as long from 'long';
 import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
@@ -7,15 +6,15 @@ import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.cla
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import { OffsetIndexItem } from '../OffsetIndexItem/OffsetIndexItem.class';
+import * as long from 'long';
 
 // PST Object is the root class of most PST Items.
 // It also provides a number of static utility functions. The most important is
 // detectAndLoadPSTObject call which allows extraction of a PST Item from the file.
 export class PSTObject {
     // protected byte[] data;
-    // protected HashMap<Integer, PSTTableBCItem> items;
-    private pstFile: PSTFile;
-    private descriptorIndexNode: DescriptorIndexNode;
+    protected pstFile: PSTFile;
+    protected descriptorIndexNode: DescriptorIndexNode;
     private localDescriptorItems: Map<number, PSTDescriptorItem> = null;
     // protected LinkedHashMap<String, HashMap<DescriptorIndexNode, PSTObject>> children;
     private pstTableBC: PSTTableBC;
@@ -90,17 +89,17 @@ export class PSTObject {
     //     return descriptorIdentifier & 0x1F;
     // }
 
-    // protected int getIntItem(final int identifier) {
-    //     return this.getIntItem(identifier, 0);
-    // }
+    protected getIntItem(identifier: number, defaultValue?: number): number {
+        if (!defaultValue) {
+            defaultValue = 0;
+        }
 
-    // protected int getIntItem(final int identifier, final int defaultValue) {
-    //     if (this.items.containsKey(identifier)) {
-    //         final PSTTableBCItem item = this.items.get(identifier);
-    //         return item.entryValueReference;
-    //     }
-    //     return defaultValue;
-    // }
+        if (this.pstTableItems.has(identifier)) {
+            let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+            return item.entryValueReference;
+        }
+        return defaultValue;
+    }
 
     // protected boolean getBooleanItem(final int identifier) {
     //     return this.getBooleanItem(identifier, false);
@@ -270,17 +269,13 @@ export class PSTObject {
     //     return this.localDescriptorItems + "\n" + (this.items);
     // }
 
-    // /**
-    //  * These are the common properties, some don't really appear to be common
-    //  * across folders and emails, but hey
-    //  */
+    //  These are the common properties, some don't really appear to be common
+    //  across folders and emails, but hey
 
-    // /**
-    //  * get the display name
-    //  */
-    // public String getDisplayName() {
-    //     return this.getStringItem(0x3001);
-    // }
+    //  get the display name
+    public getDisplayName(): string {
+        return this.getStringItem(0x3001);
+    }
 
     // /**
     //  * Address type

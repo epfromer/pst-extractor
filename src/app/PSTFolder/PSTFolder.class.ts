@@ -1,11 +1,17 @@
+import * as long from 'long';
 import { PSTObject } from './../PSTObject/PSTObject.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
+import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTTable7C } from '../PSTTable7C/PSTTable7C.class';
+import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 
 // Represents a folder in the PST File.  Allows you to access child folders or items. 
 // Items are accessed through a sort of cursor arrangement.  This allows for 
 // incremental reading of a folder which may have _lots_ of emails.
 export class PSTFolder extends PSTObject {
+    private subfoldersTable: PSTTable7C = null;
+
     constructor(pstFile: PSTFile, descriptorIndexNode: DescriptorIndexNode) {
         super();
         this.loadDescriptor(pstFile, descriptorIndexNode);
@@ -36,65 +42,62 @@ export class PSTFolder extends PSTObject {
     //     super(theFile, folderIndexNode, table, localDescriptorItems);
     // }
 
-    // /**
-    //  * get all of the sub folders...
-    //  * there are not usually thousands, so we just do it in one big operation.
-    //  * 
-    //  * @return all of the subfolders
-    //  * @throws PSTException
-    //  * @throws IOException
-    //  */
-    // public Vector<PSTFolder> getSubFolders() throws PSTException, IOException {
-    //     final Vector<PSTFolder> output = new Vector<>();
-    //     try {
-    //         this.initSubfoldersTable();
-    //         final List<HashMap<Integer, PSTTable7CItem>> itemMapSet = this.subfoldersTable.getItems();
-    //         for (final HashMap<Integer, PSTTable7CItem> itemMap : itemMapSet) {
-    //             final PSTTable7CItem item = itemMap.get(26610);
-    //             final PSTFolder folder = (PSTFolder) PSTObject.detectAndLoadPSTObject(this.pstFile,
-    //                 item.entryValueReference);
-    //             output.add(folder);
-    //         }
-    //     } catch (final PSTException err) {
-    //         // hierarchy node doesn't exist: This is OK if child count is 0.
-    //     	// Seen with special search folders at the top of the hierarchy:
-    //     	// "8739 - SPAM Search Folder 2", "8739 - Content.Filter".
-    //     	// this.subfoldersTable may remain uninitialized (null) in that case.
-    //     	if (this.getContentCount() != 0) {
-    //     		if (err.getMessage().startsWith("Can't get child folders")) {
-    //     			throw err;
-    //     		} else {
-    //             	//err.printStackTrace();
-    //                 throw new PSTException("Can't get child folders for folder " + this.getDisplayName() + "("
-    //                         + this.getDescriptorNodeId() + ") child count: " + this.getContentCount() + " - " + err.toString(), err);
-    //     		}
-    //     	}
-    //     }
-    //     return output;
-    // }
+    // get all of the sub folders...
+    // there are not usually thousands, so we just do it in one big operation.
+    public getSubFolders(): PSTFolder[] {
+        let output: PSTFolder[] = [];
+        try {
+            this.initSubfoldersTable();
+            // final List<HashMap<Integer, PSTTable7CItem>> itemMapSet = this.subfoldersTable.getItems();
+            // for (final HashMap<Integer, PSTTable7CItem> itemMap : itemMapSet) {
+            //     final PSTTable7CItem item = itemMap.get(26610);
+            //     final PSTFolder folder = (PSTFolder) PSTObject.detectAndLoadPSTObject(this.pstFile,
+            //         item.entryValueReference);
+            //     output.add(folder);
+            // }
+        } catch (err) {
+            // hierarchy node doesn't exist: This is OK if child count is 0.
+        	// Seen with special search folders at the top of the hierarchy:
+        	// "8739 - SPAM Search Folder 2", "8739 - Content.Filter".
+        	// this.subfoldersTable may remain uninitialized (null) in that case.
+            console.log("Can't get child folders for folder " + this.getDisplayName());
+            debugger;
+            throw err;
+        	// if (this.getContentCount() != 0) {
+        	// 	if (err.getMessage().startsWith("Can't get child folders")) {
+        	// 		throw err;
+        	// 	} else {
+            //     	//err.printStackTrace();
+            //         throw new PSTException("Can't get child folders for folder " + this.getDisplayName() + "("
+            //                 + this.getDescriptorNodeId() + ") child count: " + this.getContentCount() + " - " + err.toString(), err);
+        	// 	}
+        	// }
+        }
+        return output;
+    }
 
-    // private void initSubfoldersTable() throws IOException, PSTException {
-    //     if (this.subfoldersTable != null) {
-    //         return;
-    //     }
+    private initSubfoldersTable() {
+        debugger;
+        
+        if (this.subfoldersTable) {
+            return;
+        }
 
-    //     final long folderDescriptorIndex = this.descriptorIndexNode.descriptorIdentifier + 11;
-    //     try {
-    //         final DescriptorIndexNode folderDescriptor = this.pstFile.getDescriptorIndexNode(folderDescriptorIndex);
-    //         HashMap<Integer, PSTDescriptorItem> tmp = null;
-    //         if (folderDescriptor.localDescriptorsOffsetIndexIdentifier > 0) {
-    //             // tmp = new PSTDescriptor(pstFile,
-    //             // folderDescriptor.localDescriptorsOffsetIndexIdentifier).getChildren();
-    //             tmp = this.pstFile.getPSTDescriptorItems(folderDescriptor.localDescriptorsOffsetIndexIdentifier);
-    //         }
-    //         this.subfoldersTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile,
-    //             this.pstFile.getOffsetIndexNode(folderDescriptor.dataOffsetIndexIdentifier)), tmp);
-    //     } catch (final PSTException err) {
-    //         // hierarchy node doesn't exist
-    //         throw new PSTException("Can't get child folders for folder " + this.getDisplayName() + "("
-    //             + this.getDescriptorNodeId() + ") child count: " + this.getContentCount() + " - " + err.toString(), err);
-    //     }
-    // }
+        let folderDescriptorIndex: long = long.fromValue(this.descriptorIndexNode.descriptorIdentifier + 11);
+        try {
+            let folderDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(folderDescriptorIndex);
+            let tmp: Map<number, PSTDescriptorItem> = null;
+            if (folderDescriptor.localDescriptorsOffsetIndexIdentifier.greaterThan(0)) {
+                tmp = this.pstFile.getPSTDescriptorItems(folderDescriptor.localDescriptorsOffsetIndexIdentifier);
+            }
+            this.subfoldersTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile,
+                this.pstFile.getOffsetIndexNode(folderDescriptor.dataOffsetIndexIdentifier)), tmp);
+        } catch (err) {
+            // hierarchy node doesn't exist
+            console.log("Can't get child folders for folder " + this.getDisplayName());
+            throw err;
+        }
+    }
 
     // /**
     //  * internal vars for the tracking of things..
@@ -299,21 +302,15 @@ export class PSTFolder extends PSTObject {
     //     this.currentEmailIndex = newIndex;
     // }
 
-    // /**
-    //  * the number of child folders in this folder
-    //  * 
-    //  * @return number of subfolders as counted
-    //  * @throws IOException
-    //  * @throws PSTException
-    //  */
-    // public int getSubFolderCount() throws IOException, PSTException {
-    //     this.initSubfoldersTable();
-    //     if (this.subfoldersTable != null) {
-    //         return this.subfoldersTable.getRowCount();
-    //     } else {
-    //         return 0;
-    //     }
-    // }
+    // the number of child folders in this folder
+    public getSubFolderCount(): number {
+        this.initSubfoldersTable();
+        if (this.subfoldersTable != null) {
+            return this.subfoldersTable.getRowCount();
+        } else {
+            return 0;
+        }
+    }
 
     // /**
     //  * the number of emails in this folder
@@ -354,16 +351,12 @@ export class PSTFolder extends PSTObject {
     //     return this.getIntItem(0x3603);
     // }
 
-    // /**
-    //  * does this folder have subfolders
-    //  * once again, read from the PST, use getSubFolderCount if you want to know
-    //  * what the library makes of it all
-    //  * 
-    //  * @return has subfolders as reported by the PST File
-    //  */
-    // public boolean hasSubfolders() {
-    //     return (this.getIntItem(0x360a) != 0);
-    // }
+    //  does this folder have subfolders
+    //  once again, read from the PST, use getSubFolderCount if you want to know
+    //  what the library makes of it all
+    public hasSubfolders(): boolean {
+        return (this.getIntItem(0x360a) != 0);
+    }
 
     // public String getContainerClass() {
     //     return this.getStringItem(0x3613);

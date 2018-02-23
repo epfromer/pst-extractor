@@ -46,7 +46,6 @@ export class PSTTable {
         this.tableTypeByte = headdata[3];
         switch (this.tableTypeByte) { // bClientSig
             case 0x7c: // Table Context (TC/HN)
-                debugger;
                 this.tableType = '7c';
                 break;
             case 188:
@@ -77,30 +76,10 @@ export class PSTTable {
         this.sizeOfItemValue = headerNodeInfo.pstNodeInputStream.read() & 0xff; // Size of value in key table
         this.numberOfIndexLevels = headerNodeInfo.pstNodeInputStream.read() & 0xff;
         this.hidRoot = headerNodeInfo.seekAndReadLong(long.fromValue(4), 4).toNumber();
-        this.description +=
-            'Table (' +
-            this.tableType +
-            ')\n' +
-            'hidUserRoot: ' +
-            this.hidUserRoot +
-            ' - 0x' +
-            this.hidUserRoot.toString(16) +
-            '\n' +
-            'Size Of Keys: ' +
-            this.sizeOfItemKey +
-            ' - 0x' +
-            this.hidUserRoot.toString(16) +
-            '\n' +
-            'Size Of Values: ' +
-            this.sizeOfItemValue +
-            ' - 0x' +
-            this.hidUserRoot.toString(16) +
-            '\n' +
-            'hidRoot: ' +
-            this.hidRoot +
-            ' - 0x' +
-            this.hidUserRoot.toString(16) +
-            '\n';
+        this.description += 'Table (' + this.tableType + ')\n' + 'hidUserRoot: ' + this.hidUserRoot + ' - 0x' + 
+            this.hidUserRoot.toString(16) + '\n' + 'Size Of Keys: ' + this.sizeOfItemKey + ' - 0x' + 
+            this.hidUserRoot.toString(16) + '\n' + 'Size Of Values: ' + this.sizeOfItemValue + ' - 0x' + 
+            this.hidUserRoot.toString(16) + '\n' + 'hidRoot: ' + this.hidRoot + ' - 0x' + this.hidUserRoot.toString(16) + '\n';
     }
 
     protected releaseRawData() {
