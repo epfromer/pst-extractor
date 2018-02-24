@@ -2,8 +2,6 @@ import { PSTFile } from './app/PSTFile/PSTFile.class';
 import { PSTFolder } from './app/PSTFolder/PSTFolder.class';
 import { Log } from './app/Log.class';
 
-debugger;
-
 let depth = -1;
 
 let pstFile = new PSTFile('/home/ed/Desktop/outlook/2005-02.pst');

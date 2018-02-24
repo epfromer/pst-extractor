@@ -6,6 +6,7 @@ import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class'
 import { NodeInfo } from '../NodeInfo/NodeInfo.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
+import { Log } from '../Log.class';
 
 export class PSTTableBC extends PSTTable {
     private items: Map<number, PSTTableBCItem> = new Map();
@@ -73,7 +74,7 @@ export class PSTTableBC extends PSTTable {
             offset = offset + 8;
 
             this.items.set(item.entryType.toNumber(), item);
-            console.log(item.toString());
+            Log.debug2('PSTTableBC::constructor ' + item.toString());
         }
 
         this.releaseRawData();
