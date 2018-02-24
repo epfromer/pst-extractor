@@ -1,7 +1,7 @@
 import { PSTObject } from '../PSTObject/PSTObject.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
-import * as long from 'long';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
+import * as long from 'long';
 
 // Generic table item
 // Provides some basic string functions
@@ -154,21 +154,8 @@ export class PSTTableItem {
         }
 
         if (this.entryValueType == 0x001f) {
-            //     // Unicode string
-            //     String s;
-            //     try {
-            //         s = new String(this.data, "UTF-16LE");
-            //     } catch (final UnsupportedEncodingException e) {
-            //         System.err.println("Error decoding string: " + this.data.toString());
-            //         s = "";
-            //     }
-
-            //     if (s.length() >= 2 && s.charAt(0) == 0x0001) {
-            //         return String.format("%s [%04X][%04X]%s", ret, (short) s.charAt(0), (short) s.charAt(1),
-            //             s.substring(2));
-            //     }
-
-            //     return ret + s;
+            // Unicode string
+            return this.data.toString('utf16le');
         }
 
         return ret + this.getStringValue(this.entryValueType);

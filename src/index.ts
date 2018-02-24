@@ -1,5 +1,8 @@
 import { PSTFile } from './app/PSTFile/PSTFile.class';
 import { PSTFolder } from './app/PSTFolder/PSTFolder.class';
+import { Log } from './app/Log.class';
+
+debugger;
 
 let depth = -1;
 
@@ -45,6 +48,4 @@ function processFolder(folder: PSTFolder) {
     depth--;
 }
 
-function printDepth() {
-
-}
+function printDepth() {}

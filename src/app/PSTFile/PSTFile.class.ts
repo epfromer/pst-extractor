@@ -15,6 +15,7 @@ import * as fsext from 'fs-ext';
 import * as util from 'util';
 import * as long from 'long';
 import * as uuidparse from 'uuid-parse';
+import { Log } from '../Log.class';
 
 export class PSTFile {
     public static ENCRYPTION_TYPE_NONE: number = 0;
@@ -202,7 +203,7 @@ export class PSTFile {
                 dwPropertyIdLong = dwPropertyIdLong.or(guidIndexLong);
                 this.nameToId.set(dwPropertyIdLong, wPropIdx);
                 this.idToName.set(wPropIdx, dwPropertyIdLong);
-                console.log('numeric key: ' + dwPropertyIdLong.toString());
+                Log.debug2('numeric key: ' + dwPropertyIdLong.toString());
             } else {
                 // identifier is a string
                 // dwPropertyId becomes thHke byte offset into the String stream
@@ -214,7 +215,7 @@ export class PSTFile {
                 let key = keyByteValue.toString('utf16le');
                 this.stringToId.set(key, wPropIdx);
                 this.idToString.set(wPropIdx, key);
-                console.log('string key: ' + key);
+                Log.debug2('string key: ' + key);
             }
         }
     }
@@ -410,7 +411,7 @@ export class PSTFile {
             this.pstFileContent.seek(btreeStartOffset);
             this.pstFileContent.readCompletely(branchNodeItems);
 
-            console.log('btreeStartOffset = ' + btreeStartOffset);
+            Log.debug2('btreeStartOffset = ' + btreeStartOffset);
 
             let numberOfItems = 0;
             if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {

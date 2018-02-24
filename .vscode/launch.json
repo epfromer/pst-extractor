@@ -9,6 +9,7 @@
             "args": ["-r", "ts-node/register", "${relativeFile}"],
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",
+            "console": "integratedTerminal",
             "internalConsoleOptions": "openOnSessionStart"
         },
         {
@@ -19,6 +20,7 @@
             "runtimeArgs": ["-r", "ts-node/register"],
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",
+            "console": "integratedTerminal",
             "internalConsoleOptions": "openOnSessionStart"
         }
     ]

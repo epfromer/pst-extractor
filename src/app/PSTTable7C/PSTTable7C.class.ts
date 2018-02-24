@@ -170,7 +170,7 @@ export class PSTTable7C extends PSTTable {
                 col = this.overrideCol;
             }
 //            for (; col < this.cCols; ++col) {
-            while (col < this.cCols) {
+            while (col < (this.cCols - 1)) {
                 col++;
 
                 // Does this column exist for this row?
@@ -238,6 +238,7 @@ export class PSTTable7C extends PSTTable {
                 }
 
                 currentItem.set(item.entryType.toNumber(), item);
+                console.log(item.toString());
             }
             itemList[dataSetNumber] = currentItem;
             dataSetNumber++;
