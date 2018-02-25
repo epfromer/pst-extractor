@@ -1,3 +1,4 @@
+import { PSTUtil } from './../PSTUtil/PSTUtil.class';
 import * as long from 'long';
 import { PSTObject } from './../PSTObject/PSTObject.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
@@ -13,6 +14,10 @@ import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 // incremental reading of a folder which may have _lots_ of emails.
 export class PSTFolder extends PSTObject {
     private subfoldersTable: PSTTable7C = null;
+    private currentEmailIndex = 0;
+    //private LinkedHashSet<DescriptorIndexNode> otherItems = null;
+    private emailsTable: PSTTable7C = null;
+    private fallbackEmailsTable: DescriptorIndexNode[] = null;
 
     constructor(
         pstFile: PSTFile,
@@ -29,19 +34,6 @@ export class PSTFolder extends PSTObject {
             this.loadDescriptor(pstFile, descriptorIndexNode);
         }
     }
-
-    // /**
-    //  * For pre-populating a folder object with values.
-    //  * Not recommended for use outside this library
-    //  *
-    //  * @param theFile
-    //  * @param folderIndexNode
-    //  * @param table
-    //  */
-    // PSTFolder(final PSTFile theFile, final DescriptorIndexNode folderIndexNode, final PSTTableBC table,
-    //     final HashMap<Integer, PSTDescriptorItem> localDescriptorItems) {
-    //     super(theFile, folderIndexNode, table, localDescriptorItems);
-    // }
 
     // get all of the sub folders...
     // there are not usually thousands, so we just do it in one big operation.
@@ -77,6 +69,8 @@ export class PSTFolder extends PSTObject {
     }
 
     private initSubfoldersTable() {
+        debugger;
+        
         if (this.subfoldersTable) {
             return;
         }
@@ -99,75 +93,58 @@ export class PSTFolder extends PSTObject {
         }
     }
 
-    // /**
-    //  * internal vars for the tracking of things..
-    //  */
-    // private int currentEmailIndex = 0;
-    // private final LinkedHashSet<DescriptorIndexNode> otherItems = null;
+    // this method goes through all of the children and sorts them into one of the three hash sets
+    private initEmailsTable() {
+        debugger;
 
-    // private PSTTable7C emailsTable = null;
-    // private LinkedList<DescriptorIndexNode> fallbackEmailsTable = null;
-    // private PSTTable7C subfoldersTable = null;
+        if (this.emailsTable != null || this.fallbackEmailsTable != null) {
+            return;
+        }
 
-    // /**
-    //  * this method goes through all of the children and sorts them into one of
-    //  * the three hash sets.
-    //  *
-    //  * @throws PSTException
-    //  * @throws IOException
-    //  */
-    // private void initEmailsTable() throws PSTException, IOException {
-    //     if (this.emailsTable != null || this.fallbackEmailsTable != null) {
-    //         return;
-    //     }
+        // some folder types don't have children:
+        if (this.getNodeType() == PSTUtil.NID_TYPE_SEARCH_FOLDER) {
+            return;
+        }
 
-    //     // some folder types don't have children:
-    //     if (this.getNodeType() == PSTObject.NID_TYPE_SEARCH_FOLDER) {
-    //         return;
-    //     }
+        try {
+            let folderDescriptorIndex = this.descriptorIndexNode.descriptorIdentifier + 12; 
+            let folderDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(long.fromNumber(folderDescriptorIndex));
+            HashMap<Integer, PSTDescriptorItem> tmp = null;
+            if (folderDescriptor.localDescriptorsOffsetIndexIdentifier > 0) {
+                // tmp = new PSTDescriptor(pstFile,
+                // folderDescriptor.localDescriptorsOffsetIndexIdentifier).getChildren();
+                tmp = this.pstFile.getPSTDescriptorItems(folderDescriptor.localDescriptorsOffsetIndexIdentifier);
+            }
+            // PSTTable7CForFolder folderDescriptorTable = new
+            // PSTTable7CForFolder(folderDescriptor.dataBlock.data,
+            // folderDescriptor.dataBlock.blockOffsets,tmp, 0x67F2);
+            this.emailsTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile,
+                this.pstFile.getOffsetIndexNode(folderDescriptor.dataOffsetIndexIdentifier)), tmp, 0x67F2);
+        } catch (final Exception err) {
 
-    //     try {
-    //         final long folderDescriptorIndex = this.descriptorIndexNode.descriptorIdentifier + 12; // +12
-    //                                                                                                // lists
-    //                                                                                                // emails!
-    //                                                                                                // :D
-    //         final DescriptorIndexNode folderDescriptor = this.pstFile.getDescriptorIndexNode(folderDescriptorIndex);
-    //         HashMap<Integer, PSTDescriptorItem> tmp = null;
-    //         if (folderDescriptor.localDescriptorsOffsetIndexIdentifier > 0) {
-    //             // tmp = new PSTDescriptor(pstFile,
-    //             // folderDescriptor.localDescriptorsOffsetIndexIdentifier).getChildren();
-    //             tmp = this.pstFile.getPSTDescriptorItems(folderDescriptor.localDescriptorsOffsetIndexIdentifier);
-    //         }
-    //         // PSTTable7CForFolder folderDescriptorTable = new
-    //         // PSTTable7CForFolder(folderDescriptor.dataBlock.data,
-    //         // folderDescriptor.dataBlock.blockOffsets,tmp, 0x67F2);
-    //         this.emailsTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile,
-    //             this.pstFile.getOffsetIndexNode(folderDescriptor.dataOffsetIndexIdentifier)), tmp, 0x67F2);
-    //     } catch (final Exception err) {
+            // here we have to attempt to fallback onto the children as listed
+            // by the descriptor b-tree
+            final LinkedHashMap<Integer, LinkedList<DescriptorIndexNode>> tree = this.pstFile.getChildDescriptorTree();
 
-    //         // here we have to attempt to fallback onto the children as listed
-    //         // by the descriptor b-tree
-    //         final LinkedHashMap<Integer, LinkedList<DescriptorIndexNode>> tree = this.pstFile.getChildDescriptorTree();
+            this.fallbackEmailsTable = new LinkedList<>();
+            final LinkedList<DescriptorIndexNode> allChildren = tree.get(this.getDescriptorNode().descriptorIdentifier);
 
-    //         this.fallbackEmailsTable = new LinkedList<>();
-    //         final LinkedList<DescriptorIndexNode> allChildren = tree.get(this.getDescriptorNode().descriptorIdentifier);
+            if (allChildren != null) {
+                // quickly go through and remove those entries that are not
+                // messages!
+                for (final DescriptorIndexNode node : allChildren) {
+                    if (node != null
+                        && PSTObject.getNodeType(node.descriptorIdentifier) == PSTObject.NID_TYPE_NORMAL_MESSAGE) {
+                        this.fallbackEmailsTable.add(node);
+                    }
+                }
+            }
 
-    //         if (allChildren != null) {
-    //             // quickly go through and remove those entries that are not
-    //             // messages!
-    //             for (final DescriptorIndexNode node : allChildren) {
-    //                 if (node != null
-    //                     && PSTObject.getNodeType(node.descriptorIdentifier) == PSTObject.NID_TYPE_NORMAL_MESSAGE) {
-    //                     this.fallbackEmailsTable.add(node);
-    //                 }
-    //             }
-    //         }
-
-    //         System.err.println("Can't get children for folder " + this.getDisplayName() + "("
-    //             + this.getDescriptorNodeId() + ") child count: " + this.getContentCount() + " - " + err.toString()
-    //             + ", using alternate child tree with " + this.fallbackEmailsTable.size() + " items");
-    //     }
-    // }
+            System.err.println("Can't get children for folder " + this.getDisplayName() + "("
+                + this.getDescriptorNodeId() + ") child count: " + this.getContentCount() + " - " + err.toString()
+                + ", using alternate child tree with " + this.fallbackEmailsTable.size() + " items");
+        }
+    }
 
     // /**
     //  * get some children from the folder
@@ -241,66 +218,57 @@ export class PSTFolder extends PSTObject {
     //     return output;
     // }
 
-    // /**
-    //  * Get the next child of this folder
-    //  * As there could be thousands of emails, we have these kind of cursor
-    //  * operations
-    //  *
-    //  * @return the next email in the folder or null if at the end of the folder
-    //  * @throws PSTException
-    //  * @throws IOException
-    //  */
-    // public PSTObject getNextChild() throws PSTException, IOException {
-    //     this.initEmailsTable();
+     // Get the next child of this folder as there could be thousands of emails, 
+     // we have these kind of cursor operations
+    public getNextChild(): PSTObject {
+        debugger;
 
-    //     if (this.emailsTable != null) {
-    //         final List<HashMap<Integer, PSTTable7CItem>> rows = this.emailsTable.getItems(this.currentEmailIndex, 1);
+        this.initEmailsTable();
 
-    //         if (this.currentEmailIndex == this.getContentCount()) {
-    //             // no more!
-    //             return null;
-    //         }
-    //         // get the emails from the rows
-    //         final PSTTable7CItem emailRow = rows.get(0).get(0x67F2);
-    //         final DescriptorIndexNode childDescriptor = this.pstFile
-    //             .getDescriptorIndexNode(emailRow.entryValueReference);
-    //         final PSTObject child = PSTObject.detectAndLoadPSTObject(this.pstFile, childDescriptor);
-    //         this.currentEmailIndex++;
+        if (this.emailsTable != null) {
+            final List<HashMap<Integer, PSTTable7CItem>> rows = this.emailsTable.getItems(this.currentEmailIndex, 1);
 
-    //         return child;
-    //     } else if (this.fallbackEmailsTable != null) {
-    //         if (this.currentEmailIndex >= this.getContentCount()
-    //             || this.currentEmailIndex >= this.fallbackEmailsTable.size()) {
-    //             // no more!
-    //             return null;
-    //         }
-    //         // get the emails from the rows
-    //         final DescriptorIndexNode childDescriptor = this.fallbackEmailsTable.get(this.currentEmailIndex);
-    //         final PSTObject child = PSTObject.detectAndLoadPSTObject(this.pstFile, childDescriptor);
-    //         this.currentEmailIndex++;
-    //         return child;
-    //     }
-    //     return null;
-    // }
+            if (this.currentEmailIndex == this.getContentCount()) {
+                // no more!
+                return null;
+            }
+            // get the emails from the rows
+            final PSTTable7CItem emailRow = rows.get(0).get(0x67F2);
+            final DescriptorIndexNode childDescriptor = this.pstFile
+                .getDescriptorIndexNode(emailRow.entryValueReference);
+            final PSTObject child = PSTObject.detectAndLoadPSTObject(this.pstFile, childDescriptor);
+            this.currentEmailIndex++;
 
-    // /**
-    //  * move the internal folder cursor to the desired position
-    //  * position 0 is before the first record.
-    //  *
-    //  * @param newIndex
-    //  */
-    // public void moveChildCursorTo(int newIndex) throws IOException, PSTException {
-    //     this.initEmailsTable();
+            return child;
+        } else if (this.fallbackEmailsTable != null) {
+            if (this.currentEmailIndex >= this.getContentCount()
+                || this.currentEmailIndex >= this.fallbackEmailsTable.size()) {
+                // no more!
+                return null;
+            }
+            // get the emails from the rows
+            final DescriptorIndexNode childDescriptor = this.fallbackEmailsTable.get(this.currentEmailIndex);
+            final PSTObject child = PSTObject.detectAndLoadPSTObject(this.pstFile, childDescriptor);
+            this.currentEmailIndex++;
+            return child;
+        }
+        return null;
+    }
 
-    //     if (newIndex < 1) {
-    //         this.currentEmailIndex = 0;
-    //         return;
-    //     }
-    //     if (newIndex > this.getContentCount()) {
-    //         newIndex = this.getContentCount();
-    //     }
-    //     this.currentEmailIndex = newIndex;
-    // }
+    //  move the internal folder cursor to the desired position
+    //  position 0 is before the first record.
+    public moveChildCursorTo(newIndex: number) {
+        this.initEmailsTable();
+
+        if (newIndex < 1) {
+            this.currentEmailIndex = 0;
+            return;
+        }
+        if (newIndex > this.getContentCount()) {
+            newIndex = this.getContentCount();
+        }
+        this.currentEmailIndex = newIndex;
+    }
 
     // the number of child folders in this folder
     public getSubFolderCount(): number {
@@ -333,16 +301,11 @@ export class PSTFolder extends PSTObject {
     //     return this.getIntItem(0x3601);
     // }
 
-    // /**
-    //  * the number of emails in this folder
-    //  * this is as reported by the PST file, for a number calculated by the
-    //  * library use getEmailCount
-    //  *
-    //  * @return number of items as reported by PST File
-    //  */
-    // public int getContentCount() {
-    //     return this.getIntItem(0x3602);
-    // }
+     // the number of emails in this folder this is as reported by the PST file, 
+     // for a number calculated by the library use getEmailCount
+    public getContentCount(): number {
+        return this.getIntItem(0x3602);
+    }
 
     // /**
     //  * Amount of unread content items Integer 32-bit signed

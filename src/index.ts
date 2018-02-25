@@ -1,3 +1,4 @@
+import { PSTMessage } from './app/PSTMessage/PSTMessage.class';
 import { PSTFile } from './app/PSTFile/PSTFile.class';
 import { PSTFolder } from './app/PSTFolder/PSTFolder.class';
 import { Log } from './app/Log.class';
@@ -29,17 +30,17 @@ function processFolder(folder: PSTFolder) {
         }
     }
 
-    // // and now the emails for this folder
-    // if (folder.getContentCount() > 0) {
-    //     this.depth++;
-    //     PSTMessage email = (PSTMessage) folder.getNextChild();
-    //     while (email != null) {
-    //         this.printDepth();
-    //         System.out.println("Email: " + email.getDescriptorNodeId() + " - " + email.getSubject());
-    //         email = (PSTMessage) folder.getNextChild();
-    //     }
-    //     this.depth--;
-    // }
+    // and now the emails for this folder
+    if (folder.getContentCount() > 0) {
+        this.depth++;
+        let email: PSTMessage = (PSTMessage) folder.getNextChild();
+        while (email != null) {
+            this.printDepth();
+            System.out.println("Email: " + email.getDescriptorNodeId() + " - " + email.getSubject());
+            email = (PSTMessage) folder.getNextChild();
+        }
+        this.depth--;
+    }
 
     depth--;
 }

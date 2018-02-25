@@ -96,13 +96,13 @@ export class PSTObject {
     //     return 0;
     // }
 
-    // public int getNodeType() {
-    //     return PSTObject.getNodeType(this.descriptorIndexNode.descriptorIdentifier);
-    // }
-
-    // public static int getNodeType(final int descriptorIdentifier) {
-    //     return descriptorIdentifier & 0x1F;
-    // }
+    public getNodeType(descriptorIdentifier?: number): number {
+        if (descriptorIdentifier) {
+            return descriptorIdentifier & 0x1F;
+        } else {
+            return this.descriptorIndexNode.descriptorIdentifier & 0x1F;
+        }
+    }
 
     protected getIntItem(identifier: number, defaultValue?: number): number {
         if (!defaultValue) {
