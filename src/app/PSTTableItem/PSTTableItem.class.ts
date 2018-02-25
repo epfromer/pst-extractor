@@ -1,3 +1,4 @@
+import { PSTUtil } from './../PSTUtil/PSTUtil.class';
 import { PSTObject } from '../PSTObject/PSTObject.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
@@ -129,28 +130,26 @@ export class PSTTableItem {
         }
 
         if (this.entryValueType == 0x0005 || this.entryValueType == 0x0014) {
-            debugger;
-            //     // 64bit data
-            //     if (this.data == null) {
-            //         return ret + "no data";
-            //     }
-            //     if (this.data.length == 8) {
-            //         final long l = PSTObject.convertLittleEndianBytesToLong(this.data, 0, 8);
-            //         return String.format("%s0x%016X (%d)", ret, l, l);
-            //     } else {
-            //         return String.format("%s invalid data length: %d", ret, this.data.length);
-            //     }
+            // 64bit data
+            if (this.data == null) {
+                return ret + "no data";
+            }
+            if (this.data.length == 8) {
+                let l: long = PSTUtil.convertLittleEndianBytesToLong(this.data, 0, 8);
+                return ret + l.toString(16) + '(' + l.toNumber() + ')';
+            } else {
+                return ret + 'invalid data length: ' + this.data.length;
+            }
         }
 
         if (this.entryValueType == 0x0040) {
+            // It's a date...
+            let high: number = PSTUtil.convertLittleEndianBytesToLong(this.data, 4, 8).toNumber();
+            let low: number = PSTUtil.convertLittleEndianBytesToLong(this.data, 0, 4).toNumber();
             debugger;
-            //     // It's a date...
-            //     final int high = (int) PSTObject.convertLittleEndianBytesToLong(this.data, 4, 8);
-            //     final int low = (int) PSTObject.convertLittleEndianBytesToLong(this.data, 0, 4);
-
-            //     final Date d = PSTObject.filetimeToDate(high, low);
-            //     this.dateFormatter.setTimeZone(utcTimeZone);
-            //     return ret + this.dateFormatter.format(d);
+            // final Date d = PSTObject.filetimeToDate(high, low);
+            // this.dateFormatter.setTimeZone(utcTimeZone);
+            // return ret + this.dateFormatter.format(d);
         }
 
         if (this.entryValueType == 0x001f) {

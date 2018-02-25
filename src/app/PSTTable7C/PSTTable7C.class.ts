@@ -8,6 +8,7 @@ import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import { NodeInfo } from '../NodeInfo/NodeInfo.class';
 import * as long from 'long';
 import { PSTFile } from '../PSTFile/PSTFile.class';
+import { Log } from '../Log.class';
 
 // Specific functions for the 7c table type ("Table Context").
 // This is used for attachments.
@@ -88,7 +89,6 @@ export class PSTTable7C extends PSTTable {
 
         this.description += "Number of keys: " + this.numberOfKeys + "\n" + "Number of columns: " + this.cCols + "\n"
             + "Row Size: " + this.TCI_bm + "\n" + "hidRowIndex: " + hidRowIndex + "\n" + "hnidRows: " + hnidRows + "\n";
-        console.log(this.description);
 
         let numberOfBlocks: number = Math.trunc(this.rowNodeInfo.length() / this.BLOCK_SIZE);
         let numberOfRowsPerBlock: number = Math.trunc(this.BLOCK_SIZE / this.TCI_bm);
@@ -105,9 +105,7 @@ export class PSTTable7C extends PSTTable {
     //     return this.items;
     // }
 
-    private getItems(startAtRecord?: number, numberOfRecordsToReturn?: number): Map<number, PSTTable7CItem>[] {
-        debugger;
-
+    public getItems(startAtRecord?: number, numberOfRecordsToReturn?: number): Map<number, PSTTable7CItem>[] {
         let itemList: Map<number, PSTTable7CItem>[] = [];
 
         // okay, work out the number of records we have
@@ -238,15 +236,12 @@ export class PSTTable7C extends PSTTable {
                 }
 
                 currentItem.set(item.entryType.toNumber(), item);
-                console.log(item.toString());
             }
             itemList[dataSetNumber] = currentItem;
             dataSetNumber++;
             currentValueArrayStart += this.TCI_bm;
         }
-
-        console.log(this.description);
-
+        Log.debug1('PSTTable7C::getItems number of items = ' + itemList.length);
         return itemList;
     }
 }

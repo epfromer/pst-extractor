@@ -7,6 +7,7 @@ import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class'
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import { OffsetIndexItem } from '../OffsetIndexItem/OffsetIndexItem.class';
 import * as long from 'long';
+import { PSTFolder } from '../PSTFolder/PSTFolder.class';
 
 // PST Object is the root class of most PST Items.
 // It also provides a number of static utility functions. The most important is
@@ -19,6 +20,7 @@ export class PSTObject {
     // protected LinkedHashMap<String, HashMap<DescriptorIndexNode, PSTObject>> children;
     private pstTableBC: PSTTableBC;
     protected pstTableItems: Map<number, PSTTableBCItem>;
+    protected table: PSTTableBC;
 
     constructor() {}
 
@@ -35,6 +37,19 @@ export class PSTObject {
         if (descriptorIndexNode.localDescriptorsOffsetIndexIdentifier.notEquals(long.ZERO)) {
             this.localDescriptorItems = pstFile.getPSTDescriptorItems(descriptorIndexNode.localDescriptorsOffsetIndexIdentifier);
         }
+    }
+
+    protected prePopulate(
+        theFile: PSTFile,
+        folderIndexNode: DescriptorIndexNode,
+        table: PSTTableBC,
+        localDescriptorItems: Map<number, PSTDescriptorItem>
+    ) {
+        this.pstFile = theFile;
+        this.descriptorIndexNode = folderIndexNode;
+        this.pstTableItems = table.getItems();
+        this.table = table;
+        this.localDescriptorItems = localDescriptorItems;
     }
 
     // /**
@@ -399,74 +414,68 @@ export class PSTObject {
     //     return PSTObject.detectAndLoadPSTObject(theFile, theFile.getDescriptorIndexNode(descriptorIndex));
     // }
 
-    // /**
-    //  * Detect and load a PST Object from a file with the specified descriptor
-    //  * index
-    //  *
-    //  * @param theFile
-    //  * @param folderIndexNode
-    //  * @return PSTObject with that index
-    //  * @throws IOException
-    //  * @throws PSTException
-    //  */
-    // static PSTObject detectAndLoadPSTObject(final PSTFile theFile, final DescriptorIndexNode folderIndexNode)
-    //     throws IOException, PSTException {
-    //     final int nidType = (folderIndexNode.descriptorIdentifier & 0x1F);
-    //     if (nidType == 0x02 || nidType == 0x03 || nidType == 0x04) {
+    // Detect and load a PST Object from a file with the specified descriptor index
+    static detectAndLoadPSTObject(theFile: PSTFile, descriptorIndex: long): any;
+    static detectAndLoadPSTObject(theFile: PSTFile, folderIndexNode: DescriptorIndexNode): any;
+    static detectAndLoadPSTObject(theFile: PSTFile, arg: any): any {
+        let folderIndexNode = arg;
+        if (arg instanceof long) {
+            folderIndexNode = theFile.getDescriptorIndexNode(arg);
+        }
 
-    //         final PSTTableBC table = new PSTTableBC(
-    //             new PSTNodeInputStream(theFile, theFile.getOffsetIndexNode(folderIndexNode.dataOffsetIndexIdentifier)));
+        let nidType = folderIndexNode.descriptorIdentifier & 0x1f;
+        if (nidType == 0x02 || nidType == 0x03 || nidType == 0x04) {
+            let table: PSTTableBC = new PSTTableBC(
+                new PSTNodeInputStream(theFile, theFile.getOffsetIndexNode(folderIndexNode.dataOffsetIndexIdentifier))
+            );
 
-    //         HashMap<Integer, PSTDescriptorItem> localDescriptorItems = null;
-    //         if (folderIndexNode.localDescriptorsOffsetIndexIdentifier != 0) {
-    //             localDescriptorItems = theFile
-    //                 .getPSTDescriptorItems(folderIndexNode.localDescriptorsOffsetIndexIdentifier);
-    //         }
+            let localDescriptorItems: Map<number, PSTDescriptorItem> = null;
+            if (folderIndexNode.localDescriptorsOffsetIndexIdentifier != 0) {
+                localDescriptorItems = theFile.getPSTDescriptorItems(folderIndexNode.localDescriptorsOffsetIndexIdentifier);
+            }
 
-    //         if (nidType == 0x02 || nidType == 0x03) {
-    //             return new PSTFolder(theFile, folderIndexNode, table, localDescriptorItems);
-    //         } else {
-    //             return PSTObject.createAppropriatePSTMessageObject(theFile, folderIndexNode, table,
-    //                 localDescriptorItems);
-    //         }
-    //     } else {
-    //         throw new PSTException(
-    //             "Unknown child type with offset id: " + folderIndexNode.localDescriptorsOffsetIndexIdentifier);
-    //     }
-    // }
+            if (nidType == 0x02 || nidType == 0x03) {
+                return new PSTFolder(theFile, folderIndexNode, table, localDescriptorItems);
+            } else {
+                debugger;
+                return null;
+                //return PSTObject.createAppropriatePSTMessageObject(theFile, folderIndexNode, table, localDescriptorItems);
+            }
+        } else {
+            throw new Error('Unknown child type with offset id: ' + folderIndexNode.localDescriptorsOffsetIndexIdentifier);
+        }
+    }
 
-    // static PSTMessage createAppropriatePSTMessageObject(final PSTFile theFile,
-    //     final DescriptorIndexNode folderIndexNode, final PSTTableBC table,
-    //     final HashMap<Integer, PSTDescriptorItem> localDescriptorItems) {
+    // static createAppropriatePSTMessageObject(theFile: PSTFile, folderIndexNode: DescriptorIndexNode, table: PSTTableBC, localDescriptorItems: Map<number, PSTDescriptorItem>): PSTMessage {
 
-    //     final PSTTableBCItem item = table.getItems().get(0x001a);
-    //     String messageClass = "";
-    //     if (item != null) {
-    //         messageClass = item.getStringValue();
-    //     }
+        // final PSTTableBCItem item = table.getItems().get(0x001a);
+        // String messageClass = "";
+        // if (item != null) {
+        //     messageClass = item.getStringValue();
+        // }
 
-    //     if (messageClass.equals("IPM.Note")
-    //         || messageClass.equals("IPM.Note.SMIME.MultipartSigned")) {
-    //         return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
-    //     } else if (messageClass.equals("IPM.Appointment")
-    //         || messageClass.equals("IPM.OLE.CLASS.{00061055-0000-0000-C000-000000000046}")
-    //         || messageClass.startsWith("IPM.Schedule.Meeting")) {
-    //         return new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
-    //     } else if (messageClass.equals("IPM.Contact")) {
-    //         return new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
-    //     } else if (messageClass.equals("IPM.Task")) {
-    //         return new PSTTask(theFile, folderIndexNode, table, localDescriptorItems);
-    //     } else if (messageClass.equals("IPM.Activity")) {
-    //         return new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
-    //     } else if (messageClass.equals("IPM.Post.Rss")) {
-    //         return new PSTRss(theFile, folderIndexNode, table, localDescriptorItems);
-    //     } else if (messageClass.equals("IPM.DistList")) {
-    //         return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
-    //     } else {
-    //         System.err.println("Unknown message type: " + messageClass);
-    //     }
+        // if (messageClass.equals("IPM.Note")
+        //     || messageClass.equals("IPM.Note.SMIME.MultipartSigned")) {
+        //     return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
+        // } else if (messageClass.equals("IPM.Appointment")
+        //     || messageClass.equals("IPM.OLE.CLASS.{00061055-0000-0000-C000-000000000046}")
+        //     || messageClass.startsWith("IPM.Schedule.Meeting")) {
+        //     return new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
+        // } else if (messageClass.equals("IPM.Contact")) {
+        //     return new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
+        // } else if (messageClass.equals("IPM.Task")) {
+        //     return new PSTTask(theFile, folderIndexNode, table, localDescriptorItems);
+        // } else if (messageClass.equals("IPM.Activity")) {
+        //     return new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
+        // } else if (messageClass.equals("IPM.Post.Rss")) {
+        //     return new PSTRss(theFile, folderIndexNode, table, localDescriptorItems);
+        // } else if (messageClass.equals("IPM.DistList")) {
+        //     return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
+        // } else {
+        //     System.err.println("Unknown message type: " + messageClass);
+        // }
 
-    //     return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
+        // return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
     // }
 
     // static String guessPSTObjectType(final PSTFile theFile, final DescriptorIndexNode folderIndexNode)

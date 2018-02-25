@@ -14,8 +14,6 @@ console.log('exiting');
 function processFolder(folder: PSTFolder) {
     depth++;
 
-    debugger;
-
     // the root folder doesn't have a display name
     if (depth > 0) {
         printDepth();

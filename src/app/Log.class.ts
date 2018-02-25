@@ -5,17 +5,15 @@ export class Log {
     static logLevels = {
         error: 0,
         info: 1,
-        debug: 2,
-        debug1: 3,
-        debug2: 4
+        debug1: 2,
+        debug2: 3
     }
     
     static logColors = {
         error: 'red',
         info: 'yellow',
-        debug: 'blue',
-        debug1: 'green',
-        debug2: 'grey'
+        debug1: 'blue',
+        debug2: 'green'
     }
     
     static logger = new winston.Logger({
@@ -34,10 +32,6 @@ export class Log {
 
     static info(s: string) {
         Log.logger.info(s);
-    }
-
-    static debug(s: string) {
-        Log.logger.debug(s);
     }
 
     static debug1(s: string) {

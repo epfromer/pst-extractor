@@ -168,7 +168,7 @@ export class PSTFile {
             } else {
                 uuidIndexes[i] = -1; // We don't know this guid
             }
-            console.log('idx: ' + i + ', ' + strUID + ', ' + uuidIndexes[i]);
+            Log.debug1('PSTFile:: processNameToIdMap idx: ' + i + ', ' + strUID + ', ' + uuidIndexes[i]);
             offset += 16;
         }
 
