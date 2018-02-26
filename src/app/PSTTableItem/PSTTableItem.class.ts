@@ -1,4 +1,3 @@
-import { PSTUtil } from './../PSTUtil/PSTUtil.class';
 import { PSTObject } from '../PSTObject/PSTObject.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
@@ -66,12 +65,12 @@ export class PSTTableItem {
         return -1;
     }
 
-    // public getStringValue(): string {
-    //     return this.getStringValue(this.entryValueType);
-    // }
-
     // get a string value of the data
-    public getStringValue(stringType: number): string {
+    public getStringValue(stringType?: number): string {
+        if (!stringType) {
+            stringType = this.entryValueType;
+        }
+
         if (stringType === PSTTableItem.VALUE_TYPE_PT_UNICODE) {
             // little-endian unicode string
             try {

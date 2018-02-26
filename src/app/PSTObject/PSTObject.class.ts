@@ -6,8 +6,10 @@ import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.cla
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import { OffsetIndexItem } from '../OffsetIndexItem/OffsetIndexItem.class';
-import * as long from 'long';
 import { PSTFolder } from '../PSTFolder/PSTFolder.class';
+import { PSTMessage } from '../PSTMessage/PSTMessage.class';
+import { Log } from '../Log.class';
+import * as long from 'long';
 
 // PST Object is the root class of most PST Items.
 // It also provides a number of static utility functions. The most important is
@@ -80,27 +82,21 @@ export class PSTObject {
     //     return this.descriptorIndexNode;
     // }
 
-    // /**
-    //  * get the descriptor identifier for this item
-    //  * can be used for loading objects through detectAndLoadPSTObject(PSTFile
-    //  * theFile, long descriptorIndex)
-    //  *
-    //  * @return item's descriptor node identifier
-    //  */
-    // public long getDescriptorNodeId() {
-    //     if (this.descriptorIndexNode != null) { // Prevent null pointer
-    //                                             // exceptions for embedded
-    //                                             // messages
-    //         return this.descriptorIndexNode.descriptorIdentifier;
-    //     }
-    //     return 0;
-    // }
+    // get the descriptor identifier for this item which can be used for loading objects
+    // through detectAndLoadPSTObject(PSTFile theFile, long descriptorIndex)
+    public getDescriptorNodeId(): long {
+        // Prevent null pointer exceptions for embedded messages
+        if (this.descriptorIndexNode != null) {
+            return long.fromNumber(this.descriptorIndexNode.descriptorIdentifier);
+        }
+        return long.ZERO;
+    }
 
     public getNodeType(descriptorIdentifier?: number): number {
         if (descriptorIdentifier) {
-            return descriptorIdentifier & 0x1F;
+            return descriptorIdentifier & 0x1f;
         } else {
-            return this.descriptorIndexNode.descriptorIdentifier & 0x1F;
+            return this.descriptorIndexNode.descriptorIdentifier & 0x1f;
         }
     }
 
@@ -446,36 +442,40 @@ export class PSTObject {
         }
     }
 
-    // static createAppropriatePSTMessageObject(theFile: PSTFile, folderIndexNode: DescriptorIndexNode, table: PSTTableBC, localDescriptorItems: Map<number, PSTDescriptorItem>): PSTMessage {
-
-        // final PSTTableBCItem item = table.getItems().get(0x001a);
-        // String messageClass = "";
-        // if (item != null) {
-        //     messageClass = item.getStringValue();
-        // }
-
-        // if (messageClass.equals("IPM.Note")
-        //     || messageClass.equals("IPM.Note.SMIME.MultipartSigned")) {
-        //     return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
-        // } else if (messageClass.equals("IPM.Appointment")
-        //     || messageClass.equals("IPM.OLE.CLASS.{00061055-0000-0000-C000-000000000046}")
-        //     || messageClass.startsWith("IPM.Schedule.Meeting")) {
-        //     return new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
-        // } else if (messageClass.equals("IPM.Contact")) {
-        //     return new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
-        // } else if (messageClass.equals("IPM.Task")) {
-        //     return new PSTTask(theFile, folderIndexNode, table, localDescriptorItems);
-        // } else if (messageClass.equals("IPM.Activity")) {
-        //     return new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
-        // } else if (messageClass.equals("IPM.Post.Rss")) {
-        //     return new PSTRss(theFile, folderIndexNode, table, localDescriptorItems);
-        // } else if (messageClass.equals("IPM.DistList")) {
-        //     return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
-        // } else {
-        //     System.err.println("Unknown message type: " + messageClass);
-        // }
-
-        // return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
+    // static createAppropriatePSTMessageObject(
+    //     theFile: PSTFile,
+    //     folderIndexNode: DescriptorIndexNode,
+    //     table: PSTTableBC,
+    //     localDescriptorItems: Map<number, PSTDescriptorItem>
+    // ): PSTMessage {
+    //     let item: PSTTableBCItem = table.getItems().get(0x001a);
+    //     let messageClass = '';
+    //     if (item != null) {
+    //         messageClass = item.getStringValue();
+    //     }
+    //     if (messageClass === 'IPM.Note' || messageClass === 'IPM.Note.SMIME.MultipartSigned') {
+    //         return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
+    //     } else if (
+    //         messageClass === 'IPM.Appointment' ||
+    //         messageClass === 'IPM.OLE.CLASS.{00061055-0000-0000-C000-000000000046}' ||
+    //         messageClass.startsWith('IPM.Schedule.Meeting')
+    //     ) {
+    //         debugger;
+    //     //     return new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
+    //     // } else if (messageClass.equals('IPM.Contact')) {
+    //     //     return new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
+    //     // } else if (messageClass.equals('IPM.Task')) {
+    //     //     return new PSTTask(theFile, folderIndexNode, table, localDescriptorItems);
+    //     // } else if (messageClass.equals('IPM.Activity')) {
+    //     //     return new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
+    //     // } else if (messageClass.equals('IPM.Post.Rss')) {
+    //     //     return new PSTRss(theFile, folderIndexNode, table, localDescriptorItems);
+    //     // } else if (messageClass.equals('IPM.DistList')) {
+    //     //     return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
+    //     // } else {
+    //     //     Log.error('Unknown message type: ' + messageClass);
+    //     }
+    //     return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
     // }
 
     // static String guessPSTObjectType(final PSTFile theFile, final DescriptorIndexNode folderIndexNode)

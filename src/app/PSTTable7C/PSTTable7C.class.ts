@@ -34,7 +34,7 @@ export class PSTTable7C extends PSTTable {
     //     super(in, subNodeDescriptorItems);
 
     constructor(pstNodeInputStream: PSTNodeInputStream, subNodeDescriptorItems: Map<number, PSTDescriptorItem>, entityToExtract?: number) {
-        super(pstNodeInputStream, new Map<number, PSTDescriptorItem>());
+        super(pstNodeInputStream, subNodeDescriptorItems);
 
         if (this.tableTypeByte != 0x7c) {
             throw new Error("unable to create PSTTable7C, table does not appear to be a 7c!");

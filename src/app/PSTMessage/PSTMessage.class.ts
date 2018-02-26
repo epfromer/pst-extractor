@@ -1,6 +1,8 @@
-import { PSTObject } from './../PSTObject/PSTObject.class';
+import { PSTObject } from '../PSTObject/PSTObject.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
+import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
+import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 
 // PST Message contains functions that are common across most MAPI objects.
 // Note that many of these functions may not be applicable for the item in question,
@@ -12,15 +14,21 @@ export class PSTMessage extends PSTObject {
     public static IMPORTANCE_NORMAL = 1;
     public static IMPORTANCE_HIGH = 2;
 
-    constructor(pstFile: PSTFile, descriptorIndexNode: DescriptorIndexNode) {
+    constructor(
+        pstFile: PSTFile,
+        descriptorIndexNode: DescriptorIndexNode,
+        table?: PSTTableBC,
+        localDescriptorItems?: Map<number, PSTDescriptorItem>
+    ) {
         super();
-        this.loadDescriptor(pstFile, descriptorIndexNode);
+        if (table) {
+            // pre-populate folder object with values
+            this.prePopulate(pstFile, descriptorIndexNode, table, localDescriptorItems);
+        } else {
+            // load folder object
+            this.loadDescriptor(pstFile, descriptorIndexNode);
+        }
     }
-
-    // PSTMessage(final PSTFile theFile, final DescriptorIndexNode folderIndexNode, final PSTTableBC table,
-    //     final HashMap<Integer, PSTDescriptorItem> localDescriptorItems) {
-    //     super(theFile, folderIndexNode, table, localDescriptorItems);
-    // }
 
     // public String getRTFBody() throws PSTException, IOException {
     //     // do we have an entry for it?
@@ -42,7 +50,7 @@ export class PSTMessage extends PSTObject {
 
     // /**
     //  * get the importance of the email
-    //  * 
+    //  *
     //  * @return IMPORTANCE_NORMAL if unknown
     //  */
     // public int getImportance() {
@@ -51,7 +59,7 @@ export class PSTMessage extends PSTObject {
 
     // /**
     //  * get the message class for the email
-    //  * 
+    //  *
     //  * @return empty string if unknown
     //  */
     // @Override
@@ -59,35 +67,22 @@ export class PSTMessage extends PSTObject {
     //     return this.getStringItem(0x001a);
     // }
 
-    // /**
-    //  * get the subject
-    //  * 
-    //  * @return empty string if not found
-    //  */
-    // public String getSubject() {
-    //     String subject = this.getStringItem(0x0037);
-
-    //     // byte[] controlCodesA = {0x01, 0x01};
-    //     // byte[] controlCodesB = {0x01, 0x05};
-    //     // byte[] controlCodesC = {0x01, 0x10};
-    //     if (subject != null && (subject.length() >= 2) &&
-
-    //     // (subject.startsWith(new String(controlCodesA)) ||
-    //     // subject.startsWith(new String(controlCodesB)) ||
-    //     // subject.startsWith(new String(controlCodesC)))
-    //         subject.charAt(0) == 0x01) {
-    //         if (subject.length() == 2) {
-    //             subject = "";
-    //         } else {
-    //             subject = subject.substring(2, subject.length());
-    //         }
-    //     }
-    //     return subject;
-    // }
+    // get the subject
+    public getSubject(): string {
+        let subject = this.getStringItem(0x0037);
+        if (subject != null && subject.length >= 2 && subject.charCodeAt(0) == 0x01) {
+            if (subject.length == 2) {
+                subject = '';
+            } else {
+                subject = subject.substring(2, subject.length);
+            }
+        }
+        return subject;
+    }
 
     // /**
     //  * get the client submit time
-    //  * 
+    //  *
     //  * @return null if not found
     //  */
     // public Date getClientSubmitTime() {
@@ -96,7 +91,7 @@ export class PSTMessage extends PSTObject {
 
     // /**
     //  * get received by name
-    //  * 
+    //  *
     //  * @return empty string if not found
     //  */
     // public String getReceivedByName() {
@@ -105,7 +100,7 @@ export class PSTMessage extends PSTObject {
 
     // /**
     //  * get sent representing name
-    //  * 
+    //  *
     //  * @return empty string if not found
     //  */
     // public String getSentRepresentingName() {
@@ -115,7 +110,7 @@ export class PSTMessage extends PSTObject {
     // /**
     //  * Sent representing address type
     //  * Known values are SMTP, EX (Exchange) and UNKNOWN
-    //  * 
+    //  *
     //  * @return empty string if not found
     //  */
     // public String getSentRepresentingAddressType() {
@@ -124,7 +119,7 @@ export class PSTMessage extends PSTObject {
 
     // /**
     //  * Sent representing email address
-    //  * 
+    //  *
     //  * @return empty string if not found
     //  */
     // public String getSentRepresentingEmailAddress() {
@@ -134,7 +129,7 @@ export class PSTMessage extends PSTObject {
     // /**
     //  * Conversation topic
     //  * This is basically the subject from which Fwd:, Re, etc. has been removed
-    //  * 
+    //  *
     //  * @return empty string if not found
     //  */
     // public String getConversationTopic() {
@@ -144,7 +139,7 @@ export class PSTMessage extends PSTObject {
     // /**
     //  * Received by address type
     //  * Known values are SMTP, EX (Exchange) and UNKNOWN
-    //  * 
+    //  *
     //  * @return empty string if not found
     //  */
     // public String getReceivedByAddressType() {
@@ -153,7 +148,7 @@ export class PSTMessage extends PSTObject {
 
     // /**
     //  * Received by email address
-    //  * 
+    //  *
     //  * @return empty string if not found
     //  */
     // public String getReceivedByAddress() {
@@ -778,7 +773,7 @@ export class PSTMessage extends PSTObject {
     // /**
     //  * find, extract and load up all of the attachments in this email
     //  * necessary for the other operations.
-    //  * 
+    //  *
     //  * @throws PSTException
     //  * @throws IOException
     //  */
@@ -802,7 +797,7 @@ export class PSTMessage extends PSTObject {
 
     // /**
     //  * get the number of recipients for this message
-    //  * 
+    //  *
     //  * @throws PSTException
     //  * @throws IOException
     //  */
@@ -828,7 +823,7 @@ export class PSTMessage extends PSTObject {
     // /**
     //  * find, extract and load up all of the attachments in this email
     //  * necessary for the other operations.
-    //  * 
+    //  *
     //  * @throws PSTException
     //  * @throws IOException
     //  */
@@ -861,7 +856,7 @@ export class PSTMessage extends PSTObject {
 
     // /**
     //  * Is a reminder set on this object?
-    //  * 
+    //  *
     //  * @return
     //  */
     // public boolean getReminderSet() {
@@ -927,7 +922,7 @@ export class PSTMessage extends PSTObject {
 
     // /**
     //  * get the number of attachments for this message
-    //  * 
+    //  *
     //  * @throws PSTException
     //  * @throws IOException
     //  */
@@ -948,7 +943,7 @@ export class PSTMessage extends PSTObject {
 
     // /**
     //  * get a specific attachment from this email.
-    //  * 
+    //  *
     //  * @param attachmentNumber
     //  * @return the attachment at the defined index
     //  * @throws PSTException
@@ -1004,7 +999,7 @@ export class PSTMessage extends PSTObject {
 
     // /**
     //  * get a specific recipient from this email.
-    //  * 
+    //  *
     //  * @param recipientNumber
     //  * @return the recipient at the defined index
     //  * @throws PSTException
@@ -1054,5 +1049,4 @@ export class PSTMessage extends PSTObject {
     //         + "Message Class: " + this.getMessageClass() + "\n\n" + this.getTransportMessageHeaders() + "\n\n\n"
     //         + this.items + this.localDescriptorItems;
     // }
-
 }

@@ -98,7 +98,7 @@ export class PSTTable {
         }
 
         // Is it a subnode ID?
-        if (this.subNodeDescriptorItems.has(hnid)) {
+        if (this.subNodeDescriptorItems && this.subNodeDescriptorItems.has(hnid)) {
             let item: PSTDescriptorItem = this.subNodeDescriptorItems.get(hnid);
             let subNodeInfo: NodeInfo = null;
 
