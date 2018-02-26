@@ -1,5 +1,4 @@
 import { PSTUtil } from './../PSTUtil/PSTUtil.class';
-import * as long from 'long';
 import { PSTObject } from './../PSTObject/PSTObject.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
@@ -8,6 +7,7 @@ import { PSTTable7C } from '../PSTTable7C/PSTTable7C.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import { PSTTable7CItem } from '../PSTTable7CItem/PSTTable7CItem.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
+import * as long from 'long';
 
 // Represents a folder in the PST File.  Allows you to access child folders or items.
 // Items are accessed through a sort of cursor arrangement.  This allows for
@@ -44,7 +44,7 @@ export class PSTFolder extends PSTObject {
             let itemMapSet: Map<number, PSTTable7CItem>[] = this.subfoldersTable.getItems();
             for (let itemMap of itemMapSet) {
                 let item: PSTTable7CItem = itemMap.get(26610);
-                let folder: PSTFolder = PSTObject.detectAndLoadPSTObject(this.pstFile, long.fromNumber(item.entryValueReference));
+                let folder: PSTFolder = PSTUtil.detectAndLoadPSTObject(this.pstFile, long.fromNumber(item.entryValueReference));
                 output.push(folder);
             }
         } catch (err) {
@@ -92,8 +92,6 @@ export class PSTFolder extends PSTObject {
 
     // this method goes through all of the children and sorts them into one of the three hash sets
     private initEmailsTable() {
-        debugger;
-
         if (this.emailsTable != null || this.fallbackEmailsTable != null) {
             return;
         }
@@ -216,8 +214,6 @@ export class PSTFolder extends PSTObject {
      // Get the next child of this folder as there could be thousands of emails, 
      // we have these kind of cursor operations
     public getNextChild(): any {
-        debugger;
-
         this.initEmailsTable();
 
         if (this.emailsTable != null) {
@@ -230,7 +226,7 @@ export class PSTFolder extends PSTObject {
             // get the emails from the rows
             let emailRow: PSTTable7CItem = rows[0].get(0x67F2);
             let childDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(long.fromNumber(emailRow.entryValueReference));
-            let child: PSTObject = PSTObject.detectAndLoadPSTObject(this.pstFile, childDescriptor);
+            let child: PSTObject = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor);
             this.currentEmailIndex++;
             return child;
         } else if (this.fallbackEmailsTable != null) {
@@ -240,7 +236,7 @@ export class PSTFolder extends PSTObject {
             }
             // get the emails from the rows
             let childDescriptor: DescriptorIndexNode = this.fallbackEmailsTable[this.currentEmailIndex];
-            let child: PSTObject = PSTObject.detectAndLoadPSTObject(this.pstFile, childDescriptor);
+            let child: PSTObject = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor);
             this.currentEmailIndex++;
             return child;
         }

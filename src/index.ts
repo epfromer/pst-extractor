@@ -9,7 +9,6 @@ let pstFile = new PSTFile('/home/ed/Desktop/outlook/2005-02.pst');
 pstFile.open();
 console.log(pstFile.getMessageStore().getDisplayName());
 processFolder(pstFile.getRootFolder());
-debugger;
 console.log('exiting');
 
 function processFolder(folder: PSTFolder) {

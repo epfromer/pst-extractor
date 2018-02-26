@@ -3,6 +3,7 @@ import { PSTFile } from '../PSTFile/PSTFile.class';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import * as long from 'long';
 
 // PST Message contains functions that are common across most MAPI objects.
 // Note that many of these functions may not be applicable for the item in question,

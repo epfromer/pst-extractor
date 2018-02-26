@@ -142,10 +142,9 @@ export class PSTTableItem {
         }
 
         if (this.entryValueType == 0x0040) {
-            // It's a date...
+            // It's a date...  TODO
             let high: number = PSTUtil.convertLittleEndianBytesToLong(this.data, 4, 8).toNumber();
             let low: number = PSTUtil.convertLittleEndianBytesToLong(this.data, 0, 4).toNumber();
-            debugger;
             // final Date d = PSTObject.filetimeToDate(high, low);
             // this.dateFormatter.setTimeZone(utcTimeZone);
             // return ret + this.dateFormatter.format(d);
