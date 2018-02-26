@@ -14,6 +14,8 @@ export class PSTMessage extends PSTObject {
     public static IMPORTANCE_LOW = 0;
     public static IMPORTANCE_NORMAL = 1;
     public static IMPORTANCE_HIGH = 2;
+    public static RECIPIENT_TYPE_TO = 1;
+    public static RECIPIENT_TYPE_CC = 2;
 
     constructor(
         pstFile: PSTFile,
@@ -31,42 +33,33 @@ export class PSTMessage extends PSTObject {
         }
     }
 
-    // public String getRTFBody() throws PSTException, IOException {
-    //     // do we have an entry for it?
-    //     if (this.items.containsKey(0x1009)) {
-    //         // is it a reference?
-    //         final PSTTableBCItem item = this.items.get(0x1009);
-    //         if (item.data.length > 0) {
-    //             return (LZFu.decode(item.data));
-    //         }
-    //         final int ref = item.entryValueReference;
-    //         final PSTDescriptorItem descItem = this.localDescriptorItems.get(ref);
-    //         if (descItem != null) {
-    //             return LZFu.decode(descItem.getData());
-    //         }
-    //     }
+    public getRTFBody(): string {
+        debugger;
+        //     // do we have an entry for it?
+        //     if (this.items.containsKey(0x1009)) {
+        //         // is it a reference?
+        //         final PSTTableBCItem item = this.items.get(0x1009);
+        //         if (item.data.length > 0) {
+        //             return (LZFu.decode(item.data));
+        //         }
+        //         final int ref = item.entryValueReference;
+        //         final PSTDescriptorItem descItem = this.localDescriptorItems.get(ref);
+        //         if (descItem != null) {
+        //             return LZFu.decode(descItem.getData());
+        //         }
+        //     }
+        return '';
+    }
 
-    //     return "";
-    // }
+    // get the importance of the email
+    public getImportance(): number {
+        return this.getIntItem(0x0017, PSTMessage.IMPORTANCE_NORMAL);
+    }
 
-    // /**
-    //  * get the importance of the email
-    //  *
-    //  * @return IMPORTANCE_NORMAL if unknown
-    //  */
-    // public int getImportance() {
-    //     return this.getIntItem(0x0017, IMPORTANCE_NORMAL);
-    // }
-
-    // /**
-    //  * get the message class for the email
-    //  *
-    //  * @return empty string if unknown
-    //  */
-    // @Override
-    // public String getMessageClass() {
-    //     return this.getStringItem(0x001a);
-    // }
+    // get the message class for the email
+    public getMessageClass(): string {
+        return this.getStringItem(0x001a);
+    }
 
     // get the subject
     public getSubject(): string {
@@ -81,174 +74,126 @@ export class PSTMessage extends PSTObject {
         return subject;
     }
 
-    // /**
-    //  * get the client submit time
-    //  *
-    //  * @return null if not found
-    //  */
-    // public Date getClientSubmitTime() {
-    //     return this.getDateItem(0x0039);
-    // }
+    // get the client submit time
+    public getClientSubmitTime(): Date {
+        return this.getDateItem(0x0039);
+    }
 
-    // /**
-    //  * get received by name
-    //  *
-    //  * @return empty string if not found
-    //  */
-    // public String getReceivedByName() {
-    //     return this.getStringItem(0x0040);
-    // }
+    // get received by name
+    public getReceivedByName(): string {
+        return this.getStringItem(0x0040);
+    }
 
-    // /**
-    //  * get sent representing name
-    //  *
-    //  * @return empty string if not found
-    //  */
-    // public String getSentRepresentingName() {
-    //     return this.getStringItem(0x0042);
-    // }
+    // get sent representing name
+    public getSentRepresentingName(): string {
+        return this.getStringItem(0x0042);
+    }
 
-    // /**
-    //  * Sent representing address type
-    //  * Known values are SMTP, EX (Exchange) and UNKNOWN
-    //  *
-    //  * @return empty string if not found
-    //  */
-    // public String getSentRepresentingAddressType() {
-    //     return this.getStringItem(0x0064);
-    // }
+    // Sent representing address type
+    // Known values are SMTP, EX (Exchange) and UNKNOWN
+    public getSentRepresentingAddressType(): string {
+        return this.getStringItem(0x0064);
+    }
 
-    // /**
-    //  * Sent representing email address
-    //  *
-    //  * @return empty string if not found
-    //  */
-    // public String getSentRepresentingEmailAddress() {
-    //     return this.getStringItem(0x0065);
-    // }
+    // Sent representing email address
+    public getSentRepresentingEmailAddress(): string {
+        return this.getStringItem(0x0065);
+    }
 
-    // /**
-    //  * Conversation topic
-    //  * This is basically the subject from which Fwd:, Re, etc. has been removed
-    //  *
-    //  * @return empty string if not found
-    //  */
-    // public String getConversationTopic() {
-    //     return this.getStringItem(0x0070);
-    // }
+    // Conversation topic
+    // This is basically the subject from which Fwd:, Re, etc. has been removed
+    public getConversationTopic(): string {
+        return this.getStringItem(0x0070);
+    }
 
-    // /**
-    //  * Received by address type
-    //  * Known values are SMTP, EX (Exchange) and UNKNOWN
-    //  *
-    //  * @return empty string if not found
-    //  */
-    // public String getReceivedByAddressType() {
-    //     return this.getStringItem(0x0075);
-    // }
+    // Received by address type
+    // Known values are SMTP, EX (Exchange) and UNKNOWN
+    public getReceivedByAddressType(): string {
+        return this.getStringItem(0x0075);
+    }
 
-    // /**
-    //  * Received by email address
-    //  *
-    //  * @return empty string if not found
-    //  */
-    // public String getReceivedByAddress() {
-    //     return this.getStringItem(0x0076);
-    // }
+    // Received by email address
+    public getReceivedByAddress(): string {
+        return this.getStringItem(0x0076);
+    }
 
-    // /**
-    //  * Transport message headers ASCII or Unicode string These contain the SMTP
-    //  * e-mail headers.
-    //  */
-    // public String getTransportMessageHeaders() {
-    //     return this.getStringItem(0x007d);
-    // }
+    // Transport message headers ASCII or Unicode string These contain the SMTP
+    // e-mail headers.
+    public getTransportMessageHeaders(): string {
+        return this.getStringItem(0x007d);
+    }
 
-    // public boolean isRead() {
-    //     return ((this.getIntItem(0x0e07) & 0x01) != 0);
-    // }
+    public isRead(): boolean {
+        return ((this.getIntItem(0x0e07) & 0x01) != 0);
+    }
 
-    // public boolean isUnmodified() {
-    //     return ((this.getIntItem(0x0e07) & 0x02) != 0);
-    // }
+    public isUnmodified(): boolean {
+        return ((this.getIntItem(0x0e07) & 0x02) != 0);
+    }
 
-    // public boolean isSubmitted() {
-    //     return ((this.getIntItem(0x0e07) & 0x04) != 0);
-    // }
+    public isSubmitted(): boolean {
+        return ((this.getIntItem(0x0e07) & 0x04) != 0);
+    }
 
-    // public boolean isUnsent() {
-    //     return ((this.getIntItem(0x0e07) & 0x08) != 0);
-    // }
+    public isUnsent(): boolean {
+        return ((this.getIntItem(0x0e07) & 0x08) != 0);
+    }
 
-    // public boolean hasAttachments() {
-    //     return ((this.getIntItem(0x0e07) & 0x10) != 0);
-    // }
+    public hasAttachments(): boolean {
+        return ((this.getIntItem(0x0e07) & 0x10) != 0);
+    }
 
-    // public boolean isFromMe() {
-    //     return ((this.getIntItem(0x0e07) & 0x20) != 0);
-    // }
+    public isFromMe(): boolean {
+        return ((this.getIntItem(0x0e07) & 0x20) != 0);
+    }
 
-    // public boolean isAssociated() {
-    //     return ((this.getIntItem(0x0e07) & 0x40) != 0);
-    // }
+    public isAssociated(): boolean {
+        return ((this.getIntItem(0x0e07) & 0x40) != 0);
+    }
 
-    // public boolean isResent() {
-    //     return ((this.getIntItem(0x0e07) & 0x80) != 0);
-    // }
+    public isResent(): boolean {
+        return ((this.getIntItem(0x0e07) & 0x80) != 0);
+    }
 
-    // /**
-    //  * Acknowledgment mode Integer 32-bit signed
-    //  */
-    // public int getAcknowledgementMode() {
-    //     return this.getIntItem(0x0001);
-    // }
+    // Acknowledgment mode Integer 32-bit signed
+    public getAcknowledgementMode(): number {
+        return this.getIntItem(0x0001);
+    }
 
-    // /**
-    //  * Originator delivery report requested set if the sender wants a delivery
-    //  * report from all recipients 0 = false 0 != true
-    //  */
-    // public boolean getOriginatorDeliveryReportRequested() {
-    //     return (this.getIntItem(0x0023) != 0);
-    // }
+    // Originator delivery report requested set if the sender wants a delivery
+    // report from all recipients 0 = false 0 != true
+    public getOriginatorDeliveryReportRequested(): boolean {
+        return (this.getIntItem(0x0023) != 0);
+    }
 
-    // // 0x0025 0x0102 PR_PARENT_KEY Parent key Binary data Contains a GUID
-    // /**
-    //  * Priority Integer 32-bit signed -1 = NonUrgent 0 = Normal 1 = Urgent
-    //  */
-    // public int getPriority() {
-    //     return this.getIntItem(0x0026);
-    // }
+    // 0x0025 0x0102 PR_PARENT_KEY Parent key Binary data Contains a GUID
+    // Priority Integer 32-bit signed -1 = NonUrgent 0 = Normal 1 = Urgent
+    public getPriority(): number {
+        return this.getIntItem(0x0026);
+    }
 
-    // /**
-    //  * Read Receipt Requested Boolean 0 = false 0 != true
-    //  */
-    // public boolean getReadReceiptRequested() {
-    //     return (this.getIntItem(0x0029) != 0);
-    // }
+    // Read Receipt Requested Boolean 0 = false 0 != true
+    public getReadReceiptRequested(): boolean {
+        return (this.getIntItem(0x0029) != 0);
+    }
 
-    // /**
-    //  * Recipient Reassignment Prohibited Boolean 0 = false 0 != true
-    //  */
-    // public boolean getRecipientReassignmentProhibited() {
-    //     return (this.getIntItem(0x002b) != 0);
-    // }
+    // Recipient Reassignment Prohibited Boolean 0 = false 0 != true
+    public getRecipientReassignmentProhibited(): boolean {
+        return (this.getIntItem(0x002b) != 0);
+    }
 
-    // /**
-    //  * Original sensitivity Integer 32-bit signed the sensitivity of the message
-    //  * before being replied to or forwarded 0 = None 1 = Personal 2 = Private 3
-    //  * = Company Confidential
-    //  */
-    // public int getOriginalSensitivity() {
-    //     return this.getIntItem(0x002e);
-    // }
+    // Original sensitivity Integer 32-bit signed the sensitivity of the message
+    // before being replied to or forwarded 0 = None 1 = Personal 2 = Private 3
+    //  = Company Confidential
+    public getOriginalSensitivity(): number {
+        return this.getIntItem(0x002e);
+    }
 
-    // /**
-    //  * Sensitivity Integer 32-bit signed sender's opinion of the sensitivity of
-    //  * an email 0 = None 1 = Personal 2 = Private 3 = Company Confidential
-    //  */
-    // public int getSensitivity() {
-    //     return this.getIntItem(0x0036);
-    // }
+    // Sensitivity Integer 32-bit signed sender's opinion of the sensitivity of
+    // an email 0 = None 1 = Personal 2 = Private 3 = Company Confidential
+    public getSensitivity(): number {
+        return this.getIntItem(0x0036);
+    }
     // // 0x003f 0x0102 PR_RECEIVED_BY_ENTRYID (PidTagReceivedByEntr yId) Received
     // // by entry identifier Binary data Contains recipient/sender structure
     // // 0x0041 0x0102 PR_SENT_REPRESENTING_ENTRYID Sent representing entry
@@ -256,173 +201,124 @@ export class PSTMessage extends PSTObject {
     // // 0x0043 0x0102 PR_RCVD_REPRESENTING_ENTRYID Received representing entry
     // // identifier Binary data Contains recipient/sender structure
 
-    // /*
-    //  * Address book search key
-    //  */
-    // public byte[] getPidTagSentRepresentingSearchKey() {
-    //     return this.getBinaryItem(0x003b);
-    // }
+    // Address book search key
+    public getPidTagSentRepresentingSearchKey(): Buffer {
+        return this.getBinaryItem(0x003b);
+    }
 
-    // /**
-    //  * Received representing name ASCII or Unicode string
-    //  */
-    // public String getRcvdRepresentingName() {
-    //     return this.getStringItem(0x0044);
-    // }
+    // Received representing name ASCII or Unicode string
+    public getRcvdRepresentingName(): string {
+        return this.getStringItem(0x0044);
+    }
 
-    // /**
-    //  * Original subject ASCII or Unicode string
-    //  */
-    // public String getOriginalSubject() {
-    //     return this.getStringItem(0x0049);
-    // }
+    // Original subject ASCII or Unicode string
+    public getOriginalSubject(): string {
+        return this.getStringItem(0x0049);
+    }
 
-    // // 0x004e 0x0040 PR_ORIGINAL_SUBMIT_TIME Original submit time Filetime
-    // /**
-    //  * Reply recipients names ASCII or Unicode string
-    //  */
-    // public String getReplyRecipientNames() {
-    //     return this.getStringItem(0x0050);
-    // }
+    // 0x004e 0x0040 PR_ORIGINAL_SUBMIT_TIME Original submit time Filetime
+    // Reply recipients names ASCII or Unicode string
+    public getReplyRecipientNames(): string {
+        return this.getStringItem(0x0050);
+    }
 
-    // /**
-    //  * My address in To field Boolean
-    //  */
-    // public boolean getMessageToMe() {
-    //     return (this.getIntItem(0x0057) != 0);
-    // }
+    // My address in To field Boolean
+    public getMessageToMe(): boolean {
+        return (this.getIntItem(0x0057) != 0);
+    }
 
-    // /**
-    //  * My address in CC field Boolean
-    //  */
-    // public boolean getMessageCcMe() {
-    //     return (this.getIntItem(0x0058) != 0);
-    // }
+    // My address in CC field Boolean
+    public getMessageCcMe(): boolean {
+        return (this.getIntItem(0x0058) != 0);
+    }
 
-    // /**
-    //  * Indicates that the receiving mailbox owner is a primary or a carbon copy
-    //  * (Cc) recipient
-    //  */
-    // public boolean getMessageRecipMe() {
-    //     return this.getIntItem(0x0059) != 0;
-    // }
+    // Indicates that the receiving mailbox owner is a primary or a carbon copy
+    // (Cc) recipient
+    public getMessageRecipMe(): boolean {
+        return this.getIntItem(0x0059) != 0;
+    }
 
-    // /**
-    //  * Response requested Boolean
-    //  */
-    // public boolean getResponseRequested() {
-    //     return this.getBooleanItem(0x0063);
-    // }
+    // Response requested Boolean
+    public getResponseRequested(): boolean {
+        return this.getBooleanItem(0x0063);
+    }
 
-    // /**
-    //  * Sent representing address type ASCII or Unicode string Known values are
-    //  * SMTP, EX (Exchange) and UNKNOWN
-    //  */
-    // public String getSentRepresentingAddrtype() {
-    //     return this.getStringItem(0x0064);
-    // }
+    // Sent representing address type ASCII or Unicode string Known values are
+    // SMTP, EX (Exchange) and UNKNOWN
+    public getSentRepresentingAddrtype(): string {
+        return this.getStringItem(0x0064);
+    }
 
-    // // 0x0071 0x0102 PR_CONVERSATION_INDEX (PidTagConversationInd ex)
-    // // Conversation index Binary data
-    // /**
-    //  * Original display BCC ASCII or Unicode string
-    //  */
-    // public String getOriginalDisplayBcc() {
-    //     return this.getStringItem(0x0072);
-    // }
+    // 0x0071 0x0102 PR_CONVERSATION_INDEX (PidTagConversationInd ex)
+    // Conversation index Binary data
+    // Original display BCC ASCII or Unicode string
+    public getOriginalDisplayBcc(): string {
+        return this.getStringItem(0x0072);
+    }
 
-    // /**
-    //  * Original display CC ASCII or Unicode string
-    //  */
-    // public String getOriginalDisplayCc() {
-    //     return this.getStringItem(0x0073);
-    // }
+    // Original display CC ASCII or Unicode string
+    public getOriginalDisplayCc(): string {
+        return this.getStringItem(0x0073);
+    }
 
-    // /**
-    //  * Original display TO ASCII or Unicode string
-    //  */
-    // public String getOriginalDisplayTo() {
-    //     return this.getStringItem(0x0074);
-    // }
+    // Original display TO ASCII or Unicode string
+    public getOriginalDisplayTo(): string {
+        return this.getStringItem(0x0074);
+    }
 
-    // /**
-    //  * Received representing address type.
-    //  * Known values are SMTP, EX (Exchange) and UNKNOWN
-    //  */
-    // public String getRcvdRepresentingAddrtype() {
-    //     return this.getStringItem(0x0077);
-    // }
+    // Received representing address type.
+    // Known values are SMTP, EX (Exchange) and UNKNOWN
+    public getRcvdRepresentingAddrtype(): string {
+        return this.getStringItem(0x0077);
+    }
 
-    // /**
-    //  * Received representing e-mail address
-    //  */
-    // public String getRcvdRepresentingEmailAddress() {
-    //     return this.getStringItem(0x0078);
-    // }
+    // Received representing e-mail address
+    public getRcvdRepresentingEmailAddress(): string {
+        return this.getStringItem(0x0078);
+    }
 
-    // /**
-    //  * Recipient details
-    //  */
+    // Recipient details
 
-    // /**
-    //  * Non receipt notification requested
-    //  */
-    // public boolean isNonReceiptNotificationRequested() {
-    //     return (this.getIntItem(0x0c06) != 0);
-    // }
+    // Non receipt notification requested
+    public isNonReceiptNotificationRequested(): boolean {
+        return (this.getIntItem(0x0c06) != 0);
+    }
 
-    // /**
-    //  * Originator non delivery report requested
-    //  */
-    // public boolean isOriginatorNonDeliveryReportRequested() {
-    //     return (this.getIntItem(0x0c08) != 0);
-    // }
+    // Originator non delivery report requested
+    public isOriginatorNonDeliveryReportRequested(): boolean {
+        return (this.getIntItem(0x0c08) != 0);
+    }
 
-    // public static final int RECIPIENT_TYPE_TO = 1;
-    // public static final int RECIPIENT_TYPE_CC = 2;
+    // Recipient type Integer 32-bit signed 0x01 => To 0x02 =>CC
+    public getRecipientType(): number {
+        return this.getIntItem(0x0c15);
+    }
 
-    // /**
-    //  * Recipient type Integer 32-bit signed 0x01 => To 0x02 =>CC
-    //  */
-    // public int getRecipientType() {
-    //     return this.getIntItem(0x0c15);
-    // }
+    // Reply requested
+    public isReplyRequested(): boolean {
+        return (this.getIntItem(0x0c17) != 0);
+    }
 
-    // /**
-    //  * Reply requested
-    //  */
-    // public boolean isReplyRequested() {
-    //     return (this.getIntItem(0x0c17) != 0);
-    // }
+    // Sending mailbox owner's address book entry ID
+    public getSenderEntryId(): Buffer {
+        return this.getBinaryItem(0x0c19);
+    }
 
-    // /*
-    //  * Sending mailbox owner's address book entry ID
-    //  */
-    // public byte[] getSenderEntryId() {
-    //     return this.getBinaryItem(0x0c19);
-    // }
+    // Sender name
+    public getSenderName(): string {
+        return this.getStringItem(0x0c1a);
+    }
 
-    // /**
-    //  * Sender name
-    //  */
-    // public String getSenderName() {
-    //     return this.getStringItem(0x0c1a);
-    // }
+    // Sender address type.
+    // Known values are SMTP, EX (Exchange) and UNKNOWN
+    public getSenderAddrtype(): string {
+        return this.getStringItem(0x0c1e);
+    }
 
-    // /**
-    //  * Sender address type.
-    //  * Known values are SMTP, EX (Exchange) and UNKNOWN
-    //  */
-    // public String getSenderAddrtype() {
-    //     return this.getStringItem(0x0c1e);
-    // }
-
-    // /**
-    //  * Sender e-mail address
-    //  */
-    // public String getSenderEmailAddress() {
-    //     return this.getStringItem(0x0c1f);
-    // }
+    // Sender e-mail address
+    public getSenderEmailAddress(): string {
+        return this.getStringItem(0x0c1f);
+    }
 
     // /**
     //  * Non-transmittable message properties
