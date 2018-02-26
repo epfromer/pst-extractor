@@ -77,9 +77,9 @@ export class PSTTableItem {
                 if (this.isExternalValueReference) {
                     return 'External string reference!';
                 }
-                return this.data.toString();
+                return this.data.toString('utf16le');
             } catch (err) {
-                console.log('Error decoding string: ' + this.data.toString());
+                console.log('Error decoding string: ' + this.data.toString('utf16le'));
                 return '';
             }
         }

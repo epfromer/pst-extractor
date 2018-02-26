@@ -74,7 +74,7 @@ export class PSTTable7C extends PSTTable {
         // Read the key table
         this.keyMap = new Map();
         let keyTableInfo: NodeInfo = this.getNodeInfo(this.hidRoot);
-        this.numberOfKeys = keyTableInfo.length() / (this.sizeOfItemKey + this.sizeOfItemValue);
+        this.numberOfKeys = Math.trunc(keyTableInfo.length() / (this.sizeOfItemKey + this.sizeOfItemValue));
         offset = 0;
         for (let x = 0; x < this.numberOfKeys; x++) {
             let context = keyTableInfo.seekAndReadLong(long.fromNumber(offset), this.sizeOfItemKey).toNumber();
@@ -93,17 +93,8 @@ export class PSTTable7C extends PSTTable {
         let numberOfBlocks: number = Math.trunc(this.rowNodeInfo.length() / this.BLOCK_SIZE);
         let numberOfRowsPerBlock: number = Math.trunc(this.BLOCK_SIZE / this.TCI_bm);
         let blockPadding = this.BLOCK_SIZE - (numberOfRowsPerBlock * this.TCI_bm);
-        this.numberOfDataSets = (numberOfBlocks * numberOfRowsPerBlock)
-            + ((this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm);
+        this.numberOfDataSets = (numberOfBlocks * numberOfRowsPerBlock) + ((this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm);
     }
-
-    // get all the items parsed out of this table.
-    // List<HashMap<Integer, PSTTable7CItem>> getItems() throws PSTException, IOException {
-    //     if (this.items == null) {
-    //         this.items = this.getItems(-1, -1);
-    //     }
-    //     return this.items;
-    // }
 
     public getItems(startAtRecord?: number, numberOfRecordsToReturn?: number): Map<number, PSTTable7CItem>[] {
         let itemList: Map<number, PSTTable7CItem>[] = [];
@@ -114,16 +105,18 @@ export class PSTTable7C extends PSTTable {
         let blockPadding = this.BLOCK_SIZE - (numberOfRowsPerBlock * this.TCI_bm);
         this.numberOfDataSets = (numberOfBlocks * numberOfRowsPerBlock) + ((this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm);
 
-        if (!startAtRecord) {
+        if (startAtRecord === undefined) {
             numberOfRecordsToReturn = this.numberOfDataSets;
             startAtRecord = 0;
         }
 
         // repeat the reading process for every dataset
-        let currentValueArrayStart = ((startAtRecord / numberOfRowsPerBlock) * this.BLOCK_SIZE) + ((startAtRecord % numberOfRowsPerBlock) * this.TCI_bm);
+        let currentValueArrayStart = (Math.trunc(startAtRecord / numberOfRowsPerBlock) * this.BLOCK_SIZE) + ((startAtRecord % numberOfRowsPerBlock) * this.TCI_bm);
         if (numberOfRecordsToReturn > this.getRowCount() - startAtRecord) {
             numberOfRecordsToReturn = this.getRowCount() - startAtRecord;
         }
+        
+        if (numberOfRecordsToReturn == 0) { debugger; }
 
         let dataSetNumber = 0;
         // while ( currentValueArrayStart + ((cCols+7)/8) + TCI_1b <=
@@ -165,7 +158,7 @@ export class PSTTable7C extends PSTTable {
 
             let col = 0;
             if (this.overrideCol > -1) {
-                col = this.overrideCol;
+                col = (this.overrideCol - 1);
             }
 //            for (; col < this.cCols; ++col) {
             while (col < (this.cCols - 1)) {
@@ -242,6 +235,11 @@ export class PSTTable7C extends PSTTable {
             currentValueArrayStart += this.TCI_bm;
         }
         Log.debug1('PSTTable7C::getItems number of items = ' + itemList.length);
+        if (itemList.length == 0) { debugger; }
         return itemList;
+    }
+
+    public getRowCount(): number {
+        return this.numberOfDataSets;
     }
 }

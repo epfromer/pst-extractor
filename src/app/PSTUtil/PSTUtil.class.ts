@@ -779,16 +779,14 @@ export class PSTUtil {
             if (nidType == 0x02 || nidType == 0x03) {
                 return new PSTFolder(theFile, folderIndexNode, table, localDescriptorItems);
             } else {
-                // TODO - debugger;
-                return null;
-                //return PSTObject.createAppropriatePSTMessageObject(theFile, folderIndexNode, table, localDescriptorItems);
+                return this.createAppropriatePSTMessageObject(theFile, folderIndexNode, table, localDescriptorItems);
             }
         } else {
             throw new Error('Unknown child type with offset id: ' + folderIndexNode.localDescriptorsOffsetIndexIdentifier);
         }
     }
 
-    private createAppropriatePSTMessageObject(
+    private static createAppropriatePSTMessageObject(
         theFile: PSTFile,
         folderIndexNode: DescriptorIndexNode,
         table: PSTTableBC,

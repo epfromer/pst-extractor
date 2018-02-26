@@ -265,7 +265,7 @@ export class PSTNodeInputStream {
             output = PSTUtil.compEnc[output];
         }
 
-        this.currentLocation.add(1);
+        this.currentLocation = this.currentLocation.add(1);
 
         return output;
     }

@@ -25,7 +25,8 @@ export class PSTTableBC extends PSTTable {
         let keyTableInfo: Buffer = new Buffer(keyTableInfoNodeInfo.length());
         keyTableInfoNodeInfo.pstNodeInputStream.seek(long.fromValue(keyTableInfoNodeInfo.startOffset));
         keyTableInfoNodeInfo.pstNodeInputStream.readCompletely(keyTableInfo);
-        this.numberOfKeys = keyTableInfo.length / (this.sizeOfItemKey + this.sizeOfItemValue);
+        this.numberOfKeys = Math.trunc(keyTableInfo.length / (this.sizeOfItemKey + this.sizeOfItemValue));
+        if (this.numberOfKeys == 0) { debugger; }
         this.descBuffer += 'Number of entries: ' + this.numberOfKeys + '\n';
 
         // Read the key table
