@@ -1,3 +1,4 @@
+import { PSTDistList } from './../PSTDistList/PSTDistList.class';
 import { PSTRss } from './../PSTRss/PSTRss.class';
 import { PSTActivity } from './../PSTActivity/PSTActivity.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
