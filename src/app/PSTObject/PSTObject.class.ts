@@ -403,30 +403,6 @@ export class PSTObject {
     //  */
     // private static final long EPOCH_DIFF = 11644473600000L;
 
-    // /**
-    //  * <p>
-    //  * Converts a Windows FILETIME into a {@link Date}. The Windows
-    //  * FILETIME structure holds a date and time associated with a
-    //  * file. The structure identifies a 64-bit integer specifying the
-    //  * number of 100-nanosecond intervals which have passed since
-    //  * January 1, 1601. This 64-bit value is split into the two double
-    //  * words stored in the structure.
-    //  * </p>
-    //  *
-    //  * @param high
-    //  *            The higher double word of the FILETIME structure.
-    //  * @param low
-    //  *            The lower double word of the FILETIME structure.
-    //  * @return The Windows FILETIME as a {@link Date}.
-    //  */
-    // protected static Date filetimeToDate(final int high, final int low) {
-    //     final long filetime = ((long) high) << 32 | (low & 0xffffffffL);
-    //     // System.out.printf("0x%X\n", filetime);
-    //     final long ms_since_16010101 = filetime / (1000 * 10);
-    //     final long ms_since_19700101 = ms_since_16010101 - EPOCH_DIFF;
-    //     return new Date(ms_since_19700101);
-    // }
-
     // public static Calendar apptTimeToCalendar(final int minutes) {
     //     final long ms_since_16010101 = minutes * (60 * 1000L);
     //     final long ms_since_19700101 = ms_since_16010101 - EPOCH_DIFF;

@@ -7,9 +7,9 @@ import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTTable7C } from '../PSTTable7C/PSTTable7C.class';
-import * as long from 'long';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import { PSTTable7CItem } from '../PSTTable7CItem/PSTTable7CItem.class';
+import * as long from 'long';
 
 // PST Message contains functions that are common across most MAPI objects.
 // Note that many of these functions may not be applicable for the item in question,
@@ -766,6 +766,6 @@ export class PSTMessage extends PSTObject {
     public toString() {
         return "PSTEmail: " + this.getSubject() + "\n" + "Importance: " + this.getImportance() + "\n"
             + "Message Class: " + this.getMessageClass() + "\n\n" + this.getTransportMessageHeaders() + "\n\n\n"
-            + this.items + this.localDescriptorItems;
+            + this.pstTableItems + this.localDescriptorItems;
     }
 }

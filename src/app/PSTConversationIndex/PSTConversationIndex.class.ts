@@ -1,11 +1,14 @@
 import { ResponseLevel } from './../ResponseLevel/ResponseLevel.class';
 import { UUID } from './../UUID/UUID.class';
+import { PSTObject } from '../PSTObject/PSTObject.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
+import * as long from 'long';
 
 // Class to hold decoded PidTagConversationIndex
 export class PSTConversationIndex {
-    private static HUNDRED_NS_TO_MS = 1000;
-    private static MINIMUM_HEADER_SIZE = 22;
-    private static RESPONSE_LEVEL_SIZE = 5;
+    private HUNDRED_NS_TO_MS = 1000;
+    private MINIMUM_HEADER_SIZE = 22;
+    private RESPONSE_LEVEL_SIZE = 5;
 
     private _deliveryTime: Date;
     public get deliveryTime(): Date {
@@ -22,10 +25,10 @@ export class PSTConversationIndex {
         return this._responseLevels;
     }
 
-    protected PSTConversationIndex(rawConversationIndex: Buffer) {
-        if (rawConversationIndex != null && rawConversationIndex.length >= PSTConversationIndex.MINIMUM_HEADER_SIZE) {
+    public constructor(rawConversationIndex: Buffer) {
+        if (rawConversationIndex != null && rawConversationIndex.length >= this.MINIMUM_HEADER_SIZE) {
             this.decodeHeader(rawConversationIndex);
-            if (rawConversationIndex.length >= PSTConversationIndex.MINIMUM_HEADER_SIZE + PSTConversationIndex.RESPONSE_LEVEL_SIZE) {
+            if (rawConversationIndex.length >= this.MINIMUM_HEADER_SIZE + this.RESPONSE_LEVEL_SIZE) {
                 this.decodeResponseLevel(rawConversationIndex);
             }
         }
@@ -35,45 +38,42 @@ export class PSTConversationIndex {
         return this.guid + "@" + this.deliveryTime + " " + this.responseLevels.length + " ResponseLevels";
     }
 
-    private void decodeHeader(final byte[] rawConversationIndex) {
+    private decodeHeader(rawConversationIndex: Buffer) {
         // According to the Spec the first byte is not included, but I believe
         // the spec is incorrect!
-        // int reservedheaderMarker = (int)
-        // PSTObject.convertBigEndianBytesToLong(rawConversationIndex, 0, 1);
+        debugger;
+        let deliveryTimeHigh: long = PSTUtil.convertBigEndianBytesToLong(rawConversationIndex, 0, 4);
+        let deliveryTimeLow: long = PSTUtil.convertBigEndianBytesToLong(rawConversationIndex, 4, 6);
+        deliveryTimeLow = deliveryTimeLow.shiftLeft(16);
+        this._deliveryTime = PSTUtil.filetimeToDate(deliveryTimeHigh, deliveryTimeLow);
 
-        final long deliveryTimeHigh = PSTObject.convertBigEndianBytesToLong(rawConversationIndex, 0, 4);
-        final long deliveryTimeLow = PSTObject.convertBigEndianBytesToLong(rawConversationIndex, 4, 6) << 16;
-        this.deliveryTime = PSTObject.filetimeToDate((int) deliveryTimeHigh, (int) deliveryTimeLow);
+        let guidHigh: long = PSTUtil.convertBigEndianBytesToLong(rawConversationIndex, 6, 14);
+        let guidLow: long = PSTUtil.convertBigEndianBytesToLong(rawConversationIndex, 14, 22);
 
-        final long guidHigh = PSTObject.convertBigEndianBytesToLong(rawConversationIndex, 6, 14);
-        final long guidLow = PSTObject.convertBigEndianBytesToLong(rawConversationIndex, 14, 22);
-
-        this.guid = new UUID(guidHigh, guidLow);
+        this._guid = new UUID(guidHigh, guidLow);
     }
 
-    private void decodeResponseLevel(final byte[] rawConversationIndex) {
-        final int responseLevelCount = (rawConversationIndex.length - MINIMUM_HEADER_SIZE) / RESPONSE_LEVEL_SIZE;
-        this.responseLevels = new ArrayList<>(responseLevelCount);
+    private decodeResponseLevel(rawConversationIndex: Buffer) {
+        debugger;
+        let responseLevelCount: number = Math.trunc((rawConversationIndex.length - this.MINIMUM_HEADER_SIZE) / this.RESPONSE_LEVEL_SIZE);
+        for (let responseLevelIndex = 0, position = 22; responseLevelIndex < responseLevelCount; responseLevelIndex++, position += this.RESPONSE_LEVEL_SIZE) {
 
-        for (int responseLevelIndex = 0, position = 22; responseLevelIndex < responseLevelCount; responseLevelIndex++, position += RESPONSE_LEVEL_SIZE) {
-
-            final long responseLevelValue = PSTObject.convertBigEndianBytesToLong(rawConversationIndex, position,
-                position + 5);
-            final short deltaCode = (short) (responseLevelValue >> 39);
-            final short random = (short) (responseLevelValue & 0xFF);
+            let responseLevelValue: long = PSTUtil.convertBigEndianBytesToLong(rawConversationIndex, position, position + 5);
+            let deltaCode = responseLevelValue.shiftRight(39).toNumber();
+            let random = responseLevelValue.and(0xFF);
 
             // shift by 1 byte (remove the random) and mask off the deltaCode
-            long deltaTime = (responseLevelValue >> 8) & 0x7FFFFFFF;
+            let deltaTime: long = responseLevelValue.shiftRight(8).and(0x7FFFFFFF);
 
             if (deltaCode == 0) {
-                deltaTime <<= 18;
+                deltaTime = deltaTime.shiftLeft(18);
             } else {
-                deltaTime <<= 23;
+                deltaTime = deltaTime.shiftLeft(23);
             }
 
-            deltaTime /= HUNDRED_NS_TO_MS;
+            deltaTime = deltaTime.divide(this.HUNDRED_NS_TO_MS);
 
-            this.responseLevels.add(responseLevelIndex, new ResponseLevel(deltaCode, deltaTime, random));
+            this.responseLevels[responseLevelIndex] = new ResponseLevel(deltaCode, deltaTime, random.toNumber());
         }
     }
 }

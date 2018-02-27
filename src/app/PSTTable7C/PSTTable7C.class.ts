@@ -13,7 +13,7 @@ import { Log } from '../Log.class';
 // Specific functions for the 7c table type ("Table Context").
 // This is used for attachments.
 export class PSTTable7C extends PSTTable {
-    // private List<HashMap<Integer, PSTTable7CItem>> items = null;
+    private items: Map<number, PSTTable7CItem>[] = null;
     private numberOfDataSets = 0;
     private BLOCK_SIZE = 8176;
     private cCols = 0;
@@ -37,7 +37,7 @@ export class PSTTable7C extends PSTTable {
         super(pstNodeInputStream, subNodeDescriptorItems);
 
         if (this.tableTypeByte != 0x7c) {
-            throw new Error("unable to create PSTTable7C, table does not appear to be a 7c!");
+            throw new Error('unable to create PSTTable7C, table does not appear to be a 7c!');
         }
 
         // TCINFO header is in the hidUserRoot node
@@ -87,52 +87,67 @@ export class PSTTable7C extends PSTTable {
         // Read the Row Matrix
         this.rowNodeInfo = this.getNodeInfo(hnidRows);
 
-        this.description += "Number of keys: " + this.numberOfKeys + "\n" + "Number of columns: " + this.cCols + "\n"
-            + "Row Size: " + this.TCI_bm + "\n" + "hidRowIndex: " + hidRowIndex + "\n" + "hnidRows: " + hnidRows + "\n";
+        this.description +=
+            'Number of keys: ' +
+            this.numberOfKeys +
+            '\nNumber of columns: ' +
+            this.cCols +
+            '\nRow Size: ' +
+            this.TCI_bm +
+            '\nhidRowIndex: ' +
+            hidRowIndex +
+            '\nhnidRows: ' +
+            hnidRows +
+            '\n';
 
         let numberOfBlocks: number = Math.trunc(this.rowNodeInfo.length() / this.BLOCK_SIZE);
         let numberOfRowsPerBlock: number = Math.trunc(this.BLOCK_SIZE / this.TCI_bm);
-        let blockPadding = this.BLOCK_SIZE - (numberOfRowsPerBlock * this.TCI_bm);
-        this.numberOfDataSets = (numberOfBlocks * numberOfRowsPerBlock) + ((this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm);
+        let blockPadding = this.BLOCK_SIZE - numberOfRowsPerBlock * this.TCI_bm;
+        this.numberOfDataSets = numberOfBlocks * numberOfRowsPerBlock + (this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm;
     }
 
     public getItems(startAtRecord?: number, numberOfRecordsToReturn?: number): Map<number, PSTTable7CItem>[] {
         let itemList: Map<number, PSTTable7CItem>[] = [];
+        let setLocalList = false;
 
         // okay, work out the number of records we have
         let numberOfBlocks = Math.trunc(this.rowNodeInfo.length() / this.BLOCK_SIZE);
         let numberOfRowsPerBlock = Math.trunc(this.BLOCK_SIZE / this.TCI_bm);
-        let blockPadding = this.BLOCK_SIZE - (numberOfRowsPerBlock * this.TCI_bm);
-        this.numberOfDataSets = (numberOfBlocks * numberOfRowsPerBlock) + ((this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm);
+        let blockPadding = this.BLOCK_SIZE - numberOfRowsPerBlock * this.TCI_bm;
+        this.numberOfDataSets = numberOfBlocks * numberOfRowsPerBlock + (this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm;
 
         if (startAtRecord === undefined) {
             numberOfRecordsToReturn = this.numberOfDataSets;
             startAtRecord = 0;
+            setLocalList = true;
         }
 
         // repeat the reading process for every dataset
-        let currentValueArrayStart = (Math.trunc(startAtRecord / numberOfRowsPerBlock) * this.BLOCK_SIZE) + ((startAtRecord % numberOfRowsPerBlock) * this.TCI_bm);
+        let currentValueArrayStart =
+            Math.trunc(startAtRecord / numberOfRowsPerBlock) * this.BLOCK_SIZE + (startAtRecord % numberOfRowsPerBlock) * this.TCI_bm;
         if (numberOfRecordsToReturn > this.getRowCount() - startAtRecord) {
             numberOfRecordsToReturn = this.getRowCount() - startAtRecord;
         }
-        
-        if (numberOfRecordsToReturn == 0) { debugger; }
+
+        if (numberOfRecordsToReturn == 0) {
+            debugger;
+        }
 
         let dataSetNumber = 0;
         // while ( currentValueArrayStart + ((cCols+7)/8) + TCI_1b <=
         // rowNodeInfo.length())
         for (let rowCounter = 0; rowCounter < numberOfRecordsToReturn; rowCounter++) {
-            let currentItem: Map<number, PSTTable7CItem>  = new Map();
+            let currentItem: Map<number, PSTTable7CItem> = new Map();
             // add on some padding for block boundries?
             if (this.rowNodeInfo.pstNodeInputStream.pstFile.pstFileType == PSTFile.PST_TYPE_ANSI) {
                 if (currentValueArrayStart >= this.BLOCK_SIZE) {
-                    currentValueArrayStart = currentValueArrayStart + (4) * (currentValueArrayStart / this.BLOCK_SIZE);
+                    currentValueArrayStart = currentValueArrayStart + 4 * (currentValueArrayStart / this.BLOCK_SIZE);
                 }
                 if (this.rowNodeInfo.startOffset + currentValueArrayStart + this.TCI_1b > this.rowNodeInfo.pstNodeInputStream.length.toNumber()) {
                     continue;
                 }
             } else {
-                if ((currentValueArrayStart % this.BLOCK_SIZE) > this.BLOCK_SIZE - this.TCI_bm) {
+                if (currentValueArrayStart % this.BLOCK_SIZE > this.BLOCK_SIZE - this.TCI_bm) {
                     // adjust!
                     // currentValueArrayStart += 8176 - (currentValueArrayStart
                     // % 8176);
@@ -151,17 +166,17 @@ export class PSTTable7C extends PSTTable {
             let item: PSTTable7CItem = new PSTTable7CItem();
             item.itemIndex = -1;
             item.entryValueType = 3;
-            item.entryType = long.fromNumber(0x67F2);
+            item.entryType = long.fromNumber(0x67f2);
             item.entryValueReference = id.toNumber();
             item.isExternalValueReference = true;
             currentItem.set(item.entryType.toNumber(), item);
 
             let col = 0;
             if (this.overrideCol > -1) {
-                col = (this.overrideCol - 1);
+                col = this.overrideCol - 1;
             }
-//            for (; col < this.cCols; ++col) {
-            while (col < (this.cCols - 1)) {
+            //            for (; col < this.cCols; ++col) {
+            while (col < this.cCols - 1) {
                 col++;
 
                 // Does this column exist for this row?
@@ -181,36 +196,46 @@ export class PSTTable7C extends PSTTable {
 
                 switch (this.columnDescriptors[col].cbData) {
                     case 1: // Single byte data
-                        item.entryValueReference = this.rowNodeInfo.seekAndReadLong(
-                            long.fromNumber(currentValueArrayStart + this.columnDescriptors[col].ibData), 1).toNumber() & 0xFF;
+                        item.entryValueReference =
+                            this.rowNodeInfo
+                                .seekAndReadLong(long.fromNumber(currentValueArrayStart + this.columnDescriptors[col].ibData), 1)
+                                .toNumber() & 0xff;
                         item.isExternalValueReference = true;
                         break;
 
                     case 2: // Two byte data
-                        item.entryValueReference = this.rowNodeInfo.seekAndReadLong(
-                            long.fromNumber(currentValueArrayStart + this.columnDescriptors[col].ibData), 2).toNumber() & 0xFFFF;
+                        item.entryValueReference =
+                            this.rowNodeInfo
+                                .seekAndReadLong(long.fromNumber(currentValueArrayStart + this.columnDescriptors[col].ibData), 2)
+                                .toNumber() & 0xffff;
                         item.isExternalValueReference = true;
                         break;
 
                     case 8: // 8 byte data
                         item.data = new Buffer(8);
                         this.rowNodeInfo.pstNodeInputStream.seek(
-                            long.fromNumber(this.rowNodeInfo.startOffset + currentValueArrayStart + this.columnDescriptors[col].ibData));
+                            long.fromNumber(this.rowNodeInfo.startOffset + currentValueArrayStart + this.columnDescriptors[col].ibData)
+                        );
                         this.rowNodeInfo.pstNodeInputStream.readCompletely(item.data);
                         break;
 
-                default:// Four byte data
-                        item.entryValueReference = this.rowNodeInfo.seekAndReadLong(
-                            long.fromNumber(currentValueArrayStart + this.columnDescriptors[col].ibData), 4).toNumber();
-                        if (this.columnDescriptors[col].type == 0x0003 || this.columnDescriptors[col].type == 0x0004
-                            || this.columnDescriptors[col].type == 0x000A) {
+                    default:
+                        // Four byte data
+                        item.entryValueReference = this.rowNodeInfo
+                            .seekAndReadLong(long.fromNumber(currentValueArrayStart + this.columnDescriptors[col].ibData), 4)
+                            .toNumber();
+                        if (
+                            this.columnDescriptors[col].type == 0x0003 ||
+                            this.columnDescriptors[col].type == 0x0004 ||
+                            this.columnDescriptors[col].type == 0x000a
+                        ) {
                             // True 32bit data
                             item.isExternalValueReference = true;
                             break;
                         }
 
                         // Variable length data so it's an hnid
-                        if ((item.entryValueReference & 0x1F) != 0) {
+                        if ((item.entryValueReference & 0x1f) != 0) {
                             // Some kind of external reference...
                             item.isExternalValueReference = true;
                             break;
@@ -220,7 +245,7 @@ export class PSTTable7C extends PSTTable {
                             item.data = new Buffer(0);
                             break;
                         } else {
-                            let entryInfo: NodeInfo  = this.getNodeInfo(item.entryValueReference);
+                            let entryInfo: NodeInfo = this.getNodeInfo(item.entryValueReference);
                             item.data = new Buffer(entryInfo.length());
                             entryInfo.pstNodeInputStream.seek(long.fromNumber(entryInfo.startOffset));
                             entryInfo.pstNodeInputStream.readCompletely(item.data);
@@ -235,11 +260,25 @@ export class PSTTable7C extends PSTTable {
             currentValueArrayStart += this.TCI_bm;
         }
         Log.debug1('PSTTable7C::getItems number of items = ' + itemList.length);
-        if (itemList.length == 0) { debugger; }
+        if (setLocalList) {
+            this.items = itemList;
+        }
         return itemList;
     }
 
     public getRowCount(): number {
         return this.numberOfDataSets;
+    }
+
+    public toString() {
+        return this.description;
+    }
+
+    public getItemsString() {
+        if (this.items == null) {
+            return '';
+        }
+
+        return this.items.toString();
     }
 }

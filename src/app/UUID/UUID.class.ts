@@ -1,5 +1,7 @@
+import * as long from 'long';
+
 export class UUID {
-    constructor() {
+    constructor(guidHigh: long, guidLow: long) {
         
     }
 }

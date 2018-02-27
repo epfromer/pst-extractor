@@ -821,4 +821,25 @@ export class PSTUtil {
         }
         return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
     }
+
+    /**
+     * Converts a Windows FILETIME into a {@link Date}. The Windows
+     * FILETIME structure holds a date and time associated with a
+     * file. The structure identifies a 64-bit integer specifying the
+     * number of 100-nanosecond intervals which have passed since
+     * January 1, 1601. This 64-bit value is split into the two double
+     * words stored in the structure.
+     */
+    public static filetimeToDate(hi: long, low: long): Date {
+        debugger;
+
+        return new Date();
+        // let filetime: long = ((long) high) << 32 | (low & 0xffffffffL);
+        // // System.out.printf("0x%X\n", filetime);
+        // final long ms_since_16010101 = filetime / (1000 * 10);
+        // final long ms_since_19700101 = ms_since_16010101 - EPOCH_DIFF;
+        // return new Date(ms_since_19700101);
+    }
+
+
 }
