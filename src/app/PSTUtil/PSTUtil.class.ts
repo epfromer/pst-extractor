@@ -1,3 +1,4 @@
+import { PSTRss } from './../PSTRss/PSTRss.class';
 import { PSTActivity } from './../PSTActivity/PSTActivity.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
