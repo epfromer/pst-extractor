@@ -10,6 +10,7 @@ import { PSTFolder } from '../PSTFolder/PSTFolder.class';
 import { PSTMessage } from '../PSTMessage/PSTMessage.class';
 import { Log } from '../Log.class';
 import * as long from 'long';
+import { PSTTimeZone } from '../PSTTimeZone/PSTTimeZone.class';
 
 // PST Object is the root class of most PST Items.
 // It also provides a number of static utility functions. The most important is
@@ -225,23 +226,21 @@ export class PSTObject {
 
     public getDateItem(identifier: number): Date {
         debugger;
-
-        return new Date();
-    //     if (this.items.containsKey(identifier)) {
-    //         final PSTTableBCItem item = this.items.get(identifier);
-    //         if (item.data.length == 0) {
-    //             return new Date(0);
-    //         }
-    //         final int high = (int) PSTObject.convertLittleEndianBytesToLong(item.data, 4, 8);
-    //         final int low = (int) PSTObject.convertLittleEndianBytesToLong(item.data, 0, 4);
-
-    //         return PSTObject.filetimeToDate(high, low);
-    //     }
-    //     return null;
+        if (this.pstTableItems.has(identifier)) {
+            let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+            if (item.data.length == 0) {
+                return new Date(0);
+            }
+            let hi = PSTUtil.convertLittleEndianBytesToLong(item.data, 4, 8);
+            let low = PSTUtil.convertLittleEndianBytesToLong(item.data, 0, 4);
+            return PSTUtil.filetimeToDate(hi, low);
+        }
+        return null;
     }
 
     protected getBinaryItem(identifier: number): Buffer {
-        debugger;
+        // TODO
+        // debugger;
 
         if (this.pstTableItems.has(identifier)) {
             let item: PSTTableBCItem = this.pstTableItems.get(identifier);
@@ -266,17 +265,17 @@ export class PSTObject {
         return null;
     }
 
-    // protected PSTTimeZone getTimeZoneItem(final int identifier) {
-    //     final byte[] tzData = this.getBinaryItem(identifier);
-    //     if (tzData != null && tzData.length != 0) {
-    //         return new PSTTimeZone(tzData);
-    //     }
-    //     return null;
-    // }
+    protected getTimeZoneItem(identifier: number): PSTTimeZone {
+        let tzData: Buffer = this.getBinaryItem(identifier);
+        if (tzData != null && tzData.length != 0) {
+            return new PSTTimeZone(tzData);
+        }
+        return null;
+    }
 
-    // public String getMessageClass() {
-    //     return this.getStringItem(0x001a);
-    // }
+    public getMessageClass(): string {
+        return this.getStringItem(0x001a);
+    }
 
     public toString() {
         return this.localDescriptorItems + "\n" + this.pstTableItems;

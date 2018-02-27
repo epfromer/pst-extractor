@@ -812,7 +812,9 @@ export class PSTUtil {
             messageClass.startsWith('IPM.Schedule.Meeting')
         ) {
             debugger;
-            return new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
+            let apt = new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
+            console.log(apt.toString())
+            return apt;
         } else if (messageClass === 'IPM.Contact') {
             debugger;
             return new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
@@ -829,7 +831,6 @@ export class PSTUtil {
             debugger;
             return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
         } else {
-            debugger;
             Log.error('Unknown message type: ' + messageClass);
         }
         return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
@@ -845,12 +846,14 @@ export class PSTUtil {
      */
     public static filetimeToDate(hi: long, low: long): Date {
         debugger;
-
-        return new Date();
-        // let filetime: long = ((long) high) << 32 | (low & 0xffffffffL);
-        // // System.out.printf("0x%X\n", filetime);
-        // final long ms_since_16010101 = filetime / (1000// 10);
-        // final long ms_since_19700101 = ms_since_16010101 - EPOCH_DIFF;
-        // return new Date(ms_since_19700101);
+        let h: long = high.shiftLeft(32);
+        let l: long = low.and(0xffffffff);
+        let filetime = h.or(l);
+//        let filetime: long = ((long) high) << 32 | (low & 0xffffffffL);
+        // System.out.printf("0x%X\n", filetime);
+        let ms_since_16010101: long = filetime.divide((1000 * 10));
+        let epoch_diff: long = long.fromValue('11644473600000');
+        let ms_since_19700101: long = ms_since_16010101.subtract(epoch_diff);
+        return new Date(ms_since_19700101);
     }
 }

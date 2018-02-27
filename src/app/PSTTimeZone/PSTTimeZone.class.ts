@@ -13,7 +13,7 @@ export class PSTTimeZone {
     private rule: TZRule;
     // private simpleTimeZone: SimpleTimeZone = null;
 
-    constructor(timeZoneData: Buffer) {
+    constructor(timeZoneData: Buffer, name?: string) {
         this.rule = null;
         this._name = "";
 

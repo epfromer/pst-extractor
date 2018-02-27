@@ -17,39 +17,39 @@ export class PSTAppointment extends PSTMessage {
         super(pstFile, descriptorIndexNode, table, localDescriptorItems);
     }
     
-    public getSendAsICAL(): boolean {
-        return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008200, PSTFile.PSETID_Appointment)));
+    public get sendAsICAL(): boolean {
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008200, PSTFile.PSETID_Appointment));
     }
 
-    public getBusyStatus(): number {
+    public get busyStatus(): number {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008205, PSTFile.PSETID_Appointment));
     }
 
-    public getShowAsBusy(): boolean {
-        return this.getBusyStatus() == 2;
+    public get showAsBusy(): boolean {
+        return this.busyStatus == 2;
     }
 
-    public getLocation(): string {
+    public get location(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008208, PSTFile.PSETID_Appointment));
     }
 
-    public getStartTime(): Date {
+    public get startTime(): Date {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(0x0000820d, PSTFile.PSETID_Appointment));
     }
 
-    public getStartTimeZone(): PSTTimeZone {
+    public get startTimeZone(): PSTTimeZone {
         return this.getTimeZoneItem(this.pstFile.getNameToIdMapItem(0x0000825e, PSTFile.PSETID_Appointment));
     }
 
-    public getEndTime(): Date {
+    public get endTime(): Date {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(0x0000820e, PSTFile.PSETID_Appointment));
     }
 
-    public getEndTimeZone(): PSTTimeZone {
+    public get endTimeZone(): PSTTimeZone {
         return this.getTimeZoneItem(this.pstFile.getNameToIdMapItem(0x0000825f, PSTFile.PSETID_Appointment));
     }
 
-    public getRecurrenceTimeZone(): PSTTimeZone {
+    public get recurrenceTimeZone(): PSTTimeZone {
         let desc = this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008234, PSTFile.PSETID_Appointment));
         if (desc != null && desc.length != 0) {
             let tzData: Buffer = this.getBinaryItem(this.pstFile.getNameToIdMapItem(0x00008233, PSTFile.PSETID_Appointment));
@@ -60,132 +60,175 @@ export class PSTAppointment extends PSTMessage {
         return null;
     }
 
-    public getDuration(): number {
+    public get duration(): number {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008213, PSTFile.PSETID_Appointment));
     }
 
-    public getColor(): number {
+    public get color(): number {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008214, PSTFile.PSETID_Appointment));
     }
 
-    public getSubType(): boolean {
+    public get subType(): boolean {
         return (this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008215, PSTFile.PSETID_Appointment)) != 0);
     }
 
-    public getMeetingStatus(): number {
+    public get meetingStatus(): number {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008217, PSTFile.PSETID_Appointment));
     }
 
-    public getResponseStatus(): number {
+    public get responseStatus(): number {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008218, PSTFile.PSETID_Appointment));
     }
 
-    public isRecurring(): boolean {
+    public get isRecurring(): boolean {
         return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008223, PSTFile.PSETID_Appointment));
     }
 
-    public getRecurrenceBase(): Date {
+    public get recurrenceBase(): Date {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008228, PSTFile.PSETID_Appointment));
     }
 
-    public getRecurrenceType(): number {
+    public get recurrenceType(): number {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008231, PSTFile.PSETID_Appointment));
     }
 
-    public getRecurrencePattern(): string {
+    public get recurrencePattern(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008232, PSTFile.PSETID_Appointment));
     }
 
-    public getRecurrenceStructure(): Buffer {
+    public get recurrenceStructure(): Buffer {
         return this.getBinaryItem(this.pstFile.getNameToIdMapItem(0x00008216, PSTFile.PSETID_Appointment));
     }
 
-    public getTimezone(): Buffer {
+    public get timezone(): Buffer {
         return this.getBinaryItem(this.pstFile.getNameToIdMapItem(0x00008233, PSTFile.PSETID_Appointment));
     }
 
-    public getAllAttendees(): string {
+    public get allAttendees(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008238, PSTFile.PSETID_Appointment));
     }
 
-    public getToAttendees(): string {
+    public get toAttendees(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x0000823b, PSTFile.PSETID_Appointment));
     }
 
-    public getCCAttendees(): string {
+    public get ccAttendees(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x0000823c, PSTFile.PSETID_Appointment));
     }
 
-    public getAppointmentSequence(): number {
+    public get appointmentSequence(): number {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008201, PSTFile.PSETID_Appointment));
     }
 
-    // online meeting properties
-    public isOnlineMeeting(): boolean {
+    public get isOnlineMeeting(): boolean {
         return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008240, PSTFile.PSETID_Appointment)));
     }
 
-    public getNetMeetingType(): number {
+    public get netMeetingType(): number {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008241, PSTFile.PSETID_Appointment));
     }
 
-    public getNetMeetingServer(): string {
+    public get netMeetingServer(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008242, PSTFile.PSETID_Appointment));
     }
 
-    public getNetMeetingOrganizerAlias(): string {
+    public get netMeetingOrganizerAlias(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008243, PSTFile.PSETID_Appointment));
     }
 
-    public getNetMeetingAutostart(): boolean {
+    public get netMeetingAutostart(): boolean {
         return (this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008245, PSTFile.PSETID_Appointment)) != 0);
     }
 
-    public getConferenceServerAllowExternal(): boolean {
+    public get conferenceServerAllowExternal(): boolean {
         return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008246, PSTFile.PSETID_Appointment)));
     }
 
-    public getNetMeetingDocumentPathName(): string {
+    public get netMeetingDocumentPathName(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008247, PSTFile.PSETID_Appointment));
     }
 
-    public getNetShowURL(): string {
+    public get netShowURL(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008248, PSTFile.PSETID_Appointment));
     }
 
-    public getAttendeeCriticalChange(): Date {
+    public get attendeeCriticalChange(): Date {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00000001, PSTFile.PSETID_Meeting));
     }
 
-    public getOwnerCriticalChange(): Date {
+    public get ownerCriticalChange(): Date {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(0x0000001a, PSTFile.PSETID_Meeting));
     }
 
-    public getConferenceServerPassword(): string {
+    public get conferenceServerPassword(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008249, PSTFile.PSETID_Appointment));
     }
 
-    public getAppointmentCounterProposal(): boolean {
+    public get appointmentCounterProposal(): boolean {
         return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008257, PSTFile.PSETID_Appointment)));
     }
 
-    public isSilent(): boolean {
+    public get isSilent(): boolean {
         return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00000004, PSTFile.PSETID_Meeting)));
     }
 
-    public getRequiredAttendees(): string {
+    public get requiredAttendees(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00000006, PSTFile.PSETID_Meeting));
     }
 
-    public getLocaleId(): number {
+    public get localeId(): number {
         return this.getIntItem(0x3ff1);
     }
 
-    public getGlobalObjectId(): PSTGlobalObjectId {
+    public get globalObjectId(): PSTGlobalObjectId {
         return new PSTGlobalObjectId(this.getBinaryItem(this.pstFile.getNameToIdMapItem(0x00000003, PSTFile.PSETID_Meeting)));
     }
 
-    public getCleanGlobalObjectId(): PSTGlobalObjectId {
+    public get cleanGlobalObjectId(): PSTGlobalObjectId {
         return new PSTGlobalObjectId(this.getBinaryItem(this.pstFile.getNameToIdMapItem(0x00000023, PSTFile.PSETID_Meeting)));
+    }
+
+    public toString(): string {
+        return (
+            'PSTAppointment:' +
+            '\n sendAsICAL: ' + this.sendAsICAL + 
+            '\n busyStatus: ' + this.busyStatus + 
+            '\n showAsBusy: ' + this.showAsBusy + 
+            '\n location: ' + this.location + 
+            '\n startTime: ' + this.startTime + 
+            '\n endTime: ' + this.endTime + 
+            '\n endTimeZone: ' + this.endTimeZone +
+            '\n recurrenceTimeZone: ' + this.recurrenceTimeZone +
+            '\n duration: ' + this.duration +
+            '\n color: ' + this.color +
+            '\n subType: ' + this.subType +
+            '\n meetingStatus: ' + this.meetingStatus +
+            '\n isRecurring: ' + this.isRecurring +
+            '\n recurrenceBase: ' + this.recurrenceBase +
+            '\n recurrenceType: ' + this.recurrenceType +
+            '\n recurrencePattern: ' + this.recurrencePattern +
+            '\n recurrenceStructure: ' + this.recurrenceStructure +
+            '\n timezone: ' + this.timezone +
+            '\n allAttendees: ' + this.allAttendees +
+            '\n toAttendees: ' + this.toAttendees +
+            '\n ccAttendees: ' + this.ccAttendees +
+            '\n appointmentSequence: ' + this.appointmentSequence +
+            '\n isOnlineMeeting: ' + this.isOnlineMeeting +
+            '\n netMeetingType: ' + this.netMeetingType +
+            '\n netMeetingServer: ' + this.netMeetingServer +
+            '\n netMeetingOrganizerAlias: ' + this.netMeetingOrganizerAlias +
+            '\n netMeetingAutostart: ' + this.netMeetingAutostart +
+            '\n conferenceServerAllowExternal: ' + this.conferenceServerAllowExternal +
+            '\n netMeetingDocumentPathName: ' + this.netMeetingDocumentPathName +
+            '\n attendeeCriticalChange: ' + this.attendeeCriticalChange +
+            '\n ownerCriticalChange: ' + this.ownerCriticalChange +
+            '\n conferenceServerPassword: ' + this.conferenceServerPassword +
+            '\n appointmentCounterProposal: ' + this.appointmentCounterProposal +
+            '\n isSilent: ' + this.isSilent +
+            '\n requiredAttendees: ' + this.requiredAttendees +
+            '\n localeId: ' + this.localeId +
+            '\n globalObjectId: ' + this.globalObjectId +
+            '\n cleanGlobalObjectId: ' + this.cleanGlobalObjectId
+        );
     }
 }
