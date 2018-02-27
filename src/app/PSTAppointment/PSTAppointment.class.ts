@@ -4,6 +4,7 @@ import { DescriptorIndexNode } from "../DescriptorIndexNode/DescriptorIndexNode.
 import { PSTTableBC } from "../PSTTableBC/PSTTableBC.class";
 import { PSTDescriptorItem } from "../PSTDescriptorItem/PSTDescriptorItem.class";
 import { PSTMessage } from "../PSTMessage/PSTMessage.class";
+import { PSTTimeZone } from '../PSTTimeZone/PSTTimeZone.class';
 
 // PSTAppointment is for Calendar items
 export class PSTAppointment extends PSTMessage {
@@ -36,7 +37,7 @@ export class PSTAppointment extends PSTMessage {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(0x0000820d, PSTFile.PSETID_Appointment));
     }
 
-    public PSTTimeZone getStartTimeZone() {
+    public getStartTimeZone(): PSTTimeZone {
         return this.getTimeZoneItem(this.pstFile.getNameToIdMapItem(0x0000825e, PSTFile.PSETID_Appointment));
     }
 
@@ -44,17 +45,16 @@ export class PSTAppointment extends PSTMessage {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(0x0000820e, PSTFile.PSETID_Appointment));
     }
 
-    public PSTTimeZone getEndTimeZone() {
+    public getEndTimeZone(): PSTTimeZone {
         return this.getTimeZoneItem(this.pstFile.getNameToIdMapItem(0x0000825f, PSTFile.PSETID_Appointment));
     }
 
-    public PSTTimeZone getRecurrenceTimeZone() {
-        final String desc = this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008234, PSTFile.PSETID_Appointment));
-        if (desc != null && desc.length() != 0) {
-            final byte[] tzData = this
-                .getBinaryItem(this.pstFile.getNameToIdMapItem(0x00008233, PSTFile.PSETID_Appointment));
+    public getRecurrenceTimeZone(): PSTTimeZone {
+        let desc = this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008234, PSTFile.PSETID_Appointment));
+        if (desc != null && desc.length != 0) {
+            let tzData: Buffer = this.getBinaryItem(this.pstFile.getNameToIdMapItem(0x00008233, PSTFile.PSETID_Appointment));
             if (tzData != null && tzData.length != 0) {
-                return new PSTTimeZone(desc, tzData);
+                return new PSTTimeZone(tzData, desc);
             }
         }
         return null;

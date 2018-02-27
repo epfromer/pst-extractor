@@ -4,9 +4,13 @@ import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTFolder } from '../PSTFolder/PSTFolder.class';
-import * as long from 'long';
 import { PSTMessage } from '../PSTMessage/PSTMessage.class';
 import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
+import { Log } from '../Log.class';
+import { PSTAppointment } from '../PSTAppointment/PSTAppointment.class';
+import { PSTContact } from '../PSTContact/PSTContact.class';
+import * as long from 'long';
+import { PSTTask } from '../PSTTask/PSTTask.class';
 
 // utility functions for PST components
 export class PSTUtil {
@@ -591,24 +595,24 @@ export class PSTUtil {
             //             }
             //         }
             //         /*
-            //          * if (codepage == null || codepage.toUpperCase().equals("UTF-8") ||
-            //          * codepage.toUpperCase().equals("UTF-7")) {
-            //          * // PST UTF-8 strings are not... really UTF-8
-            //          * // it seems that they just don't use multibyte chars at all.
-            //          * // indeed, with some crylic chars in there, the difficult chars
-            //          * are just converted to %3F(?)
-            //          * // I suspect that outlook actually uses RTF to store these
-            //          * problematic strings.
-            //          * StringBuffer sbOut = new StringBuffer();
-            //          * for (int x = 0; x < data.length; x++) {
-            //          * sbOut.append((char)(data[x] & 0xFF)); // just blindly accept the
-            //          * byte as a UTF char, seems right half the time
-            //          * }
-            //          * return new String(sbOut);
-            //          * } else {
-            //          * codepage = codepage.toUpperCase();
-            //          * return new String(data, codepage);
-            //          * }
+            //         // if (codepage == null || codepage.toUpperCase().equals("UTF-8") ||
+            //         // codepage.toUpperCase().equals("UTF-7")) {
+            //         // // PST UTF-8 strings are not... really UTF-8
+            //         // // it seems that they just don't use multibyte chars at all.
+            //         // // indeed, with some crylic chars in there, the difficult chars
+            //         // are just converted to %3F(?)
+            //         // // I suspect that outlook actually uses RTF to store these
+            //         // problematic strings.
+            //         // StringBuffer sbOut = new StringBuffer();
+            //         // for (int x = 0; x < data.length; x++) {
+            //         // sbOut.append((char)(data[x] & 0xFF)); // just blindly accept the
+            //         // byte as a UTF char, seems right half the time
+            //         // }
+            //         // return new String(sbOut);
+            //         // } else {
+            //         // codepage = codepage.toUpperCase();
+            //         // return new String(data, codepage);
+            //         // }
             //          */
         } catch (err) {
             console.log('Unable to decode string');
@@ -805,30 +809,36 @@ export class PSTUtil {
             messageClass.startsWith('IPM.Schedule.Meeting')
         ) {
             debugger;
-            //     return new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
-            // } else if (messageClass.equals('IPM.Contact')) {
-            //     return new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
-            // } else if (messageClass.equals('IPM.Task')) {
-            //     return new PSTTask(theFile, folderIndexNode, table, localDescriptorItems);
-            // } else if (messageClass.equals('IPM.Activity')) {
-            //     return new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
-            // } else if (messageClass.equals('IPM.Post.Rss')) {
-            //     return new PSTRss(theFile, folderIndexNode, table, localDescriptorItems);
-            // } else if (messageClass.equals('IPM.DistList')) {
-            //     return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
-            // } else {
-            //     Log.error('Unknown message type: ' + messageClass);
+            return new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
+        } else if (messageClass === 'IPM.Contact') {
+            debugger;
+            return new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
+        } else if (messageClass === 'IPM.Task') {
+            debugger;
+            return new PSTTask(theFile, folderIndexNode, table, localDescriptorItems);
+        } else if (messageClass === 'IPM.Activity') {
+            debugger;
+            return new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
+        } else if (messageClass === 'IPM.Post.Rss') {
+            debugger;
+            return new PSTRss(theFile, folderIndexNode, table, localDescriptorItems);
+        } else if (messageClass === 'IPM.DistList') {
+            debugger;
+            return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
+        } else {
+            debugger;
+            Log.error('Unknown message type: ' + messageClass);
         }
         return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
     }
 
     /**
-     * Converts a Windows FILETIME into a {@link Date}. The Windows
-     * FILETIME structure holds a date and time associated with a
-     * file. The structure identifies a 64-bit integer specifying the
-     * number of 100-nanosecond intervals which have passed since
-     * January 1, 1601. This 64-bit value is split into the two double
-     * words stored in the structure.
+    // Converts a Windows FILETIME into a {@link Date}. The Windows
+    // FILETIME structure holds a date and time associated with a
+    // file. The structure identifies a 64-bit integer specifying the
+    // number of 100-nanosecond intervals which have passed since
+    // January 1, 1601. This 64-bit value is split into the two double
+    // words stored in the structure.
      */
     public static filetimeToDate(hi: long, low: long): Date {
         debugger;
@@ -836,10 +846,8 @@ export class PSTUtil {
         return new Date();
         // let filetime: long = ((long) high) << 32 | (low & 0xffffffffL);
         // // System.out.printf("0x%X\n", filetime);
-        // final long ms_since_16010101 = filetime / (1000 * 10);
+        // final long ms_since_16010101 = filetime / (1000// 10);
         // final long ms_since_19700101 = ms_since_16010101 - EPOCH_DIFF;
         // return new Date(ms_since_19700101);
     }
-
-
 }

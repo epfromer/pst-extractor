@@ -128,14 +128,15 @@ export class PSTObject {
     //     return this.getDoubleItem(identifier, 0);
     // }
 
-    // protected getDoubleItem(final int identifier, final double defaultValue) {
-    //     if (this.items.containsKey(identifier)) {
-    //         final PSTTableBCItem item = this.items.get(identifier);
-    //         final long longVersion = PSTObject.convertLittleEndianBytesToLong(item.data);
-    //         return Double.longBitsToDouble(longVersion);
-    //     }
-    //     return defaultValue;
-    // }
+    protected getDoubleItem(identifier: number, defaultValue?: number) {
+        debugger;
+        if (this.pstTableItems.has(identifier)) {
+            let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+            // final long longVersion = PSTUtil.convertLittleEndianBytesToLong(item.data);
+            // return Double.longBitsToDouble(longVersion);
+        }
+        return defaultValue;
+    }
 
     protected getLongItem(identifier: number, defaultValue?: long): long {
         if (defaultValue == undefined) {
