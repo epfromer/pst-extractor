@@ -5,10 +5,14 @@ import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
 
 export class PSTDescriptorItem {
-    private subNodeOffsetIndexIdentifier: number;
     private dataBlockData: Buffer;
     private dataBlockOffsets: number[] = [];
     private _pstFile: PSTFile;
+
+    private _subNodeOffsetIndexIdentifier: number;
+    public get subNodeOffsetIndexIdentifier(): number {
+        return this._subNodeOffsetIndexIdentifier;
+    }
 
     private _descriptorIdentifier: number;
     public get descriptorIdentifier(): number {
@@ -26,11 +30,11 @@ export class PSTDescriptorItem {
         if (pstFile.pstFileType == PSTFile.PST_TYPE_ANSI) {
             this._descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
             this._offsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset + 4, offset + 8).toNumber() & 0xfffffffe;
-            this.subNodeOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset + 8, offset + 12).toNumber() & 0xfffffffe;
+            this._subNodeOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset + 8, offset + 12).toNumber() & 0xfffffffe;
         } else {
             this._descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset, offset + 4).toNumber();
             this._offsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset + 8, offset + 16).toNumber() & 0xfffffffe;
-            this.subNodeOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset + 16, offset + 24).toNumber() & 0xfffffffe;
+            this._subNodeOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, offset + 16, offset + 24).toNumber() & 0xfffffffe;
         }
     }
 

@@ -42,6 +42,9 @@ export class PSTFile {
     public static PSETID_AirSync: number = 13;
     public static PSETID_Sharing: number = 14;
 
+    // static private Properties propertyNames = null;
+    // static private boolean bFirstTime = true;
+
     private guidMap: Map<string, number> = new Map([
         ['00020329-0000-0000-C000-000000000046', 0],
         ['00062008-0000-0000-C000-000000000046', 1],
@@ -240,25 +243,24 @@ export class PSTFile {
         return mapDescriptorItem.getData();
     }
 
-    // int getNameToIdMapItem(final int key, final int propertySetIndex) {
-    //     final long lKey = ((long) propertySetIndex << 32) | key;
-    //     final Integer i = this.nameToId.get(lKey);
-    //     if (i == null) {
-    //         return -1;
-    //     }
-    //     return i;
-    // }
+    public getNameToIdMapItem(key: number, propertySetIndex: number) {
+        let lKey = long.fromNumber(propertySetIndex);
+        lKey = lKey.shiftLeft(32);
+        lKey = lKey.or(key);
+        let i = this.nameToId.get(lKey);
+        if (i == null) {
+            return -1;
+        }
+        return i;
+    }
 
-    // int getPublicStringToIdMapItem(final String key) {
-    //     final Integer i = this.stringToId.get(key);
-    //     if (i == null) {
-    //         return -1;
-    //     }
-    //     return i;
-    // }
-
-    // static private Properties propertyNames = null;
-    // static private boolean bFirstTime = true;
+    public getPublicStringToIdMapItem(key: string): number {
+        let i = this.stringToId.get(key);
+        if (i == null) {
+            return -1;
+        }
+        return i;
+    }
 
     // /**
     //  * destructor just closes the file handle...

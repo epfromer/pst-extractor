@@ -1,9 +1,15 @@
+import { PSTConversationIndex } from './../PSTConversationIndex/PSTConversationIndex.class';
+import { PSTAttachment } from './../PSTAttachment/PSTAttachment.class';
+import { PSTRecipient } from './../PSTRecipient/PSTRecipient.class';
 import { PSTObject } from '../PSTObject/PSTObject.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTTable7C } from '../PSTTable7C/PSTTable7C.class';
 import * as long from 'long';
+import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
+import { PSTTable7CItem } from '../PSTTable7CItem/PSTTable7CItem.class';
 
 // PST Message contains functions that are common across most MAPI objects.
 // Note that many of these functions may not be applicable for the item in question,
@@ -16,7 +22,9 @@ export class PSTMessage extends PSTObject {
     public static IMPORTANCE_HIGH = 2;
     public static RECIPIENT_TYPE_TO = 1;
     public static RECIPIENT_TYPE_CC = 2;
-
+    private recipientTable: PSTTable7C = null;
+    private attachmentTable: PSTTable7C = null;
+    
     constructor(
         pstFile: PSTFile,
         descriptorIndexNode: DescriptorIndexNode,
@@ -320,462 +328,294 @@ export class PSTMessage extends PSTObject {
         return this.getStringItem(0x0c1f);
     }
 
-    // /**
-    //  * Non-transmittable message properties
-    //  */
+    // Non-transmittable message properties
 
-    // /**
-    //  * Message size
-    //  */
-    // public long getMessageSize() {
-    //     return this.getLongItem(0x0e08);
-    // }
+    // Message size
+    public getMessageSize(): long {
+        return this.getLongItem(0x0e08);
+    }
 
-    // /**
-    //  * Internet article number
-    //  */
-    // public int getInternetArticleNumber() {
-    //     return this.getIntItem(0x0e23);
-    // }
+    // Internet article number
+    public getInternetArticleNumber(): number {
+        return this.getIntItem(0x0e23);
+    }
 
-    // /*
-    //  * Server that the client should attempt to send the mail with
-    //  */
-    // public String getPrimarySendAccount() {
-    //     return this.getStringItem(0x0e28);
-    // }
+    // Server that the client should attempt to send the mail with
+    public getPrimarySendAccount(): string {
+        return this.getStringItem(0x0e28);
+    }
 
-    // /*
-    //  * Server that the client is currently using to send mail
-    //  */
-    // public String getNextSendAcct() {
-    //     return this.getStringItem(0x0e29);
-    // }
+    // Server that the client is currently using to send mail
+    public getNextSendAcct(): string {
+        return this.getStringItem(0x0e29);
+    }
 
-    // /**
-    //  * URL computer name postfix
-    //  */
-    // public int getURLCompNamePostfix() {
-    //     return this.getIntItem(0x0e61);
-    // }
+    // URL computer name postfix
+    public getURLCompNamePostfix(): number {
+        return this.getIntItem(0x0e61);
+    }
 
-    // /**
-    //  * Object type
-    //  */
-    // public int getObjectType() {
-    //     return this.getIntItem(0x0ffe);
-    // }
+    // Object type
+    public getObjectType(): number {
+        return this.getIntItem(0x0ffe);
+    }
 
-    // /**
-    //  * Delete after submit
-    //  */
-    // public boolean getDeleteAfterSubmit() {
-    //     return ((this.getIntItem(0x0e01)) != 0);
-    // }
+    // Delete after submit
+    public getDeleteAfterSubmit(): boolean {
+        return ((this.getIntItem(0x0e01)) != 0);
+    }
 
-    // /**
-    //  * Responsibility
-    //  */
-    // public boolean getResponsibility() {
-    //     return ((this.getIntItem(0x0e0f)) != 0);
-    // }
+    // Responsibility
+    public getResponsibility(): boolean {
+        return ((this.getIntItem(0x0e0f)) != 0);
+    }
 
-    // /**
-    //  * Compressed RTF in Sync Boolean
-    //  */
-    // public boolean isRTFInSync() {
-    //     return ((this.getIntItem(0x0e1f)) != 0);
-    // }
+    // Compressed RTF in Sync Boolean
+    public isRTFInSync(): boolean {
+        return ((this.getIntItem(0x0e1f)) != 0);
+    }
 
-    // /**
-    //  * URL computer name set
-    //  */
-    // public boolean isURLCompNameSet() {
-    //     return ((this.getIntItem(0x0e62)) != 0);
-    // }
+    // URL computer name set
+    public isURLCompNameSet(): boolean {
+        return ((this.getIntItem(0x0e62)) != 0);
+    }
 
-    // /**
-    //  * Display BCC
-    //  */
-    // public String getDisplayBCC() {
-    //     return this.getStringItem(0x0e02);
-    // }
+    // Display BCC
+    public getDisplayBCC(): string {
+        return this.getStringItem(0x0e02);
+    }
 
-    // /**
-    //  * Display CC
-    //  */
-    // public String getDisplayCC() {
-    //     return this.getStringItem(0x0e03);
-    // }
+    // Display CC
+    public getDisplayCC(): string {
+        return this.getStringItem(0x0e03);
+    }
 
-    // /**
-    //  * Display To
-    //  */
-    // public String getDisplayTo() {
-    //     return this.getStringItem(0x0e04);
-    // }
+    // Display To
+    public getDisplayTo(): string {
+        return this.getStringItem(0x0e04);
+    }
 
-    // /**
-    //  * Message delivery time
-    //  */
-    // public Date getMessageDeliveryTime() {
-    //     return this.getDateItem(0x0e06);
-    // }
+    // Message delivery time
+    public getMessageDeliveryTime(): Date {
+        return this.getDateItem(0x0e06);
+    }
 
-    // //
-    // // public int getFlags() {
-    // // if (this.items.containsKey(0x0e17)) {
-    // // System.out.println(this.items.get(0x0e17));
-    // // }
-    // // return this.getIntItem(0x0e17);
-    // // }
-    // //
-    // // /**
-    // // * The message is to be highlighted in recipients' folder displays.
-    // // */
-    // // public boolean isHighlighted() {
-    // // return (this.getIntItem(0x0e17) & 0x1) != 0;
-    // // }
-    // //
-    // // /**
-    // // * The message has been tagged for a client-defined purpose.
-    // // */
-    // // public boolean isTagged() {
-    // // return (this.getIntItem(0x0e17) & 0x2) != 0;
-    // // }
-    // //
-    // // /**
-    // // * The message is to be suppressed from recipients' folder displays.
-    // // */
-    // // public boolean isHidden() {
-    // // return (this.getIntItem(0x0e17) & 0x4) != 0;
-    // // }
-    // //
-    // // /**
-    // // * The message has been marked for subsequent deletion
-    // // */
-    // // public boolean isDelMarked() {
-    // // return (this.getIntItem(0x0e17) & 0x8) != 0;
-    // // }
-    // //
-    // // /**
-    // // * The message is in draft revision status.
-    // // */
-    // // public boolean isDraft() {
-    // // return (this.getIntItem(0x0e17) & 0x100) != 0;
-    // // }
-    // //
-    // // /**
-    // // * The message has been replied to.
-    // // */
-    // // public boolean isAnswered() {
-    // // return (this.getIntItem(0x0e17) & 0x200) != 0;
-    // // }
-    // //
-    // // /**
-    // // * The message has been marked for downloading from the remote message
-    // // store to the local client
-    // // */
-    // // public boolean isMarkedForDownload() {
-    // // return (this.getIntItem(0x0e17) & 0x1000) != 0;
-    // // }
-    // //
-    // // /**
-    // // * The message has been marked for deletion at the remote message store
-    // // without downloading to the local client.
-    // // */
-    // // public boolean isRemoteDelMarked() {
-    // // return (this.getIntItem(0x0e17) & 0x2000) != 0;
-    // // }
+    // Message content properties
+    public getNativeBodyType(): number {
+        return this.getIntItem(0x1016);
+    }
 
-    // /**
-    //  * Message content properties
-    //  */
-    // public int getNativeBodyType() {
-    //     return this.getIntItem(0x1016);
-    // }
+    // Plain text e-mail body
+    public getBody(): string {
+        debugger;
+        return '';
+        // let cp: string = null;
+        // let cpItem: PSTTableBCItem = this.items.get(0x3FFD); // PidTagMessageCodepage
+        // if (cpItem == null) {
+        //     cpItem = this.items.get(0x3FDE); // PidTagInternetCodepage
+        // }
+        // if (cpItem != null) {
+        //     cp = PSTFile.getInternetCodePageCharset(cpItem.entryValueReference);
+        // }
+        // return this.getStringItem(0x1000, 0, cp);
+    }
 
-    // /**
-    //  * Plain text e-mail body
-    //  */
-    // public String getBody() {
-    //     String cp = null;
-    //     PSTTableBCItem cpItem = this.items.get(0x3FFD); // PidTagMessageCodepage
-    //     if (cpItem == null) {
-    //         cpItem = this.items.get(0x3FDE); // PidTagInternetCodepage
-    //     }
-    //     if (cpItem != null) {
-    //         cp = PSTFile.getInternetCodePageCharset(cpItem.entryValueReference);
-    //     }
-    //     return this.getStringItem(0x1000, 0, cp);
-    // }
+    // Plain text body prefix
+    public getBodyPrefix(): string {
+        return this.getStringItem(0x6619);
+    }
 
-    // /*
-    //  * Plain text body prefix
-    //  */
-    // public String getBodyPrefix() {
-    //     return this.getStringItem(0x6619);
-    // }
+    // RTF Sync Body CRC
+    public getRTFSyncBodyCRC(): number {
+        return this.getIntItem(0x1006);
+    }
 
-    // /**
-    //  * RTF Sync Body CRC
-    //  */
-    // public int getRTFSyncBodyCRC() {
-    //     return this.getIntItem(0x1006);
-    // }
+    // RTF Sync Body character count
+    public getRTFSyncBodyCount(): number {
+        return this.getIntItem(0x1007);
+    }
 
-    // /**
-    //  * RTF Sync Body character count
-    //  */
-    // public int getRTFSyncBodyCount() {
-    //     return this.getIntItem(0x1007);
-    // }
+    // RTF Sync body tag
+    public getRTFSyncBodyTag(): string {
+        return this.getStringItem(0x1008);
+    }
 
-    // /**
-    //  * RTF Sync body tag
-    //  */
-    // public String getRTFSyncBodyTag() {
-    //     return this.getStringItem(0x1008);
-    // }
+    // RTF whitespace prefix count
+    public getRTFSyncPrefixCount(): number {
+        return this.getIntItem(0x1010);
+    }
 
-    // /**
-    //  * RTF whitespace prefix count
-    //  */
-    // public int getRTFSyncPrefixCount() {
-    //     return this.getIntItem(0x1010);
-    // }
+    // RTF whitespace tailing count
+    public getRTFSyncTrailingCount(): number {
+        return this.getIntItem(0x1011);
+    }
 
-    // /**
-    //  * RTF whitespace tailing count
-    //  */
-    // public int getRTFSyncTrailingCount() {
-    //     return this.getIntItem(0x1011);
-    // }
+    // HTML e-mail body
+    public getBodyHTML(): string {
+        debugger;
+        return '';
+        // String cp = null;
+        // PSTTableBCItem cpItem = this.items.get(0x3FDE); // PidTagInternetCodepage
+        // if (cpItem == null) {
+        //     cpItem = this.items.get(0x3FFD); // PidTagMessageCodepage
+        // }
+        // if (cpItem != null) {
+        //     cp = PSTFile.getInternetCodePageCharset(cpItem.entryValueReference);
+        // }
+        // return this.getStringItem(0x1013, 0, cp);
+    }
 
-    // /**
-    //  * HTML e-mail body
-    //  */
-    // public String getBodyHTML() {
-    //     String cp = null;
-    //     PSTTableBCItem cpItem = this.items.get(0x3FDE); // PidTagInternetCodepage
-    //     if (cpItem == null) {
-    //         cpItem = this.items.get(0x3FFD); // PidTagMessageCodepage
-    //     }
-    //     if (cpItem != null) {
-    //         cp = PSTFile.getInternetCodePageCharset(cpItem.entryValueReference);
-    //     }
-    //     return this.getStringItem(0x1013, 0, cp);
-    // }
+    // Message ID for this email as allocated per rfc2822
+    public getInternetMessageId(): string {
+        return this.getStringItem(0x1035);
+    }
 
-    // /**
-    //  * Message ID for this email as allocated per rfc2822
-    //  */
-    // public String getInternetMessageId() {
-    //     return this.getStringItem(0x1035);
-    // }
+    // In-Reply-To
+    public getInReplyToId(): string {
+        return this.getStringItem(0x1042);
+    }
 
-    // /**
-    //  * In-Reply-To
-    //  */
-    // public String getInReplyToId() {
-    //     return this.getStringItem(0x1042);
-    // }
+    // Return Path
+    public getReturnPath(): string {
+        return this.getStringItem(0x1046);
+    }
 
-    // /**
-    //  * Return Path
-    //  */
-    // public String getReturnPath() {
-    //     return this.getStringItem(0x1046);
-    // }
+    // Icon index
+    public getIconIndex(): number {
+        return this.getIntItem(0x1080);
+    }
 
-    // /**
-    //  * Icon index
-    //  */
-    // public int getIconIndex() {
-    //     return this.getIntItem(0x1080);
-    // }
+    // Action flag
+    // This relates to the replying / forwarding of messages.
+    // It is classified as "unknown" atm, so just provided here
+    // in case someone works out what all the various flags mean.
+    public getActionFlag(): number {
+        return this.getIntItem(0x1081);
+    }
 
-    // /**
-    //  * Action flag
-    //  * This relates to the replying / forwarding of messages.
-    //  * It is classified as "unknown" atm, so just provided here
-    //  * in case someone works out what all the various flags mean.
-    //  */
-    // public int getActionFlag() {
-    //     return this.getIntItem(0x1081);
-    // }
+    // is the action flag for this item "forward"?
+    public hasForwarded(): boolean {
+        let actionFlag = this.getIntItem(0x1081);
+        return ((actionFlag & 0x8) > 0);
+    }
 
-    // /**
-    //  * is the action flag for this item "forward"?
-    //  */
-    // public boolean hasForwarded() {
-    //     final int actionFlag = this.getIntItem(0x1081);
-    //     return ((actionFlag & 0x8) > 0);
-    // }
+    // is the action flag for this item "replied"?
+    public hasReplied(): boolean {
+        let actionFlag = this.getIntItem(0x1081);
+        return ((actionFlag & 0x4) > 0);
+    }
 
-    // /**
-    //  * is the action flag for this item "replied"?
-    //  */
-    // public boolean hasReplied() {
-    //     final int actionFlag = this.getIntItem(0x1081);
-    //     return ((actionFlag & 0x4) > 0);
-    // }
+    // the date that this item had an action performed (eg. replied or
+    // forwarded)
+    public getActionDate(): Date {
+        return this.getDateItem(0x1082);
+    }
 
-    // /**
-    //  * the date that this item had an action performed (eg. replied or
-    //  * forwarded)
-    //  */
-    // public Date getActionDate() {
-    //     return this.getDateItem(0x1082);
-    // }
+    // Disable full fidelity
+    public getDisableFullFidelity(): boolean {
+        return (this.getIntItem(0x10f2) != 0);
+    }
 
-    // /**
-    //  * Disable full fidelity
-    //  */
-    // public boolean getDisableFullFidelity() {
-    //     return (this.getIntItem(0x10f2) != 0);
-    // }
+    // URL computer name
+    // Contains the .eml file name
+    public getURLCompName(): String {
+        return this.getStringItem(0x10f3);
+    }
 
-    // /**
-    //  * URL computer name
-    //  * Contains the .eml file name
-    //  */
-    // public String getURLCompName() {
-    //     return this.getStringItem(0x10f3);
-    // }
+    // Attribute hidden
+    public getAttrHidden(): boolean {
+        return (this.getIntItem(0x10f4) != 0);
+    }
 
-    // /**
-    //  * Attribute hidden
-    //  */
-    // public boolean getAttrHidden() {
-    //     return (this.getIntItem(0x10f4) != 0);
-    // }
+    // Attribute system
+    public getAttrSystem(): boolean {
+        return (this.getIntItem(0x10f5) != 0);
+    }
 
-    // /**
-    //  * Attribute system
-    //  */
-    // public boolean getAttrSystem() {
-    //     return (this.getIntItem(0x10f5) != 0);
-    // }
+    // Attribute read only
+    public getAttrReadonly(): boolean {
+        return (this.getIntItem(0x10f6) != 0);
+    }
 
-    // /**
-    //  * Attribute read only
-    //  */
-    // public boolean getAttrReadonly() {
-    //     return (this.getIntItem(0x10f6) != 0);
-    // }
+    // find, extract and load up all of the attachments in this email
+    // necessary for the other operations.
+    private processRecipients() {
+        debugger;
+        try {
+            let recipientTableKey = 0x0692;
+            if (this.recipientTable == null && this.localDescriptorItems != null
+                && this.localDescriptorItems.has(recipientTableKey)) {
+                let item: PSTDescriptorItem = this.localDescriptorItems.get(recipientTableKey);
+                let descriptorItems: Map<number, PSTDescriptorItem> = null;
+                if (item.subNodeOffsetIndexIdentifier > 0) {
+                    descriptorItems = this.pstFile.getPSTDescriptorItems(long.fromNumber(item.subNodeOffsetIndexIdentifier));
+                }
+                this.recipientTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile, item), descriptorItems);
+            }
+        } catch (err) {
+            this.recipientTable = null;
+        }
+    }
 
-    // private PSTTable7C recipientTable = null;
+    // get the number of recipients for this message
+    public getNumberOfRecipients(): number {
+        this.processRecipients();
 
-    // /**
-    //  * find, extract and load up all of the attachments in this email
-    //  * necessary for the other operations.
-    //  *
-    //  * @throws PSTException
-    //  * @throws IOException
-    //  */
-    // private void processRecipients() {
-    //     try {
-    //         final int recipientTableKey = 0x0692;
-    //         if (this.recipientTable == null && this.localDescriptorItems != null
-    //             && this.localDescriptorItems.containsKey(recipientTableKey)) {
-    //             final PSTDescriptorItem item = this.localDescriptorItems.get(recipientTableKey);
-    //             HashMap<Integer, PSTDescriptorItem> descriptorItems = null;
-    //             if (item.subNodeOffsetIndexIdentifier > 0) {
-    //                 descriptorItems = this.pstFile.getPSTDescriptorItems(item.subNodeOffsetIndexIdentifier);
-    //             }
-    //             this.recipientTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile, item), descriptorItems);
-    //         }
-    //     } catch (final Exception e) {
-    //         e.printStackTrace();
-    //         this.recipientTable = null;
-    //     }
-    // }
+        // still nothing? must be no recipients...
+        if (this.recipientTable == null) {
+            return 0;
+        }
+        return this.recipientTable.getRowCount();
+    }
 
-    // /**
-    //  * get the number of recipients for this message
-    //  *
-    //  * @throws PSTException
-    //  * @throws IOException
-    //  */
-    // public int getNumberOfRecipients() throws PSTException, IOException {
-    //     this.processRecipients();
+    // attachment stuff here, not sure if these can just exist in emails or not,
+    // but a table key of 0x0671 would suggest that this is a property of the
+    // envelope rather than a specific email property
 
-    //     // still nothing? must be no recipients...
-    //     if (this.recipientTable == null) {
-    //         return 0;
-    //     }
-    //     return this.recipientTable.getRowCount();
-    // }
+    // find, extract and load up all of the attachments in this email
+    // necessary for the other operations.
+    private processAttachments() {
+        let attachmentTableKey = 0x0671;
+        if (this.attachmentTable == null && this.localDescriptorItems != null
+            && this.localDescriptorItems.has(attachmentTableKey)) {
+            let item: PSTDescriptorItem = this.localDescriptorItems.get(attachmentTableKey);
+            let descriptorItems: Map<number, PSTDescriptorItem> = null;
+            if (item.subNodeOffsetIndexIdentifier > 0) {
+                descriptorItems = this.pstFile.getPSTDescriptorItems(long.fromValue(item.subNodeOffsetIndexIdentifier));
+            }
+            this.attachmentTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile, item), descriptorItems);
+        }
+    }
 
-    // /**
-    //  * attachment stuff here, not sure if these can just exist in emails or not,
-    //  * but a table key of 0x0671 would suggest that this is a property of the
-    //  * envelope
-    //  * rather than a specific email property
-    //  */
+    // Start date Filetime
+    public getTaskStartDate(): Date {
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008104, PSTFile.PSETID_Task));
+    }
 
-    // private PSTTable7C attachmentTable = null;
+    // Due date Filetime
+    public getTaskDueDate(): Date {
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008105, PSTFile.PSETID_Task));
+    }
 
-    // /**
-    //  * find, extract and load up all of the attachments in this email
-    //  * necessary for the other operations.
-    //  *
-    //  * @throws PSTException
-    //  * @throws IOException
-    //  */
-    // private void processAttachments() throws PSTException, IOException {
-    //     final int attachmentTableKey = 0x0671;
-    //     if (this.attachmentTable == null && this.localDescriptorItems != null
-    //         && this.localDescriptorItems.containsKey(attachmentTableKey)) {
-    //         final PSTDescriptorItem item = this.localDescriptorItems.get(attachmentTableKey);
-    //         HashMap<Integer, PSTDescriptorItem> descriptorItems = null;
-    //         if (item.subNodeOffsetIndexIdentifier > 0) {
-    //             descriptorItems = this.pstFile.getPSTDescriptorItems(item.subNodeOffsetIndexIdentifier);
-    //         }
-    //         this.attachmentTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile, item), descriptorItems);
-    //     }
-    // }
+    // Is a reminder set on this object?
+    public getReminderSet(): boolean {
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008503, PSTFile.PSETID_Common));
+    }
 
-    // /**
-    //  * Start date Filetime
-    //  */
-    // public Date getTaskStartDate() {
-    //     return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008104, PSTFile.PSETID_Task));
-    // }
+    public getReminderDelta(): number {
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008501, PSTFile.PSETID_Common));
+    }
 
-    // /**
-    //  * Due date Filetime
-    //  */
-    // public Date getTaskDueDate() {
-    //     return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008105, PSTFile.PSETID_Task));
-    // }
+    // "flagged" items are actually emails with a due date.
+    // This convience method just checks to see if that is true.
+    public isFlagged(): boolean {
+        return this.getTaskDueDate() != null;
+    }
 
-    // /**
-    //  * Is a reminder set on this object?
-    //  *
-    //  * @return
-    //  */
-    // public boolean getReminderSet() {
-    //     return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008503, PSTFile.PSETID_Common));
-    // }
-
-    // public int getReminderDelta() {
-    //     return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008501, PSTFile.PSETID_Common));
-    // }
-
-    // /**
-    //  * "flagged" items are actually emails with a due date.
-    //  * This convience method just checks to see if that is true.
-    //  */
-    // public boolean isFlagged() {
-    //     return this.getTaskDueDate() != null;
-    // }
-
-    // /**
-    //  * get the categories defined for this message
-    //  */
-    // public String[] getColorCategories() throws PSTException {
+    // get the categories defined for this message
+    public getColorCategories(): string[] {
+        debugger;
+        return [];
     //     final int keywordCategory = this.pstFile.getPublicStringToIdMapItem("Keywords");
 
     //     String[] categories = new String[0];
@@ -815,38 +655,29 @@ export class PSTMessage extends PSTObject {
     //         }
     //     }
     //     return categories;
-    // }
+    }
 
-    // /**
-    //  * get the number of attachments for this message
-    //  *
-    //  * @throws PSTException
-    //  * @throws IOException
-    //  */
-    // public int getNumberOfAttachments() {
-    //     try {
-    //         this.processAttachments();
-    //     } catch (final Exception e) {
-    //         e.printStackTrace();
-    //         return 0;
-    //     }
+    // get the number of attachments for this message
+    public getNumberOfAttachments(): number {
+        try {
+            this.processAttachments();
+        } catch (e) {
+            e.printStackTrace();
+            debugger;
+            return 0;
+        }
 
-    //     // still nothing? must be no attachments...
-    //     if (this.attachmentTable == null) {
-    //         return 0;
-    //     }
-    //     return this.attachmentTable.getRowCount();
-    // }
+        // still nothing? must be no attachments...
+        if (this.attachmentTable == null) {
+            return 0;
+        }
+        return this.attachmentTable.getRowCount();
+    }
 
-    // /**
-    //  * get a specific attachment from this email.
-    //  *
-    //  * @param attachmentNumber
-    //  * @return the attachment at the defined index
-    //  * @throws PSTException
-    //  * @throws IOException
-    //  */
-    // public PSTAttachment getAttachment(final int attachmentNumber) throws PSTException, IOException {
+    // get a specific attachment from this email.
+    public getAttachment(attachmentNumber: number): PSTAttachment {
+        debugger;
+        return null;
     //     this.processAttachments();
 
     //     int attachmentCount = 0;
@@ -892,58 +723,49 @@ export class PSTMessage extends PSTObject {
 
     //     throw new PSTException(
     //         "unable to fetch attachment number " + attachmentNumber + ", unable to read attachment details table");
-    // }
+    }
 
-    // /**
-    //  * get a specific recipient from this email.
-    //  *
-    //  * @param recipientNumber
-    //  * @return the recipient at the defined index
-    //  * @throws PSTException
-    //  * @throws IOException
-    //  */
-    // public PSTRecipient getRecipient(final int recipientNumber) throws PSTException, IOException {
-    //     if (recipientNumber >= this.getNumberOfRecipients()
-    //         || recipientNumber >= this.recipientTable.getItems().size()) {
-    //         throw new PSTException("unable to fetch recipient number " + recipientNumber);
-    //     }
+    // get a specific recipient from this email.
+    public getRecipient(recipientNumber: number): PSTRecipient {
+        if (recipientNumber >= this.getNumberOfRecipients()
+            || recipientNumber >= this.recipientTable.getItems().length) {
+            throw new Error("unable to fetch recipient number " + recipientNumber);
+        }
 
-    //     final HashMap<Integer, PSTTable7CItem> recipientDetails = this.recipientTable.getItems().get(recipientNumber);
+        debugger;
 
-    //     if (recipientDetails != null) {
-    //         return new PSTRecipient(recipientDetails);
-    //     }
+        let recipientDetails: Map<number, PSTTable7CItem> = this.recipientTable.getItems()[recipientNumber];
 
-    //     return null;
-    // }
+        if (recipientDetails != null) {
+            return new PSTRecipient(recipientDetails);
+        }
 
-    // public String getRecipientsString() {
-    //     if (this.recipientTable != null) {
-    //         return this.recipientTable.getItemsString();
-    //     }
+        return null;
+    }
 
-    //     return "No recipients table!";
-    // }
+    public getRecipientsString(): string {
+        if (this.recipientTable != null) {
+            return this.recipientTable.getItemsString();
+        }
+        return "No recipients table!";
+    }
 
-    // public byte[] getConversationId() {
-    //     return this.getBinaryItem(0x3013);
-    // }
+    public getConversationId(): Buffer {
+        return this.getBinaryItem(0x3013);
+    }
 
-    // public PSTConversationIndex getConversationIndex() {
-    //     return new PSTConversationIndex(this.getBinaryItem(0x0071));
-    // }
+    public getConversationIndex(): PSTConversationIndex {
+        return new PSTConversationIndex(this.getBinaryItem(0x0071));
+    }
 
-    // public boolean isConversationIndexTracking() {
-    //     return this.getBooleanItem(0x3016, false);
-    // }
+    public isConversationIndexTracking(): boolean {
+        return this.getBooleanItem(0x3016, false);
+    }
 
-    // /**
-    //  * string representation of this email
-    //  */
-    // @Override
-    // public String toString() {
-    //     return "PSTEmail: " + this.getSubject() + "\n" + "Importance: " + this.getImportance() + "\n"
-    //         + "Message Class: " + this.getMessageClass() + "\n\n" + this.getTransportMessageHeaders() + "\n\n\n"
-    //         + this.items + this.localDescriptorItems;
-    // }
+    // string representation of this email
+    public toString() {
+        return "PSTEmail: " + this.getSubject() + "\n" + "Importance: " + this.getImportance() + "\n"
+            + "Message Class: " + this.getMessageClass() + "\n\n" + this.getTransportMessageHeaders() + "\n\n\n"
+            + this.items + this.localDescriptorItems;
+    }
 }

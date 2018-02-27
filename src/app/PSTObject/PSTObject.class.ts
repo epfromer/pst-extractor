@@ -18,7 +18,7 @@ export class PSTObject {
     // protected byte[] data;
     protected pstFile: PSTFile;
     protected descriptorIndexNode: DescriptorIndexNode;
-    private localDescriptorItems: Map<number, PSTDescriptorItem> = null;
+    protected localDescriptorItems: Map<number, PSTDescriptorItem> = null;
     // protected LinkedHashMap<String, HashMap<DescriptorIndexNode, PSTObject>> children;
     private pstTableBC: PSTTableBC;
     protected pstTableItems: Map<number, PSTTableBCItem>;
@@ -112,23 +112,23 @@ export class PSTObject {
         return defaultValue;
     }
 
-    // protected boolean getBooleanItem(final int identifier) {
-    //     return this.getBooleanItem(identifier, false);
-    // }
+    protected getBooleanItem(identifier: number, defaultValue?: boolean) {
+        if (defaultValue == undefined) {
+            defaultValue = false;
+        }
 
-    // protected boolean getBooleanItem(final int identifier, final boolean defaultValue) {
-    //     if (this.items.containsKey(identifier)) {
-    //         final PSTTableBCItem item = this.items.get(identifier);
-    //         return item.entryValueReference != 0;
-    //     }
-    //     return defaultValue;
-    // }
+        if (this.pstTableItems.has(identifier)) {
+            let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+            return item.entryValueReference != 0;
+        }
+        return defaultValue;
+    }
 
     // protected double getDoubleItem(final int identifier) {
     //     return this.getDoubleItem(identifier, 0);
     // }
 
-    // protected double getDoubleItem(final int identifier, final double defaultValue) {
+    // protected getDoubleItem(final int identifier, final double defaultValue) {
     //     if (this.items.containsKey(identifier)) {
     //         final PSTTableBCItem item = this.items.get(identifier);
     //         final long longVersion = PSTObject.convertLittleEndianBytesToLong(item.data);
@@ -137,28 +137,28 @@ export class PSTObject {
     //     return defaultValue;
     // }
 
-    // protected long getLongItem(final int identifier) {
-    //     return this.getLongItem(identifier, 0);
-    // }
+    protected getLongItem(identifier: number, defaultValue?: long): long {
+        if (defaultValue == undefined) {
+            defaultValue = long.ZERO;
+        }
 
-    // protected long getLongItem(final int identifier, final long defaultValue) {
-    //     if (this.items.containsKey(identifier)) {
-    //         final PSTTableBCItem item = this.items.get(identifier);
-    //         if (item.entryValueType == 0x0003) {
-    //             // we are really just an int
-    //             return item.entryValueReference;
-    //         } else if (item.entryValueType == 0x0014) {
-    //             // we are a long
-    //             if (item.data != null && item.data.length == 8) {
-    //                 return PSTObject.convertLittleEndianBytesToLong(item.data, 0, 8);
-    //             } else {
-    //                 System.err.printf("Invalid data length for long id 0x%04X\n", identifier);
-    //                 // Return the default value for now...
-    //             }
-    //         }
-    //     }
-    //     return defaultValue;
-    // }
+        if (this.pstTableItems.has(identifier)) {
+            let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+            if (item.entryValueType == 0x0003) {
+                // we are really just an int
+                return long.fromNumber(item.entryValueReference);
+            } else if (item.entryValueType == 0x0014) {
+                // we are a long
+                if (item.data != null && item.data.length == 8) {
+                    return PSTUtil.convertLittleEndianBytesToLong(item.data, 0, 8);
+                } else {
+                    Log.error("PSTObject::getLongItem Invalid data length for long id " + identifier);
+                    // Return the default value for now...
+                }
+            }
+        }
+        return defaultValue;
+    }
 
     protected getStringItem(identifier: number, stringType?: number, codepage?: string): string {
         if (!stringType) {
@@ -222,7 +222,10 @@ export class PSTObject {
         return null;
     }
 
-    // public Date getDateItem(final int identifier) {
+    public getDateItem(identifier: number): Date {
+        debugger;
+
+        return new Date();
     //     if (this.items.containsKey(identifier)) {
     //         final PSTTableBCItem item = this.items.get(identifier);
     //         if (item.data.length == 0) {
@@ -234,34 +237,33 @@ export class PSTObject {
     //         return PSTObject.filetimeToDate(high, low);
     //     }
     //     return null;
-    // }
+    }
 
-    // protected byte[] getBinaryItem(final int identifier) {
-    //     if (this.items.containsKey(identifier)) {
-    //         final PSTTableBCItem item = this.items.get(identifier);
-    //         if (item.entryValueType == 0x0102) {
-    //             if (!item.isExternalValueReference) {
-    //                 return item.data;
-    //             }
-    //             if (this.localDescriptorItems != null
-    //                 && this.localDescriptorItems.containsKey(item.entryValueReference)) {
-    //                 // we have a hit!
-    //                 final PSTDescriptorItem descItem = this.localDescriptorItems.get(item.entryValueReference);
-    //                 try {
-    //                     return descItem.getData();
-    //                 } catch (final Exception e) {
-    //                     System.err.printf("Exception reading binary item: reference 0x%08X\n",
-    //                         item.entryValueReference);
+    protected getBinaryItem(identifier: number): Buffer {
+        debugger;
 
-    //                     return null;
-    //                 }
-    //             }
-
-    //             // System.out.println("External reference!!!\n");
-    //         }
-    //     }
-    //     return null;
-    // }
+        if (this.pstTableItems.has(identifier)) {
+            let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+            if (item.entryValueType == 0x0102) {
+                if (!item.isExternalValueReference) {
+                    return item.data;
+                }
+                if (this.localDescriptorItems != null
+                    && this.localDescriptorItems.has(item.entryValueReference)) {
+                    // we have a hit!
+                    let descItem: PSTDescriptorItem = this.localDescriptorItems.get(item.entryValueReference);
+                    try {
+                        return descItem.getData();
+                    } catch (e) {
+                        Log.error("Exception reading binary item: reference " + item.entryValueReference);
+                        return null;
+                    }
+                }
+                Log.debug1("PSTObject::getBinaryItem External reference!");
+            }
+        }
+        return null;
+    }
 
     // protected PSTTimeZone getTimeZoneItem(final int identifier) {
     //     final byte[] tzData = this.getBinaryItem(identifier);
@@ -275,10 +277,9 @@ export class PSTObject {
     //     return this.getStringItem(0x001a);
     // }
 
-    // @Override
-    // public String toString() {
-    //     return this.localDescriptorItems + "\n" + (this.items);
-    // }
+    public toString() {
+        return this.localDescriptorItems + "\n" + this.pstTableItems;
+    }
 
     //  These are the common properties, some don't really appear to be common
     //  across folders and emails, but hey
@@ -350,50 +351,6 @@ export class PSTObject {
 
     //     return data;
     // }
-
-    // /*
-    //  * protected static boolean isPSTArray(byte[] data) {
-    //  * return (data[0] == 1 && data[1] == 1);
-    //  * }
-    //  * /
-    //  **/
-    // /*
-    //  * protected static int[] getBlockOffsets(RandomAccessFile in, byte[] data)
-    //  * throws IOException, PSTException
-    //  * {
-    //  * // is the data an array?
-    //  * if (!(data[0] == 1 && data[1] == 1))
-    //  * {
-    //  * throw new
-    //  * PSTException("Unable to process array, does not appear to be one!");
-    //  * }
-    //  *
-    //  * // we are an array!
-    //  * // get the array items and merge them together
-    //  * int numberOfEntries = (int)PSTObject.convertLittleEndianBytesToLong(data,
-    //  * 2, 4);
-    //  * int[] output = new int[numberOfEntries];
-    //  * int tableOffset = 8;
-    //  * int blockOffset = 0;
-    //  * for (int y = 0; y < numberOfEntries; y++) {
-    //  * // get the offset identifier
-    //  * long tableOffsetIdentifierIndex =
-    //  * PSTObject.convertLittleEndianBytesToLong(data, tableOffset,
-    //  * tableOffset+8);
-    //  * // clear the last bit of the identifier. Why so hard?
-    //  * tableOffsetIdentifierIndex = (tableOffsetIdentifierIndex & 0xfffffffe);
-    //  * OffsetIndexItem tableOffsetIdentifier = PSTObject.getOffsetIndexNode(in,
-    //  * tableOffsetIdentifierIndex);
-    //  * blockOffset += tableOffsetIdentifier.size;
-    //  * output[y] = blockOffset;
-    //  * tableOffset += 8;
-    //  * }
-    //  *
-    //  * // replace the item data with the stuff from the array...
-    //  * return output;
-    //  * }
-    //  * /
-    //  **/
 
     // static String guessPSTObjectType(final PSTFile theFile, final DescriptorIndexNode folderIndexNode)
     //     throws IOException, PSTException {
