@@ -16,15 +16,13 @@ function processFolder(folder: PSTFolder) {
 
     // the root folder doesn't have a display name
     if (depth > 0) {
-        printDepth();
-        console.log(folder.getDisplayName());
+        console.log(getDepth(depth) + folder.getDisplayName());
     }
 
     // go through the folders...
     if (folder.hasSubfolders()) {
         let childFolders: PSTFolder[] = folder.getSubFolders();
         for (let childFolder of childFolders) {
-            printDepth();
             processFolder(childFolder);
         }
     }
@@ -34,8 +32,7 @@ function processFolder(folder: PSTFolder) {
         depth++;
         let email: PSTMessage = folder.getNextChild();
         while (email != null) {
-            printDepth();
-            console.log("Email: " + email.getDescriptorNodeId() + " - " + email.getSubject());
+            console.log(getDepth(depth) +  "Email: " + email.getDescriptorNodeId() + " - " + email.getSubject());
             email = folder.getNextChild();
         }
         depth--;
@@ -44,4 +41,11 @@ function processFolder(folder: PSTFolder) {
     depth--;
 }
 
-function printDepth() {}
+function getDepth(depth: number): string {
+    let sdepth = '';
+    for (let x = 0; x < depth - 1; x++) {
+        sdepth += " | ";
+    }
+    sdepth += " |- ";
+    return sdepth;
+}

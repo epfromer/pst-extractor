@@ -775,7 +775,6 @@ export class PSTUtil {
             // Log.debug2(apt.toJSONstring());
             return apt;
         } else if (messageClass === 'IPM.Contact') {
-            debugger;
             let contact = new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
             // Log.debug2(contact.toJSONstring());
             return contact;

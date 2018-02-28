@@ -129,9 +129,9 @@ export class PSTTable7C extends PSTTable {
             numberOfRecordsToReturn = this.getRowCount() - startAtRecord;
         }
 
-        if (numberOfRecordsToReturn == 0) {
-            debugger;
-        }
+        // if (numberOfRecordsToReturn == 0) {
+        //     debugger;
+        // }
 
         let dataSetNumber = 0;
         // while ( currentValueArrayStart + ((cCols+7)/8) + TCI_1b <=
