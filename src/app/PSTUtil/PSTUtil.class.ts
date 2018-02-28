@@ -813,7 +813,7 @@ export class PSTUtil {
         ) {
             debugger;
             let apt = new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
-            console.log(apt.toString())
+            Log.debug1(apt.toString());
             return apt;
         } else if (messageClass === 'IPM.Contact') {
             debugger;
@@ -845,15 +845,12 @@ export class PSTUtil {
     // words stored in the structure.
      */
     public static filetimeToDate(hi: long, low: long): Date {
-        debugger;
-        let h: long = high.shiftLeft(32);
+        let h: long = hi.shiftLeft(32);
         let l: long = low.and(0xffffffff);
         let filetime = h.or(l);
-//        let filetime: long = ((long) high) << 32 | (low & 0xffffffffL);
-        // System.out.printf("0x%X\n", filetime);
         let ms_since_16010101: long = filetime.divide((1000 * 10));
         let epoch_diff: long = long.fromValue('11644473600000');
         let ms_since_19700101: long = ms_since_16010101.subtract(epoch_diff);
-        return new Date(ms_since_19700101);
+        return new Date(ms_since_19700101.toNumber());
     }
 }

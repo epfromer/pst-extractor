@@ -225,7 +225,6 @@ export class PSTObject {
     }
 
     public getDateItem(identifier: number): Date {
-        debugger;
         if (this.pstTableItems.has(identifier)) {
             let item: PSTTableBCItem = this.pstTableItems.get(identifier);
             if (item.data.length == 0) {

@@ -1,3 +1,4 @@
+import { NodeMap } from './NodeMap.class';
 import { PSTFolder } from './../PSTFolder/PSTFolder.class';
 import { PSTMessageStore } from './../PSTMessageStore/PSTMessageStore.class';
 import { DescriptorIndexNode } from './../DescriptorIndexNode/DescriptorIndexNode.class';
@@ -75,9 +76,13 @@ export class PSTFile {
     public get pstFileType(): number {
         return this._pstFileType;
     }
+    
+    // node tree maps
+    private nodeMap: NodeMap = new NodeMap();
 
     // the node tree
     private nameToId: Map<long, number> = new Map();
+    private nameStrToId: Map<string, number> = new Map();
     private stringToId: Map<string, number> = new Map();
     private idToName: Map<number, long> = new Map();
     private idToString: Map<number, string> = new Map();
@@ -200,13 +205,14 @@ export class PSTFile {
                 } else {
                     guidIndex = uuidIndexes[wGuid - 3];
                 }
-                let dwPropertyIdLong: long = long.fromNumber(dwPropertyId);
-                let guidIndexLong: long = long.fromNumber(guidIndex);
-                guidIndexLong = guidIndexLong.shiftLeft(32);
-                dwPropertyIdLong = dwPropertyIdLong.or(guidIndexLong);
-                this.nameToId.set(dwPropertyIdLong, wPropIdx);
-                this.idToName.set(wPropIdx, dwPropertyIdLong);
-                Log.debug2('PSTFile::processNameToIDMap numeric key: ' + dwPropertyIdLong.toString());
+                this.nodeMap.setNumeric(dwPropertyId, guidIndex, wPropIdx);
+                // let dwPropertyIdLong: long = long.fromNumber(dwPropertyId);
+                // let guidIndexLong: long = long.fromNumber(guidIndex);
+                // guidIndexLong = guidIndexLong.shiftLeft(32);
+                // dwPropertyIdLong = dwPropertyIdLong.or(guidIndexLong);
+                // this.nameToId.set(dwPropertyIdLong, wPropIdx);
+                // this.nameStrToId.set(dwPropertyIdLong.toString(), wPropIdx);
+               ////// this.idToName.set(wPropIdx, dwPropertyIdLong);
             } else {
                 // identifier is a string
                 // dwPropertyId becomes thHke byte offset into the String stream
@@ -244,14 +250,7 @@ export class PSTFile {
     }
 
     public getNameToIdMapItem(key: number, propertySetIndex: number) {
-        let lKey = long.fromNumber(propertySetIndex);
-        lKey = lKey.shiftLeft(32);
-        lKey = lKey.or(key);
-        let i = this.nameToId.get(lKey);
-        if (i == null) {
-            return -1;
-        }
-        return i;
+        return this.nodeMap.getID(key, propertySetIndex);
     }
 
     public getPublicStringToIdMapItem(key: string): number {
@@ -496,7 +495,7 @@ export class PSTFile {
                                 buffer = new Buffer(12);
                                 this.pstFileContent.seek(btreeStartOffset.add(x * 12));
                                 this.pstFileContent.readCompletely(buffer);
-                                Log.debug1('PSTFile::findBtreeItem ' + index.toString() + ' found!');
+                                Log.debug2('PSTFile::findBtreeItem ' + index.toString() + ' found!');
                                 return buffer;
                             }
                         }
@@ -511,7 +510,7 @@ export class PSTFile {
                                 buffer = new Buffer(32);
                                 this.pstFileContent.seek(btreeStartOffset.add(x * 32));
                                 this.pstFileContent.readCompletely(buffer);
-                                Log.debug1('PSTFile::findBtreeItem ' + index.toString() + ' found!');
+                                Log.debug2('PSTFile::findBtreeItem ' + index.toString() + ' found!');
                                 // PSTObject.printHexFormatted(temp, true);
                                 return buffer;
                             }
@@ -525,7 +524,7 @@ export class PSTFile {
                                 buffer = new Buffer(24);
                                 this.pstFileContent.seek(btreeStartOffset.add(x * 24));
                                 this.pstFileContent.readCompletely(buffer);
-                                Log.debug1('PSTFile::findBtreeItem ' + index.toString() + ' found!');
+                                Log.debug2('PSTFile::findBtreeItem ' + index.toString() + ' found!');
                                 return buffer;
                             }
                         }
