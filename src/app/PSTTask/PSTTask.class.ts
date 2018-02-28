@@ -96,10 +96,9 @@ export class PSTTask extends PSTMessage {
 
     public toString() {
         return (
-            'PSTTask:' +
+            '\n message class: ' + this.getMessageClass() + 
             '\n subject: ' + this.getSubject() + 
             '\n importance: ' + this.getImportance() + 
-            '\n message class: ' + this.getMessageClass() + 
             '\n transport message headers: ' + this.getTransportMessageHeaders() + 
             '\n taskStatus: ' + this.taskStatus + 
             '\n percentComplete: ' + this.percentComplete + 
@@ -118,5 +117,30 @@ export class PSTTask extends PSTMessage {
             '\n taskOwnership: ' + this.taskOwnership + 
             '\n acceptanceState: ' + this.acceptanceState 
         );
+    }
+
+    public toJSONstring(): string {
+        return JSON.stringify({
+            messageClass: this.getMessageClass(),
+            subject: this.getSubject(),
+            importance: this.getImportance(),
+            transportMessageHeaders: this.getTransportMessageHeaders(),
+            taskStatus: this.taskStatus,
+            percentComplete: this.percentComplete,
+            isTeamTask: this.isTeamTask,
+            taskDateCompleted: this.taskDateCompleted,
+            taskActualEffort: this.taskActualEffort,
+            taskEstimatedEffort: this.taskEstimatedEffort,
+            taskVersion: this.taskVersion,
+            isTaskComplete: this.isTaskComplete,
+            taskOwner: this.taskOwner,
+            taskAssigner: this.taskAssigner,
+            taskLastUser: this.taskLastUser,
+            taskOrdinal: this.taskOrdinal,
+            isTaskRecurring: this.isTaskRecurring,
+            taskRole: this.taskRole,
+            taskOwnership: this.taskOwnership,
+            acceptanceState: this.acceptanceState 
+        });
     }
 }

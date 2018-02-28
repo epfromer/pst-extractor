@@ -772,16 +772,16 @@ export class PSTUtil {
             messageClass.startsWith('IPM.Schedule.Meeting')
         ) {
             let apt = new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
-            // Log.debug2(apt.toString());
+            // Log.debug2(apt.toJSONstring());
             return apt;
         } else if (messageClass === 'IPM.Contact') {
             debugger;
             let contact = new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
-            Log.debug1(contact.toString());
+            // Log.debug2(contact.toJSONstring());
             return contact;
         } else if (messageClass === 'IPM.Task') {
             let task = new PSTTask(theFile, folderIndexNode, table, localDescriptorItems);
-            // Log.debug2(task.toString());
+            // Log.debug2(task.toJSONstring());
             return task;
         } else if (messageClass === 'IPM.Activity') {
             debugger;

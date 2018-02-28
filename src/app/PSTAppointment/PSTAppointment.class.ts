@@ -188,15 +188,12 @@ export class PSTAppointment extends PSTMessage {
         return new PSTGlobalObjectId(this.getBinaryItem(this.pstFile.getNameToIdMapItem(0x00000023, PSTFile.PSETID_Meeting)));
     }
 
-    // TODO - make this a big JSON object?
     public toString(): string {
         return (
-            'PSTAppointment:' +
+            '\n message class: ' + this.getMessageClass() + 
             '\n subject: ' + this.getSubject() + 
             '\n importance: ' + this.getImportance() + 
-            '\n message class: ' + this.getMessageClass() + 
             '\n transport message headers: ' + this.getTransportMessageHeaders() + 
-            '\n sendAsICAL: ' + this.sendAsICAL + 
             '\n sendAsICAL: ' + this.sendAsICAL + 
             '\n busyStatus: ' + this.busyStatus + 
             '\n showAsBusy: ' + this.showAsBusy + 
@@ -236,5 +233,52 @@ export class PSTAppointment extends PSTMessage {
             '\n globalObjectId: ' + this.globalObjectId +
             '\n cleanGlobalObjectId: ' + this.cleanGlobalObjectId
         );
+    }
+
+    public toJSONstring(): string {
+        return JSON.stringify({
+            messageClass: this.getMessageClass(),
+            subject: this.getSubject(), 
+            importance: this.getImportance(), 
+            transportMessageHeaders: this.getTransportMessageHeaders(), 
+            sendAsICAL: this.sendAsICAL, 
+            busyStatus: this.busyStatus, 
+            showAsBusy: this.showAsBusy, 
+            location: this.location, 
+            startTime: this.startTime, 
+            endTime: this.endTime, 
+            endTimeZone: this.endTimeZone,
+            recurrenceTimeZone: this.recurrenceTimeZone,
+            duration: this.duration,
+            color: this.color,
+            subType: this.subType,
+            meetingStatus: this.meetingStatus,
+            isRecurring: this.isRecurring,
+            recurrenceBase: this.recurrenceBase,
+            recurrenceType: this.recurrenceType,
+            recurrencePattern: this.recurrencePattern,
+            recurrenceStructure: this.recurrenceStructure,
+            timezone: this.timezone,
+            allAttendees: this.allAttendees,
+            toAttendees: this.toAttendees,
+            ccAttendees: this.ccAttendees,
+            appointmentSequence: this.appointmentSequence,
+            isOnlineMeeting: this.isOnlineMeeting,
+            netMeetingType: this.netMeetingType,
+            netMeetingServer: this.netMeetingServer,
+            netMeetingOrganizerAlias: this.netMeetingOrganizerAlias,
+            netMeetingAutostart: this.netMeetingAutostart,
+            conferenceServerAllowExternal: this.conferenceServerAllowExternal,
+            netMeetingDocumentPathName: this.netMeetingDocumentPathName,
+            attendeeCriticalChange: this.attendeeCriticalChange,
+            ownerCriticalChange: this.ownerCriticalChange,
+            conferenceServerPassword: this.conferenceServerPassword,
+            appointmentCounterProposal: this.appointmentCounterProposal,
+            isSilent: this.isSilent,
+            requiredAttendees: this.requiredAttendees,
+            localeId: this.localeId,
+            globalObjectId: this.globalObjectId,
+            cleanGlobalObjectId: this.cleanGlobalObjectId
+        });
     }
 }
