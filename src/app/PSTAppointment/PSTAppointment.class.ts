@@ -188,9 +188,15 @@ export class PSTAppointment extends PSTMessage {
         return new PSTGlobalObjectId(this.getBinaryItem(this.pstFile.getNameToIdMapItem(0x00000023, PSTFile.PSETID_Meeting)));
     }
 
+    // TODO - make this a big JSON object?
     public toString(): string {
         return (
             'PSTAppointment:' +
+            '\n subject: ' + this.getSubject() + 
+            '\n importance: ' + this.getImportance() + 
+            '\n message class: ' + this.getMessageClass() + 
+            '\n transport message headers: ' + this.getTransportMessageHeaders() + 
+            '\n sendAsICAL: ' + this.sendAsICAL + 
             '\n sendAsICAL: ' + this.sendAsICAL + 
             '\n busyStatus: ' + this.busyStatus + 
             '\n showAsBusy: ' + this.showAsBusy + 

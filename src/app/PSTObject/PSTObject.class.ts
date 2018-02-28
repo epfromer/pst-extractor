@@ -22,7 +22,7 @@ export class PSTObject {
     protected localDescriptorItems: Map<number, PSTDescriptorItem> = null;
     // protected LinkedHashMap<String, HashMap<DescriptorIndexNode, PSTObject>> children;
     private pstTableBC: PSTTableBC;
-    protected pstTableItems: Map<number, PSTTableBCItem>;
+    protected pstTableItems: Map<number, PSTTableBCItem>; // make this a JSON object?
     protected table: PSTTableBC;
 
     constructor() {}
@@ -114,7 +114,7 @@ export class PSTObject {
     }
 
     protected getBooleanItem(identifier: number, defaultValue?: boolean) {
-        if (defaultValue == undefined) {
+        if (defaultValue === undefined) {
             defaultValue = false;
         }
 
@@ -125,22 +125,25 @@ export class PSTObject {
         return defaultValue;
     }
 
-    // protected double getDoubleItem(final int identifier) {
-    //     return this.getDoubleItem(identifier, 0);
-    // }
-
     protected getDoubleItem(identifier: number, defaultValue?: number) {
-        debugger;
+        if (defaultValue === undefined) {
+            defaultValue = 0;
+        }
+
         if (this.pstTableItems.has(identifier)) {
             let item: PSTTableBCItem = this.pstTableItems.get(identifier);
-            // final long longVersion = PSTUtil.convertLittleEndianBytesToLong(item.data);
-            // return Double.longBitsToDouble(longVersion);
+            let longVersion: long = PSTUtil.convertLittleEndianBytesToLong(item.data);
+            // TODO - is this necessary?
+            if (longVersion.toNumber()) {
+                debugger;
+            }
+            return longVersion.toNumber();
         }
         return defaultValue;
     }
 
     protected getLongItem(identifier: number, defaultValue?: long): long {
-        if (defaultValue == undefined) {
+        if (defaultValue === undefined) {
             defaultValue = long.ZERO;
         }
 
