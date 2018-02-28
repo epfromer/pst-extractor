@@ -78,14 +78,7 @@ export class PSTFile {
     }
     
     // node tree maps
-    private nodeMap: NodeMap = new NodeMap();
-
-    // the node tree
-    private nameToId: Map<long, number> = new Map();
-    private nameStrToId: Map<string, number> = new Map();
-    private stringToId: Map<string, number> = new Map();
-    private idToName: Map<number, long> = new Map();
-    private idToString: Map<number, string> = new Map();
+    private static nodeMap: NodeMap = new NodeMap();
 
     // file descriptor
     private pstFilename: string;
@@ -190,41 +183,32 @@ export class PSTFile {
         // process the entries
         for (let x = 0; x + 8 < nameToIdByte.length; x += 8) {
             let dwPropertyId: number = PSTUtil.convertLittleEndianBytesToLong(nameToIdByte, x, x + 4).toNumber();
-            let wGuid: number = PSTUtil.convertLittleEndianBytesToLong(nameToIdByte, x + 4, x + 6).toNumber();
-            let wPropIdx: number = PSTUtil.convertLittleEndianBytesToLong(nameToIdByte, x + 6, x + 8).toNumber();
+            let guid: number = PSTUtil.convertLittleEndianBytesToLong(nameToIdByte, x + 4, x + 6).toNumber();
+            let propId: number = PSTUtil.convertLittleEndianBytesToLong(nameToIdByte, x + 6, x + 8).toNumber();
 
-            if ((wGuid & 0x0001) == 0) {
+            if ((guid & 0x0001) == 0) {
                 // identifier is numeric
-                wPropIdx += 0x8000;
-                wGuid >>= 1;
+                propId += 0x8000;
+                guid >>= 1;
                 let guidIndex: number;
-                if (wGuid == 1) {
+                if (guid == 1) {
                     guidIndex = PSTFile.PS_MAPI;
-                } else if (wGuid == 2) {
+                } else if (guid == 2) {
                     guidIndex = PSTFile.PS_PUBLIC_STRINGS;
                 } else {
-                    guidIndex = uuidIndexes[wGuid - 3];
+                    guidIndex = uuidIndexes[guid - 3];
                 }
-                this.nodeMap.setNumeric(dwPropertyId, guidIndex, wPropIdx);
-                // let dwPropertyIdLong: long = long.fromNumber(dwPropertyId);
-                // let guidIndexLong: long = long.fromNumber(guidIndex);
-                // guidIndexLong = guidIndexLong.shiftLeft(32);
-                // dwPropertyIdLong = dwPropertyIdLong.or(guidIndexLong);
-                // this.nameToId.set(dwPropertyIdLong, wPropIdx);
-                // this.nameStrToId.set(dwPropertyIdLong.toString(), wPropIdx);
-               ////// this.idToName.set(wPropIdx, dwPropertyIdLong);
+                PSTFile.nodeMap.setId(dwPropertyId, propId, guidIndex);
             } else {
                 // identifier is a string
-                // dwPropertyId becomes thHke byte offset into the String stream
+                // dwPropertyId is byte offset into the String stream
                 // in which the string name of the property is stored.
                 let len = PSTUtil.convertLittleEndianBytesToLong(stringNameToIdByte, dwPropertyId, dwPropertyId + 4).toNumber();
                 let keyByteValue = new Buffer(len);
                 PSTUtil.arraycopy(stringNameToIdByte, dwPropertyId + 4, keyByteValue, 0, keyByteValue.length);
-                wPropIdx += 0x8000;
+                propId += 0x8000;
                 let key = keyByteValue.toString('utf16le');
-                this.stringToId.set(key, wPropIdx);
-                this.idToString.set(wPropIdx, key);
-                Log.debug2('PSTFile::processNameToIDMap string key: ' + key);
+                PSTFile.nodeMap.setId(key, propId);
             }
         }
     }
@@ -249,16 +233,46 @@ export class PSTFile {
         return mapDescriptorItem.getData();
     }
 
-    public getNameToIdMapItem(key: number, propertySetIndex: number) {
-        return this.nodeMap.getID(key, propertySetIndex);
+    // TODO - resolve static issue (should these functions be static?  not so sure)
+    public getNameToIdMapItem(key: number, idx: number): number {
+        return PSTFile.nodeMap.getId(key, idx);
     }
 
-    public getPublicStringToIdMapItem(key: string): number {
-        let i = this.stringToId.get(key);
-        if (i == null) {
-            return -1;
+    public static getPublicStringToIdMapItem(key: string): number {
+        return PSTFile.nodeMap.getId(key);    
+    }
+
+    public static getPropertyName(propertyId: number, bNamed: boolean): string {
+        return PSTUtil.propertyName.get(propertyId);
+    }
+
+    public static getNameToIdMapKey(propId: number): long {
+        return PSTFile.nodeMap.getNumericName(propId);
+    }
+
+    public static getPropertyDescription(entryType: number, entryValueType: number): string {
+        let ret = '';
+        if (entryType < 0x8000) {
+            let name = this.getPropertyName(entryType, false);
+            if (name != null) {
+                ret = name + ':' + entryValueType.toString(16) + ':';
+            } else {
+                ret = entryType.toString(16) + ':' + entryValueType.toString(16) + ':';
+            }
+        } else {
+            let type = PSTFile.getNameToIdMapKey(entryType);
+            if (!type) {
+                ret = '0xFFFF(' + entryType.toString(16) + '):' + entryValueType.toString(16) + ':';
+            } else {
+                let name = this.getPropertyName(type.toNumber(), true);
+                if (name != null) {
+                    ret = name + '(' + entryType.toString(16) + '):' + entryValueType.toString(16) + ':';
+                } else {
+                    ret = '0x' + type.toString(16) + '(' + entryType.toString(16) + '):' + entryValueType.toString(16) + ':';
+                }
+            }
         }
-        return i;
+        return ret;
     }
 
     // /**

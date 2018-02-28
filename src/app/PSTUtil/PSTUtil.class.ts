@@ -722,46 +722,6 @@ export class PSTUtil {
     //     System.out.println(Long.toBinaryString(number));
     // }
 
-    public static getPropertyName(propertyId: number, bNamed: boolean): string {
-        return ''; // TODO
-        // return this.propertyName.get(propertyId);
-    }
-
-    public static getNameToIdMapKey(id: number): number {
-        return -1;
-        // TODO
-        // let i = idToName.get(id);
-        // if (i == null) {
-        //     // throw new PSTException("Name to Id mapping not found");
-        //     return -1;
-        // }
-        // return i;
-    }
-
-    public static getPropertyDescription(entryType: number, entryValueType: number): string {
-        let ret = '';
-        if (entryType < 0x8000) {
-            let name = this.getPropertyName(entryType, false);
-            if (name != null) {
-                ret = name + ':' + entryValueType.toString(16) + ':';
-            } else {
-                ret = entryType.toString(16) + ':' + entryValueType.toString(16) + ':';
-            }
-        } else {
-            let type = this.getNameToIdMapKey(entryType);
-            if (type == -1) {
-                ret = '0xFFFF(' + entryType.toString(16) + '):' + entryValueType.toString(16) + ':';
-            } else {
-                let name = this.getPropertyName(type, true);
-                if (name != null) {
-                    ret = name + '(' + entryType.toString(16) + '):' + entryValueType.toString(16) + ':';
-                } else {
-                    ret = '0x' + type.toString(16) + '(' + entryType.toString(16) + '):' + entryValueType.toString(16) + ':';
-                }
-            }
-        }
-        return ret;
-    }
 
     // Detect and load a PST Object from a file with the specified descriptor index
     public static detectAndLoadPSTObject(theFile: PSTFile, descriptorIndex: long): any;

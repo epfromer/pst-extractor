@@ -117,7 +117,7 @@ export class PSTTableItem {
     }
 
     public toString(): string {
-        let ret = PSTUtil.getPropertyDescription(this.entryType.toNumber(), this.entryValueType);
+        let ret = PSTFile.getPropertyDescription(this.entryType.toNumber(), this.entryValueType);
 
         if (this.entryValueType == 0x000b) {
             return ret + (this.entryValueReference == 0 ? 'false' : 'true');
