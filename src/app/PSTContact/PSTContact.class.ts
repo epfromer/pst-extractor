@@ -15,291 +15,291 @@ export class PSTContact extends PSTMessage {
     }
 
     // Contact's Account name
-    public getAccount(): string {
+    public get account(): string {
         return this.getStringItem(0x3a00);
     }
 
     // Callback telephone number
-    public getCallbackTelephoneNumber(): string {
+    public get callbackTelephoneNumber(): string {
         return this.getStringItem(0x3a02);
     }
 
     // Contact's generational abbreviation FTK: Name suffix
-    public getGeneration(): string {
+    public get generation(): string {
         return this.getStringItem(0x3a05);
     }
 
     // Contacts given name
-    public getGivenName(): string {
+    public get givenName(): string {
         return this.getStringItem(0x3a06);
     }
 
     // Contacts Government ID Number
-    public getGovernmentIdNumber(): string {
+    public get governmentIdNumber(): string {
         return this.getStringItem(0x3a07);
     }
 
     // Business/Office Telephone Number
-    public getBusinessTelephoneNumber(): string {
+    public get businessTelephoneNumber(): string {
         return this.getStringItem(0x3a08);
     }
 
     // Home Telephone Number
-    public getHomeTelephoneNumber(): string {
+    public get homeTelephoneNumber(): string {
         return this.getStringItem(0x3a09);
     }
 
     // Contacts initials
-    public getInitials(): string {
+    public get initials(): string {
         return this.getStringItem(0x3a0a);
     }
 
     // Keyword
-    public getKeyword(): string {
+    public get keyword(): string {
         return this.getStringItem(0x3a0b);
     }
 
     // Contact's language
-    public getLanguage(): string {
+    public get language(): string {
         return this.getStringItem(0x3a0c);
     }
 
     // Contact's location
-    public getLocation(): string {
+    public get location(): string {
         return this.getStringItem(0x3a0d);
     }
 
     // MHS Common Name
-    public getMhsCommonName(): string {
+    public get mhsCommonName(): string {
         return this.getStringItem(0x3a0f);
     }
 
     // Organizational identification number
-    public getOrganizationalIdNumber(): string {
+    public get organizationalIdNumber(): string {
         return this.getStringItem(0x3a10);
     }
 
     // Contact's surname FTK: Last name
-    public getSurname(): string {
+    public get surname(): string {
         return this.getStringItem(0x3a11);
     }
 
     // Original display name
-    public getOriginalDisplayName(): string {
+    public get originalDisplayName(): string {
         return this.getStringItem(0x3a13);
     }
 
     // Default Postal Address
-    public getPostalAddress(): string {
+    public get postalAddress(): string {
         return this.getStringItem(0x3a15);
     }
 
     // Contact's company name
-    public getCompanyName(): string {
+    public get companyName(): string {
         return this.getStringItem(0x3a16);
     }
 
     // Contact's job title FTK: Profession
-    public getTitle(): string {
+    public get title(): string {
         return this.getStringItem(0x3a17);
     }
 
     // Contact's department name Used in contact item
-    public getDepartmentName(): string {
+    public get departmentName(): string {
         return this.getStringItem(0x3a18);
     }
 
     // Contact's office location
-    public getOfficeLocation(): string {
+    public get officeLocation(): string {
         return this.getStringItem(0x3a19);
     }
 
     // Primary Telephone
-    public getPrimaryTelephoneNumber(): string {
+    public get primaryTelephoneNumber(): string {
         return this.getStringItem(0x3a1a);
     }
 
     // Contact's secondary office (business) phone number
-    public getBusiness2TelephoneNumber(): string {
+    public get business2TelephoneNumber(): string {
         return this.getStringItem(0x3a1b);
     }
 
     // Mobile Phone Number
-    public getMobileTelephoneNumber(): string {
+    public get mobileTelephoneNumber(): string {
         return this.getStringItem(0x3a1c);
     }
 
     // Radio Phone Number
-    public getRadioTelephoneNumber(): string {
+    public get radioTelephoneNumber(): string {
         return this.getStringItem(0x3a1d);
     }
 
     // Car Phone Number
-    public getCarTelephoneNumber(): string {
+    public get carTelephoneNumber(): string {
         return this.getStringItem(0x3a1e);
     }
 
     // Other Phone Number
-    public getOtherTelephoneNumber(): string {
+    public get otherTelephoneNumber(): string {
         return this.getStringItem(0x3a1f);
     }
 
     // Transmittable display name
-    public getTransmittableDisplayName(): string {
+    public get transmittableDisplayName(): string {
         return this.getStringItem(0x3a20);
     }
 
     // Pager Phone Number
-    public getPagerTelephoneNumber(): string {
+    public get pagerTelephoneNumber(): string {
         return this.getStringItem(0x3a21);
     }
 
     // Primary Fax Number
-    public getPrimaryFaxNumber(): string {
+    public get primaryFaxNumber(): string {
         return this.getStringItem(0x3a23);
     }
 
     // Contact's office (business) fax number
-    public getBusinessFaxNumber(): string {
+    public get businessFaxNumber(): string {
         return this.getStringItem(0x3a24);
     }
 
     // Contact's home fax number
-    public getHomeFaxNumber(): string {
+    public get homeFaxNumber(): string {
         return this.getStringItem(0x3a25);
     }
 
     // Business Address Country
-    public getBusinessAddressCountry(): string {
+    public get businessAddressCountry(): string {
         return this.getStringItem(0x3a26);
     }
 
     // Business Address City
-    public getBusinessAddressCity(): string {
+    public get businessAddressCity(): string {
         return this.getStringItem(0x3a27);
     }
 
     // Business Address State
-    public getBusinessAddressStateOrProvince(): string {
+    public get businessAddressStateOrProvince(): string {
         return this.getStringItem(0x3a28);
     }
 
     // Business Address Street
-    public getBusinessAddressStreet(): string {
+    public get businessAddressStreet(): string {
         return this.getStringItem(0x3a29);
     }
 
     // Business Postal Code
-    public getBusinessPostalCode(): string {
+    public get businessPostalCode(): string {
         return this.getStringItem(0x3a2a);
     }
 
     // Business PO Box
-    public getBusinessPoBox(): string {
+    public get businessPoBox(): string {
         return this.getStringItem(0x3a2b);
     }
 
     // Telex Number
-    public getTelexNumber(): string {
+    public get telexNumber(): string {
         return this.getStringItem(0x3a2c);
     }
 
     // ISDN Number
-    public getIsdnNumber(): string {
+    public get isdnNumber(): string {
         return this.getStringItem(0x3a2d);
     }
 
     // Assistant Phone Number
-    public getAssistantTelephoneNumber(): string {
+    public get assistantTelephoneNumber(): string {
         return this.getStringItem(0x3a2e);
     }
 
     // Home Phone 2
-    public getHome2TelephoneNumber(): string {
+    public get home2TelephoneNumber(): string {
         return this.getStringItem(0x3a2f);
     }
 
     // Assistant�s Name
-    public getAssistant(): string {
+    public get assistant(): string {
         return this.getStringItem(0x3a30);
     }
 
     // Hobbies
-    public getHobbies(): string {
+    public get hobbies(): string {
         return this.getStringItem(0x3a43);
     }
 
     // Middle Name
-    public getMiddleName(): string {
+    public get middleName(): string {
         return this.getStringItem(0x3a44);
     }
 
     // Display Name Prefix (Contact Title)
-    public getDisplayNamePrefix(): string {
+    public get displayNamePrefix(): string {
         return this.getStringItem(0x3a45);
     }
 
     // Profession
-    public getProfession(): string {
+    public get profession(): string {
         return this.getStringItem(0x3a46);
     }
 
     // Preferred By Name
-    public getPreferredByName(): string {
+    public get preferredByName(): string {
         return this.getStringItem(0x3a47);
     }
 
     // Spouse�s Name
-    public getSpouseName(): string {
+    public get spouseName(): string {
         return this.getStringItem(0x3a48);
     }
 
     // Computer Network Name
-    public getComputerNetworkName(): string {
+    public get computerNetworkName(): string {
         return this.getStringItem(0x3a49);
     }
 
     // Customer ID
-    public getCustomerId(): string {
+    public get customerId(): string {
         return this.getStringItem(0x3a4a);
     }
 
     // TTY/TDD Phone
-    public getTtytddPhoneNumber(): string {
+    public get ttytddPhoneNumber(): string {
         return this.getStringItem(0x3a4b);
     }
 
     // Ftp Site
-    public getFtpSite(): string {
+    public get ftpSite(): string {
         return this.getStringItem(0x3a4c);
     }
 
     // Manager�s Name
-    public getManagerName(): string {
+    public get managerName(): string {
         return this.getStringItem(0x3a4e);
     }
 
     // Nickname
-    public getNickname(): string {
+    public get nickname(): string {
         return this.getStringItem(0x3a4f);
     }
 
     // Personal Home Page
-    public getPersonalHomePage(): string {
+    public get personalHomePage(): string {
         return this.getStringItem(0x3a50);
     }
 
     // Business Home Page
-    public getBusinessHomePage(): string {
+    public get businessHomePage(): string {
         return this.getStringItem(0x3a51);
     }
 
     // Note
-    public getNote(): string {
+    public get note(): string {
         return this.getStringItem(0x6619);
     }
 
-    getNamedStringItem(key: number): string {
+    public getNamedStringItem(key: number): string {
         let id = this.pstFile.getNameToIdMapItem(key, PSTFile.PSETID_Address);
         if (id != -1) {
             return this.getStringItem(id);
@@ -307,77 +307,77 @@ export class PSTContact extends PSTMessage {
         return '';
     }
 
-    public getSMTPAddress(): string {
+    public get smtpAddress(): string {
         return this.getNamedStringItem(0x00008084);
     }
 
     // Company Main Phone
-    public getCompanyMainPhoneNumber(): string {
+    public get companyMainPhoneNumber(): string {
         return this.getStringItem(0x3a57);
     }
 
     // Children's names
-    public getChildrensNames(): string {
+    public get childrensNames(): string {
         return this.getStringItem(0x3a58);
     }
 
     // Home Address City
-    public getHomeAddressCity(): string {
+    public get homeAddressCity(): string {
         return this.getStringItem(0x3a59);
     }
 
     // Home Address Country
-    public getHomeAddressCountry(): string {
+    public get homeAddressCountry(): string {
         return this.getStringItem(0x3a5a);
     }
 
     // Home Address Postal Code
-    public getHomeAddressPostalCode(): string {
+    public get homeAddressPostalCode(): string {
         return this.getStringItem(0x3a5b);
     }
 
     // Home Address State or Province
-    public getHomeAddressStateOrProvince(): string {
+    public get homeAddressStateOrProvince(): string {
         return this.getStringItem(0x3a5c);
     }
 
     // Home Address Street
-    public getHomeAddressStreet(): string {
+    public get homeAddressStreet(): string {
         return this.getStringItem(0x3a5d);
     }
 
     // Home Address Post Office Box
-    public getHomeAddressPostOfficeBox(): string {
+    public get homeAddressPostOfficeBox(): string {
         return this.getStringItem(0x3a5e);
     }
 
     // Other Address City
-    public getOtherAddressCity(): string {
+    public get otherAddressCity(): string {
         return this.getStringItem(0x3a5f);
     }
 
     // Other Address Country
-    public getOtherAddressCountry(): string {
+    public get otherAddressCountry(): string {
         return this.getStringItem(0x3a60);
     }
 
     // Other Address Postal Code
-    public getOtherAddressPostalCode(): string {
+    public get otherAddressPostalCode(): string {
         return this.getStringItem(0x3a61);
     }
 
     // Other Address State
-    public getOtherAddressStateOrProvince(): string {
+    public get otherAddressStateOrProvince(): string {
         return this.getStringItem(0x3a62);
     }
 
     // Other Address Street
-    public getOtherAddressStreet(): string {
+    public get otherAddressStreet(): string {
         return this.getStringItem(0x3a63);
     }
 
     // Other Address Post Office box
-    public getOtherAddressPostOfficeBox(): string {
+    public get otherAddressPostOfficeBox(): string {
         return this.getStringItem(0x3a64);
     }
 
@@ -386,422 +386,311 @@ export class PSTContact extends PSTMessage {
     ///////////////////////////////////////////////////
 
     // File under FTK: File as
-    public getFileUnder(): string {
+    public get fileUnder(): string {
         return this.getNamedStringItem(0x00008005);
     }
 
     // Home Address
-    public getHomeAddress(): string {
+    public get homeAddress(): string {
         return this.getNamedStringItem(0x0000801a);
     }
 
     // Business Address
-    public getWorkAddress(): string {
+    public get workAddress(): string {
         return this.getNamedStringItem(0x0000801b);
     }
 
     // Other Address
-    public getOtherAddress(): string {
+    public get otherAddress(): string {
         return this.getNamedStringItem(0x0000801c);
     }
 
     // Selected Mailing Address
-    public getPostalAddressId(): number {
+    public get postalAddressId(): number {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008022, PSTFile.PSETID_Address));
     }
 
     // Webpage
-    public getHtml(): string {
+    public get html(): string {
         return this.getNamedStringItem(0x0000802b);
     }
 
     // Business Address City
-    public getWorkAddressStreet(): string {
+    public get workAddressStreet(): string {
         return this.getNamedStringItem(0x00008045);
     }
 
     // Business Address Street
-    public getWorkAddressCity(): string {
+    public get workAddressCity(): string {
         return this.getNamedStringItem(0x00008046);
     }
 
     // Business Address State
-    public getWorkAddressState(): string {
+    public get workAddressState(): string {
         return this.getNamedStringItem(0x00008047);
     }
 
     // Business Address Postal Code
-    public getWorkAddressPostalCode(): string {
+    public get workAddressPostalCode(): string {
         return this.getNamedStringItem(0x00008048);
     }
 
     // Business Address Country
-    public getWorkAddressCountry(): string {
+    public get workAddressCountry(): string {
         return this.getNamedStringItem(0x00008049);
     }
 
     // Business Address Country
-    public getWorkAddressPostOfficeBox(): string {
+    public get workAddressPostOfficeBox(): string {
         return this.getNamedStringItem(0x0000804a);
     }
 
     // IM Address
-    public getInstantMessagingAddress(): string {
+    public get instantMessagingAddress(): string {
         return this.getNamedStringItem(0x00008062);
     }
 
     // E-mail1 Display Name
-    public getEmail1DisplayName(): string {
+    public get email1DisplayName(): string {
         return this.getNamedStringItem(0x00008080);
     }
 
     // E-mail1 Address Type
-    public getEmail1AddressType(): string {
+    public get email1AddressType(): string {
         return this.getNamedStringItem(0x00008082);
     }
 
     // E-mail1 Address
-    public getEmail1EmailAddress(): string {
+    public get email1EmailAddress(): string {
         return this.getNamedStringItem(0x00008083);
     }
 
     // E-mail1 Display Name
-    public getEmail1OriginalDisplayName(): string {
+    public get email1OriginalDisplayName(): string {
         return this.getNamedStringItem(0x00008084);
     }
 
     // E-mail1 type
-    public getEmail1EmailType(): string {
+    public get email1EmailType(): string {
         return this.getNamedStringItem(0x00008087);
     }
 
     // E-mail2 display name
-    public getEmail2DisplayName(): string {
+    public get email2DisplayName(): string {
         return this.getNamedStringItem(0x00008090);
     }
 
     // E-mail2 address type
-    public getEmail2AddressType(): string {
+    public get email2AddressType(): string {
         return this.getNamedStringItem(0x00008092);
     }
 
     // E-mail2 e-mail address
-    public getEmail2EmailAddress(): string {
+    public get email2EmailAddress(): string {
         return this.getNamedStringItem(0x00008093);
     }
 
     // E-mail2 original display name
-    public getEmail2OriginalDisplayName(): string {
+    public get email2OriginalDisplayName(): string {
         return this.getNamedStringItem(0x00008094);
     }
 
     // E-mail3 display name
-    public getEmail3DisplayName(): string {
+    public get email3DisplayName(): string {
         return this.getNamedStringItem(0x000080a0);
     }
 
     // E-mail3 address type
-    public getEmail3AddressType(): string {
+    public get email3AddressType(): string {
         return this.getNamedStringItem(0x000080a2);
     }
 
     // E-mail3 e-mail address
-    public getEmail3EmailAddress(): string {
+    public get email3EmailAddress(): string {
         return this.getNamedStringItem(0x000080a3);
     }
 
     // E-mail3 original display name
-    public getEmail3OriginalDisplayName(): string {
+    public get email3OriginalDisplayName(): string {
         return this.getNamedStringItem(0x000080a4);
     }
 
     // Fax1 Address Type
-    public getFax1AddressType(): string {
+    public get fax1AddressType(): string {
         return this.getNamedStringItem(0x000080b2);
     }
 
     // Fax1 Email Address
-    public getFax1EmailAddress(): string {
+    public get fax1EmailAddress(): string {
         return this.getNamedStringItem(0x000080b3);
     }
 
     // Fax1 Original Display Name
-    public getFax1OriginalDisplayName(): string {
+    public get fax1OriginalDisplayName(): string {
         return this.getNamedStringItem(0x000080b4);
     }
 
     // Fax2 Address Type
-    public getFax2AddressType(): string {
+    public get fax2AddressType(): string {
         return this.getNamedStringItem(0x000080c2);
     }
 
     // Fax2 Email Address
-    public getFax2EmailAddress(): string {
+    public get fax2EmailAddress(): string {
         return this.getNamedStringItem(0x000080c3);
     }
 
     // Fax2 Original Display Name
-    public getFax2OriginalDisplayName(): string {
+    public get fax2OriginalDisplayName(): string {
         return this.getNamedStringItem(0x000080c4);
     }
 
     // Fax3 Address Type
-    public getFax3AddressType(): string {
+    public get fax3AddressType(): string {
         return this.getNamedStringItem(0x000080d2);
     }
 
     // Fax3 Email Address
-    public getFax3EmailAddress(): string {
+    public get fax3EmailAddress(): string {
         return this.getNamedStringItem(0x000080d3);
     }
 
     // Fax3 Original Display Name
-    public getFax3OriginalDisplayName(): string {
+    public get fax3OriginalDisplayName(): string {
         return this.getNamedStringItem(0x000080d4);
     }
 
     // Free/Busy Location (URL)
-    public getFreeBusyLocation(): string {
+    public get freeBusyLocation(): string {
         return this.getNamedStringItem(0x000080d8);
     }
 
     // Birthday
-    public getBirthday(): Date {
+    public get birthday(): Date {
         return this.getDateItem(0x3a42);
     }
 
     // (Wedding) Anniversary
-    public getAnniversary(): Date {
+    public get anniversary(): Date {
         return this.getDateItem(0x3a41);
     }
 
     public toString(): string {
         return (
-            "Contact's Account name: " +
-            this.getAccount() +
-            '\n' +
-            'Display Name: ' +
-            this.getGivenName() +
-            ' ' +
-            this.getSurname() +
-            ' (' +
-            this.getSMTPAddress() +
-            ')\n' +
-            'Email1 Address Type: ' +
-            this.getEmail1AddressType() +
-            '\n' +
-            'Email1 Address: ' +
-            this.getEmail1EmailAddress() +
-            '\n' +
-            'Callback telephone number: ' +
-            this.getCallbackTelephoneNumber() +
-            '\n' +
-            "Contact's generational abbreviation (name suffix): " +
-            this.getGeneration() +
-            '\n' +
-            'Contacts given name: ' +
-            this.getGivenName() +
-            '\n' +
-            'Contacts Government ID Number: ' +
-            this.getGovernmentIdNumber() +
-            '\n' +
-            'Business/Office Telephone Number: ' +
-            this.getBusinessTelephoneNumber() +
-            '\n' +
-            'Home Telephone Number: ' +
-            this.getHomeTelephoneNumber() +
-            '\n' +
-            'Contacts initials: ' +
-            this.getInitials() +
-            '\n' +
-            'Keyword: ' +
-            this.getKeyword() +
-            '\n' +
-            "Contact's language: " +
-            this.getLanguage() +
-            '\n' +
-            "Contact's location: " +
-            this.getLocation() +
-            '\n' +
-            'MHS Common Name: ' +
-            this.getMhsCommonName() +
-            '\n' +
-            'Organizational identification number: ' +
-            this.getOrganizationalIdNumber() +
-            '\n' +
-            "Contact's surname  (Last name): " +
-            this.getSurname() +
-            '\n' +
-            'Original display name: ' +
-            this.getOriginalDisplayName() +
-            '\n' +
-            'Default Postal Address: ' +
-            this.getPostalAddress() +
-            '\n' +
-            "Contact's company name: " +
-            this.getCompanyName() +
-            '\n' +
-            "Contact's job title (Profession): " +
-            this.getTitle() +
-            '\n' +
-            "Contact's department name  Used in contact ite: " +
-            this.getDepartmentName() +
-            '\n' +
-            "Contact's office location: " +
-            this.getOfficeLocation() +
-            '\n' +
-            'Primary Telephone: ' +
-            this.getPrimaryTelephoneNumber() +
-            '\n' +
-            "Contact's secondary office (business) phone number: " +
-            this.getBusiness2TelephoneNumber() +
-            '\n' +
-            'Mobile Phone Number: ' +
-            this.getMobileTelephoneNumber() +
-            '\n' +
-            'Radio Phone Number: ' +
-            this.getRadioTelephoneNumber() +
-            '\n' +
-            'Car Phone Number: ' +
-            this.getCarTelephoneNumber() +
-            '\n' +
-            'Other Phone Number: ' +
-            this.getOtherTelephoneNumber() +
-            '\n' +
-            'Transmittable display name: ' +
-            this.getTransmittableDisplayName() +
-            '\n' +
-            'Pager Phone Number: ' +
-            this.getPagerTelephoneNumber() +
-            '\n' +
-            'Primary Fax Number: ' +
-            this.getPrimaryFaxNumber() +
-            '\n' +
-            "Contact's office (business) fax numbe: " +
-            this.getBusinessFaxNumber() +
-            '\n' +
-            "Contact's home fax number: " +
-            this.getHomeFaxNumber() +
-            '\n' +
-            'Business Address Country: ' +
-            this.getBusinessAddressCountry() +
-            '\n' +
-            'Business Address City: ' +
-            this.getBusinessAddressCity() +
-            '\n' +
-            'Business Address State: ' +
-            this.getBusinessAddressStateOrProvince() +
-            '\n' +
-            'Business Address Street: ' +
-            this.getBusinessAddressStreet() +
-            '\n' +
-            'Business Postal Code: ' +
-            this.getBusinessPostalCode() +
-            '\n' +
-            'Business PO Box: ' +
-            this.getBusinessPoBox() +
-            '\n' +
-            'Telex Number: ' +
-            this.getTelexNumber() +
-            '\n' +
-            'ISDN Number: ' +
-            this.getIsdnNumber() +
-            '\n' +
-            'Assistant Phone Number: ' +
-            this.getAssistantTelephoneNumber() +
-            '\n' +
-            'Home Phone 2: ' +
-            this.getHome2TelephoneNumber() +
-            '\n' +
-            "Assistant's Name: " +
-            this.getAssistant() +
-            '\n' +
-            'Hobbies: ' +
-            this.getHobbies() +
-            '\n' +
-            'Middle Name: ' +
-            this.getMiddleName() +
-            '\n' +
-            'Display Name Prefix (Contact Title): ' +
-            this.getDisplayNamePrefix() +
-            '\n' +
-            'Profession: ' +
-            this.getProfession() +
-            '\n' +
-            'Preferred By Name: ' +
-            this.getPreferredByName() +
-            '\n' +
-            "Spouse's Name: " +
-            this.getSpouseName() +
-            '\n' +
-            'Computer Network Name: ' +
-            this.getComputerNetworkName() +
-            '\n' +
-            'Customer ID: ' +
-            this.getCustomerId() +
-            '\n' +
-            'TTY/TDD Phone: ' +
-            this.getTtytddPhoneNumber() +
-            '\n' +
-            'Ftp Site: ' +
-            this.getFtpSite() +
-            '\n' +
-            "Manager's Name: " +
-            this.getManagerName() +
-            '\n' +
-            'Nickname: ' +
-            this.getNickname() +
-            '\n' +
-            'Personal Home Page: ' +
-            this.getPersonalHomePage() +
-            '\n' +
-            'Business Home Page: ' +
-            this.getBusinessHomePage() +
-            '\n' +
-            'Company Main Phone: ' +
-            this.getCompanyMainPhoneNumber() +
-            '\n' +
-            'Childrens names: ' +
-            this.getChildrensNames() +
-            '\n' +
-            'Home Address City: ' +
-            this.getHomeAddressCity() +
-            '\n' +
-            'Home Address Country: ' +
-            this.getHomeAddressCountry() +
-            '\n' +
-            'Home Address Postal Code: ' +
-            this.getHomeAddressPostalCode() +
-            '\n' +
-            'Home Address State or Province: ' +
-            this.getHomeAddressStateOrProvince() +
-            '\n' +
-            'Home Address Street: ' +
-            this.getHomeAddressStreet() +
-            '\n' +
-            'Home Address Post Office Box: ' +
-            this.getHomeAddressPostOfficeBox() +
-            '\n' +
-            'Other Address City: ' +
-            this.getOtherAddressCity() +
-            '\n' +
-            'Other Address Country: ' +
-            this.getOtherAddressCountry() +
-            '\n' +
-            'Other Address Postal Code: ' +
-            this.getOtherAddressPostalCode() +
-            '\n' +
-            'Other Address State: ' +
-            this.getOtherAddressStateOrProvince() +
-            '\n' +
-            'Other Address Street: ' +
-            this.getOtherAddressStreet() +
-            '\n' +
-            'Other Address Post Office box: ' +
-            this.getOtherAddressPostOfficeBox() +
-            '\n' +
-            '\n' +
-            this.getBody()
+            'PSTContact:' +
+            '\n subject: ' + this.getSubject() + 
+            '\n importance: ' + this.getImportance() + 
+            '\n message class: ' + this.getMessageClass() + 
+            '\n transport message headers: ' + this.getTransportMessageHeaders() + 
+            '\n account: ' + this.account + 
+            '\n callbackTelephoneNumber: ' + this.callbackTelephoneNumber + 
+            '\n generation: ' + this.generation + 
+            '\n givenName: ' + this.givenName + 
+            '\n governmentIdNumber: ' + this.governmentIdNumber + 
+            '\n businessTelephoneNumber: ' + this.businessTelephoneNumber + 
+            '\n homeTelephoneNumber: ' + this.homeTelephoneNumber + 
+            '\n initials: ' + this.initials + 
+            '\n keyword: ' + this.keyword + 
+            '\n language: ' + this.language + 
+            '\n location: ' + this.location + 
+            '\n mhsCommonName: ' + this.mhsCommonName + 
+            '\n organizationalIdNumber: ' + this.organizationalIdNumber + 
+            '\n surname: ' + this.surname + 
+            '\n originalDisplayName: ' + this.originalDisplayName + 
+            '\n postalAddress: ' + this.postalAddress + 
+            '\n companyName: ' + this.companyName + 
+            '\n title: ' + this.title + 
+            '\n departmentName: ' + this.departmentName + 
+            '\n officeLocation: ' + this.officeLocation + 
+            '\n primaryTelephoneNumber: ' + this.primaryTelephoneNumber + 
+            '\n business2TelephoneNumber: ' + this.business2TelephoneNumber + 
+            '\n mobileTelephoneNumber: ' + this.mobileTelephoneNumber + 
+            '\n radioTelephoneNumber: ' + this.radioTelephoneNumber + 
+            '\n carTelephoneNumber: ' + this.carTelephoneNumber + 
+            '\n otherTelephoneNumber: ' + this.otherTelephoneNumber + 
+            '\n transmittableDisplayName: ' + this.transmittableDisplayName + 
+            '\n pagerTelephoneNumber: ' + this.pagerTelephoneNumber + 
+            '\n primaryFaxNumber: ' + this.primaryFaxNumber + 
+            '\n businessFaxNumber: ' + this.businessFaxNumber + 
+            '\n homeFaxNumber: ' + this.homeFaxNumber + 
+            '\n businessAddressCountry: ' + this.businessAddressCountry + 
+            '\n businessAddressCity: ' + this.businessAddressCity + 
+            '\n businessAddressStateOrProvince: ' + this.businessAddressStateOrProvince + 
+            '\n businessAddressStreet: ' + this.businessAddressStreet + 
+            '\n businessPostalCode: ' + this.businessPostalCode + 
+            '\n businessPoBox: ' + this.businessPoBox + 
+            '\n telexNumber: ' + this.telexNumber + 
+            '\n isdnNumber: ' + this.isdnNumber + 
+            '\n assistantTelephoneNumber: ' + this.assistantTelephoneNumber + 
+            '\n home2TelephoneNumber: ' + this.home2TelephoneNumber + 
+            '\n assistant: ' + this.assistant + 
+            '\n hobbies: ' + this.hobbies + 
+            '\n middleName: ' + this.middleName + 
+            '\n displayNamePrefix: ' + this.displayNamePrefix + 
+            '\n profession: ' + this.profession + 
+            '\n preferredByName: ' + this.preferredByName + 
+            '\n spouseName: ' + this.spouseName + 
+            '\n computerNetworkName: ' + this.computerNetworkName + 
+            '\n customerId: ' + this.customerId + 
+            '\n ttytddPhoneNumber: ' + this.ttytddPhoneNumber + 
+            '\n ftpSite: ' + this.ftpSite + 
+            '\n managerName: ' + this.managerName + 
+            '\n nickname: ' + this.nickname + 
+            '\n personalHomePage: ' + this.personalHomePage + 
+            '\n businessHomePage: ' + this.businessHomePage + 
+            '\n smtpAddress: ' + this.smtpAddress + 
+            '\n companyMainPhoneNumber: ' + this.companyMainPhoneNumber + 
+            '\n childrensNames: ' + this.childrensNames + 
+            '\n homeAddressCity: ' + this.homeAddressCity + 
+            '\n homeAddressCountry: ' + this.homeAddressCountry + 
+            '\n homeAddressPostalCode: ' + this.homeAddressPostalCode + 
+            '\n homeAddressStateOrProvince: ' + this.homeAddressStateOrProvince + 
+            '\n homeAddressStreet: ' + this.homeAddressStreet + 
+            '\n homeAddressPostOfficeBox: ' + this.homeAddressPostOfficeBox + 
+            '\n otherAddressCity: ' + this.otherAddressCity + 
+            '\n otherAddressCountry: ' + this.otherAddressCountry + 
+            '\n otherAddressPostalCode: ' + this.otherAddressPostalCode + 
+            '\n otherAddressStateOrProvince: ' + this.otherAddressStateOrProvince + 
+            '\n otherAddressStreet: ' + this.otherAddressStreet + 
+            '\n otherAddressPostOfficeBox: ' + this.otherAddressPostOfficeBox + 
+            '\n fileUnder: ' + this.fileUnder + 
+            '\n homeAddress: ' + this.homeAddress + 
+            '\n workAddress: ' + this.workAddress + 
+            '\n otherAddress: ' + this.otherAddress + 
+            '\n postalAddressId: ' + this.postalAddressId + 
+            '\n html: ' + this.html + 
+            '\n workAddressStreet: ' + this.workAddressStreet + 
+            '\n workAddressCity: ' + this.workAddressCity + 
+            '\n workAddressState: ' + this.workAddressState + 
+            '\n workAddressPostalCode: ' + this.workAddressPostalCode + 
+            '\n workAddressCountry: ' + this.workAddressCountry + 
+            '\n workAddressPostOfficeBox: ' + this.workAddressPostOfficeBox + 
+            '\n instantMessagingAddress: ' + this.instantMessagingAddress + 
+            '\n email1DisplayName: ' + this.email1DisplayName + 
+            '\n email1AddressType: ' + this.email1AddressType + 
+            '\n email1EmailAddress: ' + this.email1EmailAddress + 
+            '\n email1OriginalDisplayName: ' + this.email1OriginalDisplayName + 
+            '\n email1EmailType: ' + this.email1EmailType + 
+            '\n email2DisplayName: ' + this.email2DisplayName + 
+            '\n email2AddressType: ' + this.email2AddressType + 
+            '\n email2EmailAddress: ' + this.email2EmailAddress + 
+            '\n email2OriginalDisplayName: ' + this.email2OriginalDisplayName + 
+            '\n email3DisplayName: ' + this.email3DisplayName + 
+            '\n email3AddressType: ' + this.email3AddressType + 
+            '\n email3EmailAddress: ' + this.email3EmailAddress + 
+            '\n email3OriginalDisplayName: ' + this.email3OriginalDisplayName + 
+            '\n fax1AddressType: ' + this.fax1AddressType + 
+            '\n fax1EmailAddress: ' + this.fax1EmailAddress + 
+            '\n fax1OriginalDisplayName: ' + this.fax1OriginalDisplayName + 
+            '\n fax2AddressType: ' + this.fax2AddressType + 
+            '\n fax2EmailAddress: ' + this.fax2EmailAddress + 
+            '\n fax2OriginalDisplayName: ' + this.fax2OriginalDisplayName + 
+            '\n fax3AddressType: ' + this.fax3AddressType + 
+            '\n fax3EmailAddress: ' + this.fax3EmailAddress + 
+            '\n fax3OriginalDisplayName: ' + this.fax3OriginalDisplayName + 
+            '\n freeBusyLocation: ' + this.freeBusyLocation + 
+            '\n birthday: ' + this.birthday + 
+            '\n anniversary: ' + this.anniversary 
         );
     }
 }
