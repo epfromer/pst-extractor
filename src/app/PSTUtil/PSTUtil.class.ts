@@ -722,7 +722,6 @@ export class PSTUtil {
     //     System.out.println(Long.toBinaryString(number));
     // }
 
-
     // Detect and load a PST Object from a file with the specified descriptor index
     public static detectAndLoadPSTObject(theFile: PSTFile, descriptorIndex: long): any;
     public static detectAndLoadPSTObject(theFile: PSTFile, folderIndexNode: DescriptorIndexNode): any;
@@ -753,6 +752,7 @@ export class PSTUtil {
         }
     }
 
+    // creates object based on message class
     private static createAppropriatePSTMessageObject(
         theFile: PSTFile,
         folderIndexNode: DescriptorIndexNode,
@@ -764,35 +764,65 @@ export class PSTUtil {
         if (item != null) {
             messageClass = item.getStringValue();
         }
-        if (messageClass === 'IPM.Note' || messageClass === 'IPM.Note.SMIME.MultipartSigned') {
-            return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
-        } else if (
-            messageClass === 'IPM.Appointment' ||
-            messageClass === 'IPM.OLE.CLASS.{00061055-0000-0000-C000-000000000046}' ||
-            messageClass.startsWith('IPM.Schedule.Meeting')
-        ) {
-            let apt = new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
-            // Log.debug2(apt.toJSONstring());
-            return apt;
-        } else if (messageClass === 'IPM.Contact') {
-            let contact = new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
-            // Log.debug2(contact.toJSONstring());
-            return contact;
-        } else if (messageClass === 'IPM.Task') {
-            let task = new PSTTask(theFile, folderIndexNode, table, localDescriptorItems);
-            // Log.debug2(task.toJSONstring());
-            return task;
-        } else if (messageClass === 'IPM.Activity') {
-            debugger;
-            return new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
-        } else if (messageClass === 'IPM.Post.Rss') {
-            debugger;
-            return new PSTRss(theFile, folderIndexNode, table, localDescriptorItems);
-        } else if (messageClass === 'IPM.DistList') {
-            debugger;
-            return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
-        } else {
-            Log.error('Unknown message type: ' + messageClass);
+        switch(messageClass) {
+            case 'IPM.Note':
+            case 'IPM.Note.SMIME.MultipartSigned':
+                // email message
+                return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
+            case 'IPM.Appointment':
+            case 'IPM.OLE.CLASS.{00061055-0000-0000-C000-000000000046}':
+                // appointment
+                // messageClass.startsWith('IPM.Schedule.Meeting')
+                let apt = new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
+                // Log.debug2(apt.toJSONstring());
+                return apt;
+            case 'IPM.Contact': 
+                // contact
+                let contact = new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
+                // Log.debug2(contact.toJSONstring());
+                return contact;
+            case 'IPM.Task':
+                // task
+                let task = new PSTTask(theFile, folderIndexNode, table, localDescriptorItems);
+                // Log.debug2(task.toJSONstring());
+                return task;
+            case 'IPM.Activity':
+                // journal entry
+                debugger;
+                return new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
+            case 'IPM.Post.Rss':
+                // Rss Feed
+                debugger;
+                return new PSTRss(theFile, folderIndexNode, table, localDescriptorItems);
+            case 'IPM.DistList':
+                debugger;
+                return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
+            case 'IPM.Schedule.Meeting.Request':
+                // Meeting request
+                debugger;
+            case 'REPORT.IPM.Note.IPNRN':
+                // Read receipt
+                debugger;
+            case 'REPORT.IPM.Note.IPNNRN':
+                // Not-read notification
+                debugger;
+            case 'IPM.StickyNote':
+                // Creating note
+                debugger;
+            case 'IPM.Schedule.Meeting.Request':
+                // Meeting request
+                debugger;
+            case 'REPORT.IPM.Note.DR':
+                // Delivery receipt
+                debugger;
+            case 'REPORT.IPM.Note.NDR':
+                // Receipt of non-delivery
+                debugger;
+            case 'IPM.Note.Rules.OofTemplate.Microsoft':
+                // Out of Office rule
+                debugger;
+            default:
+                Log.error('PSTUtil::createAppropriatePSTMessageObject unknown message type: ' + messageClass);
         }
         return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
     }
@@ -809,7 +839,7 @@ export class PSTUtil {
         let h: long = hi.shiftLeft(32);
         let l: long = low.and(0xffffffff);
         let filetime = h.or(l);
-        let ms_since_16010101: long = filetime.divide((1000 * 10));
+        let ms_since_16010101: long = filetime.divide(1000 * 10);
         let epoch_diff: long = long.fromValue('11644473600000');
         let ms_since_19700101: long = ms_since_16010101.subtract(epoch_diff);
         return new Date(ms_since_19700101.toNumber());

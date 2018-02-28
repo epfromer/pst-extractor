@@ -768,4 +768,6 @@ export class PSTMessage extends PSTObject {
             + "Message Class: " + this.getMessageClass() + "\n\n" + this.getTransportMessageHeaders() + "\n\n\n"
             + this.pstTableItems + this.localDescriptorItems;
     }
+
+    
 }
