@@ -32,7 +32,7 @@ function processFolder(folder: PSTFolder) {
         depth++;
         let email: PSTMessage = folder.getNextChild();
         while (email != null) {
-            console.log(getDepth(depth) +  "Email: " + email.getDescriptorNodeId() + " - " + email.getSubject());
+            console.log(getDepth(depth) +  "Email: " + email.getDescriptorNodeId() + " - " + email.subject);
             email = folder.getNextChild();
         }
         depth--;

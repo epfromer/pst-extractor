@@ -577,10 +577,10 @@ export class PSTContact extends PSTMessage {
 
     public toString(): string {
         return (
-            '\n message class: ' + this.getMessageClass() + 
-            '\n subject: ' + this.getSubject() + 
-            '\n importance: ' + this.getImportance() + 
-            '\n transport message headers: ' + this.getTransportMessageHeaders() + 
+            '\n messageClass: ' + this.messageClass + 
+            '\n subject: ' + this.subject + 
+            '\n importance: ' + this.importance + 
+            '\n transportMessageHeaders: ' + this.transportMessageHeaders + 
             '\n account: ' + this.account + 
             '\n callbackTelephoneNumber: ' + this.callbackTelephoneNumber + 
             '\n generation: ' + this.generation + 
@@ -695,10 +695,10 @@ export class PSTContact extends PSTMessage {
 
     public toJSONstring(): string {
         return JSON.stringify({
-            messageClass: this.getMessageClass(),
-            subject: this.getSubject(), 
-            importance: this.getImportance(),
-            transportMessageHeaders: this.getTransportMessageHeaders(),
+            messageClass: this.messageClass,
+            subject: this.subject, 
+            importance: this.importance, 
+            transportMessageHeaders: this.transportMessageHeaders, 
             account: this.account,
             callbackTelephoneNumber: this.callbackTelephoneNumber,
             generation: this.generation,

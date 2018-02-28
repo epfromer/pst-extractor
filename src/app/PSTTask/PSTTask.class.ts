@@ -96,10 +96,10 @@ export class PSTTask extends PSTMessage {
 
     public toString() {
         return (
-            '\n message class: ' + this.getMessageClass() + 
-            '\n subject: ' + this.getSubject() + 
-            '\n importance: ' + this.getImportance() + 
-            '\n transport message headers: ' + this.getTransportMessageHeaders() + 
+            '\n messageClass: ' + this.messageClass + 
+            '\n subject: ' + this.subject + 
+            '\n importance: ' + this.importance + 
+            '\n transportMessageHeaders: ' + this.transportMessageHeaders + 
             '\n taskStatus: ' + this.taskStatus + 
             '\n percentComplete: ' + this.percentComplete + 
             '\n isTeamTask: ' + this.isTeamTask + 
@@ -121,10 +121,10 @@ export class PSTTask extends PSTMessage {
 
     public toJSONstring(): string {
         return JSON.stringify({
-            messageClass: this.getMessageClass(),
-            subject: this.getSubject(),
-            importance: this.getImportance(),
-            transportMessageHeaders: this.getTransportMessageHeaders(),
+            messageClass: this.messageClass,
+            subject: this.subject, 
+            importance: this.importance, 
+            transportMessageHeaders: this.transportMessageHeaders, 
             taskStatus: this.taskStatus,
             percentComplete: this.percentComplete,
             isTeamTask: this.isTeamTask,

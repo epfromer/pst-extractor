@@ -41,7 +41,7 @@ export class PSTMessage extends PSTObject {
         }
     }
 
-    public getRTFBody(): string {
+    public get rtfBody(): string {
         debugger;
         //     // do we have an entry for it?
         //     if (this.items.containsKey(0x1009)) {
@@ -60,17 +60,17 @@ export class PSTMessage extends PSTObject {
     }
 
     // get the importance of the email
-    public getImportance(): number {
+    public get importance(): number {
         return this.getIntItem(0x0017, PSTMessage.IMPORTANCE_NORMAL);
     }
 
     // get the message class for the email
-    public getMessageClass(): string {
+    public get messageClass(): string {
         return this.getStringItem(0x001a);
     }
 
     // get the subject
-    public getSubject(): string {
+    public get subject(): string {
         let subject = this.getStringItem(0x0037);
         if (subject != null && subject.length >= 2 && subject.charCodeAt(0) == 0x01) {
             if (subject.length == 2) {
@@ -83,123 +83,123 @@ export class PSTMessage extends PSTObject {
     }
 
     // get the client submit time
-    public getClientSubmitTime(): Date {
+    public get clientSubmitTime(): Date {
         return this.getDateItem(0x0039);
     }
 
     // get received by name
-    public getReceivedByName(): string {
+    public get receivedByName(): string {
         return this.getStringItem(0x0040);
     }
 
     // get sent representing name
-    public getSentRepresentingName(): string {
+    public get sentRepresentingName(): string {
         return this.getStringItem(0x0042);
     }
 
     // Sent representing address type
     // Known values are SMTP, EX (Exchange) and UNKNOWN
-    public getSentRepresentingAddressType(): string {
+    public get sentRepresentingAddressType(): string {
         return this.getStringItem(0x0064);
     }
 
     // Sent representing email address
-    public getSentRepresentingEmailAddress(): string {
+    public get sentRepresentingEmailAddress(): string {
         return this.getStringItem(0x0065);
     }
 
     // Conversation topic
     // This is basically the subject from which Fwd:, Re, etc. has been removed
-    public getConversationTopic(): string {
+    public get conversationTopic(): string {
         return this.getStringItem(0x0070);
     }
 
     // Received by address type
     // Known values are SMTP, EX (Exchange) and UNKNOWN
-    public getReceivedByAddressType(): string {
+    public get receivedByAddressType(): string {
         return this.getStringItem(0x0075);
     }
 
     // Received by email address
-    public getReceivedByAddress(): string {
+    public get receivedByAddress(): string {
         return this.getStringItem(0x0076);
     }
 
     // Transport message headers ASCII or Unicode string These contain the SMTP
     // e-mail headers.
-    public getTransportMessageHeaders(): string {
+    public get transportMessageHeaders(): string {
         return this.getStringItem(0x007d);
     }
 
-    public isRead(): boolean {
+    public get isRead(): boolean {
         return ((this.getIntItem(0x0e07) & 0x01) != 0);
     }
 
-    public isUnmodified(): boolean {
+    public get isUnmodified(): boolean {
         return ((this.getIntItem(0x0e07) & 0x02) != 0);
     }
 
-    public isSubmitted(): boolean {
+    public get isSubmitted(): boolean {
         return ((this.getIntItem(0x0e07) & 0x04) != 0);
     }
 
-    public isUnsent(): boolean {
+    public get isUnsent(): boolean {
         return ((this.getIntItem(0x0e07) & 0x08) != 0);
     }
 
-    public hasAttachments(): boolean {
+    public get hasAttachments(): boolean {
         return ((this.getIntItem(0x0e07) & 0x10) != 0);
     }
 
-    public isFromMe(): boolean {
+    public get isFromMe(): boolean {
         return ((this.getIntItem(0x0e07) & 0x20) != 0);
     }
 
-    public isAssociated(): boolean {
+    public get isAssociated(): boolean {
         return ((this.getIntItem(0x0e07) & 0x40) != 0);
     }
 
-    public isResent(): boolean {
+    public get isResent(): boolean {
         return ((this.getIntItem(0x0e07) & 0x80) != 0);
     }
 
     // Acknowledgment mode Integer 32-bit signed
-    public getAcknowledgementMode(): number {
+    public get acknowledgementMode(): number {
         return this.getIntItem(0x0001);
     }
 
     // Originator delivery report requested set if the sender wants a delivery
     // report from all recipients 0 = false 0 != true
-    public getOriginatorDeliveryReportRequested(): boolean {
+    public get originatorDeliveryReportRequested(): boolean {
         return (this.getIntItem(0x0023) != 0);
     }
 
     // 0x0025 0x0102 PR_PARENT_KEY Parent key Binary data Contains a GUID
     // Priority Integer 32-bit signed -1 = NonUrgent 0 = Normal 1 = Urgent
-    public getPriority(): number {
+    public get priority(): number {
         return this.getIntItem(0x0026);
     }
 
     // Read Receipt Requested Boolean 0 = false 0 != true
-    public getReadReceiptRequested(): boolean {
+    public get readReceiptRequested(): boolean {
         return (this.getIntItem(0x0029) != 0);
     }
 
     // Recipient Reassignment Prohibited Boolean 0 = false 0 != true
-    public getRecipientReassignmentProhibited(): boolean {
+    public get recipientReassignmentProhibited(): boolean {
         return (this.getIntItem(0x002b) != 0);
     }
 
     // Original sensitivity Integer 32-bit signed the sensitivity of the message
     // before being replied to or forwarded 0 = None 1 = Personal 2 = Private 3
     //  = Company Confidential
-    public getOriginalSensitivity(): number {
+    public get originalSensitivity(): number {
         return this.getIntItem(0x002e);
     }
 
     // Sensitivity Integer 32-bit signed sender's opinion of the sensitivity of
     // an email 0 = None 1 = Personal 2 = Private 3 = Company Confidential
-    public getSensitivity(): number {
+    public get sensitivity(): number {
         return this.getIntItem(0x0036);
     }
     // // 0x003f 0x0102 PR_RECEIVED_BY_ENTRYID (PidTagReceivedByEntr yId) Received
@@ -210,203 +210,203 @@ export class PSTMessage extends PSTObject {
     // // identifier Binary data Contains recipient/sender structure
 
     // Address book search key
-    public getPidTagSentRepresentingSearchKey(): Buffer {
+    public get pidTagSentRepresentingSearchKey(): Buffer {
         return this.getBinaryItem(0x003b);
     }
 
     // Received representing name ASCII or Unicode string
-    public getRcvdRepresentingName(): string {
+    public get rcvdRepresentingName(): string {
         return this.getStringItem(0x0044);
     }
 
     // Original subject ASCII or Unicode string
-    public getOriginalSubject(): string {
+    public get originalSubject(): string {
         return this.getStringItem(0x0049);
     }
 
     // 0x004e 0x0040 PR_ORIGINAL_SUBMIT_TIME Original submit time Filetime
     // Reply recipients names ASCII or Unicode string
-    public getReplyRecipientNames(): string {
+    public get replyRecipientNames(): string {
         return this.getStringItem(0x0050);
     }
 
     // My address in To field Boolean
-    public getMessageToMe(): boolean {
+    public get messageToMe(): boolean {
         return (this.getIntItem(0x0057) != 0);
     }
 
     // My address in CC field Boolean
-    public getMessageCcMe(): boolean {
+    public get messageCcMe(): boolean {
         return (this.getIntItem(0x0058) != 0);
     }
 
     // Indicates that the receiving mailbox owner is a primary or a carbon copy
     // (Cc) recipient
-    public getMessageRecipMe(): boolean {
+    public get messageRecipMe(): boolean {
         return this.getIntItem(0x0059) != 0;
     }
 
     // Response requested Boolean
-    public getResponseRequested(): boolean {
+    public get responseRequested(): boolean {
         return this.getBooleanItem(0x0063);
     }
 
     // Sent representing address type ASCII or Unicode string Known values are
     // SMTP, EX (Exchange) and UNKNOWN
-    public getSentRepresentingAddrtype(): string {
+    public get sentRepresentingAddrtype(): string {
         return this.getStringItem(0x0064);
     }
 
     // 0x0071 0x0102 PR_CONVERSATION_INDEX (PidTagConversationInd ex)
     // Conversation index Binary data
     // Original display BCC ASCII or Unicode string
-    public getOriginalDisplayBcc(): string {
+    public get originalDisplayBcc(): string {
         return this.getStringItem(0x0072);
     }
 
     // Original display CC ASCII or Unicode string
-    public getOriginalDisplayCc(): string {
+    public get originalDisplayCc(): string {
         return this.getStringItem(0x0073);
     }
 
     // Original display TO ASCII or Unicode string
-    public getOriginalDisplayTo(): string {
+    public get originalDisplayTo(): string {
         return this.getStringItem(0x0074);
     }
 
     // Received representing address type.
     // Known values are SMTP, EX (Exchange) and UNKNOWN
-    public getRcvdRepresentingAddrtype(): string {
+    public get rcvdRepresentingAddrtype(): string {
         return this.getStringItem(0x0077);
     }
 
     // Received representing e-mail address
-    public getRcvdRepresentingEmailAddress(): string {
+    public get rcvdRepresentingEmailAddress(): string {
         return this.getStringItem(0x0078);
     }
 
     // Recipient details
 
     // Non receipt notification requested
-    public isNonReceiptNotificationRequested(): boolean {
+    public get isNonReceiptNotificationRequested(): boolean {
         return (this.getIntItem(0x0c06) != 0);
     }
 
     // Originator non delivery report requested
-    public isOriginatorNonDeliveryReportRequested(): boolean {
+    public get isOriginatorNonDeliveryReportRequested(): boolean {
         return (this.getIntItem(0x0c08) != 0);
     }
 
     // Recipient type Integer 32-bit signed 0x01 => To 0x02 =>CC
-    public getRecipientType(): number {
+    public get recipientType(): number {
         return this.getIntItem(0x0c15);
     }
 
     // Reply requested
-    public isReplyRequested(): boolean {
+    public get isReplyRequested(): boolean {
         return (this.getIntItem(0x0c17) != 0);
     }
 
     // Sending mailbox owner's address book entry ID
-    public getSenderEntryId(): Buffer {
+    public get senderEntryId(): Buffer {
         return this.getBinaryItem(0x0c19);
     }
 
     // Sender name
-    public getSenderName(): string {
+    public get senderName(): string {
         return this.getStringItem(0x0c1a);
     }
 
     // Sender address type.
     // Known values are SMTP, EX (Exchange) and UNKNOWN
-    public getSenderAddrtype(): string {
+    public get senderAddrtype(): string {
         return this.getStringItem(0x0c1e);
     }
 
     // Sender e-mail address
-    public getSenderEmailAddress(): string {
+    public get senderEmailAddress(): string {
         return this.getStringItem(0x0c1f);
     }
 
     // Non-transmittable message properties
 
     // Message size
-    public getMessageSize(): long {
+    public get messageSize(): long {
         return this.getLongItem(0x0e08);
     }
 
     // Internet article number
-    public getInternetArticleNumber(): number {
+    public get internetArticleNumber(): number {
         return this.getIntItem(0x0e23);
     }
 
     // Server that the client should attempt to send the mail with
-    public getPrimarySendAccount(): string {
+    public get primarySendAccount(): string {
         return this.getStringItem(0x0e28);
     }
 
     // Server that the client is currently using to send mail
-    public getNextSendAcct(): string {
+    public get nextSendAcct(): string {
         return this.getStringItem(0x0e29);
     }
 
     // URL computer name postfix
-    public getURLCompNamePostfix(): number {
+    public get urlCompNamePostfix(): number {
         return this.getIntItem(0x0e61);
     }
 
     // Object type
-    public getObjectType(): number {
+    public get objectType(): number {
         return this.getIntItem(0x0ffe);
     }
 
     // Delete after submit
-    public getDeleteAfterSubmit(): boolean {
+    public get deleteAfterSubmit(): boolean {
         return ((this.getIntItem(0x0e01)) != 0);
     }
 
     // Responsibility
-    public getResponsibility(): boolean {
+    public get responsibility(): boolean {
         return ((this.getIntItem(0x0e0f)) != 0);
     }
 
     // Compressed RTF in Sync Boolean
-    public isRTFInSync(): boolean {
+    public get isRTFInSync(): boolean {
         return ((this.getIntItem(0x0e1f)) != 0);
     }
 
     // URL computer name set
-    public isURLCompNameSet(): boolean {
+    public get isURLCompNameSet(): boolean {
         return ((this.getIntItem(0x0e62)) != 0);
     }
 
     // Display BCC
-    public getDisplayBCC(): string {
+    public get displayBCC(): string {
         return this.getStringItem(0x0e02);
     }
 
     // Display CC
-    public getDisplayCC(): string {
+    public get displayCC(): string {
         return this.getStringItem(0x0e03);
     }
 
     // Display To
-    public getDisplayTo(): string {
+    public get displayTo(): string {
         return this.getStringItem(0x0e04);
     }
 
     // Message delivery time
-    public getMessageDeliveryTime(): Date {
+    public get messageDeliveryTime(): Date {
         return this.getDateItem(0x0e06);
     }
 
     // Message content properties
-    public getNativeBodyType(): number {
+    public get nativeBodyType(): number {
         return this.getIntItem(0x1016);
     }
 
     // Plain text e-mail body
-    public getBody(): string {
+    public get body(): string {
         debugger;
         return '';
         // let cp: string = null;
@@ -421,37 +421,37 @@ export class PSTMessage extends PSTObject {
     }
 
     // Plain text body prefix
-    public getBodyPrefix(): string {
+    public get bodyPrefix(): string {
         return this.getStringItem(0x6619);
     }
 
     // RTF Sync Body CRC
-    public getRTFSyncBodyCRC(): number {
+    public get rtfSyncBodyCRC(): number {
         return this.getIntItem(0x1006);
     }
 
     // RTF Sync Body character count
-    public getRTFSyncBodyCount(): number {
+    public get rtfSyncBodyCount(): number {
         return this.getIntItem(0x1007);
     }
 
     // RTF Sync body tag
-    public getRTFSyncBodyTag(): string {
+    public get rtfSyncBodyTag(): string {
         return this.getStringItem(0x1008);
     }
 
     // RTF whitespace prefix count
-    public getRTFSyncPrefixCount(): number {
+    public get rtfSyncPrefixCount(): number {
         return this.getIntItem(0x1010);
     }
 
     // RTF whitespace tailing count
-    public getRTFSyncTrailingCount(): number {
+    public get rtfSyncTrailingCount(): number {
         return this.getIntItem(0x1011);
     }
 
     // HTML e-mail body
-    public getBodyHTML(): string {
+    public get bodyHTML(): string {
         debugger;
         return '';
         // String cp = null;
@@ -466,22 +466,22 @@ export class PSTMessage extends PSTObject {
     }
 
     // Message ID for this email as allocated per rfc2822
-    public getInternetMessageId(): string {
+    public get internetMessageId(): string {
         return this.getStringItem(0x1035);
     }
 
     // In-Reply-To
-    public getInReplyToId(): string {
+    public get inReplyToId(): string {
         return this.getStringItem(0x1042);
     }
 
     // Return Path
-    public getReturnPath(): string {
+    public get returnPath(): string {
         return this.getStringItem(0x1046);
     }
 
     // Icon index
-    public getIconIndex(): number {
+    public get iconIndex(): number {
         return this.getIntItem(0x1080);
     }
 
@@ -489,51 +489,51 @@ export class PSTMessage extends PSTObject {
     // This relates to the replying / forwarding of messages.
     // It is classified as "unknown" atm, so just provided here
     // in case someone works out what all the various flags mean.
-    public getActionFlag(): number {
+    public get actionFlag(): number {
         return this.getIntItem(0x1081);
     }
 
     // is the action flag for this item "forward"?
-    public hasForwarded(): boolean {
+    public get hasForwarded(): boolean {
         let actionFlag = this.getIntItem(0x1081);
         return ((actionFlag & 0x8) > 0);
     }
 
     // is the action flag for this item "replied"?
-    public hasReplied(): boolean {
+    public get hasReplied(): boolean {
         let actionFlag = this.getIntItem(0x1081);
         return ((actionFlag & 0x4) > 0);
     }
 
     // the date that this item had an action performed (eg. replied or
     // forwarded)
-    public getActionDate(): Date {
+    public get actionDate(): Date {
         return this.getDateItem(0x1082);
     }
 
     // Disable full fidelity
-    public getDisableFullFidelity(): boolean {
+    public get disableFullFidelity(): boolean {
         return (this.getIntItem(0x10f2) != 0);
     }
 
     // URL computer name
     // Contains the .eml file name
-    public getURLCompName(): String {
+    public get urlCompName(): String {
         return this.getStringItem(0x10f3);
     }
 
     // Attribute hidden
-    public getAttrHidden(): boolean {
+    public get attrHidden(): boolean {
         return (this.getIntItem(0x10f4) != 0);
     }
 
     // Attribute system
-    public getAttrSystem(): boolean {
+    public get attrSystem(): boolean {
         return (this.getIntItem(0x10f5) != 0);
     }
 
     // Attribute read only
-    public getAttrReadonly(): boolean {
+    public get attrReadonly(): boolean {
         return (this.getIntItem(0x10f6) != 0);
     }
 
@@ -558,7 +558,7 @@ export class PSTMessage extends PSTObject {
     }
 
     // get the number of recipients for this message
-    public getNumberOfRecipients(): number {
+    public get numberOfRecipients(): number {
         this.processRecipients();
 
         // still nothing? must be no recipients...
@@ -588,32 +588,32 @@ export class PSTMessage extends PSTObject {
     }
 
     // Start date Filetime
-    public getTaskStartDate(): Date {
+    public get taskStartDate(): Date {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008104, PSTFile.PSETID_Task));
     }
 
     // Due date Filetime
-    public getTaskDueDate(): Date {
+    public get taskDueDate(): Date {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008105, PSTFile.PSETID_Task));
     }
 
     // Is a reminder set on this object?
-    public getReminderSet(): boolean {
+    public get reminderSet(): boolean {
         return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008503, PSTFile.PSETID_Common));
     }
 
-    public getReminderDelta(): number {
+    public get reminderDelta(): number {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008501, PSTFile.PSETID_Common));
     }
 
     // "flagged" items are actually emails with a due date.
     // This convience method just checks to see if that is true.
-    public isFlagged(): boolean {
-        return this.getTaskDueDate() != null;
+    public get isFlagged(): boolean {
+        return this.taskDueDate != null;
     }
 
     // get the categories defined for this message
-    public getColorCategories(): string[] {
+    public get colorCategories(): string[] {
         debugger;
         return [];
     //     final int keywordCategory = this.pstFile.getPublicStringToIdMapItem("Keywords");
@@ -658,7 +658,7 @@ export class PSTMessage extends PSTObject {
     }
 
     // get the number of attachments for this message
-    public getNumberOfAttachments(): number {
+    public get numberOfAttachments(): number {
         try {
             this.processAttachments();
         } catch (e) {
@@ -727,7 +727,7 @@ export class PSTMessage extends PSTObject {
 
     // get a specific recipient from this email.
     public getRecipient(recipientNumber: number): PSTRecipient {
-        if (recipientNumber >= this.getNumberOfRecipients()
+        if (recipientNumber >= this.numberOfRecipients
             || recipientNumber >= this.recipientTable.getItems().length) {
             throw new Error("unable to fetch recipient number " + recipientNumber);
         }
@@ -743,31 +743,133 @@ export class PSTMessage extends PSTObject {
         return null;
     }
 
-    public getRecipientsString(): string {
+    public get recipientsString(): string {
         if (this.recipientTable != null) {
             return this.recipientTable.getItemsString();
         }
         return "No recipients table!";
     }
 
-    public getConversationId(): Buffer {
+    public get conversationId(): Buffer {
         return this.getBinaryItem(0x3013);
     }
 
-    public getConversationIndex(): PSTConversationIndex {
+    public get conversationIndex(): PSTConversationIndex {
         return new PSTConversationIndex(this.getBinaryItem(0x0071));
     }
 
-    public isConversationIndexTracking(): boolean {
+    public get isConversationIndexTracking(): boolean {
         return this.getBooleanItem(0x3016, false);
     }
 
     // string representation of this email
-    public toString() {
-        return "PSTEmail: " + this.getSubject() + "\n" + "Importance: " + this.getImportance() + "\n"
-            + "Message Class: " + this.getMessageClass() + "\n\n" + this.getTransportMessageHeaders() + "\n\n\n"
-            + this.pstTableItems + this.localDescriptorItems;
+    // public toString() {
+    //     return "PSTEmail: " + this.getSubject() + "\n" + "Importance: " + this.getImportance() + "\n"
+    //         + "Message Class: " + this.getMessageClass() + "\n\n" + this.getTransportMessageHeaders() + "\n\n\n"
+    //         + this.pstTableItems + this.localDescriptorItems;
+    // }
+    public toString(): string {
+        return (
+            '\n messageClass: ' + this.messageClass + 
+            '\n subject: ' + this.subject + 
+            '\n importance: ' + this.importance + 
+            '\n transportMessageHeaders: ' + this.transportMessageHeaders + 
+            '\n rtfBody: ' + this.rtfBody + 
+            '\n clientSubmitTime: ' + this.clientSubmitTime + 
+            '\n receivedByName: ' + this.receivedByName + 
+            '\n sentRepresentingName: ' + this.sentRepresentingName + 
+            '\n sentRepresentingAddressType: ' + this.sentRepresentingAddressType + 
+            '\n sentRepresentingEmailAddress: ' + this.sentRepresentingEmailAddress + 
+            '\n conversationTopic: ' + this.conversationTopic + 
+            '\n receivedByAddressType: ' + this.receivedByAddressType + 
+            '\n receivedByAddress: ' + this.receivedByAddress + 
+            '\n transportMessageHeaders: ' + this.transportMessageHeaders + 
+            '\n isRead: ' + this.isRead + 
+            '\n isUnmodified: ' + this.isUnmodified + 
+            '\n isSubmitted: ' + this.isSubmitted + 
+            '\n isUnsent: ' + this.isUnsent + 
+            '\n hasAttachments: ' + this.hasAttachments + 
+            '\n isFromMe: ' + this.isFromMe + 
+            '\n isAssociated: ' + this.isAssociated + 
+            '\n isResent: ' + this.isResent + 
+            '\n acknowledgementMode: ' + this.acknowledgementMode + 
+            '\n originatorDeliveryReportRequested: ' + this.originatorDeliveryReportRequested + 
+            '\n readReceiptRequested: ' + this.readReceiptRequested + 
+            '\n recipientReassignmentProhibited: ' + this.recipientReassignmentProhibited + 
+            '\n originalSensitivity: ' + this.originalSensitivity + 
+            '\n sensitivity: ' + this.sensitivity + 
+            '\n pidTagSentRepresentingSearchKey: ' + this.pidTagSentRepresentingSearchKey + 
+            '\n rcvdRepresentingName: ' + this.rcvdRepresentingName + 
+            '\n bloriginalSubjectah: ' + this.originalSubject + 
+            '\n replyRecipientNames: ' + this.replyRecipientNames + 
+            '\n messageToMe: ' + this.messageToMe + 
+            '\n messageCcMe: ' + this.messageCcMe + 
+            '\n messageRecipMe: ' + this.messageRecipMe + 
+            '\n responseRequested: ' + this.responseRequested + 
+            '\n sentRepresentingAddrtype: ' + this.sentRepresentingAddrtype + 
+            '\n originalDisplayBcc: ' + this.originalDisplayBcc + 
+            '\n originalDisplayCc: ' + this.originalDisplayCc + 
+            '\n originalDisplayTo: ' + this.originalDisplayTo + 
+            '\n rcvdRepresentingAddrtype: ' + this.rcvdRepresentingAddrtype + 
+            '\n rcvdRepresentingEmailAddress: ' + this.rcvdRepresentingEmailAddress + 
+            '\n isNonReceiptNotificationRequested: ' + this.isNonReceiptNotificationRequested + 
+            '\n isOriginatorNonDeliveryReportRequested: ' + this.isOriginatorNonDeliveryReportRequested + 
+            '\n recipientType: ' + this.recipientType + 
+            '\n isReplyRequested: ' + this.isReplyRequested + 
+            '\n senderEntryId: ' + this.senderEntryId + 
+            '\n senderName: ' + this.senderName + 
+            '\n senderAddrtype: ' + this.senderAddrtype + 
+            '\n senderEmailAddress: ' + this.senderEmailAddress + 
+            '\n messageSize: ' + this.messageSize + 
+            '\n internetArticleNumber: ' + this.internetArticleNumber + 
+            '\n primarySendAccount: ' + this.primarySendAccount + 
+            '\n nextSendAcct: ' + this.nextSendAcct + 
+            '\n urlCompNamePostfix: ' + this.urlCompNamePostfix + 
+            '\n objectType: ' + this.objectType + 
+            '\n deleteAfterSubmit: ' + this.deleteAfterSubmit + 
+            '\n responsibility: ' + this.responsibility + 
+            '\n isRTFInSync: ' + this.isRTFInSync + 
+            '\n isURLCompNameSet: ' + this.isURLCompNameSet + 
+            '\n displayBCC: ' + this.displayBCC + 
+            '\n displayCC: ' + this.displayCC + 
+            '\n displayTo: ' + this.displayTo + 
+            '\n messageDeliveryTime: ' + this.messageDeliveryTime + 
+            '\n nativeBodyType: ' + this.nativeBodyType + 
+            '\n bodyPrefix: ' + this.bodyPrefix + 
+            '\n rtfSyncBodyCRC: ' + this.rtfSyncBodyCRC + 
+            '\n rtfSyncBodyCount: ' + this.rtfSyncBodyCount + 
+            '\n rtfSyncBodyTag: ' + this.rtfSyncBodyTag + 
+            '\n rtfSyncPrefixCount: ' + this.rtfSyncPrefixCount + 
+            '\n rtfSyncTrailingCount: ' + this.rtfSyncTrailingCount + 
+            '\n internetMessageId: ' + this.internetMessageId + 
+            '\n inReplyToId: ' + this.inReplyToId + 
+            '\n returnPath: ' + this.returnPath + 
+            '\n iconIndex: ' + this.iconIndex + 
+            '\n actionFlag: ' + this.actionFlag + 
+            '\n hasReplied: ' + this.hasReplied + 
+            '\n actionDate: ' + this.actionDate + 
+            '\n disableFullFidelity: ' + this.disableFullFidelity + 
+            '\n urlCompName: ' + this.urlCompName + 
+            '\n attrHidden: ' + this.attrHidden + 
+            '\n attrSystem: ' + this.attrSystem + 
+            '\n attrReadonly: ' + this.attrReadonly + 
+            '\n numberOfRecipients: ' + this.numberOfRecipients + 
+            '\n taskStartDate: ' + this.taskStartDate + 
+            '\n taskDueDate: ' + this.taskDueDate + 
+            '\n reminderSet: ' + this.reminderSet + 
+            '\n reminderDelta: ' + this.reminderDelta + 
+            '\n isFlagged: ' + this.isFlagged + 
+            '\n colorCategories: ' + this.colorCategories + 
+            '\n numberOfAttachments: ' + this.numberOfAttachments + 
+            '\n recipientsString: ' + this.recipientsString + 
+            '\n conversationId: ' + this.conversationId + 
+            '\n conversationIndex: ' + this.conversationIndex + 
+            '\n isConversationIndexTracking: ' + this.isConversationIndexTracking 
+        );
     }
 
-    
+    public toJSONstring(): string {
+        return JSON.stringify({
+        });
+    }
 }
