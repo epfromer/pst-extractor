@@ -753,6 +753,7 @@ export class PSTUtil {
     }
 
     // creates object based on message class
+    // see https://msdn.microsoft.com/en-us/vba/outlook-vba/articles/item-types-and-message-classes
     private static createAppropriatePSTMessageObject(
         theFile: PSTFile,
         folderIndexNode: DescriptorIndexNode,
@@ -772,7 +773,7 @@ export class PSTUtil {
                 // Log.debug1(msg.body);
                 // Log.debug1(msg.numberOfRecipients.toString());
                 // Log.debug1(msg.colorCategories.toString());
-                Log.debug1(msg.toString());
+                // Log.debug1(msg.toJSONstring());
                 return msg;
             case 'IPM.Appointment':
             case 'IPM.OLE.CLASS.{00061055-0000-0000-C000-000000000046}':
@@ -794,17 +795,29 @@ export class PSTUtil {
             case 'IPM.Activity':
                 // journal entry
                 debugger;
-                return new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
+                let activity =  new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
+                Log.debug1(activity.toJSONstring());
+                return activity;
             case 'IPM.Post.Rss':
                 // Rss Feed
                 debugger;
-                return new PSTRss(theFile, folderIndexNode, table, localDescriptorItems);
+                let rss = new PSTRss(theFile, folderIndexNode, table, localDescriptorItems);
+                Log.debug1(rss.toJSONstring());
+                return rss;
             case 'IPM.DistList':
                 debugger;
                 return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
+            case 'IPM.Note.Rules.OofTemplate.Microsoft':
+                // Out of Office rule
+                let oof = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
+                // Log.debug1(oof.toJSONstring());
+                return oof;                
             case 'IPM.Schedule.Meeting.Request':
                 // Meeting request
                 debugger;
+                let meetReq = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
+                Log.debug1(meetReq.toJSONstring());
+                return meetReq;                
             case 'REPORT.IPM.Note.IPNRN':
                 // Read receipt
                 debugger;
@@ -822,9 +835,6 @@ export class PSTUtil {
                 debugger;
             case 'REPORT.IPM.Note.NDR':
                 // Receipt of non-delivery
-                debugger;
-            case 'IPM.Note.Rules.OofTemplate.Microsoft':
-                // Out of Office rule
                 debugger;
             default:
                 Log.error('PSTUtil::createAppropriatePSTMessageObject unknown message type: ' + messageClass);

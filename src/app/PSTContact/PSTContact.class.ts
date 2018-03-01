@@ -808,6 +808,6 @@ export class PSTContact extends PSTMessage {
             freeBusyLocation: this.freeBusyLocation,
             birthday: this.birthday,
             anniversary: this.anniversary 
-        });
+        }, null, 2);
     }
 }

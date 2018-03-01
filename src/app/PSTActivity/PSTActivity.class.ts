@@ -16,63 +16,90 @@ export class PSTActivity extends PSTMessage {
     }
 
     // Type
-    public getLogType(): string {
+    public get logType(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008700, PSTFile.PSETID_Log));
     }
 
     // Start
-    public getLogStart(): Date {
+    public get logStart(): Date {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008706, PSTFile.PSETID_Log));
     }
 
     // Duration
-    public getLogDuration(): number  {
+    public get logDuration(): number  {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008707, PSTFile.PSETID_Log));
     }
 
     // End
-    public getLogEnd(): Date  {
+    public get logEnd(): Date  {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008708, PSTFile.PSETID_Log));
     }
 
     // LogFlags
-    public getLogFlags(): number {
+    public get logFlags(): number {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x0000870c, PSTFile.PSETID_Log));
     }
 
     // DocPrinted
-    public isDocumentPrinted(): boolean {
+    public get isDocumentPrinted(): boolean {
         return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x0000870e, PSTFile.PSETID_Log)));
     }
 
     // DocSaved
-    public isDocumentSaved(): boolean {
+    public get isDocumentSaved(): boolean {
         return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x0000870f, PSTFile.PSETID_Log)));
     }
 
     // DocRouted
-    public isDocumentRouted(): boolean {
+    public get isDocumentRouted(): boolean {
         return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008710, PSTFile.PSETID_Log)));
     }
 
     // DocPosted
-    public isDocumentPosted(): boolean {
+    public get isDocumentPosted(): boolean {
         return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008711, PSTFile.PSETID_Log)));
     }
 
     // Type Description
-    public getLogTypeDesc(): string {
+    public get logTypeDesc(): string {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008712, PSTFile.PSETID_Log));
     }
 
     public toString() {
-        return "Type ASCII or Unicode string: " + this.getLogType() + "\n" + "Start Filetime: " + this.getLogStart()
-            + "\n" + "Duration Integer 32-bit signed: " + this.getLogDuration() + "\n" + "End Filetime: "
-            + this.getLogEnd() + "\n" + "LogFlags Integer 32-bit signed: " + this.getLogFlags() + "\n"
-            + "DocPrinted Boolean: " + this.isDocumentPrinted() + "\n" + "DocSaved Boolean: " + this.isDocumentSaved()
-            + "\n" + "DocRouted Boolean: " + this.isDocumentRouted() + "\n" + "DocPosted Boolean: "
-            + this.isDocumentPosted() + "\n" + "TypeDescription ASCII or Unicode string: " + this.getLogTypeDesc();
-
+        return (
+            '\n messageClass: ' + this.messageClass + 
+            '\n subject: ' + this.subject + 
+            '\n importance: ' + this.importance + 
+            '\n transportMessageHeaders: ' + this.transportMessageHeaders + 
+            '\n logType: ' + this.logType + 
+            '\n logStart: ' + this.logStart + 
+            '\n logDuration: ' + this.logDuration + 
+            '\n logEnd: ' + this.logEnd + 
+            '\n logFlags: ' + this.logFlags + 
+            '\n isDocumentPrinted: ' + this.isDocumentPrinted + 
+            '\n isDocumentSaved: ' + this.isDocumentSaved + 
+            '\n isDocumentRouted: ' + this.isDocumentRouted + 
+            '\n isDocumentPosted: ' + this.isDocumentPosted + 
+            '\n logTypeDesc: ' + this.logTypeDesc 
+        );
     }
 
+    public toJSONstring(): string {
+        return JSON.stringify({
+            messageClass: this.messageClass,
+            subject: this.subject,
+            importance: this.importance,
+            transportMessageHeaders: this.transportMessageHeaders,
+            logType: this.logType,
+            logStart: this.logStart,
+            logDuration: this.logDuration,
+            logEnd: this.logEnd,
+            logFlags: this.logFlags,
+            isDocumentPrinted: this.isDocumentPrinted,
+            isDocumentSaved: this.isDocumentSaved,
+            isDocumentRouted: this.isDocumentRouted,
+            isDocumentPosted: this.isDocumentPosted,
+            logTypeDesc: this.logTypeDesc 
+        }, null, 2);
+    }
 }

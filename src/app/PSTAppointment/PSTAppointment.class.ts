@@ -279,6 +279,6 @@ export class PSTAppointment extends PSTMessage {
             localeId: this.localeId,
             globalObjectId: this.globalObjectId,
             cleanGlobalObjectId: this.cleanGlobalObjectId
-        });
+        }, null, 2);
     }
 }

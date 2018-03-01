@@ -141,6 +141,6 @@ export class PSTTask extends PSTMessage {
             taskRole: this.taskRole,
             taskOwnership: this.taskOwnership,
             acceptanceState: this.acceptanceState 
-        });
+        }, null, 2);
     }
 }
