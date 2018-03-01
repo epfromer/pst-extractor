@@ -12,8 +12,8 @@ import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import { Log } from '../Log.class';
 import { PSTAppointment } from '../PSTAppointment/PSTAppointment.class';
 import { PSTContact } from '../PSTContact/PSTContact.class';
-import * as long from 'long';
 import { PSTTask } from '../PSTTask/PSTTask.class';
+import * as long from 'long';
 
 // utility functions for PST components
 export class PSTUtil {
@@ -765,7 +765,7 @@ export class PSTUtil {
         if (item != null) {
             messageClass = item.getStringValue();
         }
-        switch(messageClass) {
+        switch (messageClass) {
             case 'IPM.Note':
             case 'IPM.Note.SMIME.MultipartSigned':
                 // email message
@@ -782,7 +782,7 @@ export class PSTUtil {
                 let apt = new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
                 // Log.debug2(apt.toJSONstring());
                 return apt;
-            case 'IPM.Contact': 
+            case 'IPM.Contact':
                 // contact
                 let contact = new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
                 // Log.debug2(contact.toJSONstring());
@@ -795,7 +795,7 @@ export class PSTUtil {
             case 'IPM.Activity':
                 // journal entry
                 debugger;
-                let activity =  new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
+                let activity = new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
                 Log.debug1(activity.toJSONstring());
                 return activity;
             case 'IPM.Post.Rss':
@@ -811,13 +811,17 @@ export class PSTUtil {
                 // Out of Office rule
                 let oof = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
                 // Log.debug1(oof.toJSONstring());
-                return oof;                
+                return oof;
             case 'IPM.Schedule.Meeting.Request':
                 // Meeting request
-                debugger;
                 let meetReq = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
-                Log.debug1(meetReq.toJSONstring());
-                return meetReq;                
+                // Log.debug1(meetReq.toJSONstring());
+                return meetReq;
+            case 'REPORT.IPM.Note.NDR':
+                // Receipt of non-delivery
+                let ndr = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
+                // Log.debug1(ndr.toJSONstring());
+                return ndr;
             case 'REPORT.IPM.Note.IPNRN':
                 // Read receipt
                 debugger;
@@ -832,9 +836,6 @@ export class PSTUtil {
                 debugger;
             case 'REPORT.IPM.Note.DR':
                 // Delivery receipt
-                debugger;
-            case 'REPORT.IPM.Note.NDR':
-                // Receipt of non-delivery
                 debugger;
             default:
                 Log.error('PSTUtil::createAppropriatePSTMessageObject unknown message type: ' + messageClass);

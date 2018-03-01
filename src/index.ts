@@ -5,11 +5,13 @@ import { Log } from './app/Log.class';
 
 let depth = -1;
 
-let pstFile = new PSTFile('/home/ed/Desktop/outlook/2005-02.pst');
+const start = Date.now();
+let pstFile = new PSTFile('/home/ed/Desktop/outlook/2011-04.pst');
 pstFile.open();
 console.log(pstFile.getMessageStore().getDisplayName());
 processFolder(pstFile.getRootFolder());
-console.log('exiting');
+const end = Date.now();
+console.log('processed in ' + (end - start) + ' ms');
 
 function processFolder(folder: PSTFolder) {
     depth++;
