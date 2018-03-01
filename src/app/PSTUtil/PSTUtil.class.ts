@@ -768,7 +768,12 @@ export class PSTUtil {
             case 'IPM.Note':
             case 'IPM.Note.SMIME.MultipartSigned':
                 // email message
-                return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
+                let msg = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
+                // Log.debug1(msg.body);
+                // Log.debug1(msg.numberOfRecipients.toString());
+                // Log.debug1(msg.colorCategories.toString());
+                Log.debug1(msg.toString());
+                return msg;
             case 'IPM.Appointment':
             case 'IPM.OLE.CLASS.{00061055-0000-0000-C000-000000000046}':
                 // appointment

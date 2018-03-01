@@ -157,7 +157,7 @@ export class PSTObject {
                 if (item.data != null && item.data.length == 8) {
                     return PSTUtil.convertLittleEndianBytesToLong(item.data, 0, 8);
                 } else {
-                    Log.error("PSTObject::getLongItem Invalid data length for long id " + identifier);
+                    Log.error('PSTObject::getLongItem Invalid data length for long id ' + identifier);
                     // Return the default value for now...
                 }
             }
@@ -186,31 +186,26 @@ export class PSTObject {
                 return PSTUtil.createJavascriptString(item.data, stringType, codepage);
             }
 
+            if (this.localDescriptorItems != null && this.localDescriptorItems.has(item.entryValueReference)) {
+                // we have a hit!
+                let descItem: PSTDescriptorItem = this.localDescriptorItems.get(item.entryValueReference);
+
+                try {
+                    let data: Buffer = descItem.getData();
+                    if (data == null) {
+                        return '';
+                    }
+
+                    return PSTUtil.createJavascriptString(data, stringType, codepage);
+                } catch (err) {
+                    Log.error('PSTObject::getStringItem error decoding string');
+                    return '';
+                }
+            }
+
             debugger;
 
-            // if (this.localDescriptorItems != null && this.localDescriptorItems.containsKey(item.entryValueReference)) {
-            //     // we have a hit!
-            //     final PSTDescriptorItem descItem = this.localDescriptorItems.get(item.entryValueReference);
-
-            //     try {
-            //         final byte[] data = descItem.getData();
-            //         if (data == null) {
-            //             return "";
-            //         }
-
-            //         return PSTObject.createJavaString(data, stringType, codepage);
-            //     } catch (final Exception e) {
-            //         System.err.printf("Exception %s decoding string %s: %s\n", e.toString(),
-            //             PSTFile.getPropertyDescription(identifier, stringType),
-            //             this.data != null ? this.data.toString() : "null");
-            //         return "";
-            //     }
-            //     // System.out.printf("PSTObject.getStringItem - item isn't a
-            //     // string: 0x%08X\n", identifier);
-            //     // return "";
-            // }
-
-            // return PSTUtil.createJavascriptString(this.data, stringType, codepage);
+            //return PSTUtil.createJavascriptString(this.data, stringType, codepage);
         }
         return '';
     }
@@ -250,18 +245,17 @@ export class PSTObject {
                 if (!item.isExternalValueReference) {
                     return item.data;
                 }
-                if (this.localDescriptorItems != null
-                    && this.localDescriptorItems.has(item.entryValueReference)) {
+                if (this.localDescriptorItems != null && this.localDescriptorItems.has(item.entryValueReference)) {
                     // we have a hit!
                     let descItem: PSTDescriptorItem = this.localDescriptorItems.get(item.entryValueReference);
                     try {
                         return descItem.getData();
                     } catch (e) {
-                        Log.error("Exception reading binary item: reference " + item.entryValueReference);
+                        Log.error('Exception reading binary item: reference ' + item.entryValueReference);
                         return null;
                     }
                 }
-                Log.debug1("PSTObject::getBinaryItem External reference!");
+                Log.debug1('PSTObject::getBinaryItem External reference!');
             }
         }
         return null;
@@ -280,7 +274,7 @@ export class PSTObject {
     }
 
     public toString() {
-        return this.localDescriptorItems + "\n" + this.pstTableItems;
+        return this.localDescriptorItems + '\n' + this.pstTableItems;
     }
 
     //  These are the common properties, some don't really appear to be common

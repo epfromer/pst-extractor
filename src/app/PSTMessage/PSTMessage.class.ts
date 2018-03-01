@@ -1,3 +1,4 @@
+import { LZFu } from './../LZFu/LZFu.class';
 import { PSTConversationIndex } from './../PSTConversationIndex/PSTConversationIndex.class';
 import { PSTAttachment } from './../PSTAttachment/PSTAttachment.class';
 import { PSTRecipient } from './../PSTRecipient/PSTRecipient.class';
@@ -10,6 +11,8 @@ import { PSTTable7C } from '../PSTTable7C/PSTTable7C.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import { PSTTable7CItem } from '../PSTTable7CItem/PSTTable7CItem.class';
 import * as long from 'long';
+import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 
 // PST Message contains functions that are common across most MAPI objects.
 // Note that many of these functions may not be applicable for the item in question,
@@ -24,7 +27,7 @@ export class PSTMessage extends PSTObject {
     public static RECIPIENT_TYPE_CC = 2;
     private recipientTable: PSTTable7C = null;
     private attachmentTable: PSTTable7C = null;
-    
+
     constructor(
         pstFile: PSTFile,
         descriptorIndexNode: DescriptorIndexNode,
@@ -42,20 +45,19 @@ export class PSTMessage extends PSTObject {
     }
 
     public get rtfBody(): string {
-        debugger;
-        //     // do we have an entry for it?
-        //     if (this.items.containsKey(0x1009)) {
-        //         // is it a reference?
-        //         final PSTTableBCItem item = this.items.get(0x1009);
-        //         if (item.data.length > 0) {
-        //             return (LZFu.decode(item.data));
-        //         }
-        //         final int ref = item.entryValueReference;
-        //         final PSTDescriptorItem descItem = this.localDescriptorItems.get(ref);
-        //         if (descItem != null) {
-        //             return LZFu.decode(descItem.getData());
-        //         }
-        //     }
+        // do we have an entry for it?
+        if (this.pstTableItems.has(0x1009)) {
+            // is it a reference?
+            let item: PSTTableBCItem = this.pstTableItems.get(0x1009);
+            if (item.data.length > 0) {
+                return LZFu.decode(item.data);
+            }
+            let ref = item.entryValueReference;
+            let descItem: PSTDescriptorItem = this.localDescriptorItems.get(ref);
+            if (descItem != null) {
+                return LZFu.decode(descItem.getData());
+            }
+        }
         return '';
     }
 
@@ -132,35 +134,35 @@ export class PSTMessage extends PSTObject {
     }
 
     public get isRead(): boolean {
-        return ((this.getIntItem(0x0e07) & 0x01) != 0);
+        return (this.getIntItem(0x0e07) & 0x01) != 0;
     }
 
     public get isUnmodified(): boolean {
-        return ((this.getIntItem(0x0e07) & 0x02) != 0);
+        return (this.getIntItem(0x0e07) & 0x02) != 0;
     }
 
     public get isSubmitted(): boolean {
-        return ((this.getIntItem(0x0e07) & 0x04) != 0);
+        return (this.getIntItem(0x0e07) & 0x04) != 0;
     }
 
     public get isUnsent(): boolean {
-        return ((this.getIntItem(0x0e07) & 0x08) != 0);
+        return (this.getIntItem(0x0e07) & 0x08) != 0;
     }
 
     public get hasAttachments(): boolean {
-        return ((this.getIntItem(0x0e07) & 0x10) != 0);
+        return (this.getIntItem(0x0e07) & 0x10) != 0;
     }
 
     public get isFromMe(): boolean {
-        return ((this.getIntItem(0x0e07) & 0x20) != 0);
+        return (this.getIntItem(0x0e07) & 0x20) != 0;
     }
 
     public get isAssociated(): boolean {
-        return ((this.getIntItem(0x0e07) & 0x40) != 0);
+        return (this.getIntItem(0x0e07) & 0x40) != 0;
     }
 
     public get isResent(): boolean {
-        return ((this.getIntItem(0x0e07) & 0x80) != 0);
+        return (this.getIntItem(0x0e07) & 0x80) != 0;
     }
 
     // Acknowledgment mode Integer 32-bit signed
@@ -171,7 +173,7 @@ export class PSTMessage extends PSTObject {
     // Originator delivery report requested set if the sender wants a delivery
     // report from all recipients 0 = false 0 != true
     public get originatorDeliveryReportRequested(): boolean {
-        return (this.getIntItem(0x0023) != 0);
+        return this.getIntItem(0x0023) != 0;
     }
 
     // 0x0025 0x0102 PR_PARENT_KEY Parent key Binary data Contains a GUID
@@ -182,12 +184,12 @@ export class PSTMessage extends PSTObject {
 
     // Read Receipt Requested Boolean 0 = false 0 != true
     public get readReceiptRequested(): boolean {
-        return (this.getIntItem(0x0029) != 0);
+        return this.getIntItem(0x0029) != 0;
     }
 
     // Recipient Reassignment Prohibited Boolean 0 = false 0 != true
     public get recipientReassignmentProhibited(): boolean {
-        return (this.getIntItem(0x002b) != 0);
+        return this.getIntItem(0x002b) != 0;
     }
 
     // Original sensitivity Integer 32-bit signed the sensitivity of the message
@@ -232,12 +234,12 @@ export class PSTMessage extends PSTObject {
 
     // My address in To field Boolean
     public get messageToMe(): boolean {
-        return (this.getIntItem(0x0057) != 0);
+        return this.getIntItem(0x0057) != 0;
     }
 
     // My address in CC field Boolean
     public get messageCcMe(): boolean {
-        return (this.getIntItem(0x0058) != 0);
+        return this.getIntItem(0x0058) != 0;
     }
 
     // Indicates that the receiving mailbox owner is a primary or a carbon copy
@@ -289,12 +291,12 @@ export class PSTMessage extends PSTObject {
 
     // Non receipt notification requested
     public get isNonReceiptNotificationRequested(): boolean {
-        return (this.getIntItem(0x0c06) != 0);
+        return this.getIntItem(0x0c06) != 0;
     }
 
     // Originator non delivery report requested
     public get isOriginatorNonDeliveryReportRequested(): boolean {
-        return (this.getIntItem(0x0c08) != 0);
+        return this.getIntItem(0x0c08) != 0;
     }
 
     // Recipient type Integer 32-bit signed 0x01 => To 0x02 =>CC
@@ -304,7 +306,7 @@ export class PSTMessage extends PSTObject {
 
     // Reply requested
     public get isReplyRequested(): boolean {
-        return (this.getIntItem(0x0c17) != 0);
+        return this.getIntItem(0x0c17) != 0;
     }
 
     // Sending mailbox owner's address book entry ID
@@ -362,22 +364,22 @@ export class PSTMessage extends PSTObject {
 
     // Delete after submit
     public get deleteAfterSubmit(): boolean {
-        return ((this.getIntItem(0x0e01)) != 0);
+        return this.getIntItem(0x0e01) != 0;
     }
 
     // Responsibility
     public get responsibility(): boolean {
-        return ((this.getIntItem(0x0e0f)) != 0);
+        return this.getIntItem(0x0e0f) != 0;
     }
 
     // Compressed RTF in Sync Boolean
     public get isRTFInSync(): boolean {
-        return ((this.getIntItem(0x0e1f)) != 0);
+        return this.getIntItem(0x0e1f) != 0;
     }
 
     // URL computer name set
     public get isURLCompNameSet(): boolean {
-        return ((this.getIntItem(0x0e62)) != 0);
+        return this.getIntItem(0x0e62) != 0;
     }
 
     // Display BCC
@@ -407,17 +409,15 @@ export class PSTMessage extends PSTObject {
 
     // Plain text e-mail body
     public get body(): string {
-        debugger;
-        return '';
-        // let cp: string = null;
-        // let cpItem: PSTTableBCItem = this.items.get(0x3FFD); // PidTagMessageCodepage
-        // if (cpItem == null) {
-        //     cpItem = this.items.get(0x3FDE); // PidTagInternetCodepage
-        // }
-        // if (cpItem != null) {
-        //     cp = PSTFile.getInternetCodePageCharset(cpItem.entryValueReference);
-        // }
-        // return this.getStringItem(0x1000, 0, cp);
+        let cp: string = null;
+        let cpItem: PSTTableBCItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
+        if (cpItem == null) {
+            cpItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
+        }
+        if (cpItem != null) {
+            cp = PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
+        }
+        return this.getStringItem(0x1000, 0, cp);
     }
 
     // Plain text body prefix
@@ -496,13 +496,13 @@ export class PSTMessage extends PSTObject {
     // is the action flag for this item "forward"?
     public get hasForwarded(): boolean {
         let actionFlag = this.getIntItem(0x1081);
-        return ((actionFlag & 0x8) > 0);
+        return (actionFlag & 0x8) > 0;
     }
 
     // is the action flag for this item "replied"?
     public get hasReplied(): boolean {
         let actionFlag = this.getIntItem(0x1081);
-        return ((actionFlag & 0x4) > 0);
+        return (actionFlag & 0x4) > 0;
     }
 
     // the date that this item had an action performed (eg. replied or
@@ -513,7 +513,7 @@ export class PSTMessage extends PSTObject {
 
     // Disable full fidelity
     public get disableFullFidelity(): boolean {
-        return (this.getIntItem(0x10f2) != 0);
+        return this.getIntItem(0x10f2) != 0;
     }
 
     // URL computer name
@@ -524,27 +524,25 @@ export class PSTMessage extends PSTObject {
 
     // Attribute hidden
     public get attrHidden(): boolean {
-        return (this.getIntItem(0x10f4) != 0);
+        return this.getIntItem(0x10f4) != 0;
     }
 
     // Attribute system
     public get attrSystem(): boolean {
-        return (this.getIntItem(0x10f5) != 0);
+        return this.getIntItem(0x10f5) != 0;
     }
 
     // Attribute read only
     public get attrReadonly(): boolean {
-        return (this.getIntItem(0x10f6) != 0);
+        return this.getIntItem(0x10f6) != 0;
     }
 
     // find, extract and load up all of the attachments in this email
     // necessary for the other operations.
     private processRecipients() {
-        debugger;
         try {
             let recipientTableKey = 0x0692;
-            if (this.recipientTable == null && this.localDescriptorItems != null
-                && this.localDescriptorItems.has(recipientTableKey)) {
+            if (this.recipientTable == null && this.localDescriptorItems != null && this.localDescriptorItems.has(recipientTableKey)) {
                 let item: PSTDescriptorItem = this.localDescriptorItems.get(recipientTableKey);
                 let descriptorItems: Map<number, PSTDescriptorItem> = null;
                 if (item.subNodeOffsetIndexIdentifier > 0) {
@@ -576,8 +574,7 @@ export class PSTMessage extends PSTObject {
     // necessary for the other operations.
     private processAttachments() {
         let attachmentTableKey = 0x0671;
-        if (this.attachmentTable == null && this.localDescriptorItems != null
-            && this.localDescriptorItems.has(attachmentTableKey)) {
+        if (this.attachmentTable == null && this.localDescriptorItems != null && this.localDescriptorItems.has(attachmentTableKey)) {
             let item: PSTDescriptorItem = this.localDescriptorItems.get(attachmentTableKey);
             let descriptorItems: Map<number, PSTDescriptorItem> = null;
             if (item.subNodeOffsetIndexIdentifier > 0) {
@@ -615,46 +612,44 @@ export class PSTMessage extends PSTObject {
     // get the categories defined for this message
     public get colorCategories(): string[] {
         debugger;
-        return [];
-    //     final int keywordCategory = this.pstFile.getPublicStringToIdMapItem("Keywords");
+        let keywordCategory: number = PSTFile.getPublicStringToIdMapItem('Keywords');
 
-    //     String[] categories = new String[0];
-    //     if (this.items.containsKey(keywordCategory)) {
-    //         try {
-    //             final PSTTableBCItem item = this.items.get(keywordCategory);
-    //             if (item.data.length == 0) {
-    //                 return categories;
-    //             }
-    //             final int categoryCount = item.data[0];
-    //             if (categoryCount > 0) {
-    //                 categories = new String[categoryCount];
-    //                 final int[] offsets = new int[categoryCount];
-    //                 for (int x = 0; x < categoryCount; x++) {
-    //                     offsets[x] = (int) PSTObject.convertBigEndianBytesToLong(item.data, (x * 4) + 1,
-    //                         (x + 1) * 4 + 1);
-    //                 }
-    //                 for (int x = 0; x < offsets.length - 1; x++) {
-    //                     final int start = offsets[x];
-    //                     final int end = offsets[x + 1];
-    //                     final int length = (end - start);
-    //                     final byte[] string = new byte[length];
-    //                     System.arraycopy(item.data, start, string, 0, length);
-    //                     final String name = new String(string, "UTF-16LE");
-    //                     categories[x] = name;
-    //                 }
-    //                 final int start = offsets[offsets.length - 1];
-    //                 final int end = item.data.length;
-    //                 final int length = (end - start);
-    //                 final byte[] string = new byte[length];
-    //                 System.arraycopy(item.data, start, string, 0, length);
-    //                 final String name = new String(string, "UTF-16LE");
-    //                 categories[categories.length - 1] = name;
-    //             }
-    //         } catch (final Exception err) {
-    //             throw new PSTException("Unable to decode category data", err);
-    //         }
-    //     }
-    //     return categories;
+        let categories: string[] = [];
+        if (this.pstTableItems.has(keywordCategory)) {
+            try {
+                let item: PSTTableBCItem = this.pstTableItems.get(keywordCategory);
+                if (item.data.length == 0) {
+                    return [];
+                }
+                let categoryCount: number = item.data[0];
+                if (categoryCount > 0) {
+                    let categories: string[] = [];
+                    let offsets: number[] = [];
+                    for (let x = 0; x < categoryCount; x++) {
+                        offsets[x] = PSTUtil.convertBigEndianBytesToLong(item.data, x * 4 + 1, (x + 1) * 4 + 1).toNumber();
+                    }
+                    for (let x = 0; x < offsets.length - 1; x++) {
+                        let start = offsets[x];
+                        let end = offsets[x + 1];
+                        let length = end - start;
+                        let buf: Buffer = new Buffer(length);
+                        PSTUtil.arraycopy(item.data, start, buf, 0, length);
+                        let name: string = new Buffer(buf).toString();
+                        categories[x] = name;
+                    }
+                    let start = offsets[offsets.length - 1];
+                    let end = item.data.length;
+                    let length = end - start;
+                    let buf: Buffer = new Buffer(length);
+                    PSTUtil.arraycopy(item.data, start, buf, 0, length);
+                    let name: string = new Buffer(buf).toString();
+                    categories[categories.length - 1] = name;
+                }
+            } catch (err) {
+                throw new Error('Unable to decode category data');
+            }
+        }
+        return categories;
     }
 
     // get the number of attachments for this message
@@ -678,58 +673,57 @@ export class PSTMessage extends PSTObject {
     public getAttachment(attachmentNumber: number): PSTAttachment {
         debugger;
         return null;
-    //     this.processAttachments();
+        //     this.processAttachments();
 
-    //     int attachmentCount = 0;
-    //     if (this.attachmentTable != null) {
-    //         attachmentCount = this.attachmentTable.getRowCount();
-    //     }
+        //     int attachmentCount = 0;
+        //     if (this.attachmentTable != null) {
+        //         attachmentCount = this.attachmentTable.getRowCount();
+        //     }
 
-    //     if (attachmentNumber >= attachmentCount) {
-    //         throw new PSTException("unable to fetch attachment number " + attachmentNumber + ", only " + attachmentCount
-    //             + " in this email");
-    //     }
+        //     if (attachmentNumber >= attachmentCount) {
+        //         throw new PSTException("unable to fetch attachment number " + attachmentNumber + ", only " + attachmentCount
+        //             + " in this email");
+        //     }
 
-    //     // we process the C7 table here, basically we just want the attachment
-    //     // local descriptor...
-    //     final HashMap<Integer, PSTTable7CItem> attachmentDetails = this.attachmentTable.getItems()
-    //         .get(attachmentNumber);
-    //     final PSTTable7CItem attachmentTableItem = attachmentDetails.get(0x67f2);
-    //     final int descriptorItemId = attachmentTableItem.entryValueReference;
+        //     // we process the C7 table here, basically we just want the attachment
+        //     // local descriptor...
+        //     final HashMap<Integer, PSTTable7CItem> attachmentDetails = this.attachmentTable.getItems()
+        //         .get(attachmentNumber);
+        //     final PSTTable7CItem attachmentTableItem = attachmentDetails.get(0x67f2);
+        //     final int descriptorItemId = attachmentTableItem.entryValueReference;
 
-    //     // get the local descriptor for the attachmentDetails table.
-    //     final PSTDescriptorItem descriptorItem = this.localDescriptorItems.get(descriptorItemId);
+        //     // get the local descriptor for the attachmentDetails table.
+        //     final PSTDescriptorItem descriptorItem = this.localDescriptorItems.get(descriptorItemId);
 
-    //     // try and decode it
-    //     final byte[] attachmentData = descriptorItem.getData();
-    //     if (attachmentData != null && attachmentData.length > 0) {
-    //         // PSTTableBC attachmentDetailsTable = new
-    //         // PSTTableBC(descriptorItem.getData(),
-    //         // descriptorItem.getBlockOffsets());
-    //         final PSTTableBC attachmentDetailsTable = new PSTTableBC(
-    //             new PSTNodeInputStream(this.pstFile, descriptorItem));
+        //     // try and decode it
+        //     final byte[] attachmentData = descriptorItem.getData();
+        //     if (attachmentData != null && attachmentData.length > 0) {
+        //         // PSTTableBC attachmentDetailsTable = new
+        //         // PSTTableBC(descriptorItem.getData(),
+        //         // descriptorItem.getBlockOffsets());
+        //         final PSTTableBC attachmentDetailsTable = new PSTTableBC(
+        //             new PSTNodeInputStream(this.pstFile, descriptorItem));
 
-    //         // create our all-precious attachment object.
-    //         // note that all the information that was in the c7 table is
-    //         // repeated in the eb table in attachment data.
-    //         // so no need to pass it...
-    //         HashMap<Integer, PSTDescriptorItem> attachmentDescriptorItems = new HashMap<>();
-    //         if (descriptorItem.subNodeOffsetIndexIdentifier > 0) {
-    //             attachmentDescriptorItems = this.pstFile
-    //                 .getPSTDescriptorItems(descriptorItem.subNodeOffsetIndexIdentifier);
-    //         }
-    //         return new PSTAttachment(this.pstFile, attachmentDetailsTable, attachmentDescriptorItems);
-    //     }
+        //         // create our all-precious attachment object.
+        //         // note that all the information that was in the c7 table is
+        //         // repeated in the eb table in attachment data.
+        //         // so no need to pass it...
+        //         HashMap<Integer, PSTDescriptorItem> attachmentDescriptorItems = new HashMap<>();
+        //         if (descriptorItem.subNodeOffsetIndexIdentifier > 0) {
+        //             attachmentDescriptorItems = this.pstFile
+        //                 .getPSTDescriptorItems(descriptorItem.subNodeOffsetIndexIdentifier);
+        //         }
+        //         return new PSTAttachment(this.pstFile, attachmentDetailsTable, attachmentDescriptorItems);
+        //     }
 
-    //     throw new PSTException(
-    //         "unable to fetch attachment number " + attachmentNumber + ", unable to read attachment details table");
+        //     throw new PSTException(
+        //         "unable to fetch attachment number " + attachmentNumber + ", unable to read attachment details table");
     }
 
     // get a specific recipient from this email.
     public getRecipient(recipientNumber: number): PSTRecipient {
-        if (recipientNumber >= this.numberOfRecipients
-            || recipientNumber >= this.recipientTable.getItems().length) {
-            throw new Error("unable to fetch recipient number " + recipientNumber);
+        if (recipientNumber >= this.numberOfRecipients || recipientNumber >= this.recipientTable.getItems().length) {
+            throw new Error('unable to fetch recipient number ' + recipientNumber);
         }
 
         debugger;
@@ -747,7 +741,7 @@ export class PSTMessage extends PSTObject {
         if (this.recipientTable != null) {
             return this.recipientTable.getItemsString();
         }
-        return "No recipients table!";
+        return 'No recipients table!';
     }
 
     public get conversationId(): Buffer {
@@ -770,106 +764,198 @@ export class PSTMessage extends PSTObject {
     // }
     public toString(): string {
         return (
-            '\n messageClass: ' + this.messageClass + 
-            '\n subject: ' + this.subject + 
-            '\n importance: ' + this.importance + 
-            '\n transportMessageHeaders: ' + this.transportMessageHeaders + 
-            '\n rtfBody: ' + this.rtfBody + 
-            '\n clientSubmitTime: ' + this.clientSubmitTime + 
-            '\n receivedByName: ' + this.receivedByName + 
-            '\n sentRepresentingName: ' + this.sentRepresentingName + 
-            '\n sentRepresentingAddressType: ' + this.sentRepresentingAddressType + 
-            '\n sentRepresentingEmailAddress: ' + this.sentRepresentingEmailAddress + 
-            '\n conversationTopic: ' + this.conversationTopic + 
-            '\n receivedByAddressType: ' + this.receivedByAddressType + 
-            '\n receivedByAddress: ' + this.receivedByAddress + 
-            '\n transportMessageHeaders: ' + this.transportMessageHeaders + 
-            '\n isRead: ' + this.isRead + 
-            '\n isUnmodified: ' + this.isUnmodified + 
-            '\n isSubmitted: ' + this.isSubmitted + 
-            '\n isUnsent: ' + this.isUnsent + 
-            '\n hasAttachments: ' + this.hasAttachments + 
-            '\n isFromMe: ' + this.isFromMe + 
-            '\n isAssociated: ' + this.isAssociated + 
-            '\n isResent: ' + this.isResent + 
-            '\n acknowledgementMode: ' + this.acknowledgementMode + 
-            '\n originatorDeliveryReportRequested: ' + this.originatorDeliveryReportRequested + 
-            '\n readReceiptRequested: ' + this.readReceiptRequested + 
-            '\n recipientReassignmentProhibited: ' + this.recipientReassignmentProhibited + 
-            '\n originalSensitivity: ' + this.originalSensitivity + 
-            '\n sensitivity: ' + this.sensitivity + 
-            '\n pidTagSentRepresentingSearchKey: ' + this.pidTagSentRepresentingSearchKey + 
-            '\n rcvdRepresentingName: ' + this.rcvdRepresentingName + 
-            '\n bloriginalSubjectah: ' + this.originalSubject + 
-            '\n replyRecipientNames: ' + this.replyRecipientNames + 
-            '\n messageToMe: ' + this.messageToMe + 
-            '\n messageCcMe: ' + this.messageCcMe + 
-            '\n messageRecipMe: ' + this.messageRecipMe + 
-            '\n responseRequested: ' + this.responseRequested + 
-            '\n sentRepresentingAddrtype: ' + this.sentRepresentingAddrtype + 
-            '\n originalDisplayBcc: ' + this.originalDisplayBcc + 
-            '\n originalDisplayCc: ' + this.originalDisplayCc + 
-            '\n originalDisplayTo: ' + this.originalDisplayTo + 
-            '\n rcvdRepresentingAddrtype: ' + this.rcvdRepresentingAddrtype + 
-            '\n rcvdRepresentingEmailAddress: ' + this.rcvdRepresentingEmailAddress + 
-            '\n isNonReceiptNotificationRequested: ' + this.isNonReceiptNotificationRequested + 
-            '\n isOriginatorNonDeliveryReportRequested: ' + this.isOriginatorNonDeliveryReportRequested + 
-            '\n recipientType: ' + this.recipientType + 
-            '\n isReplyRequested: ' + this.isReplyRequested + 
-            '\n senderEntryId: ' + this.senderEntryId + 
-            '\n senderName: ' + this.senderName + 
-            '\n senderAddrtype: ' + this.senderAddrtype + 
-            '\n senderEmailAddress: ' + this.senderEmailAddress + 
-            '\n messageSize: ' + this.messageSize + 
-            '\n internetArticleNumber: ' + this.internetArticleNumber + 
-            '\n primarySendAccount: ' + this.primarySendAccount + 
-            '\n nextSendAcct: ' + this.nextSendAcct + 
-            '\n urlCompNamePostfix: ' + this.urlCompNamePostfix + 
-            '\n objectType: ' + this.objectType + 
-            '\n deleteAfterSubmit: ' + this.deleteAfterSubmit + 
-            '\n responsibility: ' + this.responsibility + 
-            '\n isRTFInSync: ' + this.isRTFInSync + 
-            '\n isURLCompNameSet: ' + this.isURLCompNameSet + 
-            '\n displayBCC: ' + this.displayBCC + 
-            '\n displayCC: ' + this.displayCC + 
-            '\n displayTo: ' + this.displayTo + 
-            '\n messageDeliveryTime: ' + this.messageDeliveryTime + 
-            '\n nativeBodyType: ' + this.nativeBodyType + 
-            '\n bodyPrefix: ' + this.bodyPrefix + 
-            '\n rtfSyncBodyCRC: ' + this.rtfSyncBodyCRC + 
-            '\n rtfSyncBodyCount: ' + this.rtfSyncBodyCount + 
-            '\n rtfSyncBodyTag: ' + this.rtfSyncBodyTag + 
-            '\n rtfSyncPrefixCount: ' + this.rtfSyncPrefixCount + 
-            '\n rtfSyncTrailingCount: ' + this.rtfSyncTrailingCount + 
-            '\n internetMessageId: ' + this.internetMessageId + 
-            '\n inReplyToId: ' + this.inReplyToId + 
-            '\n returnPath: ' + this.returnPath + 
-            '\n iconIndex: ' + this.iconIndex + 
-            '\n actionFlag: ' + this.actionFlag + 
-            '\n hasReplied: ' + this.hasReplied + 
-            '\n actionDate: ' + this.actionDate + 
-            '\n disableFullFidelity: ' + this.disableFullFidelity + 
-            '\n urlCompName: ' + this.urlCompName + 
-            '\n attrHidden: ' + this.attrHidden + 
-            '\n attrSystem: ' + this.attrSystem + 
-            '\n attrReadonly: ' + this.attrReadonly + 
-            '\n numberOfRecipients: ' + this.numberOfRecipients + 
-            '\n taskStartDate: ' + this.taskStartDate + 
-            '\n taskDueDate: ' + this.taskDueDate + 
-            '\n reminderSet: ' + this.reminderSet + 
-            '\n reminderDelta: ' + this.reminderDelta + 
-            '\n isFlagged: ' + this.isFlagged + 
-            '\n colorCategories: ' + this.colorCategories + 
-            '\n numberOfAttachments: ' + this.numberOfAttachments + 
-            '\n recipientsString: ' + this.recipientsString + 
-            '\n conversationId: ' + this.conversationId + 
-            '\n conversationIndex: ' + this.conversationIndex + 
-            '\n isConversationIndexTracking: ' + this.isConversationIndexTracking 
+            '\n messageClass: ' +
+            this.messageClass +
+            '\n subject: ' +
+            this.subject +
+            '\n importance: ' +
+            this.importance +
+            '\n transportMessageHeaders: ' +
+            this.transportMessageHeaders +
+            '\n clientSubmitTime: ' +
+            this.clientSubmitTime +
+            '\n receivedByName: ' +
+            this.receivedByName +
+            '\n sentRepresentingName: ' +
+            this.sentRepresentingName +
+            '\n sentRepresentingAddressType: ' +
+            this.sentRepresentingAddressType +
+            '\n sentRepresentingEmailAddress: ' +
+            this.sentRepresentingEmailAddress +
+            '\n conversationTopic: ' +
+            this.conversationTopic +
+            '\n receivedByAddressType: ' +
+            this.receivedByAddressType +
+            '\n receivedByAddress: ' +
+            this.receivedByAddress +
+            '\n transportMessageHeaders: ' +
+            this.transportMessageHeaders +
+            '\n isRead: ' +
+            this.isRead +
+            '\n isUnmodified: ' +
+            this.isUnmodified +
+            '\n isSubmitted: ' +
+            this.isSubmitted +
+            '\n isUnsent: ' +
+            this.isUnsent +
+            '\n hasAttachments: ' +
+            this.hasAttachments +
+            '\n isFromMe: ' +
+            this.isFromMe +
+            '\n isAssociated: ' +
+            this.isAssociated +
+            '\n isResent: ' +
+            this.isResent +
+            '\n acknowledgementMode: ' +
+            this.acknowledgementMode +
+            '\n originatorDeliveryReportRequested: ' +
+            this.originatorDeliveryReportRequested +
+            '\n readReceiptRequested: ' +
+            this.readReceiptRequested +
+            '\n recipientReassignmentProhibited: ' +
+            this.recipientReassignmentProhibited +
+            '\n originalSensitivity: ' +
+            this.originalSensitivity +
+            '\n sensitivity: ' +
+            this.sensitivity +
+            '\n pidTagSentRepresentingSearchKey: ' +
+            this.pidTagSentRepresentingSearchKey +
+            '\n rcvdRepresentingName: ' +
+            this.rcvdRepresentingName +
+            '\n bloriginalSubjectah: ' +
+            this.originalSubject +
+            '\n replyRecipientNames: ' +
+            this.replyRecipientNames +
+            '\n messageToMe: ' +
+            this.messageToMe +
+            '\n messageCcMe: ' +
+            this.messageCcMe +
+            '\n messageRecipMe: ' +
+            this.messageRecipMe +
+            '\n responseRequested: ' +
+            this.responseRequested +
+            '\n sentRepresentingAddrtype: ' +
+            this.sentRepresentingAddrtype +
+            '\n originalDisplayBcc: ' +
+            this.originalDisplayBcc +
+            '\n originalDisplayCc: ' +
+            this.originalDisplayCc +
+            '\n originalDisplayTo: ' +
+            this.originalDisplayTo +
+            '\n rcvdRepresentingAddrtype: ' +
+            this.rcvdRepresentingAddrtype +
+            '\n rcvdRepresentingEmailAddress: ' +
+            this.rcvdRepresentingEmailAddress +
+            '\n isNonReceiptNotificationRequested: ' +
+            this.isNonReceiptNotificationRequested +
+            '\n isOriginatorNonDeliveryReportRequested: ' +
+            this.isOriginatorNonDeliveryReportRequested +
+            '\n recipientType: ' +
+            this.recipientType +
+            '\n isReplyRequested: ' +
+            this.isReplyRequested +
+            '\n senderEntryId: ' +
+            this.senderEntryId +
+            '\n senderName: ' +
+            this.senderName +
+            '\n senderAddrtype: ' +
+            this.senderAddrtype +
+            '\n senderEmailAddress: ' +
+            this.senderEmailAddress +
+            '\n messageSize: ' +
+            this.messageSize +
+            '\n internetArticleNumber: ' +
+            this.internetArticleNumber +
+            '\n primarySendAccount: ' +
+            this.primarySendAccount +
+            '\n nextSendAcct: ' +
+            this.nextSendAcct +
+            '\n urlCompNamePostfix: ' +
+            this.urlCompNamePostfix +
+            '\n objectType: ' +
+            this.objectType +
+            '\n deleteAfterSubmit: ' +
+            this.deleteAfterSubmit +
+            '\n responsibility: ' +
+            this.responsibility +
+            '\n isRTFInSync: ' +
+            this.isRTFInSync +
+            '\n isURLCompNameSet: ' +
+            this.isURLCompNameSet +
+            '\n displayBCC: ' +
+            this.displayBCC +
+            '\n displayCC: ' +
+            this.displayCC +
+            '\n displayTo: ' +
+            this.displayTo +
+            '\n messageDeliveryTime: ' +
+            this.messageDeliveryTime +
+            '\n nativeBodyType: ' +
+            this.nativeBodyType +
+            '\n bodyPrefix: ' +
+            this.bodyPrefix +
+            '\n rtfSyncBodyCRC: ' +
+            this.rtfSyncBodyCRC +
+            '\n rtfSyncBodyCount: ' +
+            this.rtfSyncBodyCount +
+            '\n rtfSyncBodyTag: ' +
+            this.rtfSyncBodyTag +
+            '\n rtfSyncPrefixCount: ' +
+            this.rtfSyncPrefixCount +
+            '\n rtfSyncTrailingCount: ' +
+            this.rtfSyncTrailingCount +
+            '\n internetMessageId: ' +
+            this.internetMessageId +
+            '\n inReplyToId: ' +
+            this.inReplyToId +
+            '\n returnPath: ' +
+            this.returnPath +
+            '\n iconIndex: ' +
+            this.iconIndex +
+            '\n actionFlag: ' +
+            this.actionFlag +
+            '\n hasReplied: ' +
+            this.hasReplied +
+            '\n actionDate: ' +
+            this.actionDate +
+            '\n disableFullFidelity: ' +
+            this.disableFullFidelity +
+            '\n urlCompName: ' +
+            this.urlCompName +
+            '\n attrHidden: ' +
+            this.attrHidden +
+            '\n attrSystem: ' +
+            this.attrSystem +
+            '\n attrReadonly: ' +
+            this.attrReadonly +
+            '\n numberOfRecipients: ' +
+            this.numberOfRecipients +
+            '\n taskStartDate: ' +
+            this.taskStartDate +
+            '\n taskDueDate: ' +
+            this.taskDueDate +
+            '\n reminderSet: ' +
+            this.reminderSet +
+            '\n reminderDelta: ' +
+            this.reminderDelta +
+            '\n isFlagged: ' +
+            this.isFlagged +
+            '\n colorCategories: ' +
+            this.colorCategories +
+            '\n numberOfAttachments: ' +
+            this.numberOfAttachments +
+            '\n recipientsString: ' +
+            this.recipientsString +
+            '\n conversationId: ' +
+            this.conversationId +
+            '\n conversationIndex: ' +
+            this.conversationIndex +
+            '\n isConversationIndexTracking: ' +
+            this.isConversationIndexTracking
         );
     }
 
     public toJSONstring(): string {
-        return JSON.stringify({
-        });
+        return JSON.stringify({});
     }
 }

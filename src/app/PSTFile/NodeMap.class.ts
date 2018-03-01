@@ -27,7 +27,6 @@ export class NodeMap {
         if (typeof key === 'number') {
             id = this.nameToId.get(this.transformKey(key, idx).toString());
         } else if (typeof key === 'string') {
-            debugger;
             id = this.nameToId.get(key);
         } else {
             throw new Error('NodeMap::getId bad param type ' + typeof key);
