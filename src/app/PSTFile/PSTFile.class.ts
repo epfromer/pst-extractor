@@ -11,12 +11,12 @@ import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
+import { Log } from '../Log.class';
 import * as fs from 'fs';
 import * as fsext from 'fs-ext';
 import * as util from 'util';
 import * as long from 'long';
 import * as uuidparse from 'uuid-parse';
-import { Log } from '../Log.class';
 
 export class PSTFile {
     public static ENCRYPTION_TYPE_NONE: number = 0;
@@ -324,23 +324,23 @@ export class PSTFile {
         return new PSTNodeInputStream(this, offsetItem);
     }
 
-    // public int getLeafSize(final long bid) throws IOException, PSTException {
-    //     final OffsetIndexItem offsetItem = this.getOffsetIndexNode(bid);
+    public getLeafSize(bid: long): number {
+        let offsetItem: OffsetIndexItem = this.getOffsetIndexNode(bid);
 
-    //     // Internal block?
-    //     if ((offsetItem.indexIdentifier & 0x02) == 0) {
-    //         // No, return the raw size
-    //         return offsetItem.size;
-    //     }
+        // Internal block?
+        if ((offsetItem.indexIdentifier.toNumber() & 0x02) == 0) {
+            // No, return the raw size
+            return offsetItem.size;
+        }
 
-    //     // we only need the first 8 bytes
-    //     final byte[] data = new byte[8];
-    //     this.in.seek(offsetItem.fileOffset);
-    //     this.in.readCompletely(data);
+        // we only need the first 8 bytes
+        let data: Buffer = new Buffer(8);
+        this.pstFileContent.seek(offsetItem.fileOffset);
+        this.pstFileContent.readCompletely(data);
 
-    //     // we are an array, get the sum of the sizes...
-    //     return (int) PSTObject.convertLittleEndianBytesToLong(data, 4, 8);
-    // }
+        // we are an array, get the sum of the sizes...
+        return PSTUtil.convertLittleEndianBytesToLong(data, 4, 8).toNumber();
+    }
 
     // get file offset, which is sorted in 8 little endian bytes
     // returns a promise of a number
@@ -772,18 +772,4 @@ export class PSTFile {
         // return output;
         return output;
     }
-
-    // // reads a single byte from the current file position
-    // private readSingleByte(position: long): number {
-    //     let buffer = new Buffer(1);
-    //     fs.readSync(this.pstFD, buffer, 0, buffer.length, position.toNumber());
-    //     return buffer[0];
-    // }
-
-    // // seek to a specific place in file, and get specific number of bytes
-    // // returns a promise of a chunk of bytes
-    // public seekAndRead(buffer: Buffer, position: long) {
-    //     // console.log('seekAndRead: start = ' + position + ', length = ' + buffer.length);
-    //     fs.readSync(this.pstFD, buffer, 0, buffer.length, position.toNumber());
-    // }
 }

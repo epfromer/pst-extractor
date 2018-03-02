@@ -40,7 +40,14 @@ function processFolder(folder: PSTFolder) {
                 Log.debug1('has attachments!')
                 for (let i = 0; i < email.numberOfAttachments; i++) {
                     let attachment: PSTAttachment = email.getAttachment(i);
-                    console.log(attachment.getDisplayName());
+                    let attachmentStream = attachment.fileInputStream;
+                    let bufferSize = 8176;
+                    let buffer = new Buffer(bufferSize);
+                    let bytesRead;
+                    do {
+                        bytesRead = attachmentStream.read(buffer);
+                    } while (bytesRead == bufferSize);
+                    Log.debug1(attachment.toJSONstring());
                 }
             }
             email = folder.getNextChild();

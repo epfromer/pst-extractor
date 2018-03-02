@@ -78,41 +78,35 @@ export class PSTAttachment extends PSTObject {
         return null;
     }
 
-    // public InputStream getFileInputStream() throws IOException, PSTException {
+    public get fileInputStream(): PSTNodeInputStream {
+        let attachmentDataObject: PSTTableBCItem = this.pstTableItems.get(0x3701);
+        if (!attachmentDataObject) {
+            return null;
+        } else if (attachmentDataObject.isExternalValueReference) {
+            let descriptorItemNested: PSTDescriptorItem = this.localDescriptorItems.get(attachmentDataObject.entryValueReference);
+            return new PSTNodeInputStream(this.pstFile, descriptorItemNested);
+        } else {
+            // internal value references are never encrypted
+            return new PSTNodeInputStream(this.pstFile, attachmentDataObject.data, false);
+        }
 
-    //     final PSTTableBCItem attachmentDataObject = this.items.get(0x3701);
-        
-    //     if (null == attachmentDataObject) {
-    //         return new ByteArrayInputStream(new byte[0]);
-    //     } else if (attachmentDataObject.isExternalValueReference) {
-    //         final PSTDescriptorItem descriptorItemNested = this.localDescriptorItems
-    //             .get(attachmentDataObject.entryValueReference);
-    //         return new PSTNodeInputStream(this.pstFile, descriptorItemNested);
-    //     } else {
-    //         // internal value references are never encrypted
-    //         return new PSTNodeInputStream(this.pstFile, attachmentDataObject.data, false);
-    //     }
+    }
 
-    // }
+    public get filesize(): number {
+        let attachmentDataObject: PSTTableBCItem = this.pstTableItems.get(0x3701);
+        if (attachmentDataObject.isExternalValueReference) {
+            let descriptorItemNested: PSTDescriptorItem = this.localDescriptorItems.get(attachmentDataObject.entryValueReference);
+            if (descriptorItemNested == null) {
+                throw new Error(
+                    "PSTAttachment::filesize missing attachment descriptor item for: " + attachmentDataObject.entryValueReference);
+            }
+            return descriptorItemNested.getDataSize();
+        } else {
+            // raw attachment data, right there!
+            return attachmentDataObject.data.length;
+        }
 
-    // public int getFilesize() throws PSTException, IOException {
-    //     final PSTTableBCItem attachmentDataObject = this.items.get(0x3701);
-    //     if (attachmentDataObject.isExternalValueReference) {
-    //         final PSTDescriptorItem descriptorItemNested = this.localDescriptorItems
-    //             .get(attachmentDataObject.entryValueReference);
-    //         if (descriptorItemNested == null) {
-    //             throw new PSTException(
-    //                 "missing attachment descriptor item for: " + attachmentDataObject.entryValueReference);
-    //         }
-    //         return descriptorItemNested.getDataSize();
-    //     } else {
-    //         // raw attachment data, right there!
-    //         return attachmentDataObject.data.length;
-    //     }
-
-    // }
-
-    // attachment properties
+    }
 
     // Attachment (short) filename ASCII or Unicode string
     public get filename(): string {

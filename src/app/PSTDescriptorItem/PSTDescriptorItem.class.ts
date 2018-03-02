@@ -63,7 +63,7 @@ export class PSTDescriptorItem {
     //     return offsetsOut;
     // }
 
-    // public int getDataSize() throws IOException, PSTException {
-    //     return this.pstFile.getLeafSize(this.offsetIndexIdentifier);
-    // }
+    public getDataSize(): number {
+        return this._pstFile.getLeafSize(long.fromNumber(this.offsetIndexIdentifier));
+    }
 }

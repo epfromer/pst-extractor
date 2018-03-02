@@ -19,8 +19,6 @@ export class PSTNodeInputStream {
         return this._currentLocation;
     }
     private set currentLocation(loc: long) {
-        // console.log('currentLocation = ' + this._currentLocation);
-        // debugger;
         this._currentLocation = loc;
     }
 
@@ -49,10 +47,10 @@ export class PSTNodeInputStream {
     //     this.detectZlib();
     // }
 
-    constructor(pstFile: PSTFile, attachmentData: Buffer);
-    constructor(pstFile: PSTFile, descriptorItem: PSTDescriptorItem);
-    constructor(pstFile: PSTFile, offsetItem: OffsetIndexItem);
-    constructor(pstFile: PSTFile, arg: any) {
+    constructor(pstFile: PSTFile, attachmentData: Buffer, encrypted?:boolean);
+    constructor(pstFile: PSTFile, descriptorItem: PSTDescriptorItem, encrypted?:boolean);
+    constructor(pstFile: PSTFile, offsetItem: OffsetIndexItem, encrypted?:boolean);
+    constructor(pstFile: PSTFile, arg: any, encrypted?:boolean) {
         if (arg instanceof OffsetIndexItem) {
             this._pstFile = pstFile;
             this.pstFileContent = pstFile.pstFileContent;
@@ -73,7 +71,11 @@ export class PSTNodeInputStream {
         } else if (arg instanceof Buffer) {
             this.allData = arg;
             this._length = long.fromNumber(this.allData.length);
-            this._encrypted = pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
+            if (encrypted) {
+                this._encrypted = encrypted;
+            } else {
+                this._encrypted = pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
+            }
             this.currentBlock = 0;
             this.currentLocation = long.ZERO;
             this.detectZlib();
@@ -224,8 +226,16 @@ export class PSTNodeInputStream {
         }
     }
 
+    public read(output?: Buffer) {
+        if (!output) {
+            return this.readSingleByte();
+        } else {
+            return this.readBlock(output);
+        }
+    }
+
     // read a byte
-    public read(): number {
+    public readSingleByte(): number {
         // first deal with items < 8K and we have all the data already
         if (this.allData != null) {
             if (this.currentLocation == this.length) {
@@ -277,7 +287,7 @@ export class PSTNodeInputStream {
         let offset = 0;
         let numRead = 0;
         while (offset < target.length) {
-            numRead = this.readB(target, offset, target.length - offset);
+            numRead = this.readFromOffset(target, offset, target.length - offset);
             if (numRead === -1) {
                 throw new Error('unexpected EOF encountered attempting to read from PSTInputStream');
             }
@@ -287,7 +297,7 @@ export class PSTNodeInputStream {
 
     // Read a block from the input stream.
     // Recommended block size = 8176 (size used internally by PSTs)
-    public readA(output: Buffer): number {
+    public readBlock(output: Buffer): number {
         // this method is implemented in an attempt to make things a bit faster
         // than the byte-by-byte read() crap above.
         // it's tricky 'cause we have to copy blocks from a few different areas.
@@ -369,7 +379,7 @@ export class PSTNodeInputStream {
         return totalBytesFilled;
     }
 
-    public readB(output: Buffer, offset: number, length: number): number {
+    public readFromOffset(output: Buffer, offset: number, length: number): number {
         if (this.currentLocation == this.length) {
             // EOF
             return -1;
@@ -380,7 +390,7 @@ export class PSTNodeInputStream {
         }
 
         let buf = new Buffer(length);
-        let lengthRead = this.readA(buf);
+        let lengthRead = this.readBlock(buf);
 
         PSTUtil.arraycopy(buf, 0, output, offset, lengthRead);
         //System.arraycopy(buf, 0, output, offset, lengthRead);
