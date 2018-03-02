@@ -10,9 +10,9 @@ import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class'
 import { PSTTable7C } from '../PSTTable7C/PSTTable7C.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import { PSTTable7CItem } from '../PSTTable7CItem/PSTTable7CItem.class';
-import * as long from 'long';
 import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
+import * as long from 'long';
 
 // PST Message contains functions that are common across most MAPI objects.
 // Note that many of these functions may not be applicable for the item in question,
@@ -668,61 +668,52 @@ export class PSTMessage extends PSTObject {
         return this.attachmentTable.getRowCount();
     }
 
-    // get a specific attachment from this email.
+    // get a specific attachment from this email
     public getAttachment(attachmentNumber: number): PSTAttachment {
-        debugger;
-        return null;
-        //     this.processAttachments();
+        this.processAttachments();
 
-        //     int attachmentCount = 0;
-        //     if (this.attachmentTable != null) {
-        //         attachmentCount = this.attachmentTable.getRowCount();
-        //     }
+        let attachmentCount = 0;
+        if (this.attachmentTable != null) {
+            attachmentCount = this.attachmentTable.getRowCount();
+        }
 
-        //     if (attachmentNumber >= attachmentCount) {
-        //         throw new PSTException("unable to fetch attachment number " + attachmentNumber + ", only " + attachmentCount
-        //             + " in this email");
-        //     }
+        if (attachmentNumber >= attachmentCount) {
+            throw new Error('PSTMessage::getAttachment unable to fetch attachment number ' + attachmentNumber);
+        }
 
-        //     // we process the C7 table here, basically we just want the attachment
-        //     // local descriptor...
-        //     final HashMap<Integer, PSTTable7CItem> attachmentDetails = this.attachmentTable.getItems()
-        //         .get(attachmentNumber);
-        //     final PSTTable7CItem attachmentTableItem = attachmentDetails.get(0x67f2);
-        //     final int descriptorItemId = attachmentTableItem.entryValueReference;
+        // we process the C7 table here, basically we just want the attachment local descriptor...
+        let attachmentDetails: Map<number, PSTTable7CItem> = this.attachmentTable.getItems()[attachmentNumber];
+        let attachmentTableItem: PSTTable7CItem = attachmentDetails.get(0x67f2);
+        let descriptorItemId = attachmentTableItem.entryValueReference;
 
-        //     // get the local descriptor for the attachmentDetails table.
-        //     final PSTDescriptorItem descriptorItem = this.localDescriptorItems.get(descriptorItemId);
+        // get the local descriptor for the attachmentDetails table.
+        let descriptorItem: PSTDescriptorItem = this.localDescriptorItems.get(descriptorItemId);
 
-        //     // try and decode it
-        //     final byte[] attachmentData = descriptorItem.getData();
-        //     if (attachmentData != null && attachmentData.length > 0) {
-        //         // PSTTableBC attachmentDetailsTable = new
-        //         // PSTTableBC(descriptorItem.getData(),
-        //         // descriptorItem.getBlockOffsets());
-        //         final PSTTableBC attachmentDetailsTable = new PSTTableBC(
-        //             new PSTNodeInputStream(this.pstFile, descriptorItem));
+        // try and decode it
+        let attachmentData: Buffer = descriptorItem.getData();
+        if (attachmentData != null && attachmentData.length > 0) {
+            let attachmentDetailsTable: PSTTableBC = new PSTTableBC(new PSTNodeInputStream(this.pstFile, descriptorItem));
 
-        //         // create our all-precious attachment object.
-        //         // note that all the information that was in the c7 table is
-        //         // repeated in the eb table in attachment data.
-        //         // so no need to pass it...
-        //         HashMap<Integer, PSTDescriptorItem> attachmentDescriptorItems = new HashMap<>();
-        //         if (descriptorItem.subNodeOffsetIndexIdentifier > 0) {
-        //             attachmentDescriptorItems = this.pstFile
-        //                 .getPSTDescriptorItems(descriptorItem.subNodeOffsetIndexIdentifier);
-        //         }
-        //         return new PSTAttachment(this.pstFile, attachmentDetailsTable, attachmentDescriptorItems);
-        //     }
+            // create our all-precious attachment object.
+            // note that all the information that was in the c7 table is
+            // repeated in the eb table in attachment data.
+            // so no need to pass it...
+            let attachmentDescriptorItems: Map<number, PSTDescriptorItem> = new Map();
+            if (descriptorItem.subNodeOffsetIndexIdentifier > 0) {
+                attachmentDescriptorItems = this.pstFile.getPSTDescriptorItems(long.fromNumber(descriptorItem.subNodeOffsetIndexIdentifier));
+            }
+            return new PSTAttachment(this.pstFile, attachmentDetailsTable, attachmentDescriptorItems);
+        }
 
-        //     throw new PSTException(
-        //         "unable to fetch attachment number " + attachmentNumber + ", unable to read attachment details table");
+        throw new Error(
+            'PSTMessage::getAttachment unable to fetch attachment number ' + attachmentNumber + ', unable to read attachment details table'
+        );
     }
 
     // get a specific recipient from this email.
     public getRecipient(recipientNumber: number): PSTRecipient {
         if (recipientNumber >= this.numberOfRecipients || recipientNumber >= this.recipientTable.getItems().length) {
-            throw new Error('unable to fetch recipient number ' + recipientNumber);
+            throw new Error('PSTMessage::getAttachment unable to fetch recipient number ' + recipientNumber);
         }
 
         debugger;
@@ -756,11 +747,6 @@ export class PSTMessage extends PSTObject {
     }
 
     // string representation of this email
-    // public toString() {
-    //     return "PSTEmail: " + this.getSubject() + "\n" + "Importance: " + this.getImportance() + "\n"
-    //         + "Message Class: " + this.getMessageClass() + "\n\n" + this.getTransportMessageHeaders() + "\n\n\n"
-    //         + this.pstTableItems + this.localDescriptorItems;
-    // }
     public toString(): string {
         return (
             '\n messageClass: ' +
@@ -957,100 +943,104 @@ export class PSTMessage extends PSTObject {
     // note, not all fields (e.g. the body fields, pidTagSentRepresentingSearchKey, senderEntryId)
     // are included in the JSON string.  caller can get those fields independently.
     public toJSONstring(): string {
-        return JSON.stringify({
-            messageClass: this.messageClass,
-            subject: this.subject,
-            importance: this.importance,
-            transportMessageHeaders: this.transportMessageHeaders,
-            clientSubmitTime: this.clientSubmitTime,
-            receivedByName: this.receivedByName,
-            sentRepresentingName: this.sentRepresentingName,
-            sentRepresentingAddressType: this.sentRepresentingAddressType,
-            sentRepresentingEmailAddress: this.sentRepresentingEmailAddress,
-            conversationTopic: this.conversationTopic,
-            receivedByAddressType: this.receivedByAddressType,
-            receivedByAddress: this.receivedByAddress,
-            isRead: this.isRead,
-            isUnmodified: this.isUnmodified,
-            isSubmitted: this.isSubmitted,
-            isUnsent: this.isUnsent,
-            hasAttachments: this.hasAttachments,
-            isFromMe: this.isFromMe,
-            isAssociated: this.isAssociated,
-            isResent: this.isResent,
-            acknowledgementMode: this.acknowledgementMode,
-            originatorDeliveryReportRequested: this.originatorDeliveryReportRequested,
-            readReceiptRequested: this.readReceiptRequested,
-            recipientReassignmentProhibited: this.recipientReassignmentProhibited,
-            originalSensitivity: this.originalSensitivity,
-            sensitivity: this.sensitivity,
-            //pidTagSentRepresentingSearchKey: this.pidTagSentRepresentingSearchKey,
-            rcvdRepresentingName: this.rcvdRepresentingName,
-            bloriginalSubjectah: this.originalSubject,
-            replyRecipientNames: this.replyRecipientNames,
-            messageToMe: this.messageToMe,
-            messageCcMe: this.messageCcMe,
-            messageRecipMe: this.messageRecipMe,
-            responseRequested: this.responseRequested,
-            sentRepresentingAddrtype: this.sentRepresentingAddrtype,
-            originalDisplayBcc: this.originalDisplayBcc,
-            originalDisplayCc: this.originalDisplayCc,
-            originalDisplayTo: this.originalDisplayTo,
-            rcvdRepresentingAddrtype: this.rcvdRepresentingAddrtype,
-            rcvdRepresentingEmailAddress: this.rcvdRepresentingEmailAddress,
-            isNonReceiptNotificationRequested: this.isNonReceiptNotificationRequested,
-            isOriginatorNonDeliveryReportRequested: this.isOriginatorNonDeliveryReportRequested,
-            recipientType: this.recipientType,
-            isReplyRequested: this.isReplyRequested,
-            //senderEntryId: this.senderEntryId,
-            senderName: this.senderName,
-            senderAddrtype: this.senderAddrtype,
-            senderEmailAddress: this.senderEmailAddress,
-            messageSize: this.messageSize,
-            internetArticleNumber: this.internetArticleNumber,
-            primarySendAccount: this.primarySendAccount,
-            nextSendAcct: this.nextSendAcct,
-            urlCompNamePostfix: this.urlCompNamePostfix,
-            objectType: this.objectType,
-            deleteAfterSubmit: this.deleteAfterSubmit,
-            responsibility: this.responsibility,
-            isRTFInSync: this.isRTFInSync,
-            isURLCompNameSet: this.isURLCompNameSet,
-            displayBCC: this.displayBCC,
-            displayCC: this.displayCC,
-            displayTo: this.displayTo,
-            messageDeliveryTime: this.messageDeliveryTime,
-            nativeBodyType: this.nativeBodyType,
-            bodyPrefix: this.bodyPrefix,
-            rtfSyncBodyCRC: this.rtfSyncBodyCRC,
-            rtfSyncBodyCount: this.rtfSyncBodyCount,
-            rtfSyncBodyTag: this.rtfSyncBodyTag,
-            rtfSyncPrefixCount: this.rtfSyncPrefixCount,
-            rtfSyncTrailingCount: this.rtfSyncTrailingCount,
-            internetMessageId: this.internetMessageId,
-            inReplyToId: this.inReplyToId,
-            returnPath: this.returnPath,
-            iconIndex: this.iconIndex,
-            actionFlag: this.actionFlag,
-            hasReplied: this.hasReplied,
-            actionDate: this.actionDate,
-            disableFullFidelity: this.disableFullFidelity,
-            urlCompName: this.urlCompName,
-            attrHidden: this.attrHidden,
-            attrSystem: this.attrSystem,
-            attrReadonly: this.attrReadonly,
-            numberOfRecipients: this.numberOfRecipients,
-            taskStartDate: this.taskStartDate,
-            taskDueDate: this.taskDueDate,
-            reminderSet: this.reminderSet,
-            reminderDelta: this.reminderDelta,
-            isFlagged: this.isFlagged,
-            colorCategories: this.colorCategories,
-            numberOfAttachments: this.numberOfAttachments,
-            recipientsString: this.recipientsString,
-            conversationId: this.conversationId,
-            conversationIndex: this.conversationIndex,
-            isConversationIndexTracking: this.isConversationIndexTracking
-        }, null, 2);
+        return JSON.stringify(
+            {
+                messageClass: this.messageClass,
+                subject: this.subject,
+                importance: this.importance,
+                transportMessageHeaders: this.transportMessageHeaders,
+                clientSubmitTime: this.clientSubmitTime,
+                receivedByName: this.receivedByName,
+                sentRepresentingName: this.sentRepresentingName,
+                sentRepresentingAddressType: this.sentRepresentingAddressType,
+                sentRepresentingEmailAddress: this.sentRepresentingEmailAddress,
+                conversationTopic: this.conversationTopic,
+                receivedByAddressType: this.receivedByAddressType,
+                receivedByAddress: this.receivedByAddress,
+                isRead: this.isRead,
+                isUnmodified: this.isUnmodified,
+                isSubmitted: this.isSubmitted,
+                isUnsent: this.isUnsent,
+                hasAttachments: this.hasAttachments,
+                isFromMe: this.isFromMe,
+                isAssociated: this.isAssociated,
+                isResent: this.isResent,
+                acknowledgementMode: this.acknowledgementMode,
+                originatorDeliveryReportRequested: this.originatorDeliveryReportRequested,
+                readReceiptRequested: this.readReceiptRequested,
+                recipientReassignmentProhibited: this.recipientReassignmentProhibited,
+                originalSensitivity: this.originalSensitivity,
+                sensitivity: this.sensitivity,
+                //pidTagSentRepresentingSearchKey: this.pidTagSentRepresentingSearchKey,
+                rcvdRepresentingName: this.rcvdRepresentingName,
+                bloriginalSubjectah: this.originalSubject,
+                replyRecipientNames: this.replyRecipientNames,
+                messageToMe: this.messageToMe,
+                messageCcMe: this.messageCcMe,
+                messageRecipMe: this.messageRecipMe,
+                responseRequested: this.responseRequested,
+                sentRepresentingAddrtype: this.sentRepresentingAddrtype,
+                originalDisplayBcc: this.originalDisplayBcc,
+                originalDisplayCc: this.originalDisplayCc,
+                originalDisplayTo: this.originalDisplayTo,
+                rcvdRepresentingAddrtype: this.rcvdRepresentingAddrtype,
+                rcvdRepresentingEmailAddress: this.rcvdRepresentingEmailAddress,
+                isNonReceiptNotificationRequested: this.isNonReceiptNotificationRequested,
+                isOriginatorNonDeliveryReportRequested: this.isOriginatorNonDeliveryReportRequested,
+                recipientType: this.recipientType,
+                isReplyRequested: this.isReplyRequested,
+                //senderEntryId: this.senderEntryId,
+                senderName: this.senderName,
+                senderAddrtype: this.senderAddrtype,
+                senderEmailAddress: this.senderEmailAddress,
+                messageSize: this.messageSize,
+                internetArticleNumber: this.internetArticleNumber,
+                primarySendAccount: this.primarySendAccount,
+                nextSendAcct: this.nextSendAcct,
+                urlCompNamePostfix: this.urlCompNamePostfix,
+                objectType: this.objectType,
+                deleteAfterSubmit: this.deleteAfterSubmit,
+                responsibility: this.responsibility,
+                isRTFInSync: this.isRTFInSync,
+                isURLCompNameSet: this.isURLCompNameSet,
+                displayBCC: this.displayBCC,
+                displayCC: this.displayCC,
+                displayTo: this.displayTo,
+                messageDeliveryTime: this.messageDeliveryTime,
+                nativeBodyType: this.nativeBodyType,
+                bodyPrefix: this.bodyPrefix,
+                rtfSyncBodyCRC: this.rtfSyncBodyCRC,
+                rtfSyncBodyCount: this.rtfSyncBodyCount,
+                rtfSyncBodyTag: this.rtfSyncBodyTag,
+                rtfSyncPrefixCount: this.rtfSyncPrefixCount,
+                rtfSyncTrailingCount: this.rtfSyncTrailingCount,
+                internetMessageId: this.internetMessageId,
+                inReplyToId: this.inReplyToId,
+                returnPath: this.returnPath,
+                iconIndex: this.iconIndex,
+                actionFlag: this.actionFlag,
+                hasReplied: this.hasReplied,
+                actionDate: this.actionDate,
+                disableFullFidelity: this.disableFullFidelity,
+                urlCompName: this.urlCompName,
+                attrHidden: this.attrHidden,
+                attrSystem: this.attrSystem,
+                attrReadonly: this.attrReadonly,
+                numberOfRecipients: this.numberOfRecipients,
+                taskStartDate: this.taskStartDate,
+                taskDueDate: this.taskDueDate,
+                reminderSet: this.reminderSet,
+                reminderDelta: this.reminderDelta,
+                isFlagged: this.isFlagged,
+                colorCategories: this.colorCategories,
+                numberOfAttachments: this.numberOfAttachments,
+                recipientsString: this.recipientsString,
+                conversationId: this.conversationId,
+                conversationIndex: this.conversationIndex,
+                isConversationIndexTracking: this.isConversationIndexTracking
+            },
+            null,
+            2
+        );
     }
 }

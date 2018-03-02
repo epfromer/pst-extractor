@@ -2,11 +2,12 @@ import { PSTMessage } from './app/PSTMessage/PSTMessage.class';
 import { PSTFile } from './app/PSTFile/PSTFile.class';
 import { PSTFolder } from './app/PSTFolder/PSTFolder.class';
 import { Log } from './app/Log.class';
+import { PSTAttachment } from './app/PSTAttachment/PSTAttachment.class';
 
 let depth = -1;
 
 const start = Date.now();
-let pstFile = new PSTFile('/home/ed/Desktop/outlook/2011-04.pst');
+let pstFile = new PSTFile('/home/ed/Desktop/outlook/2011-01.pst');
 pstFile.open();
 console.log(pstFile.getMessageStore().getDisplayName());
 processFolder(pstFile.getRootFolder());
@@ -35,6 +36,13 @@ function processFolder(folder: PSTFolder) {
         let email: PSTMessage = folder.getNextChild();
         while (email != null) {
             console.log(getDepth(depth) +  "Email: " + email.getDescriptorNodeId() + " - " + email.subject);
+            if (email.hasAttachments) {
+                Log.debug1('has attachments!')
+                for (let i = 0; i < email.numberOfAttachments; i++) {
+                    let attachment: PSTAttachment = email.getAttachment(i);
+                    console.log(attachment.getDisplayName());
+                }
+            }
             email = folder.getNextChild();
         }
         depth--;

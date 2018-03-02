@@ -39,15 +39,6 @@ export class PSTNodeInputStream {
         return this._encrypted;
     }
 
-    // PSTNodeInputStream(final PSTFile pstFile, final byte[] attachmentData) throws PSTException {
-    //     this.allData = attachmentData;
-    //     this.length = this.allData.length;
-    //     this.encrypted = pstFile.getEncryptionType() == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
-    //     this.currentBlock = 0;
-    //     this.currentLocation = 0;
-    //     this.detectZlib();
-    // }
-
     // PSTNodeInputStream(final PSTFile pstFile, final byte[] attachmentData, final boolean encrypted)
     //     throws PSTException {
     //     this.allData = attachmentData;
@@ -58,6 +49,7 @@ export class PSTNodeInputStream {
     //     this.detectZlib();
     // }
 
+    constructor(pstFile: PSTFile, attachmentData: Buffer);
     constructor(pstFile: PSTFile, descriptorItem: PSTDescriptorItem);
     constructor(pstFile: PSTFile, offsetItem: OffsetIndexItem);
     constructor(pstFile: PSTFile, arg: any) {
@@ -75,6 +67,13 @@ export class PSTNodeInputStream {
             this._encrypted = pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
             // we want to get the first block of data and see what we are dealing with
             this.loadFromOffsetItem(pstFile.getOffsetIndexNode(long.fromNumber(arg.offsetIndexIdentifier)));
+            this.currentBlock = 0;
+            this.currentLocation = long.ZERO;
+            this.detectZlib();
+        } else if (arg instanceof Buffer) {
+            this.allData = arg;
+            this._length = long.fromNumber(this.allData.length);
+            this._encrypted = pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
             this.currentBlock = 0;
             this.currentLocation = long.ZERO;
             this.detectZlib();

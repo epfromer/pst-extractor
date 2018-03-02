@@ -754,7 +754,7 @@ export class PSTUtil {
 
     // creates object based on message class
     // see https://msdn.microsoft.com/en-us/vba/outlook-vba/articles/item-types-and-message-classes
-    private static createAppropriatePSTMessageObject(
+    public static createAppropriatePSTMessageObject(
         theFile: PSTFile,
         folderIndexNode: DescriptorIndexNode,
         table: PSTTableBC,
@@ -777,6 +777,7 @@ export class PSTUtil {
                 return msg;
             case 'IPM.Appointment':
             case 'IPM.OLE.CLASS.{00061055-0000-0000-C000-000000000046}':
+            case 'IPM.Schedule.Meeting.Canceled':
                 // appointment
                 // messageClass.startsWith('IPM.Schedule.Meeting')
                 let apt = new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
