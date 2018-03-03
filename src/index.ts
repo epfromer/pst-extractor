@@ -5,11 +5,20 @@ import { Log } from './app/Log.class';
 import { PSTAttachment } from './app/PSTAttachment/PSTAttachment.class';
 import * as fs from 'fs';
 import * as fsext from 'fs-ext';
+import * as tmp from 'tmp';
 
 let depth = -1;
+let tmpDirIndex = 1;
+
+// make a temp dir for the attachments
+try {
+    fs.mkdirSync('/media/sf_Outlook/0pst-extractor/')
+} catch (err) {
+    Log.debug1(err);
+}
 
 const start = Date.now();
-let pstFile = new PSTFile('/home/ed/Desktop/outlook/2005-02.pst');
+let pstFile = new PSTFile('/media/sf_Outlook/done/2005-02.pst');
 pstFile.open();
 console.log(pstFile.getMessageStore().getDisplayName());
 processFolder(pstFile.getRootFolder());
@@ -39,25 +48,34 @@ function processFolder(folder: PSTFolder) {
         while (email != null) {
             console.log(getDepth(depth) + 'Email: ' + email.getDescriptorNodeId() + ' - ' + email.subject);
             if (email.hasAttachments) {
-                Log.debug1('has attachments!');
+                // make a temp dir for the attachments
+                try {
+                    fs.mkdirSync('/media/sf_Outlook/0pst-extractor/' + tmpDirIndex)
+                } catch (err) {
+                    Log.debug1(err);
+                }
+                
+                // walk list of attachments and save to fs
                 for (let i = 0; i < email.numberOfAttachments; i++) {
                     let attachment: PSTAttachment = email.getAttachment(i);
                     Log.debug1(attachment.toJSONstring());
                     if (attachment.filename) {
-                        let filename = '/home/ed/Desktop/outlook/' + attachment.filename;
-                        let fd = fsext.openSync(this.pstFilename, 'w');
-                        console.log(filename);
+                        let filename = '/media/sf_Outlook/0pst-extractor/' + tmpDirIndex + '/' + attachment.filename;
+                        Log.debug1("saving attachment to " + filename);
+
+                        let fd = fsext.openSync(filename, 'w');
                         let attachmentStream = attachment.fileInputStream;
                         let bufferSize = 8176;
                         let buffer = new Buffer(bufferSize);
                         let bytesRead;
                         do {
                             bytesRead = attachmentStream.read(buffer);
-                            fsext.writeSync(fd, buffer);
+                            fsext.writeSync(fd, buffer, 0, bytesRead);
                         } while (bytesRead == bufferSize);
                         fsext.closeSync(fd);
                     }
                 }
+                tmpDirIndex++;
             }
             email = folder.getNextChild();
         }

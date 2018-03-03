@@ -71,7 +71,7 @@ export class PSTNodeInputStream {
         } else if (arg instanceof Buffer) {
             this.allData = arg;
             this._length = long.fromNumber(this.allData.length);
-            if (encrypted) {
+            if (encrypted != undefined) {
                 this._encrypted = encrypted;
             } else {
                 this._encrypted = pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
