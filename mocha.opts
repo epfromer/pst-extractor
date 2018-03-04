@@ -1,3 +1,2 @@
 --require ts-node/register
---watch-extensions ts
-src/**/*.ts
+src/**/*.spec.ts

@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "npm run mocha --recursive ./src/**/__tests__/*",
-    "mocha": "mocha -r ts-node/register"
+    "test": "mocha --opts mocha.opts"
   },
   "repository": {
     "type": "git",
