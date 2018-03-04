@@ -811,6 +811,9 @@ export class PSTUtil {
             case 'IPM.Appointment':
             case 'IPM.OLE.CLASS.{00061055-0000-0000-C000-000000000046}':
             case 'IPM.Schedule.Meeting.Canceled':
+            case 'IPM.Schedule.Meeting.Resp.Pos':
+            case 'IPM.Schedule.Meeting.Resp.Tent':
+            case 'IPM.Schedule.Meeting.Notification.Forward':
                 // appointment
                 // messageClass.startsWith('IPM.Schedule.Meeting')
                 let apt = new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
@@ -839,6 +842,7 @@ export class PSTUtil {
                 Log.debug1(rss.toJSONstring());
                 return rss;
             case 'IPM.DistList':
+                // Distribution list
                 debugger;
                 return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
             case 'IPM.Note.Rules.OofTemplate.Microsoft':

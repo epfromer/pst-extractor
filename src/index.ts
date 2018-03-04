@@ -40,21 +40,29 @@ import * as fsext from 'fs-ext';
 
 let depth = -1;
 let tmpDirIndex = 1;
+let saveAttachmentsToFS = false;
+let verbose = false;
+let col = 0;
 
 // make a temp dir for the attachments
 try {
-    fs.mkdirSync('/media/sf_Outlook/0pst-extractor/')
+    if (saveAttachmentsToFS) {
+        fs.mkdirSync('/media/sf_Outlook/0pst-extractor/');
+    }
 } catch (err) {
     Log.debug1(err);
 }
 
-const start = Date.now();
-let pstFile = new PSTFile('/media/sf_Outlook/edrm/jeffrey_a_shankman_000_1_1_1.pst');
-pstFile.open();
-console.log(pstFile.getMessageStore().getDisplayName());
-processFolder(pstFile.getRootFolder());
-const end = Date.now();
-console.log('processed in ' + (end - start) + ' ms');
+let directoryListing = fs.readdirSync('/media/sf_Outlook/test');
+directoryListing.forEach(filename => {
+    console.log('/media/sf_Outlook/test/' + filename);
+    const start = Date.now();
+    let pstFile = new PSTFile('/media/sf_Outlook/test/' + filename);
+    console.log(pstFile.getMessageStore().getDisplayName());
+    processFolder(pstFile.getRootFolder());
+    const end = Date.now();
+    console.log('processed in ' + (end - start) + ' ms');
+});
 
 function processFolder(folder: PSTFolder) {
     depth++;
@@ -77,22 +85,28 @@ function processFolder(folder: PSTFolder) {
         depth++;
         let email: PSTMessage = folder.getNextChild();
         while (email != null) {
-            console.log(getDepth(depth) + 'Email: ' + email.getDescriptorNodeId() + ' - ' + email.subject);
-            if (email.hasAttachments) {
+            if (verbose) {
+                console.log(getDepth(depth) + 'Email: ' + email.getDescriptorNodeId() + ' - ' + email.subject);
+            } else {
+                printDot();
+            }
+            if (email.hasAttachments && saveAttachmentsToFS) {
                 // make a temp dir for the attachments
                 try {
-                    fs.mkdirSync('/media/sf_Outlook/0pst-extractor/' + tmpDirIndex)
+                    fs.mkdirSync('/media/sf_Outlook/0pst-extractor/' + tmpDirIndex);
                 } catch (err) {
                     Log.debug1(err);
                 }
-                
+
                 // walk list of attachments and save to fs
                 for (let i = 0; i < email.numberOfAttachments; i++) {
                     let attachment: PSTAttachment = email.getAttachment(i);
                     Log.debug1(attachment.toJSONstring());
                     if (attachment.filename) {
                         let filename = '/media/sf_Outlook/0pst-extractor/' + tmpDirIndex + '/' + attachment.filename;
-                        Log.debug1("saving attachment to " + filename);
+                        if (verbose) {
+                            Log.debug1('saving attachment to ' + filename);
+                        }
 
                         let fd = fsext.openSync(filename, 'w');
                         let attachmentStream = attachment.fileInputStream;
@@ -116,8 +130,20 @@ function processFolder(folder: PSTFolder) {
     depth--;
 }
 
+function printDot() {
+    process.stdout.write('.');
+    if (col++ > 100) {
+        console.log('');
+        col = 0;
+    }
+}
+
 function getDepth(depth: number): string {
     let sdepth = '';
+    if (col > 0) {
+        col = 0;
+        sdepth += '\n';
+    }
     for (let x = 0; x < depth - 1; x++) {
         sdepth += ' | ';
     }

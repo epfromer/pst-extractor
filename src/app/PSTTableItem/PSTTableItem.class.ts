@@ -109,9 +109,9 @@ export class PSTTableItem {
                 if (this.isExternalValueReference) {
                     return 'External string reference!';
                 }
-                return this.data.toString('utf16le');
+                return this.data.toString('utf16le').replace(/\0/g, '');
             } catch (err) {
-                console.log('Error decoding string: ' + this.data.toString('utf16le'));
+                console.log('Error decoding string: ' + this.data.toString('utf16le').replace(/\0/g, ''));
                 return '';
             }
         }
@@ -183,8 +183,8 @@ export class PSTTableItem {
         }
 
         if (this.entryValueType == 0x001f) {
-            // Unicode string
-            return this.data.toString('utf16le');
+            // Unicode string and trim any nulls
+            return this.data.toString('utf16le').replace(/\0/g, '');
         }
 
         return ret + this.getStringValue(this.entryValueType);

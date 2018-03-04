@@ -108,27 +108,32 @@ export class PSTFile {
     public get pstFileType(): number {
         return this._pstFileType;
     }
-    
-    // node tree maps
-    private static nodeMap: NodeMap = new NodeMap();
 
-    // file descriptor
-    private pstFilename: string;
-    private pstFD: number;
-    private pstStream: fs.ReadStream;
+    private _pstFilename: string;
+    public get pstFilename(): string {
+        return this._pstFilename;
+    }
+
     private _pstFileContent: PSTFileContent;
     public get pstFileContent() {
         return this._pstFileContent;
     }
 
+    // node tree maps
+    private static nodeMap: NodeMap = new NodeMap();
+
+    // file descriptor
+    private pstFD: number;
+
     public constructor(fileName: string) {
-        this.pstFilename = fileName;
+        this._pstFilename = fileName;
+        this.open();
     }
 
     public open() {
         // attempt to open file
         // confirm first 4 bytes are !BDN
-        this.pstFD = fsext.openSync(this.pstFilename, 'r');
+        this.pstFD = fsext.openSync(this._pstFilename, 'r');
         this._pstFileContent = new PSTFileContent(this.pstFD);
         let buffer = new Buffer(514);
         fs.readSync(this.pstFD, buffer, 0, 514, 0);
@@ -160,7 +165,7 @@ export class PSTFile {
         this.processNameToIDMap();
     }
 
-    public processNameToIDMap() {
+    private processNameToIDMap() {
         // process the name to id map
         let nameToIdMapDescriptorNode = this.getDescriptorIndexNode(long.fromNumber(97));
 
@@ -201,7 +206,7 @@ export class PSTFile {
             } else {
                 uuidIndexes[i] = -1; // We don't know this guid
             }
-            Log.debug1('PSTFile:: processNameToIdMap idx: ' + i + ', ' + strUID + ', ' + uuidIndexes[i]);
+            Log.debug2('PSTFile:: processNameToIdMap idx: ' + i + ', ' + strUID + ', ' + uuidIndexes[i]);
             offset += 16;
         }
 
@@ -239,7 +244,7 @@ export class PSTFile {
                 let keyByteValue = new Buffer(len);
                 PSTUtil.arraycopy(stringNameToIdByte, dwPropertyId + 4, keyByteValue, 0, keyByteValue.length);
                 propId += 0x8000;
-                let key = keyByteValue.toString('utf16le');
+                let key = keyByteValue.toString('utf16le').replace(/\0/g, '');
                 PSTFile.nodeMap.setId(key, propId);
             }
         }
@@ -306,35 +311,6 @@ export class PSTFile {
         }
         return ret;
     }
-
-    // /**
-    //  * destructor just closes the file handle...
-    //  */
-    // @Override
-    // protected void finalize() throws IOException {
-    //     this.in.close();
-    // }
-
-    // /**
-    //  * get the type of encryption the file uses
-    //  *
-    //  * @return encryption type used in the PST File
-    //  */
-    // public int getEncryptionType() {
-    //     return this.encryptionType;
-    // }
-
-    // /**
-    //  * get the handle to the RandomAccessFile we are currently accessing (if
-    //  * any)
-    //  */
-    // public RandomAccessFile getFileHandle() {
-    //     if (this.in instanceof PSTRAFileContent) {
-    //         return ((PSTRAFileContent) this.in).getFile();
-    //     } else {
-    //         return null;
-    //     }
-    // }
 
     // Get the message store of the PST file.  Note that this doesn't really
     // have much information, better to look under the root folder.
@@ -592,176 +568,6 @@ export class PSTFile {
         return new OffsetIndexItem(this.findBtreeItem(id, false), this._pstFileType);
     }
 
-    // /**
-    //  * parse a PSTDescriptor and get all of its items
-    //  */
-    // HashMap<Integer, PSTDescriptorItem> getPSTDescriptorItems(final long localDescriptorsOffsetIndexIdentifier)
-    //     throws PSTException, IOException {
-    //     return this.getPSTDescriptorItems(this.readLeaf(localDescriptorsOffsetIndexIdentifier));
-    // }
-
-    // HashMap<Integer, PSTDescriptorItem> getPSTDescriptorItems(final PSTNodeInputStream in)
-    //     throws PSTException, IOException {
-    //     // make sure the signature is correct
-    //     in.seek(0);
-    //     final int sig = in.read();
-    //     if (sig != 0x2) {
-    //         throw new PSTException("Unable to process descriptor node, bad signature: " + sig);
-    //     }
-
-    //     final HashMap<Integer, PSTDescriptorItem> output = new HashMap<>();
-    //     final int numberOfItems = (int) in.seekAndReadLong(2, 2);
-    //     int offset;
-    //     if (this.getPSTFileType() == PSTFile.PST_TYPE_ANSI) {
-    //         offset = 4;
-    //     } else {
-    //         offset = 8;
-    //     }
-
-    //     final byte[] data = new byte[(int) in.length()];
-    //     in.seek(0);
-    //     in.readCompletely(data);
-
-    //     for (int x = 0; x < numberOfItems; x++) {
-    //         final PSTDescriptorItem item = new PSTDescriptorItem(data, offset, this);
-    //         output.put(item.descriptorIdentifier, item);
-    //         if (this.getPSTFileType() == PSTFile.PST_TYPE_ANSI) {
-    //             offset += 12;
-    //         } else {
-    //             offset += 24;
-    //         }
-    //     }
-
-    //     return output;
-    // }
-
-    // /**
-    //  * Build the children descriptor tree
-    //  * This goes through the entire descriptor B-Tree and adds every item to the
-    //  * childrenDescriptorTree.
-    //  * This is used as fallback when the nodes that list file contents are
-    //  * broken.
-    //  *
-    //  * @param in
-    //  * @throws IOException
-    //  * @throws PSTException
-    //  */
-    // LinkedHashMap<Integer, LinkedList<DescriptorIndexNode>> getChildDescriptorTree() throws IOException, PSTException {
-    //     if (this.childrenDescriptorTree == null) {
-    //         long btreeStartOffset = 0;
-    //         if (this.getPSTFileType() == PST_TYPE_ANSI) {
-    //             btreeStartOffset = this.extractLEFileOffset(188);
-    //         } else {
-    //             btreeStartOffset = this.extractLEFileOffset(224);
-    //         }
-    //         this.childrenDescriptorTree = new LinkedHashMap<>();
-    //         this.processDescriptorBTree(btreeStartOffset);
-    //     }
-    //     return this.childrenDescriptorTree;
-    // }
-
-    // /**
-    //  * Recursive function for building the descriptor tree, used by
-    //  * buildDescriptorTree
-    //  *
-    //  * @param in
-    //  * @param btreeStartOffset
-    //  * @throws IOException
-    //  * @throws PSTException
-    //  */
-    // private void processDescriptorBTree(final long btreeStartOffset) throws IOException, PSTException {
-    //     int fileTypeAdjustment;
-
-    //     byte[] temp = new byte[2];
-    //     if (this.getPSTFileType() == PST_TYPE_ANSI) {
-    //         fileTypeAdjustment = 500;
-    //     } else if (this.getPSTFileType() == PST_TYPE_2013_UNICODE) {
-    //         fileTypeAdjustment = 0x1000 - 24;
-    //     } else {
-    //         fileTypeAdjustment = 496;
-    //     }
-    //     this.in.seek(btreeStartOffset + fileTypeAdjustment);
-    //     this.in.readCompletely(temp);
-
-    //     if ((temp[0] == 0xffffff81 && temp[1] == 0xffffff81)) {
-
-    //         if (this.getPSTFileType() == PST_TYPE_ANSI) {
-    //             this.in.seek(btreeStartOffset + 496);
-    //         } else if (this.getPSTFileType() == PST_TYPE_2013_UNICODE) {
-    //             this.in.seek(btreeStartOffset + 4056);
-    //         } else {
-    //             this.in.seek(btreeStartOffset + 488);
-    //         }
-
-    //         long numberOfItems = 0;
-    //         if (this.getPSTFileType() == PST_TYPE_2013_UNICODE) {
-    //             final byte[] numberOfItemsBytes = new byte[2];
-    //             this.in.readCompletely(numberOfItemsBytes);
-    //             numberOfItems = PSTObject.convertLittleEndianBytesToLong(numberOfItemsBytes);
-    //             this.in.readCompletely(numberOfItemsBytes);
-    //             final long maxNumberOfItems = PSTObject.convertLittleEndianBytesToLong(numberOfItemsBytes);
-    //         } else {
-    //             numberOfItems = this.in.read();
-    //             this.in.read(); // maxNumberOfItems
-    //         }
-    //         this.in.read(); // itemSize
-    //         final int levelsToLeaf = this.in.read();
-
-    //         if (levelsToLeaf > 0) {
-    //             for (long x = 0; x < numberOfItems; x++) {
-    //                 if (this.getPSTFileType() == PST_TYPE_ANSI) {
-    //                     final long branchNodeItemStartIndex = (btreeStartOffset + (12 * x));
-    //                     final long nextLevelStartsAt = this.extractLEFileOffset(branchNodeItemStartIndex + 8);
-    //                     this.processDescriptorBTree(nextLevelStartsAt);
-    //                 } else {
-    //                     final long branchNodeItemStartIndex = (btreeStartOffset + (24 * x));
-    //                     final long nextLevelStartsAt = this.extractLEFileOffset(branchNodeItemStartIndex + 16);
-    //                     this.processDescriptorBTree(nextLevelStartsAt);
-    //                 }
-    //             }
-    //         } else {
-    //             for (long x = 0; x < numberOfItems; x++) {
-    //                 // The 64-bit descriptor index b-tree leaf node item
-    //                 // give me the offset index please!
-    //                 if (this.getPSTFileType() == PSTFile.PST_TYPE_ANSI) {
-    //                     this.in.seek(btreeStartOffset + (x * 16));
-    //                     temp = new byte[16];
-    //                     this.in.readCompletely(temp);
-    //                 } else {
-    //                     this.in.seek(btreeStartOffset + (x * 32));
-    //                     temp = new byte[32];
-    //                     this.in.readCompletely(temp);
-    //                 }
-
-    //                 final DescriptorIndexNode tempNode = new DescriptorIndexNode(temp, this.getPSTFileType());
-
-    //                 // we don't want to be children of ourselves...
-    //                 if (tempNode.parentDescriptorIndexIdentifier == tempNode.descriptorIdentifier) {
-    //                     // skip!
-    //                 } else if (this.childrenDescriptorTree.containsKey(tempNode.parentDescriptorIndexIdentifier)) {
-    //                     // add this entry to the existing list of children
-    //                     final LinkedList<DescriptorIndexNode> children = this.childrenDescriptorTree
-    //                         .get(tempNode.parentDescriptorIndexIdentifier);
-    //                     children.add(tempNode);
-    //                 } else {
-    //                     // create a new entry and add this one to that
-    //                     final LinkedList<DescriptorIndexNode> children = new LinkedList<>();
-    //                     children.add(tempNode);
-    //                     this.childrenDescriptorTree.put(tempNode.parentDescriptorIndexIdentifier, children);
-    //                 }
-    //                 this.itemCount++;
-    //             }
-    //         }
-    //     } else {
-    //         PSTObject.printHexFormatted(temp, true);
-    //         throw new PSTException("Unable to read descriptor node, is not a descriptor");
-    //     }
-    // }
-
-    // public void close() throws IOException {
-    //     this.in.close();
-    // }
-
     // parse a PSTDescriptor and get all of its items
     public getPSTDescriptorItems(localDescriptorsOffsetIndexIdentifier: long): Map<number, PSTDescriptorItem>;
     public getPSTDescriptorItems(inputStream: PSTNodeInputStream): Map<number, PSTDescriptorItem>;
@@ -801,7 +607,22 @@ export class PSTFile {
             }
         }
 
-        // return output;
         return output;
+    }
+
+    public toString() {
+        return (
+            '\n encryptionType: ' + this.encryptionType + 
+            '\n pstFileType: ' + this.pstFileType + 
+            '\n pstFilename: ' + this.pstFilename 
+        );
+    }
+
+    public toJSONstring(): string {
+        return JSON.stringify({
+            encryptionType: this.encryptionType,
+            pstFileType: this.pstFileType,
+            pstFilename: this.pstFilename
+        }, null, 2);
     }
 }

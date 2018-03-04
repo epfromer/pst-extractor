@@ -44,11 +44,11 @@ export class NodeMap {
             let lkey = this.transformKey(key, idx);
             this.nameToId.set(lkey.toString(), propId);
             this.idToNumericName.set(propId, lkey);
-            Log.debug1('NodeMap::setId: propId = ' + propId + ', lkey = ' + lkey.toString());
+            Log.debug2('NodeMap::setId: propId = ' + propId + ', lkey = ' + lkey.toString());
         } else if (typeof key === 'string') {
             this.nameToId.set(key, propId);
             this.idToStringName.set(propId, key);
-            Log.debug1('NodeMap::setId: propId = ' + propId + ', key = ' + key);
+            Log.debug2('NodeMap::setId: propId = ' + propId + ', key = ' + key);
         } else {
             throw new Error('NodeMap::setId bad param type ' + typeof key);
         }
