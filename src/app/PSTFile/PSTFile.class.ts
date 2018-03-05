@@ -441,11 +441,9 @@ export class PSTFile {
             if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
                 let numberOfItemsBytes = new Buffer(2);
                 this.pstFileContent.readCompletely(numberOfItemsBytes);
-                debugger;
-                throw new Error('not yet implemented');
-                // numberOfItems = this.convertLittleEndianBytesToLong(numberOfItemsBytes);
-                // in.readCompletely(numberOfItemsBytes);
-                // final long maxNumberOfItems = PSTObject.convertLittleEndianBytesToLong(numberOfItemsBytes);
+                numberOfItems = PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes).toNumber();
+                this.pstFileContent.readCompletely(numberOfItemsBytes);
+                //let maxNumberOfItems = PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes);
             } else {
                 numberOfItems = this.pstFileContent.read();
                 this.pstFileContent.read(); // maxNumberOfItems

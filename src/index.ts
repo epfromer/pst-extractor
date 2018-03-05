@@ -69,7 +69,7 @@ function processFolder(folder: PSTFolder) {
 
     // the root folder doesn't have a display name
     if (depth > 0) {
-        console.log(getDepth(depth) + folder.getDisplayName());
+        console.log(getDepth(depth) + folder.displayName);
     }
 
     // go through the folders...

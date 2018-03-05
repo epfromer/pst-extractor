@@ -37,6 +37,7 @@ import { PSTFileContent } from '../PSTFileContent/PSTFileContent.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
+import * as zlib from 'zlib';
 
 export class PSTNodeInputStream {
     private pstFileContent: PSTFileContent; // TODO:  remove this and use pstFile.pstFileContent?
@@ -115,6 +116,7 @@ export class PSTNodeInputStream {
     }
 
     private detectZlib() {
+
         // not really sure how this is meant to work, kind of going by feel here.
         if (this.length.lt(4)) {
             return;
@@ -127,56 +129,51 @@ export class PSTNodeInputStream {
                     this.pstFileContent.seek(i.fileOffset);
                     multiStreams = this.pstFileContent.read() == 0x78 && this.pstFileContent.read() == 0x9c;
                 }
-                debugger;
-                throw new Error('not yet implemented');
-                // we are a compressed block, decompress the whole thing into a
-                // buffer
-                // and replace our contents with that.
+                // we are a compressed block, decompress the whole thing into a buffer
+                // and replace our contents with that. 
                 // firstly, if we have blocks, use that as the length
-                // final ByteArrayOutputStream outputStream = new ByteArrayOutputStream((int) this.length);
-                // if (multiStreams) {
-                //     int y = 0;
-                //     for (final OffsetIndexItem i : this.indexItems) {
-                //         final byte[] inData = new byte[i.size];
-                //         this.in.seek(i.fileOffset);
-                //         this.in.readCompletely(inData);
-                //         final InflaterOutputStream inflaterStream = new InflaterOutputStream(outputStream);
-                //         //try {
-                //             inflaterStream.write(inData);
-                //             inflaterStream.close();
-                //         //} catch (Exception err) {
-                //         //    System.out.println("Y: " + y);
-                //         //    System.out.println(err);
-                //         //    PSTObject.printHexFormatted(inData, true);
-                //         //    System.exit(0);
-                //         //}
-                //         y++;
-                //     }
-                //     this.indexItems.clear();
-                //     this.skipPoints.clear();
-                // } else {
-                //     int compressedLength = (int) this.length;
-                //     if (this.indexItems.size() > 0) {
-                //         compressedLength = 0;
-                //         for (final OffsetIndexItem i : this.indexItems) {
-                //             //System.out.println(i);
-                //             compressedLength += i.size;
-                //         }
-                //     }
-                //     final byte[] inData = new byte[compressedLength];
-                //     this.seek(0);
-                //     this.readCompletely(inData);
-
-                //     final InflaterOutputStream inflaterStream = new InflaterOutputStream(outputStream);
-                //     inflaterStream.write(inData);
-                //     inflaterStream.close();
-                // }
-                // outputStream.close();
-                // final byte[] output = outputStream.toByteArray();
-                // this.allData = output;
-                // this.currentLocation = 0;
-                // this.currentBlock = 0;
-                // this.length = this.allData.length;
+                let outputStream: Buffer;
+                if (multiStreams) {
+                    debugger;
+                    // let y = 0;
+                    // for (let i of this.indexItems) {
+                    //     debugger;
+                    //     let inData: Buffer = new Buffer(i.size);
+                    //     this.pstFileContent.seek(i.fileOffset);
+                    //     this.pstFileContent.readCompletely(inData);
+                    //     final InflaterOutputStream inflaterStream = new InflaterOutputStream(outputStream);
+                    //     //try {
+                    //         inflaterStream.write(inData);
+                    //         inflaterStream.close();
+                    //     //} catch (Exception err) {
+                    //     //    System.out.println("Y: " + y);
+                    //     //    System.out.println(err);
+                    //     //    PSTObject.printHexFormatted(inData, true);
+                    //     //    System.exit(0);
+                    //     //}
+                    //     y++;
+                    // }
+                    // this.indexItems.clear();
+                    // this.skipPoints.clear();
+                } else {
+                    let compressedLength: number = this.length.toNumber();
+                    if (this.indexItems.length > 0) {
+                        compressedLength = 0;
+                        for (let i of this.indexItems) {
+                            //System.out.println(i);
+                            compressedLength += i.size;
+                        }
+                    }
+                    let inData: Buffer = new Buffer(compressedLength);
+                    this.seek(long.ZERO);
+                    this.readCompletely(inData);
+                    outputStream = zlib.unzipSync(inData);
+                }
+                let output: Buffer = outputStream;
+                this.allData = output;
+                this.currentLocation = long.ZERO;
+                this.currentBlock = 0;
+                this._length = long.fromNumber(this.allData.length);
             }
             this.seek(long.ZERO);
         } catch (err) {
