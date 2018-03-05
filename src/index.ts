@@ -73,7 +73,7 @@ function processFolder(folder: PSTFolder) {
     }
 
     // go through the folders...
-    if (folder.hasSubfolders()) {
+    if (folder.hasSubfolders) {
         let childFolders: PSTFolder[] = folder.getSubFolders();
         for (let childFolder of childFolders) {
             processFolder(childFolder);
@@ -81,7 +81,7 @@ function processFolder(folder: PSTFolder) {
     }
 
     // and now the emails for this folder
-    if (folder.getContentCount() > 0) {
+    if (folder.contentCount > 0) {
         depth++;
         let email: PSTMessage = folder.getNextChild();
         while (email != null) {
