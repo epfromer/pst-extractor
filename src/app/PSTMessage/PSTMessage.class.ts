@@ -485,9 +485,9 @@ export class PSTMessage extends PSTObject {
     // HTML e-mail body
     public get bodyHTML(): string {
         let cp: string = null;
-        let cpItem: PSTTableBCItem = this.pstTableItems.get(0x3FDE); // PidTagInternetCodepage
+        let cpItem: PSTTableBCItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
         if (cpItem == null) {
-            cpItem = this.pstTableItems.get(0x3FFD); // PidTagMessageCodepage
+            cpItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
         }
         if (cpItem != null) {
             cp = PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
@@ -775,11 +775,41 @@ export class PSTMessage extends PSTObject {
         return this.getBooleanItem(0x3016, false);
     }
 
+    public get emailAddress(): string {
+        return this.getStringItem(0x3003);
+    }
+
+    public get addrType(): string {
+        return this.getStringItem(0x3002);
+    }
+
+    public get comment(): string {
+        return this.getStringItem(0x3004);
+    }
+
+    public get creationTime(): Date {
+        return this.getDateItem(0x3007);
+    }
+
+    public get modificationTime(): Date {
+        return this.getDateItem(0x3008);
+    }
+
     // string representation of this email
     public toString(): string {
         return (
             '\n messageClass: ' +
             this.messageClass +
+            '\n emailAddress: ' +
+            this.emailAddress +
+            '\n addrType: ' +
+            this.addrType +
+            '\n comment: ' +
+            this.comment +
+            '\n creationTime: ' +
+            this.creationTime +
+            '\n modificationTime: ' +
+            this.modificationTime +
             '\n subject: ' +
             this.subject +
             '\n importance: ' +
@@ -975,7 +1005,12 @@ export class PSTMessage extends PSTObject {
         return JSON.stringify(
             {
                 messageClass: this.messageClass,
+                emailAddress: this.emailAddress,
                 subject: this.subject,
+                addrType: this.addrType,
+                comment: this.comment,
+                creationTime: this.creationTime,
+                modificationTime: this.modificationTime,
                 importance: this.importance,
                 transportMessageHeaders: this.transportMessageHeaders,
                 clientSubmitTime: this.clientSubmitTime,

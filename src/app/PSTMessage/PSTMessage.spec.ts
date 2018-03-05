@@ -31,30 +31,36 @@ describe('PSTMessage tests', () => {
         expect(childFolders.length).to.equal(3);
         let folder = childFolders[0];
         expect(folder.subFolderCount).to.equal(2);
-        expect(folder.getDisplayName()).to.equal('Top of Personal Folders');
+        expect(folder.displayName).to.equal('Top of Personal Folders');
         childFolders = folder.getSubFolders();
         folder = childFolders[0];
-        expect(folder.getDisplayName()).to.equal('Deleted Items');
+        expect(folder.displayName).to.equal('Deleted Items');
         folder = childFolders[1];
-        expect(folder.getDisplayName()).to.equal('lokay-m');
+        expect(folder.displayName).to.equal('lokay-m');
         childFolders = folder.getSubFolders();
         folder = childFolders[0];
-        expect(folder.getDisplayName()).to.equal('MLOKAY (Non-Privileged)');
+        expect(folder.displayName).to.equal('MLOKAY (Non-Privileged)');
         childFolders = folder.getSubFolders();
-        expect(childFolders[0].getDisplayName()).to.equal('TW-Commercial Group');
+        expect(childFolders[0].displayName).to.equal('TW-Commercial Group');
         const comGroupFolder = childFolders[0];
+        
         let msg: PSTMessage = comGroupFolder.getNextChild();
         expect(msg.messageClass).to.equal('IPM.Note');
         expect(msg.subject).to.equal("New OBA's");
         expect(msg.sentRepresentingEmailAddress).to.equal('Dennis.Lee@ENRON.com');
         expect(msg.displayTo).to.equal('Lindberg  Lorraine; Watson  Kimberly');
+        let body = msg.body;
+        expect(body).to.contain('Mojave (Effective date 12/02/01) and Williams Field Services')
+        expect(body.length).to.equal(678);
+        
         msg = comGroupFolder.getNextChild();
         expect(msg.messageClass).to.equal('IPM.Note');
         expect(msg.subject).to.equal("I/B Link Capacity for November and December 2001");
         expect(msg.sentRepresentingEmailAddress).to.equal('JReames@br-inc.com');
         expect(msg.displayTo).to.equal('Michelle Lokay (E-mail)');
-        const body = msg.body;
+        body = msg.body;
         expect(body).to.contain('Per our earlier conversation, Burlington Resources agrees to purchase 20,000')
         expect(body.length).to.equal(661);
+
     });
 });

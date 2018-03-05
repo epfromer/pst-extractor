@@ -1,8 +1,10 @@
-import { PSTFolder } from './PSTFolder.class';
+import { PSTObject } from './PSTObject.class';
 import * as chai from 'chai';
 import * as mocha from 'mocha';
 import { PSTFile } from '../PSTFile/PSTFile.class';
-const resolve = require('path').resolve
+import { PSTFolder } from '../PSTFolder/PSTFolder.class';
+import { PSTMessage } from '../PSTMessage/PSTMessage.class';
+const resolve = require('path').resolve;
 const expect = chai.expect;
 let pstFile: PSTFile;
 
@@ -14,28 +16,18 @@ after(() => {
     pstFile.close();
 });
 
-describe('PSTFolder tests', () => {
-    it('should have a root folder', () => {
-        const folder: PSTFolder = pstFile.getRootFolder();
-        expect(folder).to.not.be.null;
-        expect(folder.subFolderCount).to.equal(3);
-        expect(folder.hasSubfolders).to.be.true;
-    });
+// get these emails
+// Personal folders
+//  |- Top of Personal Folders
+//  |  |- Deleted Items
+//  |  |- lokay-m
+//  |  |  |- MLOKAY (Non-Privileged)
+//  |  |  |  |- TW-Commercial Group
+//  |  |  |  |  |- Email: 2097188 - New OBA's
+//  |  |  |  |  |- Email: 2097220 - I/B Link Capacity for November and December 2001
 
-    // folder structure should look like:
-    // Personal folders
-    //  |- Top of Personal Folders
-    //  |  |- Deleted Items
-    //  |  |- lokay-m
-    //  |  |  |- MLOKAY (Non-Privileged)
-    //  |  |  |  |- TW-Commercial Group
-    //  |  |  |  |- Systems
-    //  |  |  |  |- Sent Items
-    //  |  |  |  |- Personal
-    //  |- Search Root
-    //  |- SPAM Search Folder 2
-
-    it('root folder should have sub folders', () => {
+describe('PSTObject tests', () => {
+    it('should have basic attributes', () => {
         let childFolders: PSTFolder[] = pstFile.getRootFolder().getSubFolders();
         expect(childFolders.length).to.equal(3);
         let folder = childFolders[0];
@@ -51,8 +43,10 @@ describe('PSTFolder tests', () => {
         expect(folder.displayName).to.equal('MLOKAY (Non-Privileged)');
         childFolders = folder.getSubFolders();
         expect(childFolders[0].displayName).to.equal('TW-Commercial Group');
-        expect(childFolders[1].displayName).to.equal('Systems');
-        expect(childFolders[2].displayName).to.equal('Sent Items');
-        expect(childFolders[3].displayName).to.equal('Personal');
+        const comGroupFolder = childFolders[0];
+        
+        let msg: PSTMessage = comGroupFolder.getNextChild();
+        expect(msg.messageClass).to.equal('IPM.Note');
+        expect(msg.stringCodepage).to.equal('us-ascii');
     });
 });

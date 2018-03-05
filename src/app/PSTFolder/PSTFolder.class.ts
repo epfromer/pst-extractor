@@ -80,7 +80,7 @@ export class PSTFolder extends PSTObject {
                 output.push(folder);
             }
         } catch (err) {
-            Log.error("PSTFolder::getSubFolders Can't get child folders for folder " + this.getDisplayName());
+            Log.error("PSTFolder::getSubFolders Can't get child folders for folder " + this.displayName);
             throw err;
         }
         return output;
@@ -102,7 +102,7 @@ export class PSTFolder extends PSTObject {
             let pstNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem);
             this.subfoldersTable = new PSTTable7C(pstNodeInputStream, tmp);
         } catch (err) {
-            Log.error("PSTFolder::initSubfoldersTable Can't get child folders for folder " + this.getDisplayName());
+            Log.error("PSTFolder::initSubfoldersTable Can't get child folders for folder " + this.displayName);
             throw err;
         }
     }
@@ -129,7 +129,7 @@ export class PSTFolder extends PSTObject {
             const pstNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem);
             this.emailsTable = new PSTTable7C(pstNodeInputStream, tmp, 0x67F2);
         } catch (err) {
-            Log.error("PSTFolder::initEmailsTable Can't get child folders for folder " + this.getDisplayName());
+            Log.error("PSTFolder::initEmailsTable Can't get child folders for folder " + this.displayName);
             throw err;
         }
     }
@@ -229,7 +229,6 @@ export class PSTFolder extends PSTObject {
         return this.getIntItem(0x3617);
     }
 
-    // container flags 
     public get containerFlags() {
         return this.getIntItem(0x3600);
     }
