@@ -41,7 +41,7 @@ import * as fsext from 'fs-ext';
 let depth = -1;
 let tmpDirIndex = 1;
 let saveAttachmentsToFS = false;
-let verbose = false;
+let verbose = true;
 let col = 0;
 
 // make a temp dir for the attachments

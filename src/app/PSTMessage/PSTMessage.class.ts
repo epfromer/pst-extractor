@@ -484,17 +484,15 @@ export class PSTMessage extends PSTObject {
 
     // HTML e-mail body
     public get bodyHTML(): string {
-        debugger;
-        return '';
-        // String cp = null;
-        // PSTTableBCItem cpItem = this.items.get(0x3FDE); // PidTagInternetCodepage
-        // if (cpItem == null) {
-        //     cpItem = this.items.get(0x3FFD); // PidTagMessageCodepage
-        // }
-        // if (cpItem != null) {
-        //     cp = PSTFile.getInternetCodePageCharset(cpItem.entryValueReference);
-        // }
-        // return this.getStringItem(0x1013, 0, cp);
+        let cp: string = null;
+        let cpItem: PSTTableBCItem = this.pstTableItems.get(0x3FDE); // PidTagInternetCodepage
+        if (cpItem == null) {
+            cpItem = this.pstTableItems.get(0x3FFD); // PidTagMessageCodepage
+        }
+        if (cpItem != null) {
+            cp = PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
+        }
+        return this.getStringItem(0x1013, 0, cp);
     }
 
     // Message ID for this email as allocated per rfc2822
@@ -601,7 +599,6 @@ export class PSTMessage extends PSTObject {
     // attachment stuff here, not sure if these can just exist in emails or not,
     // but a table key of 0x0671 would suggest that this is a property of the
     // envelope rather than a specific email property
-
     // find, extract and load up all of the attachments in this email
     // necessary for the other operations.
     private processAttachments() {
@@ -677,7 +674,7 @@ export class PSTMessage extends PSTObject {
                     categories[categories.length - 1] = name;
                 }
             } catch (err) {
-                throw new Error('Unable to decode category data');
+                throw new Error('PSTMessage::colorCategories Unable to decode category data');
             }
         }
         return categories;
