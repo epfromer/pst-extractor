@@ -165,6 +165,10 @@ export class PSTFile {
         this.processNameToIDMap();
     }
 
+    public close() {
+        fsext.closeSync(this.pstFD);
+    }
+
     private processNameToIDMap() {
         // process the name to id map
         let nameToIdMapDescriptorNode = this.getDescriptorIndexNode(long.fromNumber(97));
@@ -256,16 +260,16 @@ export class PSTFile {
         }
 
         if (localDescriptorItems == null) {
-            throw new Error('External reference but no localDescriptorItems in PSTFile.getData()');
+            throw new Error('PSTFile::getData External reference but no localDescriptorItems in PSTFile.getData()');
         }
 
         if (item.entryValueType != 0x0102) {
-            throw new Error('Attempting to get non-binary data in PSTFile.getData()');
+            throw new Error('PSTFile::getData Attempting to get non-binary data in PSTFile.getData()');
         }
 
         let mapDescriptorItem: PSTDescriptorItem = localDescriptorItems.get(item.entryValueReference);
         if (mapDescriptorItem == null) {
-            throw new Error('Descriptor not found: ' + item.entryValueReference);
+            throw new Error('PSTFile::getData Descriptor not found: ' + item.entryValueReference);
         }
         return mapDescriptorItem.getData();
     }
@@ -353,7 +357,6 @@ export class PSTFile {
     // get file offset, which is sorted in 8 little endian bytes
     // returns a promise of a number
     private extractLEFileOffset(startOffset: long): long {
-        // console.log('startOffset = ' + startOffset.toString());
         let offset: long = long.ZERO;
         if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
             debugger;
@@ -380,7 +383,6 @@ export class PSTFile {
                 offset = offset.or(tmpLongValue);
             }
         }
-        // console.log('resolve with offset = ' + offset.toString());
         return offset;
     }
 
@@ -401,8 +403,7 @@ export class PSTFile {
             }
         }
 
-        // okay, what we want to do is navigate the tree until you reach the
-        // bottom....
+        // okay, what we want to do is navigate the tree until you reach the bottom....
         // try and read the index b-tree
         let buffer = new Buffer(2);
         if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
@@ -490,8 +491,6 @@ export class PSTFile {
                     }
                 }
             } else {
-                // System.out.println(String.format("At bottom, looking through
-                // %d items", numberOfItems));
                 // we are at the bottom of the tree...
                 // we want to get our file offset!
                 for (let x = 0; x < numberOfItems; x++) {
@@ -581,7 +580,7 @@ export class PSTFile {
         inputStream.seek(long.ZERO);
         let sig = inputStream.read();
         if (sig != 0x2) {
-            throw new Error('Unable to process descriptor node, bad signature: ' + sig);
+            throw new Error('PSTFile::getPSTDescriptorItems Unable to process descriptor node, bad signature: ' + sig);
         }
 
         let output = new Map();
