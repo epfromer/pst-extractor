@@ -128,6 +128,10 @@ export class PSTFolder extends PSTObject {
             const offsetIndexItem = this.pstFile.getOffsetIndexNode(folderDescriptor.dataOffsetIndexIdentifier);
             const pstNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem);
             this.emailsTable = new PSTTable7C(pstNodeInputStream, tmp, 0x67F2);
+
+            debugger;
+            console.log(this.emailsTable.toJSONstring());
+
         } catch (err) {
             Log.error("PSTFolder::initEmailsTable Can't get child folders for folder " + this.displayName);
             throw err;
@@ -147,6 +151,11 @@ export class PSTFolder extends PSTObject {
             }
             // get the emails from the rows
             let emailRow: PSTTable7CItem = rows[0].get(0x67F2);
+
+            console.log(emailRow.toString())
+            console.log(emailRow.toJSONstring())
+            debugger;
+
             let childDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(long.fromNumber(emailRow.entryValueReference));
             let child: PSTObject = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor);
             this.currentEmailIndex++;

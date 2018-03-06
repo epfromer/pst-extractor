@@ -801,6 +801,7 @@ export class PSTUtil {
         switch (messageClass) {
             case 'IPM.Note':
             case 'IPM.Note.SMIME.MultipartSigned':
+            case 'IPM.Note.Agenda':
                 // email message
                 let msg = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
                 // Log.debug1(msg.body);

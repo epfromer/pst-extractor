@@ -38,9 +38,9 @@ import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.cla
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import { NodeInfo } from '../NodeInfo/NodeInfo.class';
-import * as long from 'long';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { Log } from '../Log.class';
+import * as long from 'long';
 
 // Specific functions for the 7c table type ("Table Context").
 // This is used for attachments.
@@ -48,7 +48,7 @@ export class PSTTable7C extends PSTTable {
     private items: Map<number, PSTTable7CItem>[] = null;
     private numberOfDataSets = 0;
     private BLOCK_SIZE = 8176;
-    private cCols = 0;
+    private numColumns = 0;
     private TCI_bm = 0;
     private TCI_1b = 0;
     private columnDescriptors: ColumnDescriptor[] = [];
@@ -56,29 +56,19 @@ export class PSTTable7C extends PSTTable {
     private rowNodeInfo: NodeInfo = null;
     private keyMap: Map<number, number> = null;
 
-    // protected PSTTable7C(final PSTNodeInputStream in, final HashMap<Integer, PSTDescriptorItem> subNodeDescriptorItems)
-    //     throws PSTException, java.io.IOException {
-    //     this(in, subNodeDescriptorItems, -1);
-    // }
-
-    // protected PSTTable7C(final PSTNodeInputStream in, final HashMap<Integer, PSTDescriptorItem> subNodeDescriptorItems,
-    //     final int entityToExtract) throws PSTException, java.io.IOException {
-    //     super(in, subNodeDescriptorItems);
-
     constructor(pstNodeInputStream: PSTNodeInputStream, subNodeDescriptorItems: Map<number, PSTDescriptorItem>, entityToExtract?: number) {
         super(pstNodeInputStream, subNodeDescriptorItems);
 
         if (this.tableTypeByte != 0x7c) {
-            throw new Error('unable to create PSTTable7C, table does not appear to be a 7c!');
+            throw new Error('PSTTable7C::constructor unable to create PSTTable7C, table does not appear to be a 7c!');
         }
 
         // TCINFO header is in the hidUserRoot node
-        // byte[] tcHeaderNode = getNodeInfo(hidUserRoot);
         let tcHeaderNode: NodeInfo = this.getNodeInfo(this.hidUserRoot);
         let offset = 0;
 
         // get the TCINFO header information
-        this.cCols = tcHeaderNode.seekAndReadLong(long.fromNumber(offset + 1), 1).toNumber();
+        this.numColumns = tcHeaderNode.seekAndReadLong(long.fromNumber(offset + 1), 1).toNumber();
         let TCI_4b: number = tcHeaderNode.seekAndReadLong(long.fromNumber(offset + 2), 2).toNumber();
         let TCI_2b: number = tcHeaderNode.seekAndReadLong(long.fromNumber(offset + 4), 2).toNumber();
         this.TCI_1b = tcHeaderNode.seekAndReadLong(long.fromNumber(offset + 6), 2).toNumber();
@@ -88,8 +78,8 @@ export class PSTTable7C extends PSTTable {
 
         // 22... column descriptors
         offset += 22;
-        if (this.cCols != 0) {
-            for (let col = 0; col < this.cCols; ++col) {
+        if (this.numColumns != 0) {
+            for (let col = 0; col < this.numColumns; ++col) {
                 this.columnDescriptors[col] = new ColumnDescriptor(tcHeaderNode, offset);
                 if (this.columnDescriptors[col].id === entityToExtract) {
                     this.overrideCol = col;
@@ -100,7 +90,7 @@ export class PSTTable7C extends PSTTable {
 
         // if we are asking for a specific column, only get that!
         if (this.overrideCol > -1) {
-            this.cCols = this.overrideCol + 1;
+            this.numColumns = this.overrideCol + 1;
         }
 
         // Read the key table
@@ -123,7 +113,7 @@ export class PSTTable7C extends PSTTable {
             'Number of keys: ' +
             this.numberOfKeys +
             '\nNumber of columns: ' +
-            this.cCols +
+            this.numColumns +
             '\nRow Size: ' +
             this.TCI_bm +
             '\nhidRowIndex: ' +
@@ -135,7 +125,7 @@ export class PSTTable7C extends PSTTable {
         let numberOfBlocks: number = Math.trunc(this.rowNodeInfo.length() / this.BLOCK_SIZE);
         let numberOfRowsPerBlock: number = Math.trunc(this.BLOCK_SIZE / this.TCI_bm);
         let blockPadding = this.BLOCK_SIZE - numberOfRowsPerBlock * this.TCI_bm;
-        this.numberOfDataSets = numberOfBlocks * numberOfRowsPerBlock + (this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm;
+        this.numberOfDataSets = Math.trunc(numberOfBlocks * numberOfRowsPerBlock + (this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm);
     }
 
     public getItems(startAtRecord?: number, numberOfRecordsToReturn?: number): Map<number, PSTTable7CItem>[] {
@@ -161,12 +151,12 @@ export class PSTTable7C extends PSTTable {
             numberOfRecordsToReturn = this.getRowCount() - startAtRecord;
         }
 
-        // if (numberOfRecordsToReturn == 0) {
-        //     debugger;
-        // }
+        if (numberOfRecordsToReturn == 0) {
+            debugger;
+        }
 
         let dataSetNumber = 0;
-        // while ( currentValueArrayStart + ((cCols+7)/8) + TCI_1b <=
+        // while ( currentValueArrayStart + ((numColumns+7)/8) + TCI_1b <=
         // rowNodeInfo.length())
         for (let rowCounter = 0; rowCounter < numberOfRecordsToReturn; rowCounter++) {
             let currentItem: Map<number, PSTTable7CItem> = new Map();
@@ -189,7 +179,7 @@ export class PSTTable7C extends PSTTable {
                     }
                 }
             }
-            let bitmap = new Buffer((this.cCols + 7) / 8);
+            let bitmap = new Buffer((this.numColumns + 7) / 8);
             this.rowNodeInfo.pstNodeInputStream.seek(long.fromNumber(this.rowNodeInfo.startOffset + currentValueArrayStart + this.TCI_1b));
             this.rowNodeInfo.pstNodeInputStream.readCompletely(bitmap);
             let id = this.rowNodeInfo.seekAndReadLong(long.fromNumber(currentValueArrayStart), 4);
@@ -207,8 +197,8 @@ export class PSTTable7C extends PSTTable {
             if (this.overrideCol > -1) {
                 col = this.overrideCol - 1;
             }
-            //            for (; col < this.cCols; ++col) {
-            while (col < this.cCols - 1) {
+            //            for (; col < this.numColumns; ++col) {
+            while (col < this.numColumns - 1) {
                 col++;
 
                 // Does this column exist for this row?
@@ -298,19 +288,33 @@ export class PSTTable7C extends PSTTable {
         return itemList;
     }
 
-    public getRowCount(): number {
+    public get rowCount(): number {
         return this.numberOfDataSets;
     }
 
-    public toString() {
-        return this.description;
-    }
-
-    public getItemsString() {
+    public get itemsString(): string {
         if (this.items == null) {
             return '';
         }
-
         return this.items.toString();
+    }
+
+    public toString(): string {
+        return this.description;
+    }
+
+    public toJSONstring(): string {
+
+
+        return JSON.stringify({
+            rowCount: this.rowCount,
+            items: this.items,
+            numColumns: this.numColumns,
+            TCI_bm: this.TCI_bm,
+            TCI_1b: this.TCI_1b,
+            overrideCol: this.overrideCol,
+            numberOfKeys: this.numberOfKeys,
+            itemsString: this.itemsString
+        }, null, 2);
     }
 }

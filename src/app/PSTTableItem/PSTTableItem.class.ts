@@ -192,4 +192,16 @@ export class PSTTableItem {
 
     // private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
     // private static SimpleTimeZone utcTimeZone = new SimpleTimeZone(0, "UTC");
+
+    public toJSONstring(): string {
+        return JSON.stringify({
+            itemIndex: this.itemIndex,
+            entryType: this.entryType,
+            isExternalValueReference: this.isExternalValueReference,
+            entryValueReference: this.entryValueReference,
+            entryValueType: this.entryValueType,
+            data: this.data
+        }, null, 2);
+    }
+
 }

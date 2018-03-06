@@ -126,7 +126,6 @@ function processFolder(folder: PSTFolder) {
         }
         depth--;
     }
-
     depth--;
 }
 

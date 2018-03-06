@@ -30,11 +30,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTTableItem } from "../PSTTableItem/PSTTableItem.class";
+import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
 // Items found in the 7c tables
 export class PSTTable7CItem extends PSTTableItem {
     public toString(): string {
-        return "7c Table Item: " + super.toString();
+        return '7c Table Item: ' + super.toString();
+    }
+
+    public toJSONstring(): string {
+        return 'PSTTable7CItem: ' + super.toJSONstring();
     }
 }
