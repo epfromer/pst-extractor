@@ -31,7 +31,12 @@ describe('PSTActivity tests', () => {
 
     it('root folder should have a journal entry', () => {
         let activity: PSTActivity = folder.getNextChild();
-        console.log(activity.toJSONstring())
-        
+        // console.log(activity.toJSONstring())
+        expect(activity.messageClass).to.equal('IPM.Activity');
+        expect(activity.subject).to.equal('called Ed');
+        expect(activity.logTypeDesc).to.equal('Phone call');
+        expect(activity.bodyPrefix).to.contain('But no one was home');
+        expect(activity.logStart).to.eql(new Date("2018-03-06T21:09:00.000Z"));
+        expect(activity.logEnd).to.eql(new Date("2018-03-06T21:09:00.000Z"));
     });
 });
