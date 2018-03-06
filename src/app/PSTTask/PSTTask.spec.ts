@@ -39,7 +39,7 @@ describe('PSTTask tests', () => {
         expect(task.isTaskComplete).to.be.false;
         expect(task.taskOwner).to.equal('Mountain Man');
         expect(task.taskStatus).to.equal(1); // started
-        expect(task.percentComplete).to.equal(0.65);
+        expect(task.percentComplete).to.equal(0.75);
         expect(task.bodyPrefix).to.contain('Blue category, high priority, 75% complete');
 
         // basic task

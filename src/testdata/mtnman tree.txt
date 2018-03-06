@@ -74,7 +74,9 @@
  |  |  |  |- Inbound
  |  |  |- Drafts
  |  |  |- Journal
+ |  |  |  |- Email: 2106628 - called Ed
  |  |  |- Notes
+ |  |  |  |- Email: 2106596 - a pretty yellow sticky note
  |  |  |- Tasks
  |  |  |  |- Email: 2106532 - fully loaded task
  |  |  |  |- Email: 2106436 - basic task

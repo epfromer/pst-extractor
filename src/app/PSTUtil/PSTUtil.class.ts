@@ -832,9 +832,8 @@ export class PSTUtil {
                 return task;
             case 'IPM.Activity':
                 // journal entry
-                debugger;
                 let activity = new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
-                Log.debug1(activity.toJSONstring());
+                // Log.debug1(activity.toJSONstring());
                 return activity;
             case 'IPM.Post.Rss':
                 // Rss Feed
@@ -861,14 +860,16 @@ export class PSTUtil {
                 let ndr = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
                 // Log.debug1(ndr.toJSONstring());
                 return ndr;
+            case 'IPM.StickyNote':
+                // Sticky note
+                let sticky = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
+                // Log.debug1(sticky.toJSONstring());
+                return sticky;
             case 'REPORT.IPM.Note.IPNRN':
                 // Read receipt
                 debugger;
             case 'REPORT.IPM.Note.IPNNRN':
                 // Not-read notification
-                debugger;
-            case 'IPM.StickyNote':
-                // Creating note
                 debugger;
             case 'IPM.Schedule.Meeting.Request':
                 // Meeting request
