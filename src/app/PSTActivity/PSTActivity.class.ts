@@ -152,7 +152,9 @@ export class PSTActivity extends PSTMessage {
                 },
                 null,
                 2
-            )
+            ) +
+            '\n' +
+            super.toJSONstring()
         );
     }
 }
