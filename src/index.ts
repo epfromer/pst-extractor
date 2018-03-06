@@ -87,6 +87,10 @@ function processFolder(folder: PSTFolder) {
         while (email != null) {
             if (verbose) {
                 console.log(getDepth(depth) + 'Email: ' + email.descriptorNodeId + ' - ' + email.subject);
+                if (email.descriptorNodeId.equals(2106532)) {
+                    console.log(email.toJSONstring());
+                    debugger;
+                }
             } else {
                 printDot();
             }

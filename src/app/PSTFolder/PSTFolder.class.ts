@@ -119,7 +119,7 @@ export class PSTFolder extends PSTObject {
         }
 
         try {
-            let folderDescriptorIndex = this.descriptorIndexNode.descriptorIdentifier + 12; 
+            let folderDescriptorIndex = this.descriptorIndexNode.descriptorIdentifier + 12;
             let folderDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(long.fromNumber(folderDescriptorIndex));
             let tmp: Map<number, PSTDescriptorItem> = null;
             if (folderDescriptor.localDescriptorsOffsetIndexIdentifier.greaterThan(0)) {
@@ -127,14 +127,14 @@ export class PSTFolder extends PSTObject {
             }
             const offsetIndexItem = this.pstFile.getOffsetIndexNode(folderDescriptor.dataOffsetIndexIdentifier);
             const pstNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem);
-            this.emailsTable = new PSTTable7C(pstNodeInputStream, tmp, 0x67F2);
+            this.emailsTable = new PSTTable7C(pstNodeInputStream, tmp, 0x67f2);
         } catch (err) {
             Log.error("PSTFolder::initEmailsTable Can't get child folders for folder " + this.displayName);
             throw err;
         }
     }
 
-     // Get the next child of this folder. As there could be thousands of emails, we have these kind of cursor operations.
+    // Get the next child of this folder. As there could be thousands of emails, we have these kind of cursor operations.
     public getNextChild(): any {
         this.initEmailsTable();
 
@@ -146,7 +146,7 @@ export class PSTFolder extends PSTObject {
 
             // get the emails from the rows
             let rows: Map<number, PSTTable7CItem>[] = this.emailsTable.getItems(this.currentEmailIndex, 1);
-            let emailRow: PSTTable7CItem = rows[0].get(0x67F2);
+            let emailRow: PSTTable7CItem = rows[0].get(0x67f2);
             if (emailRow.itemIndex == -1) {
                 // no more!
                 return null;
@@ -208,8 +208,8 @@ export class PSTFolder extends PSTObject {
         return this.getIntItem(0x3601);
     }
 
-     // the number of emails in this folder this is as reported by the PST file, 
-     // for a number calculated by the library use getEmailCount
+    // the number of emails in this folder this is as reported by the PST file,
+    // for a number calculated by the library use getEmailCount
     public get contentCount(): number {
         return this.getIntItem(0x3602);
     }
@@ -240,30 +240,47 @@ export class PSTFolder extends PSTObject {
 
     public toString() {
         return (
-            '\n subFolderCount: ' + this.subFolderCount + 
-            '\n emailCount: ' + this.emailCount + 
-            '\n folderType: ' + this.folderType + 
-            '\n contentCount: ' + this.contentCount + 
-            '\n unreadCount: ' + this.unreadCount + 
-            '\n hasSubfolders: ' + this.hasSubfolders + 
-            '\n containerClass: ' + this.containerClass + 
-            '\n associateContentCount: ' + this.associateContentCount + 
-            '\n containerFlags: ' + this.containerFlags 
+            '\n subFolderCount: ' +
+            this.subFolderCount +
+            '\n emailCount: ' +
+            this.emailCount +
+            '\n folderType: ' +
+            this.folderType +
+            '\n contentCount: ' +
+            this.contentCount +
+            '\n unreadCount: ' +
+            this.unreadCount +
+            '\n hasSubfolders: ' +
+            this.hasSubfolders +
+            '\n containerClass: ' +
+            this.containerClass +
+            '\n associateContentCount: ' +
+            this.associateContentCount +
+            '\n containerFlags: ' +
+            this.containerFlags
         );
     }
 
     public toJSONstring(): string {
-        return JSON.stringify({
-            subFolderCount: this.subFolderCount,
-            emailCount: this.emailCount,
-            folderType: this.folderType,
-            contentCount: this.contentCount,
-            unreadCount: this.unreadCount,
-            hasSubfolders: this.hasSubfolders,
-            containerClass: this.containerClass,
-            associateContentCount: this.associateContentCount,
-            containerFlags: this.containerFlags
-        }, null, 2);
+        return (
+            'PSTFolder:' +
+            JSON.stringify(
+                {
+                    subFolderCount: this.subFolderCount,
+                    emailCount: this.emailCount,
+                    folderType: this.folderType,
+                    contentCount: this.contentCount,
+                    unreadCount: this.unreadCount,
+                    hasSubfolders: this.hasSubfolders,
+                    containerClass: this.containerClass,
+                    associateContentCount: this.associateContentCount,
+                    containerFlags: this.containerFlags
+                },
+                null,
+                2
+            ) +
+            '\n' +
+            super.toJSONstring()
+        );
     }
-
 }

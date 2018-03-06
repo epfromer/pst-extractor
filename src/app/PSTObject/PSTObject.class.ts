@@ -43,6 +43,7 @@ import { PSTMessage } from '../PSTMessage/PSTMessage.class';
 import { Log } from '../Log.class';
 import * as long from 'long';
 import { PSTTimeZone } from '../PSTTimeZone/PSTTimeZone.class';
+var fromBits = require('math-float64-from-bits');
 
 // PST Object is the root class of most PST Items.
 export class PSTObject {
@@ -113,7 +114,7 @@ export class PSTObject {
         return defaultValue;
     }
 
-    protected getBooleanItem(identifier: number, defaultValue?: boolean) {
+    protected getBooleanItem(identifier: number, defaultValue?: boolean): boolean {
         if (defaultValue === undefined) {
             defaultValue = false;
         }
@@ -125,7 +126,7 @@ export class PSTObject {
         return defaultValue;
     }
 
-    protected getDoubleItem(identifier: number, defaultValue?: number) {
+    protected getDoubleItem(identifier: number, defaultValue?: number): number {
         if (defaultValue === undefined) {
             defaultValue = 0;
         }
@@ -133,11 +134,9 @@ export class PSTObject {
         if (this.pstTableItems.has(identifier)) {
             let item: PSTTableBCItem = this.pstTableItems.get(identifier);
             let longVersion: long = PSTUtil.convertLittleEndianBytesToLong(item.data);
-            // TODO - is this necessary?
-            if (longVersion.toNumber()) {
-                debugger;
-            }
-            return longVersion.toNumber();
+
+            // convert double precision float to binary, then back to JS number
+            return fromBits('00' + longVersion.toString(2));
         }
         return defaultValue;
     }
@@ -203,7 +202,6 @@ export class PSTObject {
                 }
             }
         }
-        Log.error('PSTObject::getStringItem returning empty string?');
         return '';
     }
 
@@ -229,7 +227,6 @@ export class PSTObject {
             let low = PSTUtil.convertLittleEndianBytesToLong(item.data, 0, 4);
             return PSTUtil.filetimeToDate(hi, low);
         }
-        Log.error('PSTObject::getDateItem return null?');
         return null;
     }
 
@@ -253,7 +250,6 @@ export class PSTObject {
                 Log.error('PSTObject::getBinaryItem External reference?');
             }
         }
-        Log.error('PSTObject::getBinaryItem return null?');
         return null;
     }
 
@@ -272,4 +268,18 @@ export class PSTObject {
     public toString() {
         return this.localDescriptorItems + '\n' + this.pstTableItems;
     }
+
+    public toJSONstring(): string {
+        return (
+            'PSTObject:' +
+            JSON.stringify(
+                {
+                    displayName: this.displayName,
+                },
+                null,
+                2
+            )
+        );
+    }
+
 }

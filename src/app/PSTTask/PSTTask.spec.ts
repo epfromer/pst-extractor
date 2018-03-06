@@ -1,0 +1,57 @@
+import * as chai from 'chai';
+import * as mocha from 'mocha';
+import { PSTFile } from '../PSTFile/PSTFile.class';
+import { PSTFolder } from '../PSTFolder/PSTFolder.class';
+import { PSTTask } from './PSTTask.class';
+const resolve = require('path').resolve
+const expect = chai.expect;
+let pstFile: PSTFile;
+let folder: PSTFolder;
+
+before(() => {
+    pstFile = new PSTFile(resolve('./src/testdata/mtnman1965@outlook.com.ost'));
+
+    // get to Tasks folder
+    let childFolders: PSTFolder[] = pstFile.getRootFolder().getSubFolders();
+    folder = childFolders[1];  // Root - Mailbox
+    childFolders = folder.getSubFolders();
+    folder = childFolders[4];  // IPM_SUBTREE
+    childFolders = folder.getSubFolders();
+    folder = childFolders[17];  // Tasks
+});
+
+after(() => {
+    pstFile.close();
+});
+
+describe('PSTTask tests', () => {
+    it('should have a Tasks folder', () => {
+        expect(folder.displayName).to.equal('Tasks');
+    });
+
+    it('should have two tasks', () => {
+        // fully loaded task
+        let task: PSTTask = folder.getNextChild();
+        // console.log(task.toJSONstring())
+        expect(task.messageClass).to.equal('IPM.Task');
+        expect(task.subject).to.equal('fully loaded task');
+        expect(task.isTaskRecurring).to.be.true;
+        expect(task.isTaskComplete).to.be.false;
+        expect(task.taskOwner).to.equal('Mountain Man');
+        expect(task.taskStatus).to.equal(1); // started
+        expect(task.percentComplete).to.equal(0.65);
+        expect(task.bodyPrefix).to.contain('Blue category, high priority, 75% complete');
+
+        // basic task
+        task = folder.getNextChild();
+        // console.log(task.toJSONstring())
+        expect(task.messageClass).to.equal('IPM.Task')
+        expect(task.subject).to.equal('basic task')
+        expect(task.isTaskRecurring).to.be.false;
+        expect(task.isTaskComplete).to.be.false;
+        expect(task.taskOwner).to.equal('Mountain Man');
+        expect(task.taskStatus).to.equal(0); // not started
+        expect(task.bodyPrefix).to.contain('Vanilla task, not started');
+    });
+});
+

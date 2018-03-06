@@ -46,6 +46,7 @@ describe('PSTFolder tests', () => {
         expect(folder.displayName).to.equal('Deleted Items');
         folder = childFolders[1];
         expect(folder.displayName).to.equal('lokay-m');
+        // console.log(folder.toJSONstring())
         childFolders = folder.getSubFolders();
         folder = childFolders[0];
         expect(folder.displayName).to.equal('MLOKAY (Non-Privileged)');

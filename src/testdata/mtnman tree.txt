@@ -1,0 +1,93 @@
+ |- Root - Public
+ |  |- IPM_SUBTREE
+ |  |- NON_IPM_SUBTREE
+ |  |  |- EFORMS REGISTRY
+ |  |  |  |- Organization Forms
+ |- Root - Mailbox
+ |  |- Common Views
+ |  |- Finder
+ |  |  |- Reminders
+ |  |  |- Contact Search
+ |  |  |- To-Do Search
+ |  |  |- Tracked Mail Processing
+ |  |- Shortcuts
+ |  |- Views
+ |  |- IPM_SUBTREE
+ |  |  |- Deleted Items
+ |  |  |- Inbox
+ |  |  |  |- Email: 2106212 - test
+ |  |  |  |- Email: 2106116 - Re: test
+ |  |  |- Outbox
+ |  |  |- Sent Items
+ |  |  |  |- Email: 2105636 - hey!
+ |  |  |- Files
+ |  |  |- MeContact
+ |  |  |  |- Email: 2098180 - Mountain Man
+ |  |  |- Skype Contacts
+ |  |  |  |- Email: 2098244 - Echo / Sound Test Service
+ |  |  |- PersonMetadata
+ |  |  |- ExternalContacts
+ |  |  |- Conversation History
+ |  |  |  |- Team Chat
+ |  |  |- Contacts
+ |  |  |  |- {A9E2BC46-B3A0-4243-B315-60D991004455}
+ |  |  |  |- {06967759-274D-40B2-A3EB-D7F9E73727D7}
+ |  |  |  |- Companies
+ |  |  |  |- Organizational Contacts
+ |  |  |  |- Recipient Cache
+ |  |  |  |- GAL Contacts
+ |  |  |  |- PeopleCentricConversation Buddies
+ |  |  |  |- Email: 2105220 - Ed Pfromer
+ |  |  |- Calendar
+ |  |  |  |- Birthdays
+ |  |  |  |- United States holidays
+ |  |  |  |  |- Email: 2098628 - Christmas Holiday (Observed)
+ |  |  |  |  |- Email: 2098660 - Thanksgiving Day
+ |  |  |  |  |- Email: 2098692 - Election Day
+ |  |  |  |  |- Email: 2098724 - Columbus Day
+ |  |  |  |  |- Email: 2098756 - Labor Day
+ |  |  |  |  |- Email: 2098788 - Father's Day
+ |  |  |  |  |- Email: 2098820 - Memorial Day
+ |  |  |  |  |- Email: 2098852 - Mother's Day
+ |  |  |  |  |- Email: 2098884 - Administrative Professionals Day
+ |  |  |  |  |- Email: 2098916 - Easter Day
+ |  |  |  |  |- Email: 2098948 - Tax Day
+ |  |  |  |  |- Email: 2098980 - Presidents' Day
+ |  |  |  |  |- Email: 2099012 - Martin Luther King Day
+ |  |  |  |  |- Email: 2099044 - New Year's Day (Observed)
+ |  |  |  |  |- Email: 2099076 - Christmas Holiday (Observed)
+ |  |  |  |  |- Email: 2099108 - Day After Thanksgiving Day
+ |  |  |  |  |- Email: 2099140 - Thanksgiving Day
+ |  |  |  |  |- Email: 2099172 - Election Day
+ |  |  |  |  |- Email: 2099204 - Columbus Day
+ |  |  |  |  |- Email: 2099236 - Labor Day
+ |  |  |  |  |- Email: 2099268 - Independence Day (Observed)
+ |  |  |  |  |- Email: 2099300 - Father's Day
+ |  |  |  |  |- Email: 2099332 - Memorial Day
+ |  |  |  |  |- Email: 2099364 - Mother's Day
+ |  |  |  |- Email: 2104836 - get lunch
+ |  |  |  |- Email: 2104932 - workout
+ |  |  |- Archive
+ |  |  |- Yammer Root
+ |  |  |  |- Feeds
+ |  |  |  |- Outbound
+ |  |  |  |- Inbound
+ |  |  |- Drafts
+ |  |  |- Journal
+ |  |  |- Notes
+ |  |  |- Tasks
+ |  |  |  |- Email: 2106532 - fully loaded task
+ |  |  |  |- Email: 2106436 - basic task
+ |  |  |- Junk Email
+ |  |  |- Conversation Action Settings
+ |  |  |- Sync Issues
+ |  |  |  |- Conflicts
+ |  |  |  |- Local Failures
+ |  |  |  |- Server Failures
+ |  |  |- RSS Feeds
+ |  |  |- Quick Step Settings
+ |  |- ~MAPISP(Internal)
+ |  |- Drizzle
+ |  |- Shared Data
+ |  |- SPAM Search Folder 2
+ |  |- ItemProcSearch

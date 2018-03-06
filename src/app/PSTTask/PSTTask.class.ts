@@ -46,7 +46,7 @@ export class PSTTask extends PSTMessage {
         super(pstFile, descriptorIndexNode, table, localDescriptorItems);
     }
 
-    // Status Integer 32-bit signed 0x0 => Not started
+    // Status Integer 0 = Not started
     public get taskStatus(): number {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008101, PSTFile.PSETID_Task));
     }
@@ -128,51 +128,80 @@ export class PSTTask extends PSTMessage {
 
     public toString() {
         return (
-            '\n messageClass: ' + this.messageClass + 
-            '\n subject: ' + this.subject + 
-            '\n importance: ' + this.importance + 
-            '\n transportMessageHeaders: ' + this.transportMessageHeaders + 
-            '\n taskStatus: ' + this.taskStatus + 
-            '\n percentComplete: ' + this.percentComplete + 
-            '\n isTeamTask: ' + this.isTeamTask + 
-            '\n taskDateCompleted: ' + this.taskDateCompleted + 
-            '\n taskActualEffort: ' + this.taskActualEffort + 
-            '\n taskEstimatedEffort: ' + this.taskEstimatedEffort + 
-            '\n taskVersion: ' + this.taskVersion + 
-            '\n isTaskComplete: ' + this.isTaskComplete + 
-            '\n taskOwner: ' + this.taskOwner + 
-            '\n taskAssigner: ' + this.taskAssigner + 
-            '\n taskLastUser: ' + this.taskLastUser + 
-            '\n taskOrdinal: ' + this.taskOrdinal + 
-            '\n isTaskRecurring: ' + this.isTaskRecurring + 
-            '\n taskRole: ' + this.taskRole + 
-            '\n taskOwnership: ' + this.taskOwnership + 
-            '\n acceptanceState: ' + this.acceptanceState 
+            '\n messageClass: ' +
+            this.messageClass +
+            '\n subject: ' +
+            this.subject +
+            '\n importance: ' +
+            this.importance +
+            '\n transportMessageHeaders: ' +
+            this.transportMessageHeaders +
+            '\n taskStatus: ' +
+            this.taskStatus +
+            '\n percentComplete: ' +
+            this.percentComplete +
+            '\n isTeamTask: ' +
+            this.isTeamTask +
+            '\n taskDateCompleted: ' +
+            this.taskDateCompleted +
+            '\n taskActualEffort: ' +
+            this.taskActualEffort +
+            '\n taskEstimatedEffort: ' +
+            this.taskEstimatedEffort +
+            '\n taskVersion: ' +
+            this.taskVersion +
+            '\n isTaskComplete: ' +
+            this.isTaskComplete +
+            '\n taskOwner: ' +
+            this.taskOwner +
+            '\n taskAssigner: ' +
+            this.taskAssigner +
+            '\n taskLastUser: ' +
+            this.taskLastUser +
+            '\n taskOrdinal: ' +
+            this.taskOrdinal +
+            '\n isTaskRecurring: ' +
+            this.isTaskRecurring +
+            '\n taskRole: ' +
+            this.taskRole +
+            '\n taskOwnership: ' +
+            this.taskOwnership +
+            '\n acceptanceState: ' +
+            this.acceptanceState
         );
     }
 
     public toJSONstring(): string {
-        return JSON.stringify({
-            messageClass: this.messageClass,
-            subject: this.subject, 
-            importance: this.importance, 
-            transportMessageHeaders: this.transportMessageHeaders, 
-            taskStatus: this.taskStatus,
-            percentComplete: this.percentComplete,
-            isTeamTask: this.isTeamTask,
-            taskDateCompleted: this.taskDateCompleted,
-            taskActualEffort: this.taskActualEffort,
-            taskEstimatedEffort: this.taskEstimatedEffort,
-            taskVersion: this.taskVersion,
-            isTaskComplete: this.isTaskComplete,
-            taskOwner: this.taskOwner,
-            taskAssigner: this.taskAssigner,
-            taskLastUser: this.taskLastUser,
-            taskOrdinal: this.taskOrdinal,
-            isTaskRecurring: this.isTaskRecurring,
-            taskRole: this.taskRole,
-            taskOwnership: this.taskOwnership,
-            acceptanceState: this.acceptanceState 
-        }, null, 2);
+        return (
+            'PSTTask:' +
+            JSON.stringify(
+                {
+                    messageClass: this.messageClass,
+                    subject: this.subject,
+                    importance: this.importance,
+                    transportMessageHeaders: this.transportMessageHeaders,
+                    taskStatus: this.taskStatus,
+                    percentComplete: this.percentComplete,
+                    isTeamTask: this.isTeamTask,
+                    taskDateCompleted: this.taskDateCompleted,
+                    taskActualEffort: this.taskActualEffort,
+                    taskEstimatedEffort: this.taskEstimatedEffort,
+                    taskVersion: this.taskVersion,
+                    isTaskComplete: this.isTaskComplete,
+                    taskOwner: this.taskOwner,
+                    taskAssigner: this.taskAssigner,
+                    taskLastUser: this.taskLastUser,
+                    taskOrdinal: this.taskOrdinal,
+                    isTaskRecurring: this.isTaskRecurring,
+                    taskRole: this.taskRole,
+                    taskOwnership: this.taskOwnership,
+                    acceptanceState: this.acceptanceState
+                },
+                null,
+                2
+            ) +
+            '\n' +
+            super.toJSONstring()
+        );
     }
 }
