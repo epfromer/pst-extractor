@@ -85,7 +85,7 @@ export class PSTObject {
 
     // get the descriptor identifier for this item which can be used for loading objects
     // through detectAndLoadPSTObject(PSTFile theFile, long descriptorIndex)
-    public getDescriptorNodeId(): long {
+    public get descriptorNodeId(): long {
         // Prevent null pointer exceptions for embedded messages
         if (this.descriptorIndexNode != null) {
             return long.fromNumber(this.descriptorIndexNode.descriptorIdentifier);

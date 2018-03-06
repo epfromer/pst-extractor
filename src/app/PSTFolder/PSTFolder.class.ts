@@ -128,33 +128,29 @@ export class PSTFolder extends PSTObject {
             const offsetIndexItem = this.pstFile.getOffsetIndexNode(folderDescriptor.dataOffsetIndexIdentifier);
             const pstNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem);
             this.emailsTable = new PSTTable7C(pstNodeInputStream, tmp, 0x67F2);
-
-            debugger;
-            console.log(this.emailsTable.toJSONstring());
-
         } catch (err) {
             Log.error("PSTFolder::initEmailsTable Can't get child folders for folder " + this.displayName);
             throw err;
         }
     }
 
-     // Get the next child of this folder as there could be thousands of emails, we have these kind of cursor operations
+     // Get the next child of this folder. As there could be thousands of emails, we have these kind of cursor operations.
     public getNextChild(): any {
         this.initEmailsTable();
 
         if (this.emailsTable != null) {
-            let rows: Map<number, PSTTable7CItem>[] = this.emailsTable.getItems(this.currentEmailIndex, 1);
-
             if (this.currentEmailIndex == this.contentCount) {
                 // no more!
                 return null;
             }
-            // get the emails from the rows
-            let emailRow: PSTTable7CItem = rows[0].get(0x67F2);
 
-            console.log(emailRow.toString())
-            console.log(emailRow.toJSONstring())
-            debugger;
+            // get the emails from the rows
+            let rows: Map<number, PSTTable7CItem>[] = this.emailsTable.getItems(this.currentEmailIndex, 1);
+            let emailRow: PSTTable7CItem = rows[0].get(0x67F2);
+            if (emailRow.itemIndex == -1) {
+                // no more!
+                return null;
+            }
 
             let childDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(long.fromNumber(emailRow.entryValueReference));
             let child: PSTObject = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor);
@@ -193,7 +189,7 @@ export class PSTFolder extends PSTObject {
     public get subFolderCount(): number {
         this.initSubfoldersTable();
         if (this.subfoldersTable != null) {
-            return this.subfoldersTable.getRowCount();
+            return this.subfoldersTable.rowCount;
         } else {
             return 0;
         }
@@ -205,7 +201,7 @@ export class PSTFolder extends PSTObject {
         if (this.emailsTable == null) {
             return -1;
         }
-        return this.emailsTable.getRowCount();
+        return this.emailsTable.rowCount;
     }
 
     public get folderType(): number {

@@ -119,7 +119,7 @@ export class PSTTable {
     }
 
     //  get the number of items stored in this table.
-    public getRowCount(): number {
+    public get rowCount(): number {
         return this.numberOfKeys;
     }
 

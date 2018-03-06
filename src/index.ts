@@ -86,7 +86,7 @@ function processFolder(folder: PSTFolder) {
         let email: PSTMessage = folder.getNextChild();
         while (email != null) {
             if (verbose) {
-                console.log(getDepth(depth) + 'Email: ' + email.getDescriptorNodeId() + ' - ' + email.subject);
+                console.log(getDepth(depth) + 'Email: ' + email.descriptorNodeId + ' - ' + email.subject);
             } else {
                 printDot();
             }

@@ -136,7 +136,7 @@ export class PSTTable7C extends PSTTable {
         let numberOfBlocks = Math.trunc(this.rowNodeInfo.length() / this.BLOCK_SIZE);
         let numberOfRowsPerBlock = Math.trunc(this.BLOCK_SIZE / this.TCI_bm);
         let blockPadding = this.BLOCK_SIZE - numberOfRowsPerBlock * this.TCI_bm;
-        this.numberOfDataSets = numberOfBlocks * numberOfRowsPerBlock + (this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm;
+        this.numberOfDataSets = Math.trunc(numberOfBlocks * numberOfRowsPerBlock + (this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm);
 
         if (startAtRecord === undefined) {
             numberOfRecordsToReturn = this.numberOfDataSets;
@@ -147,8 +147,8 @@ export class PSTTable7C extends PSTTable {
         // repeat the reading process for every dataset
         let currentValueArrayStart =
             Math.trunc(startAtRecord / numberOfRowsPerBlock) * this.BLOCK_SIZE + (startAtRecord % numberOfRowsPerBlock) * this.TCI_bm;
-        if (numberOfRecordsToReturn > this.getRowCount() - startAtRecord) {
-            numberOfRecordsToReturn = this.getRowCount() - startAtRecord;
+        if (numberOfRecordsToReturn > this.rowCount - startAtRecord) {
+            numberOfRecordsToReturn = this.rowCount - startAtRecord;
         }
 
         if (numberOfRecordsToReturn == 0) {

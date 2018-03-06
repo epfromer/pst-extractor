@@ -435,7 +435,7 @@ export class PSTFile {
             this.pstFileContent.seek(btreeStartOffset);
             this.pstFileContent.readCompletely(branchNodeItems);
 
-            Log.debug1('PSTFile::findBtreeItem btreeStartOffset = ' + btreeStartOffset);
+            Log.debug2('PSTFile::findBtreeItem btreeStartOffset = ' + btreeStartOffset);
 
             let numberOfItems = 0;
             if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
@@ -557,10 +557,7 @@ export class PSTFile {
 
     // navigate the internal descriptor B-Tree and find a specific item
     public getDescriptorIndexNode(id: long): DescriptorIndexNode {
-        console.log('getDescriptorIndexNode ' + id.toString())
-        if (id.equals(2098020)) {
-            debugger;
-        }
+        Log.debug2('PSTFile::getDescriptorIndexNode ' + id.toString())
         return new DescriptorIndexNode(this.findBtreeItem(id, true), this._pstFileType);
     }
 
