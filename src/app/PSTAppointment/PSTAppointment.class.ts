@@ -31,11 +31,11 @@
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
 import { PSTGlobalObjectId } from './../PSTGlobalObjectId/PSTGlobalObjectId.class';
-import { PSTFile } from "../PSTFile/PSTFile.class";
-import { DescriptorIndexNode } from "../DescriptorIndexNode/DescriptorIndexNode.class";
-import { PSTTableBC } from "../PSTTableBC/PSTTableBC.class";
-import { PSTDescriptorItem } from "../PSTDescriptorItem/PSTDescriptorItem.class";
-import { PSTMessage } from "../PSTMessage/PSTMessage.class";
+import { PSTFile } from '../PSTFile/PSTFile.class';
+import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
+import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
+import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTMessage } from '../PSTMessage/PSTMessage.class';
 import { PSTTimeZone } from '../PSTTimeZone/PSTTimeZone.class';
 
 // PSTAppointment is for Calendar items
@@ -48,7 +48,7 @@ export class PSTAppointment extends PSTMessage {
     ) {
         super(pstFile, descriptorIndexNode, table, localDescriptorItems);
     }
-    
+
     public get sendAsICAL(): boolean {
         return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008200, PSTFile.PSETID_Appointment));
     }
@@ -101,7 +101,7 @@ export class PSTAppointment extends PSTMessage {
     }
 
     public get subType(): boolean {
-        return (this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008215, PSTFile.PSETID_Appointment)) != 0);
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008215, PSTFile.PSETID_Appointment)) != 0;
     }
 
     public get meetingStatus(): number {
@@ -153,7 +153,7 @@ export class PSTAppointment extends PSTMessage {
     }
 
     public get isOnlineMeeting(): boolean {
-        return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008240, PSTFile.PSETID_Appointment)));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008240, PSTFile.PSETID_Appointment));
     }
 
     public get netMeetingType(): number {
@@ -169,11 +169,11 @@ export class PSTAppointment extends PSTMessage {
     }
 
     public get netMeetingAutostart(): boolean {
-        return (this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008245, PSTFile.PSETID_Appointment)) != 0);
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008245, PSTFile.PSETID_Appointment)) != 0;
     }
 
     public get conferenceServerAllowExternal(): boolean {
-        return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008246, PSTFile.PSETID_Appointment)));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008246, PSTFile.PSETID_Appointment));
     }
 
     public get netMeetingDocumentPathName(): string {
@@ -197,11 +197,11 @@ export class PSTAppointment extends PSTMessage {
     }
 
     public get appointmentCounterProposal(): boolean {
-        return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008257, PSTFile.PSETID_Appointment)));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008257, PSTFile.PSETID_Appointment));
     }
 
     public get isSilent(): boolean {
-        return (this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00000004, PSTFile.PSETID_Meeting)));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00000004, PSTFile.PSETID_Meeting));
     }
 
     public get requiredAttendees(): string {
@@ -222,95 +222,146 @@ export class PSTAppointment extends PSTMessage {
 
     public toString(): string {
         return (
-            '\n messageClass: ' + this.messageClass + 
-            '\n subject: ' + this.subject + 
-            '\n importance: ' + this.importance + 
-            '\n transportMessageHeaders: ' + this.transportMessageHeaders + 
-            '\n sendAsICAL: ' + this.sendAsICAL + 
-            '\n busyStatus: ' + this.busyStatus + 
-            '\n showAsBusy: ' + this.showAsBusy + 
-            '\n location: ' + this.location + 
-            '\n startTime: ' + this.startTime + 
-            '\n endTime: ' + this.endTime + 
-            '\n endTimeZone: ' + this.endTimeZone +
-            '\n recurrenceTimeZone: ' + this.recurrenceTimeZone +
-            '\n duration: ' + this.duration +
-            '\n color: ' + this.color +
-            '\n subType: ' + this.subType +
-            '\n meetingStatus: ' + this.meetingStatus +
-            '\n isRecurring: ' + this.isRecurring +
-            '\n recurrenceBase: ' + this.recurrenceBase +
-            '\n recurrenceType: ' + this.recurrenceType +
-            '\n recurrencePattern: ' + this.recurrencePattern +
-            '\n recurrenceStructure: ' + this.recurrenceStructure +
-            '\n timezone: ' + this.timezone +
-            '\n allAttendees: ' + this.allAttendees +
-            '\n toAttendees: ' + this.toAttendees +
-            '\n ccAttendees: ' + this.ccAttendees +
-            '\n appointmentSequence: ' + this.appointmentSequence +
-            '\n isOnlineMeeting: ' + this.isOnlineMeeting +
-            '\n netMeetingType: ' + this.netMeetingType +
-            '\n netMeetingServer: ' + this.netMeetingServer +
-            '\n netMeetingOrganizerAlias: ' + this.netMeetingOrganizerAlias +
-            '\n netMeetingAutostart: ' + this.netMeetingAutostart +
-            '\n conferenceServerAllowExternal: ' + this.conferenceServerAllowExternal +
-            '\n netMeetingDocumentPathName: ' + this.netMeetingDocumentPathName +
-            '\n attendeeCriticalChange: ' + this.attendeeCriticalChange +
-            '\n ownerCriticalChange: ' + this.ownerCriticalChange +
-            '\n conferenceServerPassword: ' + this.conferenceServerPassword +
-            '\n appointmentCounterProposal: ' + this.appointmentCounterProposal +
-            '\n isSilent: ' + this.isSilent +
-            '\n requiredAttendees: ' + this.requiredAttendees +
-            '\n localeId: ' + this.localeId +
-            '\n globalObjectId: ' + this.globalObjectId +
-            '\n cleanGlobalObjectId: ' + this.cleanGlobalObjectId
+            '\n messageClass: ' +
+            this.messageClass +
+            '\n subject: ' +
+            this.subject +
+            '\n importance: ' +
+            this.importance +
+            '\n transportMessageHeaders: ' +
+            this.transportMessageHeaders +
+            '\n sendAsICAL: ' +
+            this.sendAsICAL +
+            '\n busyStatus: ' +
+            this.busyStatus +
+            '\n showAsBusy: ' +
+            this.showAsBusy +
+            '\n location: ' +
+            this.location +
+            '\n startTime: ' +
+            this.startTime +
+            '\n endTime: ' +
+            this.endTime +
+            '\n endTimeZone: ' +
+            this.endTimeZone +
+            '\n recurrenceTimeZone: ' +
+            this.recurrenceTimeZone +
+            '\n duration: ' +
+            this.duration +
+            '\n color: ' +
+            this.color +
+            '\n subType: ' +
+            this.subType +
+            '\n meetingStatus: ' +
+            this.meetingStatus +
+            '\n isRecurring: ' +
+            this.isRecurring +
+            '\n recurrenceBase: ' +
+            this.recurrenceBase +
+            '\n recurrenceType: ' +
+            this.recurrenceType +
+            '\n recurrencePattern: ' +
+            this.recurrencePattern +
+            '\n recurrenceStructure: ' +
+            this.recurrenceStructure +
+            '\n timezone: ' +
+            this.timezone +
+            '\n allAttendees: ' +
+            this.allAttendees +
+            '\n toAttendees: ' +
+            this.toAttendees +
+            '\n ccAttendees: ' +
+            this.ccAttendees +
+            '\n appointmentSequence: ' +
+            this.appointmentSequence +
+            '\n isOnlineMeeting: ' +
+            this.isOnlineMeeting +
+            '\n netMeetingType: ' +
+            this.netMeetingType +
+            '\n netMeetingServer: ' +
+            this.netMeetingServer +
+            '\n netMeetingOrganizerAlias: ' +
+            this.netMeetingOrganizerAlias +
+            '\n netMeetingAutostart: ' +
+            this.netMeetingAutostart +
+            '\n conferenceServerAllowExternal: ' +
+            this.conferenceServerAllowExternal +
+            '\n netMeetingDocumentPathName: ' +
+            this.netMeetingDocumentPathName +
+            '\n attendeeCriticalChange: ' +
+            this.attendeeCriticalChange +
+            '\n ownerCriticalChange: ' +
+            this.ownerCriticalChange +
+            '\n conferenceServerPassword: ' +
+            this.conferenceServerPassword +
+            '\n appointmentCounterProposal: ' +
+            this.appointmentCounterProposal +
+            '\n isSilent: ' +
+            this.isSilent +
+            '\n requiredAttendees: ' +
+            this.requiredAttendees +
+            '\n localeId: ' +
+            this.localeId +
+            '\n globalObjectId: ' +
+            this.globalObjectId +
+            '\n cleanGlobalObjectId: ' +
+            this.cleanGlobalObjectId
         );
     }
 
     public toJSONstring(): string {
-        return JSON.stringify({
-            messageClass: this.messageClass,
-            subject: this.subject, 
-            importance: this.importance, 
-            transportMessageHeaders: this.transportMessageHeaders, 
-            sendAsICAL: this.sendAsICAL, 
-            busyStatus: this.busyStatus, 
-            showAsBusy: this.showAsBusy, 
-            location: this.location, 
-            startTime: this.startTime, 
-            endTime: this.endTime, 
-            endTimeZone: this.endTimeZone,
-            recurrenceTimeZone: this.recurrenceTimeZone,
-            duration: this.duration,
-            color: this.color,
-            subType: this.subType,
-            meetingStatus: this.meetingStatus,
-            isRecurring: this.isRecurring,
-            recurrenceBase: this.recurrenceBase,
-            recurrenceType: this.recurrenceType,
-            recurrencePattern: this.recurrencePattern,
-            recurrenceStructure: this.recurrenceStructure,
-            timezone: this.timezone,
-            allAttendees: this.allAttendees,
-            toAttendees: this.toAttendees,
-            ccAttendees: this.ccAttendees,
-            appointmentSequence: this.appointmentSequence,
-            isOnlineMeeting: this.isOnlineMeeting,
-            netMeetingType: this.netMeetingType,
-            netMeetingServer: this.netMeetingServer,
-            netMeetingOrganizerAlias: this.netMeetingOrganizerAlias,
-            netMeetingAutostart: this.netMeetingAutostart,
-            conferenceServerAllowExternal: this.conferenceServerAllowExternal,
-            netMeetingDocumentPathName: this.netMeetingDocumentPathName,
-            attendeeCriticalChange: this.attendeeCriticalChange,
-            ownerCriticalChange: this.ownerCriticalChange,
-            conferenceServerPassword: this.conferenceServerPassword,
-            appointmentCounterProposal: this.appointmentCounterProposal,
-            isSilent: this.isSilent,
-            requiredAttendees: this.requiredAttendees,
-            localeId: this.localeId,
-            globalObjectId: this.globalObjectId,
-            cleanGlobalObjectId: this.cleanGlobalObjectId
-        }, null, 2);
+        return (
+            'PSTAppointment: ' +
+            JSON.stringify(
+                {
+                    messageClass: this.messageClass,
+                    subject: this.subject,
+                    importance: this.importance,
+                    transportMessageHeaders: this.transportMessageHeaders,
+                    sendAsICAL: this.sendAsICAL,
+                    busyStatus: this.busyStatus,
+                    showAsBusy: this.showAsBusy,
+                    location: this.location,
+                    startTime: this.startTime,
+                    endTime: this.endTime,
+                    endTimeZone: this.endTimeZone,
+                    recurrenceTimeZone: this.recurrenceTimeZone,
+                    duration: this.duration,
+                    color: this.color,
+                    subType: this.subType,
+                    meetingStatus: this.meetingStatus,
+                    isRecurring: this.isRecurring,
+                    recurrenceBase: this.recurrenceBase,
+                    recurrenceType: this.recurrenceType,
+                    recurrencePattern: this.recurrencePattern,
+                    recurrenceStructure: this.recurrenceStructure,
+                    timezone: this.timezone,
+                    allAttendees: this.allAttendees,
+                    toAttendees: this.toAttendees,
+                    ccAttendees: this.ccAttendees,
+                    appointmentSequence: this.appointmentSequence,
+                    isOnlineMeeting: this.isOnlineMeeting,
+                    netMeetingType: this.netMeetingType,
+                    netMeetingServer: this.netMeetingServer,
+                    netMeetingOrganizerAlias: this.netMeetingOrganizerAlias,
+                    netMeetingAutostart: this.netMeetingAutostart,
+                    conferenceServerAllowExternal: this.conferenceServerAllowExternal,
+                    netMeetingDocumentPathName: this.netMeetingDocumentPathName,
+                    attendeeCriticalChange: this.attendeeCriticalChange,
+                    ownerCriticalChange: this.ownerCriticalChange,
+                    conferenceServerPassword: this.conferenceServerPassword,
+                    appointmentCounterProposal: this.appointmentCounterProposal,
+                    isSilent: this.isSilent,
+                    requiredAttendees: this.requiredAttendees,
+                    localeId: this.localeId,
+                    globalObjectId: this.globalObjectId,
+                    cleanGlobalObjectId: this.cleanGlobalObjectId
+                },
+                null,
+                2
+            ) +
+            '\n' +
+            super.toJSONstring()
+        );
     }
 }

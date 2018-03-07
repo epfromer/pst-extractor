@@ -11,7 +11,7 @@ let folder: PSTFolder;
 before(() => {
     pstFile = new PSTFile(resolve('./src/testdata/mtnman1965@outlook.com.ost'));
 
-    // get to Tasks folder
+    // get to Journal folder
     let childFolders: PSTFolder[] = pstFile.getRootFolder().getSubFolders();
     folder = childFolders[1]; // Root - Mailbox
     childFolders = folder.getSubFolders();

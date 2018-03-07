@@ -609,237 +609,359 @@ export class PSTContact extends PSTMessage {
 
     public toString(): string {
         return (
-            '\n messageClass: ' + this.messageClass + 
-            '\n subject: ' + this.subject + 
-            '\n importance: ' + this.importance + 
-            '\n transportMessageHeaders: ' + this.transportMessageHeaders + 
-            '\n account: ' + this.account + 
-            '\n callbackTelephoneNumber: ' + this.callbackTelephoneNumber + 
-            '\n generation: ' + this.generation + 
-            '\n givenName: ' + this.givenName + 
-            '\n governmentIdNumber: ' + this.governmentIdNumber + 
-            '\n businessTelephoneNumber: ' + this.businessTelephoneNumber + 
-            '\n homeTelephoneNumber: ' + this.homeTelephoneNumber + 
-            '\n initials: ' + this.initials + 
-            '\n keyword: ' + this.keyword + 
-            '\n language: ' + this.language + 
-            '\n location: ' + this.location + 
-            '\n mhsCommonName: ' + this.mhsCommonName + 
-            '\n organizationalIdNumber: ' + this.organizationalIdNumber + 
-            '\n surname: ' + this.surname + 
-            '\n originalDisplayName: ' + this.originalDisplayName + 
-            '\n postalAddress: ' + this.postalAddress + 
-            '\n companyName: ' + this.companyName + 
-            '\n title: ' + this.title + 
-            '\n departmentName: ' + this.departmentName + 
-            '\n officeLocation: ' + this.officeLocation + 
-            '\n primaryTelephoneNumber: ' + this.primaryTelephoneNumber + 
-            '\n business2TelephoneNumber: ' + this.business2TelephoneNumber + 
-            '\n mobileTelephoneNumber: ' + this.mobileTelephoneNumber + 
-            '\n radioTelephoneNumber: ' + this.radioTelephoneNumber + 
-            '\n carTelephoneNumber: ' + this.carTelephoneNumber + 
-            '\n otherTelephoneNumber: ' + this.otherTelephoneNumber + 
-            '\n transmittableDisplayName: ' + this.transmittableDisplayName + 
-            '\n pagerTelephoneNumber: ' + this.pagerTelephoneNumber + 
-            '\n primaryFaxNumber: ' + this.primaryFaxNumber + 
-            '\n businessFaxNumber: ' + this.businessFaxNumber + 
-            '\n homeFaxNumber: ' + this.homeFaxNumber + 
-            '\n businessAddressCountry: ' + this.businessAddressCountry + 
-            '\n businessAddressCity: ' + this.businessAddressCity + 
-            '\n businessAddressStateOrProvince: ' + this.businessAddressStateOrProvince + 
-            '\n businessAddressStreet: ' + this.businessAddressStreet + 
-            '\n businessPostalCode: ' + this.businessPostalCode + 
-            '\n businessPoBox: ' + this.businessPoBox + 
-            '\n telexNumber: ' + this.telexNumber + 
-            '\n isdnNumber: ' + this.isdnNumber + 
-            '\n assistantTelephoneNumber: ' + this.assistantTelephoneNumber + 
-            '\n home2TelephoneNumber: ' + this.home2TelephoneNumber + 
-            '\n assistant: ' + this.assistant + 
-            '\n hobbies: ' + this.hobbies + 
-            '\n middleName: ' + this.middleName + 
-            '\n displayNamePrefix: ' + this.displayNamePrefix + 
-            '\n profession: ' + this.profession + 
-            '\n preferredByName: ' + this.preferredByName + 
-            '\n spouseName: ' + this.spouseName + 
-            '\n computerNetworkName: ' + this.computerNetworkName + 
-            '\n customerId: ' + this.customerId + 
-            '\n ttytddPhoneNumber: ' + this.ttytddPhoneNumber + 
-            '\n ftpSite: ' + this.ftpSite + 
-            '\n managerName: ' + this.managerName + 
-            '\n nickname: ' + this.nickname + 
-            '\n personalHomePage: ' + this.personalHomePage + 
-            '\n businessHomePage: ' + this.businessHomePage + 
-            '\n smtpAddress: ' + this.smtpAddress + 
-            '\n companyMainPhoneNumber: ' + this.companyMainPhoneNumber + 
-            '\n childrensNames: ' + this.childrensNames + 
-            '\n homeAddressCity: ' + this.homeAddressCity + 
-            '\n homeAddressCountry: ' + this.homeAddressCountry + 
-            '\n homeAddressPostalCode: ' + this.homeAddressPostalCode + 
-            '\n homeAddressStateOrProvince: ' + this.homeAddressStateOrProvince + 
-            '\n homeAddressStreet: ' + this.homeAddressStreet + 
-            '\n homeAddressPostOfficeBox: ' + this.homeAddressPostOfficeBox + 
-            '\n otherAddressCity: ' + this.otherAddressCity + 
-            '\n otherAddressCountry: ' + this.otherAddressCountry + 
-            '\n otherAddressPostalCode: ' + this.otherAddressPostalCode + 
-            '\n otherAddressStateOrProvince: ' + this.otherAddressStateOrProvince + 
-            '\n otherAddressStreet: ' + this.otherAddressStreet + 
-            '\n otherAddressPostOfficeBox: ' + this.otherAddressPostOfficeBox + 
-            '\n fileUnder: ' + this.fileUnder + 
-            '\n homeAddress: ' + this.homeAddress + 
-            '\n workAddress: ' + this.workAddress + 
-            '\n otherAddress: ' + this.otherAddress + 
-            '\n postalAddressId: ' + this.postalAddressId + 
-            '\n html: ' + this.html + 
-            '\n workAddressStreet: ' + this.workAddressStreet + 
-            '\n workAddressCity: ' + this.workAddressCity + 
-            '\n workAddressState: ' + this.workAddressState + 
-            '\n workAddressPostalCode: ' + this.workAddressPostalCode + 
-            '\n workAddressCountry: ' + this.workAddressCountry + 
-            '\n workAddressPostOfficeBox: ' + this.workAddressPostOfficeBox + 
-            '\n instantMessagingAddress: ' + this.instantMessagingAddress + 
-            '\n email1DisplayName: ' + this.email1DisplayName + 
-            '\n email1AddressType: ' + this.email1AddressType + 
-            '\n email1EmailAddress: ' + this.email1EmailAddress + 
-            '\n email1OriginalDisplayName: ' + this.email1OriginalDisplayName + 
-            '\n email1EmailType: ' + this.email1EmailType + 
-            '\n email2DisplayName: ' + this.email2DisplayName + 
-            '\n email2AddressType: ' + this.email2AddressType + 
-            '\n email2EmailAddress: ' + this.email2EmailAddress + 
-            '\n email2OriginalDisplayName: ' + this.email2OriginalDisplayName + 
-            '\n email3DisplayName: ' + this.email3DisplayName + 
-            '\n email3AddressType: ' + this.email3AddressType + 
-            '\n email3EmailAddress: ' + this.email3EmailAddress + 
-            '\n email3OriginalDisplayName: ' + this.email3OriginalDisplayName + 
-            '\n fax1AddressType: ' + this.fax1AddressType + 
-            '\n fax1EmailAddress: ' + this.fax1EmailAddress + 
-            '\n fax1OriginalDisplayName: ' + this.fax1OriginalDisplayName + 
-            '\n fax2AddressType: ' + this.fax2AddressType + 
-            '\n fax2EmailAddress: ' + this.fax2EmailAddress + 
-            '\n fax2OriginalDisplayName: ' + this.fax2OriginalDisplayName + 
-            '\n fax3AddressType: ' + this.fax3AddressType + 
-            '\n fax3EmailAddress: ' + this.fax3EmailAddress + 
-            '\n fax3OriginalDisplayName: ' + this.fax3OriginalDisplayName + 
-            '\n freeBusyLocation: ' + this.freeBusyLocation + 
-            '\n birthday: ' + this.birthday + 
-            '\n anniversary: ' + this.anniversary 
+            '\n messageClass: ' +
+            this.messageClass +
+            '\n subject: ' +
+            this.subject +
+            '\n importance: ' +
+            this.importance +
+            '\n transportMessageHeaders: ' +
+            this.transportMessageHeaders +
+            '\n account: ' +
+            this.account +
+            '\n callbackTelephoneNumber: ' +
+            this.callbackTelephoneNumber +
+            '\n generation: ' +
+            this.generation +
+            '\n givenName: ' +
+            this.givenName +
+            '\n governmentIdNumber: ' +
+            this.governmentIdNumber +
+            '\n businessTelephoneNumber: ' +
+            this.businessTelephoneNumber +
+            '\n homeTelephoneNumber: ' +
+            this.homeTelephoneNumber +
+            '\n initials: ' +
+            this.initials +
+            '\n keyword: ' +
+            this.keyword +
+            '\n language: ' +
+            this.language +
+            '\n location: ' +
+            this.location +
+            '\n mhsCommonName: ' +
+            this.mhsCommonName +
+            '\n organizationalIdNumber: ' +
+            this.organizationalIdNumber +
+            '\n surname: ' +
+            this.surname +
+            '\n originalDisplayName: ' +
+            this.originalDisplayName +
+            '\n postalAddress: ' +
+            this.postalAddress +
+            '\n companyName: ' +
+            this.companyName +
+            '\n title: ' +
+            this.title +
+            '\n departmentName: ' +
+            this.departmentName +
+            '\n officeLocation: ' +
+            this.officeLocation +
+            '\n primaryTelephoneNumber: ' +
+            this.primaryTelephoneNumber +
+            '\n business2TelephoneNumber: ' +
+            this.business2TelephoneNumber +
+            '\n mobileTelephoneNumber: ' +
+            this.mobileTelephoneNumber +
+            '\n radioTelephoneNumber: ' +
+            this.radioTelephoneNumber +
+            '\n carTelephoneNumber: ' +
+            this.carTelephoneNumber +
+            '\n otherTelephoneNumber: ' +
+            this.otherTelephoneNumber +
+            '\n transmittableDisplayName: ' +
+            this.transmittableDisplayName +
+            '\n pagerTelephoneNumber: ' +
+            this.pagerTelephoneNumber +
+            '\n primaryFaxNumber: ' +
+            this.primaryFaxNumber +
+            '\n businessFaxNumber: ' +
+            this.businessFaxNumber +
+            '\n homeFaxNumber: ' +
+            this.homeFaxNumber +
+            '\n businessAddressCountry: ' +
+            this.businessAddressCountry +
+            '\n businessAddressCity: ' +
+            this.businessAddressCity +
+            '\n businessAddressStateOrProvince: ' +
+            this.businessAddressStateOrProvince +
+            '\n businessAddressStreet: ' +
+            this.businessAddressStreet +
+            '\n businessPostalCode: ' +
+            this.businessPostalCode +
+            '\n businessPoBox: ' +
+            this.businessPoBox +
+            '\n telexNumber: ' +
+            this.telexNumber +
+            '\n isdnNumber: ' +
+            this.isdnNumber +
+            '\n assistantTelephoneNumber: ' +
+            this.assistantTelephoneNumber +
+            '\n home2TelephoneNumber: ' +
+            this.home2TelephoneNumber +
+            '\n assistant: ' +
+            this.assistant +
+            '\n hobbies: ' +
+            this.hobbies +
+            '\n middleName: ' +
+            this.middleName +
+            '\n displayNamePrefix: ' +
+            this.displayNamePrefix +
+            '\n profession: ' +
+            this.profession +
+            '\n preferredByName: ' +
+            this.preferredByName +
+            '\n spouseName: ' +
+            this.spouseName +
+            '\n computerNetworkName: ' +
+            this.computerNetworkName +
+            '\n customerId: ' +
+            this.customerId +
+            '\n ttytddPhoneNumber: ' +
+            this.ttytddPhoneNumber +
+            '\n ftpSite: ' +
+            this.ftpSite +
+            '\n managerName: ' +
+            this.managerName +
+            '\n nickname: ' +
+            this.nickname +
+            '\n personalHomePage: ' +
+            this.personalHomePage +
+            '\n businessHomePage: ' +
+            this.businessHomePage +
+            '\n smtpAddress: ' +
+            this.smtpAddress +
+            '\n companyMainPhoneNumber: ' +
+            this.companyMainPhoneNumber +
+            '\n childrensNames: ' +
+            this.childrensNames +
+            '\n homeAddressCity: ' +
+            this.homeAddressCity +
+            '\n homeAddressCountry: ' +
+            this.homeAddressCountry +
+            '\n homeAddressPostalCode: ' +
+            this.homeAddressPostalCode +
+            '\n homeAddressStateOrProvince: ' +
+            this.homeAddressStateOrProvince +
+            '\n homeAddressStreet: ' +
+            this.homeAddressStreet +
+            '\n homeAddressPostOfficeBox: ' +
+            this.homeAddressPostOfficeBox +
+            '\n otherAddressCity: ' +
+            this.otherAddressCity +
+            '\n otherAddressCountry: ' +
+            this.otherAddressCountry +
+            '\n otherAddressPostalCode: ' +
+            this.otherAddressPostalCode +
+            '\n otherAddressStateOrProvince: ' +
+            this.otherAddressStateOrProvince +
+            '\n otherAddressStreet: ' +
+            this.otherAddressStreet +
+            '\n otherAddressPostOfficeBox: ' +
+            this.otherAddressPostOfficeBox +
+            '\n fileUnder: ' +
+            this.fileUnder +
+            '\n homeAddress: ' +
+            this.homeAddress +
+            '\n workAddress: ' +
+            this.workAddress +
+            '\n otherAddress: ' +
+            this.otherAddress +
+            '\n postalAddressId: ' +
+            this.postalAddressId +
+            '\n html: ' +
+            this.html +
+            '\n workAddressStreet: ' +
+            this.workAddressStreet +
+            '\n workAddressCity: ' +
+            this.workAddressCity +
+            '\n workAddressState: ' +
+            this.workAddressState +
+            '\n workAddressPostalCode: ' +
+            this.workAddressPostalCode +
+            '\n workAddressCountry: ' +
+            this.workAddressCountry +
+            '\n workAddressPostOfficeBox: ' +
+            this.workAddressPostOfficeBox +
+            '\n instantMessagingAddress: ' +
+            this.instantMessagingAddress +
+            '\n email1DisplayName: ' +
+            this.email1DisplayName +
+            '\n email1AddressType: ' +
+            this.email1AddressType +
+            '\n email1EmailAddress: ' +
+            this.email1EmailAddress +
+            '\n email1OriginalDisplayName: ' +
+            this.email1OriginalDisplayName +
+            '\n email1EmailType: ' +
+            this.email1EmailType +
+            '\n email2DisplayName: ' +
+            this.email2DisplayName +
+            '\n email2AddressType: ' +
+            this.email2AddressType +
+            '\n email2EmailAddress: ' +
+            this.email2EmailAddress +
+            '\n email2OriginalDisplayName: ' +
+            this.email2OriginalDisplayName +
+            '\n email3DisplayName: ' +
+            this.email3DisplayName +
+            '\n email3AddressType: ' +
+            this.email3AddressType +
+            '\n email3EmailAddress: ' +
+            this.email3EmailAddress +
+            '\n email3OriginalDisplayName: ' +
+            this.email3OriginalDisplayName +
+            '\n fax1AddressType: ' +
+            this.fax1AddressType +
+            '\n fax1EmailAddress: ' +
+            this.fax1EmailAddress +
+            '\n fax1OriginalDisplayName: ' +
+            this.fax1OriginalDisplayName +
+            '\n fax2AddressType: ' +
+            this.fax2AddressType +
+            '\n fax2EmailAddress: ' +
+            this.fax2EmailAddress +
+            '\n fax2OriginalDisplayName: ' +
+            this.fax2OriginalDisplayName +
+            '\n fax3AddressType: ' +
+            this.fax3AddressType +
+            '\n fax3EmailAddress: ' +
+            this.fax3EmailAddress +
+            '\n fax3OriginalDisplayName: ' +
+            this.fax3OriginalDisplayName +
+            '\n freeBusyLocation: ' +
+            this.freeBusyLocation +
+            '\n birthday: ' +
+            this.birthday +
+            '\n anniversary: ' +
+            this.anniversary
         );
     }
 
     public toJSONstring(): string {
-        return JSON.stringify({
-            messageClass: this.messageClass,
-            subject: this.subject, 
-            importance: this.importance, 
-            transportMessageHeaders: this.transportMessageHeaders, 
-            account: this.account,
-            callbackTelephoneNumber: this.callbackTelephoneNumber,
-            generation: this.generation,
-            givenName: this.givenName,
-            governmentIdNumber: this.governmentIdNumber,
-            businessTelephoneNumber: this.businessTelephoneNumber,
-            homeTelephoneNumber: this.homeTelephoneNumber,
-            initials: this.initials,
-            keyword: this.keyword,
-            language: this.language,
-            location: this.location,
-            mhsCommonName: this.mhsCommonName,
-            organizationalIdNumber: this.organizationalIdNumber,
-            surname: this.surname,
-            originalDisplayName: this.originalDisplayName,
-            postalAddress: this.postalAddress,
-            companyName: this.companyName,
-            title: this.title,
-            departmentName: this.departmentName,
-            officeLocation: this.officeLocation,
-            primaryTelephoneNumber: this.primaryTelephoneNumber,
-            business2TelephoneNumber: this.business2TelephoneNumber,
-            mobileTelephoneNumber: this.mobileTelephoneNumber,
-            radioTelephoneNumber: this.radioTelephoneNumber,
-            carTelephoneNumber: this.carTelephoneNumber,
-            otherTelephoneNumber: this.otherTelephoneNumber,
-            transmittableDisplayName: this.transmittableDisplayName,
-            pagerTelephoneNumber: this.pagerTelephoneNumber,
-            primaryFaxNumber: this.primaryFaxNumber,
-            businessFaxNumber: this.businessFaxNumber,
-            homeFaxNumber: this.homeFaxNumber,
-            businessAddressCountry: this.businessAddressCountry,
-            businessAddressCity: this.businessAddressCity,
-            businessAddressStateOrProvince: this.businessAddressStateOrProvince,
-            businessAddressStreet: this.businessAddressStreet,
-            businessPostalCode: this.businessPostalCode,
-            businessPoBox: this.businessPoBox,
-            telexNumber: this.telexNumber,
-            isdnNumber: this.isdnNumber,
-            assistantTelephoneNumber: this.assistantTelephoneNumber,
-            home2TelephoneNumber: this.home2TelephoneNumber,
-            assistant: this.assistant,
-            hobbies: this.hobbies,
-            middleName: this.middleName,
-            displayNamePrefix: this.displayNamePrefix,
-            profession: this.profession,
-            preferredByName: this.preferredByName,
-            spouseName: this.spouseName,
-            computerNetworkName: this.computerNetworkName,
-            customerId: this.customerId,
-            ttytddPhoneNumber: this.ttytddPhoneNumber,
-            ftpSite: this.ftpSite,
-            managerName: this.managerName,
-            nickname: this.nickname,
-            personalHomePage: this.personalHomePage,
-            businessHomePage: this.businessHomePage,
-            smtpAddress: this.smtpAddress,
-            companyMainPhoneNumber: this.companyMainPhoneNumber,
-            childrensNames: this.childrensNames,
-            homeAddressCity: this.homeAddressCity,
-            homeAddressCountry: this.homeAddressCountry,
-            homeAddressPostalCode: this.homeAddressPostalCode,
-            homeAddressStateOrProvince: this.homeAddressStateOrProvince,
-            homeAddressStreet: this.homeAddressStreet,
-            homeAddressPostOfficeBox: this.homeAddressPostOfficeBox,
-            otherAddressCity: this.otherAddressCity,
-            otherAddressCountry: this.otherAddressCountry,
-            otherAddressPostalCode: this.otherAddressPostalCode,
-            otherAddressStateOrProvince: this.otherAddressStateOrProvince,
-            otherAddressStreet: this.otherAddressStreet,
-            otherAddressPostOfficeBox: this.otherAddressPostOfficeBox,
-            fileUnder: this.fileUnder,
-            homeAddress: this.homeAddress,
-            workAddress: this.workAddress,
-            otherAddress: this.otherAddress,
-            postalAddressId: this.postalAddressId,
-            html: this.html,
-            workAddressStreet: this.workAddressStreet,
-            workAddressCity: this.workAddressCity,
-            workAddressState: this.workAddressState,
-            workAddressPostalCode: this.workAddressPostalCode,
-            workAddressCountry: this.workAddressCountry,
-            workAddressPostOfficeBox: this.workAddressPostOfficeBox,
-            instantMessagingAddress: this.instantMessagingAddress,
-            email1DisplayName: this.email1DisplayName,
-            email1AddressType: this.email1AddressType,
-            email1EmailAddress: this.email1EmailAddress,
-            email1OriginalDisplayName: this.email1OriginalDisplayName,
-            email1EmailType: this.email1EmailType,
-            email2DisplayName: this.email2DisplayName,
-            email2AddressType: this.email2AddressType,
-            email2EmailAddress: this.email2EmailAddress,
-            email2OriginalDisplayName: this.email2OriginalDisplayName,
-            email3DisplayName: this.email3DisplayName,
-            email3AddressType: this.email3AddressType,
-            email3EmailAddress: this.email3EmailAddress,
-            email3OriginalDisplayName: this.email3OriginalDisplayName,
-            fax1AddressType: this.fax1AddressType,
-            fax1EmailAddress: this.fax1EmailAddress,
-            fax1OriginalDisplayName: this.fax1OriginalDisplayName,
-            fax2AddressType: this.fax2AddressType,
-            fax2EmailAddress: this.fax2EmailAddress,
-            fax2OriginalDisplayName: this.fax2OriginalDisplayName,
-            fax3AddressType: this.fax3AddressType,
-            fax3EmailAddress: this.fax3EmailAddress,
-            fax3OriginalDisplayName: this.fax3OriginalDisplayName,
-            freeBusyLocation: this.freeBusyLocation,
-            birthday: this.birthday,
-            anniversary: this.anniversary 
-        }, null, 2);
+        return (
+            'PSTAppointment: ' +
+            JSON.stringify(
+                {
+                    messageClass: this.messageClass,
+                    subject: this.subject,
+                    importance: this.importance,
+                    transportMessageHeaders: this.transportMessageHeaders,
+                    account: this.account,
+                    callbackTelephoneNumber: this.callbackTelephoneNumber,
+                    generation: this.generation,
+                    givenName: this.givenName,
+                    governmentIdNumber: this.governmentIdNumber,
+                    businessTelephoneNumber: this.businessTelephoneNumber,
+                    homeTelephoneNumber: this.homeTelephoneNumber,
+                    initials: this.initials,
+                    keyword: this.keyword,
+                    language: this.language,
+                    location: this.location,
+                    mhsCommonName: this.mhsCommonName,
+                    organizationalIdNumber: this.organizationalIdNumber,
+                    surname: this.surname,
+                    originalDisplayName: this.originalDisplayName,
+                    postalAddress: this.postalAddress,
+                    companyName: this.companyName,
+                    title: this.title,
+                    departmentName: this.departmentName,
+                    officeLocation: this.officeLocation,
+                    primaryTelephoneNumber: this.primaryTelephoneNumber,
+                    business2TelephoneNumber: this.business2TelephoneNumber,
+                    mobileTelephoneNumber: this.mobileTelephoneNumber,
+                    radioTelephoneNumber: this.radioTelephoneNumber,
+                    carTelephoneNumber: this.carTelephoneNumber,
+                    otherTelephoneNumber: this.otherTelephoneNumber,
+                    transmittableDisplayName: this.transmittableDisplayName,
+                    pagerTelephoneNumber: this.pagerTelephoneNumber,
+                    primaryFaxNumber: this.primaryFaxNumber,
+                    businessFaxNumber: this.businessFaxNumber,
+                    homeFaxNumber: this.homeFaxNumber,
+                    businessAddressCountry: this.businessAddressCountry,
+                    businessAddressCity: this.businessAddressCity,
+                    businessAddressStateOrProvince: this.businessAddressStateOrProvince,
+                    businessAddressStreet: this.businessAddressStreet,
+                    businessPostalCode: this.businessPostalCode,
+                    businessPoBox: this.businessPoBox,
+                    telexNumber: this.telexNumber,
+                    isdnNumber: this.isdnNumber,
+                    assistantTelephoneNumber: this.assistantTelephoneNumber,
+                    home2TelephoneNumber: this.home2TelephoneNumber,
+                    assistant: this.assistant,
+                    hobbies: this.hobbies,
+                    middleName: this.middleName,
+                    displayNamePrefix: this.displayNamePrefix,
+                    profession: this.profession,
+                    preferredByName: this.preferredByName,
+                    spouseName: this.spouseName,
+                    computerNetworkName: this.computerNetworkName,
+                    customerId: this.customerId,
+                    ttytddPhoneNumber: this.ttytddPhoneNumber,
+                    ftpSite: this.ftpSite,
+                    managerName: this.managerName,
+                    nickname: this.nickname,
+                    personalHomePage: this.personalHomePage,
+                    businessHomePage: this.businessHomePage,
+                    smtpAddress: this.smtpAddress,
+                    companyMainPhoneNumber: this.companyMainPhoneNumber,
+                    childrensNames: this.childrensNames,
+                    homeAddressCity: this.homeAddressCity,
+                    homeAddressCountry: this.homeAddressCountry,
+                    homeAddressPostalCode: this.homeAddressPostalCode,
+                    homeAddressStateOrProvince: this.homeAddressStateOrProvince,
+                    homeAddressStreet: this.homeAddressStreet,
+                    homeAddressPostOfficeBox: this.homeAddressPostOfficeBox,
+                    otherAddressCity: this.otherAddressCity,
+                    otherAddressCountry: this.otherAddressCountry,
+                    otherAddressPostalCode: this.otherAddressPostalCode,
+                    otherAddressStateOrProvince: this.otherAddressStateOrProvince,
+                    otherAddressStreet: this.otherAddressStreet,
+                    otherAddressPostOfficeBox: this.otherAddressPostOfficeBox,
+                    fileUnder: this.fileUnder,
+                    homeAddress: this.homeAddress,
+                    workAddress: this.workAddress,
+                    otherAddress: this.otherAddress,
+                    postalAddressId: this.postalAddressId,
+                    html: this.html,
+                    workAddressStreet: this.workAddressStreet,
+                    workAddressCity: this.workAddressCity,
+                    workAddressState: this.workAddressState,
+                    workAddressPostalCode: this.workAddressPostalCode,
+                    workAddressCountry: this.workAddressCountry,
+                    workAddressPostOfficeBox: this.workAddressPostOfficeBox,
+                    instantMessagingAddress: this.instantMessagingAddress,
+                    email1DisplayName: this.email1DisplayName,
+                    email1AddressType: this.email1AddressType,
+                    email1EmailAddress: this.email1EmailAddress,
+                    email1OriginalDisplayName: this.email1OriginalDisplayName,
+                    email1EmailType: this.email1EmailType,
+                    email2DisplayName: this.email2DisplayName,
+                    email2AddressType: this.email2AddressType,
+                    email2EmailAddress: this.email2EmailAddress,
+                    email2OriginalDisplayName: this.email2OriginalDisplayName,
+                    email3DisplayName: this.email3DisplayName,
+                    email3AddressType: this.email3AddressType,
+                    email3EmailAddress: this.email3EmailAddress,
+                    email3OriginalDisplayName: this.email3OriginalDisplayName,
+                    fax1AddressType: this.fax1AddressType,
+                    fax1EmailAddress: this.fax1EmailAddress,
+                    fax1OriginalDisplayName: this.fax1OriginalDisplayName,
+                    fax2AddressType: this.fax2AddressType,
+                    fax2EmailAddress: this.fax2EmailAddress,
+                    fax2OriginalDisplayName: this.fax2OriginalDisplayName,
+                    fax3AddressType: this.fax3AddressType,
+                    fax3EmailAddress: this.fax3EmailAddress,
+                    fax3OriginalDisplayName: this.fax3OriginalDisplayName,
+                    freeBusyLocation: this.freeBusyLocation,
+                    birthday: this.birthday,
+                    anniversary: this.anniversary
+                },
+                null,
+                2
+            ) +
+            '\n' +
+            super.toJSONstring()
+        );
     }
 }
