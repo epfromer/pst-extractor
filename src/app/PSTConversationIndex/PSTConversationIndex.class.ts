@@ -66,10 +66,6 @@ export class PSTConversationIndex {
         }
     }
 
-    public toString() {
-        return this.guid + "@" + this.deliveryTime + " " + this.responseLevels.length + " ResponseLevels";
-    }
-
     private decodeHeader(rawConversationIndex: Buffer) {
         // According to the Spec the first byte is not included, but I believe
         // the spec is incorrect!
@@ -106,4 +102,9 @@ export class PSTConversationIndex {
             this.responseLevels[responseLevelIndex] = new ResponseLevel(deltaCode, deltaTime, random.toNumber());
         }
     }
+
+    public toString() {
+        return this.guid + "@" + this.deliveryTime + " " + this.responseLevels.length + " ResponseLevels";
+    }
+
 }

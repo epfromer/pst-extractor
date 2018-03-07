@@ -82,18 +82,17 @@ export class PSTDescriptorItem {
         return this.dataBlockData;
     }
 
-    // public int[] getBlockOffsets() throws IOException, PSTException {
-    //     if (this.dataBlockOffsets != null) {
-
-    //         return this.dataBlockOffsets;
-    //     }
-    //     final Long[] offsets = this.pstFile.readLeaf(this.offsetIndexIdentifier).getBlockOffsets();
-    //     final int[] offsetsOut = new int[offsets.length];
-    //     for (int x = 0; x < offsets.length; x++) {
-    //         offsetsOut[x] = offsets[x].intValue();
-    //     }
-    //     return offsetsOut;
-    // }
+    public getBlockOffsets(): number[] {
+        if (this.dataBlockOffsets != null) {
+            return this.dataBlockOffsets;
+        }
+        let offsets: long[] = this._pstFile.readLeaf(long.fromNumber(this.offsetIndexIdentifier)).getBlockOffsets();
+        let offsetsOut: number[] = [];
+        for (let x = 0; x < offsets.length; x++) {
+            offsetsOut[x] = offsets[x].toNumber();
+        }
+        return offsetsOut;
+    }
 
     public getDataSize(): number {
         return this._pstFile.getLeafSize(long.fromNumber(this.offsetIndexIdentifier));
