@@ -840,7 +840,7 @@ export class PSTContact extends PSTMessage {
 
     public toJSONstring(): string {
         return (
-            'PSTAppointment: ' +
+            'PSTContact: ' +
             JSON.stringify(
                 {
                     messageClass: this.messageClass,
