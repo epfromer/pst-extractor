@@ -38,6 +38,7 @@ import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class'
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
 import * as zlib from 'zlib';
+import { Log } from '../Log.class';
 
 export class PSTNodeInputStream {
     private pstFileContent: PSTFileContent; // TODO:  remove this and use pstFile.pstFileContent?
@@ -69,16 +70,6 @@ export class PSTNodeInputStream {
     public get encrypted() {
         return this._encrypted;
     }
-
-    // PSTNodeInputStream(final PSTFile pstFile, final byte[] attachmentData, final boolean encrypted)
-    //     throws PSTException {
-    //     this.allData = attachmentData;
-    //     this.encrypted = encrypted;
-    //     this.length = this.allData.length;
-    //     this.currentBlock = 0;
-    //     this.currentLocation = 0;
-    //     this.detectZlib();
-    // }
 
     constructor(pstFile: PSTFile, attachmentData: Buffer, encrypted?:boolean);
     constructor(pstFile: PSTFile, descriptorItem: PSTDescriptorItem, encrypted?:boolean);
@@ -116,7 +107,6 @@ export class PSTNodeInputStream {
     }
 
     private detectZlib() {
-
         // not really sure how this is meant to work, kind of going by feel here.
         if (this.length.lt(4)) {
             return;
@@ -127,40 +117,33 @@ export class PSTNodeInputStream {
                 if (this.indexItems.length > 1) {
                     let i: OffsetIndexItem = this.indexItems[1];
                     this.pstFileContent.seek(i.fileOffset);
-                    multiStreams = this.pstFileContent.read() == 0x78 && this.pstFileContent.read() == 0x9c;
+                    multiStreams = this.pstFileContent.read() === 0x78 && this.pstFileContent.read() === 0x9c;
                 }
                 // we are a compressed block, decompress the whole thing into a buffer
-                // and replace our contents with that. 
-                // firstly, if we have blocks, use that as the length
+                // and replace our contents with that. firstly, if we have blocks, use that as the length
                 let outputStream: Buffer;
                 if (multiStreams) {
-                    debugger;
-                    // let y = 0;
+                    // Log.debug1('list of all index items')
                     // for (let i of this.indexItems) {
-                    //     debugger;
-                    //     let inData: Buffer = new Buffer(i.size);
-                    //     this.pstFileContent.seek(i.fileOffset);
-                    //     this.pstFileContent.readCompletely(inData);
-                    //     final InflaterOutputStream inflaterStream = new InflaterOutputStream(outputStream);
-                    //     //try {
-                    //         inflaterStream.write(inData);
-                    //         inflaterStream.close();
-                    //     //} catch (Exception err) {
-                    //     //    System.out.println("Y: " + y);
-                    //     //    System.out.println(err);
-                    //     //    PSTObject.printHexFormatted(inData, true);
-                    //     //    System.exit(0);
-                    //     //}
-                    //     y++;
+                    //     Log.debug1(i.toJSONstring());
                     // }
-                    // this.indexItems.clear();
-                    // this.skipPoints.clear();
+                    // Log.debug1('----------------------')
+                    // TODO - try this with different types of attachments, includin PDF
+                    //  may be issue with zlib and PDF files. also, mutiple attachments.
+                    for (let i of this.indexItems) {
+                        Log.debug1(i.toJSONstring());
+                        let inData: Buffer = new Buffer(i.size);
+                        this.pstFileContent.seek(i.fileOffset);
+                        this.pstFileContent.readCompletely(inData);
+                        outputStream = zlib.unzipSync(inData);
+                    }
+                    this.indexItems = [];
+                    this.skipPoints = [];
                 } else {
                     let compressedLength: number = this.length.toNumber();
                     if (this.indexItems.length > 0) {
                         compressedLength = 0;
                         for (let i of this.indexItems) {
-                            //System.out.println(i);
                             compressedLength += i.size;
                         }
                     }
@@ -177,7 +160,7 @@ export class PSTNodeInputStream {
             }
             this.seek(long.ZERO);
         } catch (err) {
-            throw new Error('Unable to decompress reportedly compressed block');
+            throw new Error('PSTNodeInputStream::detectZlib Unable to decompress reportedly compressed block\n' + err);
         }
     }
 
@@ -191,7 +174,7 @@ export class PSTNodeInputStream {
         if (bInternal) {
             // All internal blocks are at least 8 bytes long...
             if (offsetItem.size < 8) {
-                throw new Error('Invalid internal block size');
+                throw new Error('PSTNodeInputStream::loadFromOffsetItem Invalid internal block size');
             }
 
             if (data[0] == 0x1) {
@@ -214,7 +197,7 @@ export class PSTNodeInputStream {
 
     private getBlockSkipPoints(data: Buffer) {
         if (data[0] != 0x1) {
-            throw new Error('Unable to process XBlock, incorrect identifier');
+            throw new Error('PSTNodeInputStream::loadFromOffsetItem Unable to process XBlock, incorrect identifier');
         }
 
         let numberOfEntries = PSTUtil.convertLittleEndianBytesToLong(data, 2, 4).toNumber();
@@ -318,7 +301,7 @@ export class PSTNodeInputStream {
         while (offset < target.length) {
             numRead = this.readFromOffset(target, offset, target.length - offset);
             if (numRead === -1) {
-                throw new Error('unexpected EOF encountered attempting to read from PSTInputStream');
+                throw new Error('PSTNodeInputStream::readCompletely unexpected EOF encountered attempting to read from PSTInputStream');
             }
             offset += numRead;
         }
@@ -458,7 +441,7 @@ export class PSTNodeInputStream {
     public seek(location: long) {
         // not past the end!
         if (location.greaterThan(this.length)) {
-            throw new Error('Attempt to seek past end of item! size = ' + this.length + ', seeking to:' + location);
+            throw new Error('PSTNodeInputStream::seek Attempt to seek past end of item! size = ' + this.length + ', seeking to:' + location);
         }
 
         // are we already there?

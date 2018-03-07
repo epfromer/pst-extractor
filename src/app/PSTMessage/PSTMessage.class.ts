@@ -593,7 +593,7 @@ export class PSTMessage extends PSTObject {
         if (this.recipientTable == null) {
             return 0;
         }
-        return this.recipientTable.getRowCount();
+        return this.recipientTable.rowCount;
     }
 
     // attachment stuff here, not sure if these can just exist in emails or not,
@@ -694,7 +694,7 @@ export class PSTMessage extends PSTObject {
         if (this.attachmentTable == null) {
             return 0;
         }
-        return this.attachmentTable.getRowCount();
+        return this.attachmentTable.rowCount;
     }
 
     // get a specific attachment from this email
@@ -703,7 +703,7 @@ export class PSTMessage extends PSTObject {
 
         let attachmentCount = 0;
         if (this.attachmentTable != null) {
-            attachmentCount = this.attachmentTable.getRowCount();
+            attachmentCount = this.attachmentTable.rowCount;
         }
 
         if (attachmentNumber >= attachmentCount) {
@@ -758,7 +758,7 @@ export class PSTMessage extends PSTObject {
 
     public get recipientsString(): string {
         if (this.recipientTable != null) {
-            return this.recipientTable.getItemsString();
+            return this.recipientTable.itemsString;
         }
         return 'No recipients table!';
     }

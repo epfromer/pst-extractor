@@ -17,6 +17,9 @@
  |  |  |- Inbox
  |  |  |  |- Email: 2106212 - test
  |  |  |  |- Email: 2106116 - Re: test
+ |  |  |  |- Email: 2110308 - word attachment
+ |  |  |  |- Email: 2110724 - excel attachment
+ |  |  |  |- Email: 2111140 - never gonna give you up
  |  |  |- Outbox
  |  |  |- Sent Items
  |  |  |  |- Email: 2105636 - hey!
@@ -86,6 +89,7 @@
  |  |  |  |- Conflicts
  |  |  |  |- Local Failures
  |  |  |  |- Server Failures
+ |  |  |  |- Email: 2106724 - Modification Resolution
  |  |  |- RSS Feeds
  |  |  |- Quick Step Settings
  |  |- ~MAPISP(Internal)

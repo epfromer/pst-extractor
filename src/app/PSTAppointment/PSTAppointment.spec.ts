@@ -24,7 +24,7 @@ after(() => {
     pstFile.close();
 });
 
-describe('PSTActivity tests', () => {
+describe('PSTAppointment tests', () => {
     it('should have a Journal folder', () => {
         expect(folder.displayName).to.equal('Calendar');
     });
@@ -42,7 +42,7 @@ describe('PSTActivity tests', () => {
         // console.log(appt.toJSONstring())
         expect(appt.messageClass).to.equal('IPM.Appointment');
         expect(appt.subject).to.equal('workout');
-        expect(appt.creationTime).to.eql(new Date("2018-03-05T20:26:12.738Z"));
+        expect(appt.creationTime).to.eql(new Date("2018-03-05T20:26:26.396Z"));
         expect(appt.senderName).to.equal('Mountain Man');
         expect(appt.duration).to.equal(60);
     });

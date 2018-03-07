@@ -66,4 +66,20 @@ export class OffsetIndexItem {
             this.cRef = PSTUtil.convertLittleEndianBytesToLong(data, 16, 18);
         }
     }
+
+    public toJSONstring(): string {
+        return (
+            'OffsetIndexItem: ' +
+            JSON.stringify(
+                {
+                    _indexIdentifier: this._indexIdentifier.toString(),
+                    _fileOffset: this._fileOffset.toString(),
+                    _size: this._size,
+                    cRef: this.cRef.toString()
+                },
+                null,
+                2
+            ) 
+        );
+    }
 }

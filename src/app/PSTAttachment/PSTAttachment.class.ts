@@ -31,19 +31,18 @@
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
 import { PSTUtil } from './../PSTUtil/PSTUtil.class';
-import { PSTObject } from "../PSTObject/PSTObject.class";
-import { PSTFile } from "../PSTFile/PSTFile.class";
-import { PSTTableBC } from "../PSTTableBC/PSTTableBC.class";
-import { DescriptorIndexNode } from "../DescriptorIndexNode/DescriptorIndexNode.class";
-import { PSTDescriptorItem } from "../PSTDescriptorItem/PSTDescriptorItem.class";
-import { PSTMessage } from "../PSTMessage/PSTMessage.class";
-import { PSTNodeInputStream } from "../PSTNodeInputStream/PSTNodeInputStream.class";
-import { PSTTableBCItem } from "../PSTTableBCItem/PSTTableBCItem.class";
+import { PSTObject } from '../PSTObject/PSTObject.class';
+import { PSTFile } from '../PSTFile/PSTFile.class';
+import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
+import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
+import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTMessage } from '../PSTMessage/PSTMessage.class';
+import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
+import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import * as long from 'long';
 
 // Class containing attachment information.
 export class PSTAttachment extends PSTObject {
-
     public static ATTACHMENT_METHOD_NONE = 0;
     public static ATTACHMENT_METHOD_BY_VALUE = 1;
     public static ATTACHMENT_METHOD_BY_REFERENCE = 2;
@@ -53,7 +52,7 @@ export class PSTAttachment extends PSTObject {
     public static ATTACHMENT_METHOD_OLE = 6;
 
     constructor(
-        pstFile: PSTFile,  // theFile
+        pstFile: PSTFile, // theFile
         table: PSTTableBC,
         localDescriptorItems: Map<number, PSTDescriptorItem>
     ) {
@@ -83,14 +82,16 @@ export class PSTAttachment extends PSTObject {
                     pstNodeInputStream = new PSTNodeInputStream(this.pstFile, item.data);
                 } else {
                     // We are in trouble!
-                    throw new Error("PSTAttachment::getEmbeddedPSTMessage External reference in getEmbeddedPSTMessage()!");
+                    throw new Error('PSTAttachment::getEmbeddedPSTMessage External reference in getEmbeddedPSTMessage()!');
                 }
-            } else if (item.entryValueType == 0x000D) {
+            } else if (item.entryValueType == 0x000d) {
                 let descriptorItem = PSTUtil.convertLittleEndianBytesToLong(item.data, 0, 4).toNumber();
                 let descriptorItemNested: PSTDescriptorItem = this.localDescriptorItems.get(descriptorItem);
                 pstNodeInputStream = new PSTNodeInputStream(this.pstFile, descriptorItemNested);
                 if (descriptorItemNested.subNodeOffsetIndexIdentifier > 0) {
-                    this.localDescriptorItems = this.pstFile.getPSTDescriptorItems(long.fromNumber(descriptorItemNested.subNodeOffsetIndexIdentifier));
+                    this.localDescriptorItems = this.pstFile.getPSTDescriptorItems(
+                        long.fromNumber(descriptorItemNested.subNodeOffsetIndexIdentifier)
+                    );
                 }
             }
 
@@ -100,8 +101,7 @@ export class PSTAttachment extends PSTObject {
 
             try {
                 let attachmentTable: PSTTableBC = new PSTTableBC(pstNodeInputStream);
-                return PSTUtil.createAppropriatePSTMessageObject(this.pstFile, this.descriptorIndexNode,
-                    attachmentTable, this.localDescriptorItems);
+                return PSTUtil.createAppropriatePSTMessageObject(this.pstFile, this.descriptorIndexNode, attachmentTable, this.localDescriptorItems);
             } catch (err) {
                 err.printStackTrace();
             }
@@ -121,7 +121,6 @@ export class PSTAttachment extends PSTObject {
             // internal value references are never encrypted
             return new PSTNodeInputStream(this.pstFile, attachmentDataObject.data, false);
         }
-
     }
 
     public get filesize(): number {
@@ -129,15 +128,13 @@ export class PSTAttachment extends PSTObject {
         if (attachmentDataObject.isExternalValueReference) {
             let descriptorItemNested: PSTDescriptorItem = this.localDescriptorItems.get(attachmentDataObject.entryValueReference);
             if (descriptorItemNested == null) {
-                throw new Error(
-                    "PSTAttachment::filesize missing attachment descriptor item for: " + attachmentDataObject.entryValueReference);
+                throw new Error('PSTAttachment::filesize missing attachment descriptor item for: ' + attachmentDataObject.entryValueReference);
             }
             return descriptorItemNested.getDataSize();
         } else {
             // raw attachment data, right there!
             return attachmentDataObject.data.length;
         }
-
     }
 
     // Attachment (short) filename ASCII or Unicode string
@@ -200,19 +197,19 @@ export class PSTAttachment extends PSTObject {
     // Attachment not available in HTML
     public get isAttachmentInvisibleInHtml(): boolean {
         let actionFlag = this.getIntItem(0x3714);
-        return ((actionFlag & 0x1) > 0);
+        return (actionFlag & 0x1) > 0;
     }
 
     // Attachment not available in RTF
     public get isAttachmentInvisibleInRTF(): boolean {
         let actionFlag = this.getIntItem(0x3714);
-        return ((actionFlag & 0x2) > 0);
+        return (actionFlag & 0x2) > 0;
     }
 
     // Attachment is MHTML REF
     public get isAttachmentMhtmlRef(): boolean {
         let actionFlag = this.getIntItem(0x3714);
-        return ((actionFlag & 0x4) > 0);
+        return (actionFlag & 0x4) > 0;
     }
 
     // Attachment content disposition
@@ -222,46 +219,72 @@ export class PSTAttachment extends PSTObject {
 
     public toString() {
         return (
-            '\n size: ' + this.size + 
-            '\n creationTime: ' + this.creationTime + 
-            '\n modificationTime: ' + this.modificationTime + 
-            '\n filename: ' + this.filename + 
-            '\n attachMethod: ' + this.attachMethod + 
-            '\n attachSize: ' + this.attachSize + 
-            '\n attachNum: ' + this.attachNum + 
-            '\n longFilename: ' + this.longFilename + 
-            '\n pathname: ' + this.pathname + 
-            '\n renderingPosition: ' + this.renderingPosition + 
-            '\n longPathname: ' + this.longPathname + 
-            '\n mimeTag: ' + this.mimeTag + 
-            '\n mimeSequence: ' + this.mimeSequence + 
-            '\n isAttachmentInvisibleInHtml: ' + this.isAttachmentInvisibleInHtml +
-            '\n isAttachmentInvisibleInRTF: ' + this.isAttachmentInvisibleInRTF +
-            '\n isAttachmentMhtmlRef: ' + this.isAttachmentMhtmlRef +
-            '\n attachmentContentDisposition: ' + this.attachmentContentDisposition
+            '\n size: ' +
+            this.size +
+            '\n creationTime: ' +
+            this.creationTime +
+            '\n modificationTime: ' +
+            this.modificationTime +
+            '\n filename: ' +
+            this.filename +
+            '\n attachMethod: ' +
+            this.attachMethod +
+            '\n attachSize: ' +
+            this.attachSize +
+            '\n attachNum: ' +
+            this.attachNum +
+            '\n longFilename: ' +
+            this.longFilename +
+            '\n pathname: ' +
+            this.pathname +
+            '\n renderingPosition: ' +
+            this.renderingPosition +
+            '\n longPathname: ' +
+            this.longPathname +
+            '\n mimeTag: ' +
+            this.mimeTag +
+            '\n mimeSequence: ' +
+            this.mimeSequence +
+            '\n isAttachmentInvisibleInHtml: ' +
+            this.isAttachmentInvisibleInHtml +
+            '\n isAttachmentInvisibleInRTF: ' +
+            this.isAttachmentInvisibleInRTF +
+            '\n isAttachmentMhtmlRef: ' +
+            this.isAttachmentMhtmlRef +
+            '\n attachmentContentDisposition: ' +
+            this.attachmentContentDisposition
         );
     }
 
     public toJSONstring(): string {
-        return JSON.stringify({
-            size: this.size,
-            creationTime: this.creationTime,
-            modificationTime: this.modificationTime,
-            filename: this.filename,
-            attachMethod: this.attachMethod,
-            attachSize: this.attachSize,
-            attachNum: this.attachNum,
-            longFilename: this.longFilename,
-            pathname: this.pathname,
-            renderingPosition: this.renderingPosition,
-            longPathname: this.longPathname,
-            mimeTag: this.mimeTag,
-            mimeSequence: this.mimeSequence,
-            contentId: this.contentId, 
-            isAttachmentInvisibleInHtml: this.isAttachmentInvisibleInHtml, 
-            isAttachmentInvisibleInRTF: this.isAttachmentInvisibleInRTF, 
-            isAttachmentMhtmlRef: this.isAttachmentMhtmlRef, 
-            attachmentContentDisposition: this.attachmentContentDisposition 
-        }, null, 2);
+        return (
+            'PSTAttachment: ' +
+            JSON.stringify(
+                {
+                    size: this.size,
+                    creationTime: this.creationTime,
+                    modificationTime: this.modificationTime,
+                    filename: this.filename,
+                    attachMethod: this.attachMethod,
+                    attachSize: this.attachSize,
+                    attachNum: this.attachNum,
+                    longFilename: this.longFilename,
+                    pathname: this.pathname,
+                    renderingPosition: this.renderingPosition,
+                    longPathname: this.longPathname,
+                    mimeTag: this.mimeTag,
+                    mimeSequence: this.mimeSequence,
+                    contentId: this.contentId,
+                    isAttachmentInvisibleInHtml: this.isAttachmentInvisibleInHtml,
+                    isAttachmentInvisibleInRTF: this.isAttachmentInvisibleInRTF,
+                    isAttachmentMhtmlRef: this.isAttachmentMhtmlRef,
+                    attachmentContentDisposition: this.attachmentContentDisposition
+                },
+                null,
+                2
+            ) +
+            '\n' +
+            super.toJSONstring()
+        );
     }
 }

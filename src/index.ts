@@ -40,17 +40,16 @@ import * as fsext from 'fs-ext';
 
 let depth = -1;
 let tmpDirIndex = 1;
-let saveAttachmentsToFS = false;
+let saveAttachmentsToFS = true;
 let verbose = true;
 let col = 0;
 
-// make a temp dir for the attachments
+// make a dir for the attachments
 try {
     if (saveAttachmentsToFS) {
         fs.mkdirSync('/media/sf_Outlook/0pst-extractor/');
     }
 } catch (err) {
-    Log.debug1(err);
 }
 
 let directoryListing = fs.readdirSync('/media/sf_Outlook/test');
@@ -101,7 +100,7 @@ function processFolder(folder: PSTFolder) {
                 // walk list of attachments and save to fs
                 for (let i = 0; i < email.numberOfAttachments; i++) {
                     let attachment: PSTAttachment = email.getAttachment(i);
-                    Log.debug1(attachment.toJSONstring());
+                    Log.debug2(attachment.toJSONstring());
                     if (attachment.filename) {
                         let filename = '/media/sf_Outlook/0pst-extractor/' + tmpDirIndex + '/' + attachment.filename;
                         if (verbose) {
