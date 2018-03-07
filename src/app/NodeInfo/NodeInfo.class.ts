@@ -44,6 +44,10 @@ export class NodeInfo {
         return this._endOffset;
     }
 
+    public length(): number {
+        return this.endOffset - this.startOffset;
+    }
+
     private _pstNodeInputStream: PSTNodeInputStream;
     get pstNodeInputStream() {
         return this._pstNodeInputStream;
@@ -58,11 +62,22 @@ export class NodeInfo {
         this._pstNodeInputStream = pstNodeInputStream;
     }
 
-    public length(): number {
-        return this.endOffset - this.startOffset;
-    }
-
     public seekAndReadLong(offset: long, length: number): long {
         return this.pstNodeInputStream.seekAndReadLong(offset.add(this.startOffset), length);
+    }
+
+    public toJSONstring(): string {
+        return (
+            'NodeInfo: ' +
+            JSON.stringify(
+                {
+                    _startOffset: this._startOffset,
+                    _endOffset: this._endOffset,
+                    length: this.length
+                },
+                null,
+                2
+            )
+        );
     }
 }

@@ -103,8 +103,17 @@ export class PSTConversationIndex {
         }
     }
 
-    public toString() {
-        return this.guid + "@" + this.deliveryTime + " " + this.responseLevels.length + " ResponseLevels";
+    public toJSONstring(): string {
+        return (
+            'PSTConversationIndex: ' +
+            JSON.stringify(
+                {
+                    _deliveryTime: this._deliveryTime,
+                    _guid: this._guid
+                },
+                null,
+                2
+            ) 
+        );
     }
-
 }

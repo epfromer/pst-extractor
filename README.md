@@ -6,3 +6,9 @@ This is based off the code from https://github.com/rjohnsondev/java-libpst.  Tha
 A spec from Microsoft on the PST file format is at https://msdn.microsoft.com/en-us/library/ff385210(v=office.12).aspx. 
 
 Start with index.ts for sample code to walk the PST and print out the folder structure.
+
+To Do
+- try/catch
+- dist list tests
+- debugger
+- 'not yet implemented'

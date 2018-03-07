@@ -35,18 +35,12 @@ import * as fsext from 'fs-ext';
 import * as long from 'long';
 
 export class PSTFileContent {
+    // node fs file descriptor
+    private _pstFD: number;
+
     constructor(pstFD: number) {
         this._pstFD = pstFD;
     }
-
-    // node fs file descriptor
-    private _pstFD: number;
-    // set pstFD(fd: number) { this._pstFD = fd; }
-    // get pstFD() { return this._pstFD };
-
-    // public getFilePointer(): number {
-    //     return fsext.seekSync(this._pstFD, index, 0);
-    // }
 
     // reads a single byte
     public read(position?: number): number {
@@ -86,5 +80,18 @@ export class PSTFileContent {
         //     System.arraycopy(buffer, 0, target, offset, read);
         //     offset += read;
         // }
+    }
+
+    public toJSONstring(): string {
+        return (
+            'PSTDescriptorItem: ' +
+            JSON.stringify(
+                {
+                    _pstFD: this._pstFD
+                },
+                null,
+                2
+            ) 
+        );
     }
 }

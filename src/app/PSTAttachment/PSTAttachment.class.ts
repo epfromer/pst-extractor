@@ -217,45 +217,6 @@ export class PSTAttachment extends PSTObject {
         return this.getStringItem(0x3716);
     }
 
-    public toString() {
-        return (
-            '\n size: ' +
-            this.size +
-            '\n creationTime: ' +
-            this.creationTime +
-            '\n modificationTime: ' +
-            this.modificationTime +
-            '\n filename: ' +
-            this.filename +
-            '\n attachMethod: ' +
-            this.attachMethod +
-            '\n attachSize: ' +
-            this.attachSize +
-            '\n attachNum: ' +
-            this.attachNum +
-            '\n longFilename: ' +
-            this.longFilename +
-            '\n pathname: ' +
-            this.pathname +
-            '\n renderingPosition: ' +
-            this.renderingPosition +
-            '\n longPathname: ' +
-            this.longPathname +
-            '\n mimeTag: ' +
-            this.mimeTag +
-            '\n mimeSequence: ' +
-            this.mimeSequence +
-            '\n isAttachmentInvisibleInHtml: ' +
-            this.isAttachmentInvisibleInHtml +
-            '\n isAttachmentInvisibleInRTF: ' +
-            this.isAttachmentInvisibleInRTF +
-            '\n isAttachmentMhtmlRef: ' +
-            this.isAttachmentMhtmlRef +
-            '\n attachmentContentDisposition: ' +
-            this.attachmentContentDisposition
-        );
-    }
-
     public toJSONstring(): string {
         return (
             'PSTAttachment: ' +

@@ -94,7 +94,23 @@ export class PSTDescriptorItem {
         return offsetsOut;
     }
 
-    public getDataSize(): number {
+    public dataSize(): number {
         return this._pstFile.getLeafSize(long.fromNumber(this.offsetIndexIdentifier));
+    }
+
+    public toJSONstring(): string {
+        return (
+            'PSTDescriptorItem: ' +
+            JSON.stringify(
+                {
+                    _subNodeOffsetIndexIdentifier: this._subNodeOffsetIndexIdentifier,
+                    _descriptorIdentifier: this._descriptorIdentifier,
+                    _offsetIndexIdentifier: this._offsetIndexIdentifier,
+                    dataSize: this.dataSize
+                },
+                null,
+                2
+            ) 
+        );
     }
 }

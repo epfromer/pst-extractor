@@ -97,39 +97,6 @@ export class PSTActivity extends PSTMessage {
         return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008712, PSTFile.PSETID_Log));
     }
 
-    public toString() {
-        return (
-            '\n messageClass: ' +
-            this.messageClass +
-            '\n subject: ' +
-            this.subject +
-            '\n importance: ' +
-            this.importance +
-            '\n transportMessageHeaders: ' +
-            this.transportMessageHeaders +
-            '\n logType: ' +
-            this.logType +
-            '\n logStart: ' +
-            this.logStart +
-            '\n logDuration: ' +
-            this.logDuration +
-            '\n logEnd: ' +
-            this.logEnd +
-            '\n logFlags: ' +
-            this.logFlags +
-            '\n isDocumentPrinted: ' +
-            this.isDocumentPrinted +
-            '\n isDocumentSaved: ' +
-            this.isDocumentSaved +
-            '\n isDocumentRouted: ' +
-            this.isDocumentRouted +
-            '\n isDocumentPosted: ' +
-            this.isDocumentPosted +
-            '\n logTypeDesc: ' +
-            this.logTypeDesc
-        );
-    }
-
     public toJSONstring(): string {
         return (
             'PSTActivity: ' +

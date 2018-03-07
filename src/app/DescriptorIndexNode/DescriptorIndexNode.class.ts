@@ -70,4 +70,20 @@ export class DescriptorIndexNode {
             this.itemType = PSTUtil.convertLittleEndianBytesToLong(buffer, 28, 32).toNumber();
         }
     }
+
+    public toJSONstring(): string {
+        return (
+            'DescriptorIndexNode: ' +
+            JSON.stringify(
+                {
+                    parentDescriptorIndexIdentifier: this.parentDescriptorIndexIdentifier,
+                    _descriptorIdentifier: this._descriptorIdentifier,
+                    _localDescriptorsOffsetIndexIdentifier: this._localDescriptorsOffsetIndexIdentifier.toString(),
+                    _dataOffsetIndexIdentifier: this._dataOffsetIndexIdentifier.toString()
+                },
+                null,
+                2
+            )
+        );
+    }
 }

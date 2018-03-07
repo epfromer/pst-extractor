@@ -80,7 +80,7 @@ export class PSTFolder extends PSTObject {
                 output.push(folder);
             }
         } catch (err) {
-            Log.error("PSTFolder::getSubFolders Can't get child folders for folder " + this.displayName);
+            Log.error("PSTFolder::getSubFolders Can't get child folders for folder " + this.displayName + "\n" + err);
             throw err;
         }
         return output;
@@ -102,7 +102,7 @@ export class PSTFolder extends PSTObject {
             let pstNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem);
             this.subfoldersTable = new PSTTable7C(pstNodeInputStream, tmp);
         } catch (err) {
-            Log.error("PSTFolder::initSubfoldersTable Can't get child folders for folder " + this.displayName);
+            Log.error("PSTFolder::initSubfoldersTable Can't get child folders for folder " + this.displayName + "\n" + err);
             throw err;
         }
     }
@@ -129,7 +129,7 @@ export class PSTFolder extends PSTObject {
             const pstNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem);
             this.emailsTable = new PSTTable7C(pstNodeInputStream, tmp, 0x67f2);
         } catch (err) {
-            Log.error("PSTFolder::initEmailsTable Can't get child folders for folder " + this.displayName);
+            Log.error("PSTFolder::initEmailsTable Can't get child folders for folder " + this.displayName + "\n" + err);
             throw err;
         }
     }
@@ -226,39 +226,16 @@ export class PSTFolder extends PSTObject {
         return this.getIntItem(0x360a) != 0;
     }
 
-    public get containerClass() {
+    public get containerClass(): string {
         return this.getStringItem(0x3613);
     }
 
-    public get associateContentCount() {
+    public get associateContentCount(): number {
         return this.getIntItem(0x3617);
     }
 
-    public get containerFlags() {
+    public get containerFlags(): number {
         return this.getIntItem(0x3600);
-    }
-
-    public toString() {
-        return (
-            '\n subFolderCount: ' +
-            this.subFolderCount +
-            '\n emailCount: ' +
-            this.emailCount +
-            '\n folderType: ' +
-            this.folderType +
-            '\n contentCount: ' +
-            this.contentCount +
-            '\n unreadCount: ' +
-            this.unreadCount +
-            '\n hasSubfolders: ' +
-            this.hasSubfolders +
-            '\n containerClass: ' +
-            this.containerClass +
-            '\n associateContentCount: ' +
-            this.associateContentCount +
-            '\n containerFlags: ' +
-            this.containerFlags
-        );
     }
 
     public toJSONstring(): string {

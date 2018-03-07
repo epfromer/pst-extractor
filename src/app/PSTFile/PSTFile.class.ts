@@ -355,7 +355,6 @@ export class PSTFile {
     }
 
     // get file offset, which is sorted in 8 little endian bytes
-    // returns a promise of a number
     private extractLEFileOffset(startOffset: long): long {
         let offset: long = long.ZERO;
         if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
@@ -390,6 +389,7 @@ export class PSTFile {
     private findBtreeItem(index: long, descTree: boolean): Buffer {
         let btreeStartOffset: long;
         let fileTypeAdjustment: number;
+
         // first find the starting point for the offset index
         if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
             btreeStartOffset = this.extractLEFileOffset(long.fromValue(196));
@@ -443,7 +443,6 @@ export class PSTFile {
                 this.pstFileContent.readCompletely(numberOfItemsBytes);
                 numberOfItems = PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes).toNumber();
                 this.pstFileContent.readCompletely(numberOfItemsBytes);
-                //let maxNumberOfItems = PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes);
             } else {
                 numberOfItems = this.pstFileContent.read();
                 this.pstFileContent.read(); // maxNumberOfItems
@@ -509,8 +508,7 @@ export class PSTFile {
                             // The 32-bit (file) offset index item
                             let indexIdOfFirstChildNode = this.extractLEFileOffset(btreeStartOffset.add(x * 12));
                             if (indexIdOfFirstChildNode.equals(index)) {
-                                // we found it!!!! OMG
-                                // System.out.println("item found as item #"+x);
+                                // we found it!
                                 buffer = new Buffer(12);
                                 this.pstFileContent.seek(btreeStartOffset.add(x * 12));
                                 this.pstFileContent.readCompletely(buffer);
@@ -530,16 +528,13 @@ export class PSTFile {
                                 this.pstFileContent.seek(btreeStartOffset.add(x * 32));
                                 this.pstFileContent.readCompletely(buffer);
                                 Log.debug2('PSTFile::findBtreeItem ' + index.toString() + ' found!');
-                                // PSTObject.printHexFormatted(temp, true);
                                 return buffer;
                             }
                         } else {
                             // The 64-bit (file) offset index item
                             let indexIdOfFirstChildNode = this.extractLEFileOffset(btreeStartOffset.add(x * 24));
                             if (indexIdOfFirstChildNode.equals(index)) {
-                                // we found it!!!! OMG
-                                // System.out.println("item found as item #"+x +
-                                // " size (should be 24): "+itemSize);
+                                // we found it
                                 buffer = new Buffer(24);
                                 this.pstFileContent.seek(btreeStartOffset.add(x * 24));
                                 this.pstFileContent.readCompletely(buffer);
@@ -606,14 +601,6 @@ export class PSTFile {
         }
 
         return output;
-    }
-
-    public toString() {
-        return (
-            '\n encryptionType: ' + this.encryptionType + 
-            '\n pstFileType: ' + this.pstFileType + 
-            '\n pstFilename: ' + this.pstFilename 
-        );
     }
 
     public toJSONstring(): string {
