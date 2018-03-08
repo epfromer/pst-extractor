@@ -97,4 +97,21 @@ export class TZRule {
             this._startDaylight.isEqual(rhs._startDaylight)
         );
     }
+
+    public toJSONstring(): string {
+        return (
+            'TZRule: ' +
+            JSON.stringify(
+                {
+                    _dtStart: this._dtStart,
+                    _lBias: this._lBias,
+                    _lStandardBias: this._lStandardBias,
+                    _lDaylightBias: this._lDaylightBias,
+                    _startStandard: this._startStandard,
+                    _startDaylight: this._startDaylight,
+                },
+                null,
+                2
+            ));
+    }
 }

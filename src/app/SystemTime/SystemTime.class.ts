@@ -81,4 +81,23 @@ export class SystemTime {
             this.wMilliseconds === rhs.wMilliseconds
         );
     }
+
+    public toJSONstring(): string {
+        return (
+            'SystemTime: ' +
+            JSON.stringify(
+                {
+                    wYear: this.wYear,
+                    wMonth: this.wMonth,
+                    wDayOfWeek: this.wDayOfWeek,
+                    wDay: this.wDay,
+                    wHour: this.wHour,
+                    wMinute: this.wMinute,
+                    wSecond: this.wSecond,
+                    wMilliseconds: this.wMilliseconds,
+                },
+                null,
+                2
+            ));
+    }
 }

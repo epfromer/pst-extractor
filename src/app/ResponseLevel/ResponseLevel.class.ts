@@ -61,4 +61,18 @@ export class ResponseLevel {
         return new Date();
         //return new Date(anchorDate.getTime() + this.timeDelta);
     }
+
+    public toJSONstring(): string {
+        return (
+            'ResponseLevel: ' +
+            JSON.stringify(
+                {
+                    _deltaCode: this._deltaCode,
+                    _timeDelta: this._timeDelta,
+                    _random: this._random,
+                },
+                null,
+                2
+            ));
+    }
 }

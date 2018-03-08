@@ -136,29 +136,29 @@ export class PSTTimeZone {
     //     return false;
     // }
 
-    // public getStart(): SystemTime {
-    //     return this.rule.dtStart;
-    // }
+    public getStart(): SystemTime {
+        return this.rule.dtStart;
+    }
 
-    // public getBias(): number {
-    //     return this.rule.lBias;
-    // }
+    public getBias(): number {
+        return this.rule.lBias;
+    }
 
-    // public getStandardBias(): number {
-    //     return this.rule.lStandardBias;
-    // }
+    public getStandardBias(): number {
+        return this.rule.lStandardBias;
+    }
 
-    // public getDaylightBias(): number {
-    //     return this.rule.lDaylightBias;
-    // }
+    public getDaylightBias(): number {
+        return this.rule.lDaylightBias;
+    }
 
-    // public getDaylightStart(): SystemTime {
-    //     return this.rule.startDaylight;
-    // }
+    public getDaylightStart(): SystemTime {
+        return this.rule.startDaylight;
+    }
 
-    // public getStandardStart(): SystemTime {
-    //     return this.rule.startStandard;
-    // }
+    public getStandardStart(): SystemTime {
+        return this.rule.startStandard;
+    }
 
     public toJSONstring(): string {
         return (

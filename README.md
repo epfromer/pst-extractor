@@ -23,3 +23,5 @@ To Do
 - same with PSTTableBCItem
 - PSTTableItem
 - PSTTimeZone
+- UUID
+- ResponseLevel
