@@ -13,7 +13,10 @@
       ".tsx"
     ],
     "exclude": [
-      "**/*.d.ts"
+      "**/*.d.ts",
+      "src/index.ts",
+      "coverage/prettify.js",
+      "coverage/sorter.js"
     ],
     "reporter": [
       "html"

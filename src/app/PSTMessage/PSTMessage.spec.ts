@@ -61,6 +61,5 @@ describe('PSTMessage tests', () => {
         body = msg.body;
         expect(body).to.contain('Per our earlier conversation, Burlington Resources agrees to purchase 20,000')
         expect(body.length).to.equal(661);
-
     });
 });

@@ -117,6 +117,10 @@ function processFolder(folder: PSTFolder) {
                 }
             }
 
+            if (email.rtfBody != "") {
+                console.log(email.rtfBody);
+            }
+
             // display body?
             if (verbose && displayBody) {
                 console.log(email.body);
