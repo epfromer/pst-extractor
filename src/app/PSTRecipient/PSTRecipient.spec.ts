@@ -32,7 +32,7 @@ after(() => {
 //  |  |  |  |  |-  sender: Reames Julie (JReames@br-inc.com)
 //  |  |  |  |  |-  recipient: Michelle Lokay (E-mail) (michelle.lokay@enron.com)
 
-describe('PSTMessage tests', () => {
+describe('PSTRecipient tests', () => {
     it('should have email messages', () => {
         let childFolders: PSTFolder[] = pstFile.getRootFolder().getSubFolders();
         expect(childFolders.length).to.equal(3);

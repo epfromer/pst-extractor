@@ -31,6 +31,7 @@
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
 import { PSTUtil } from './../PSTUtil/PSTUtil.class';
+import { Log } from '../Log.class';
 
 // An implementation of the LZFu algorithm to decompress RTF content
 export class LZFu {
@@ -52,7 +53,8 @@ export class LZFu {
                 let bytes: Buffer = Buffer.from(LZFu.LZFU_HEADER); //getBytes("US-ASCII");
                 PSTUtil.arraycopy(bytes, 0, lzBuffer, 0, LZFu.LZFU_HEADER.length);
             } catch (err) {
-                err.printStackTrace();
+                Log.error('LZFu::decode cant preload buffer\n' + err)
+                throw err;
             }
             let bufferPosition = LZFu.LZFU_HEADER.length;
             let currentDataPosition = 16;
@@ -81,7 +83,8 @@ export class LZFu {
                                 index %= 4096;
                             }
                         } catch (err) {
-                            err.printStackTrace();
+                            Log.error('LZFu::decode copy the data from the buffer\n' + err)
+                            throw err;
                         }
                     } else {
                         // copy the byte over

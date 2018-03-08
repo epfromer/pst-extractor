@@ -34,6 +34,7 @@ import { PSTObject } from '../PSTObject/PSTObject.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
+import { Log } from '../Log.class';
 
 // Generic table item
 // Provides some basic string functions
@@ -111,7 +112,7 @@ export class PSTTableItem {
                 }
                 return this.data.toString('utf16le').replace(/\0/g, '');
             } catch (err) {
-                console.log('Error decoding string: ' + this.data.toString('utf16le').replace(/\0/g, ''));
+                Log.error('Error decoding string: ' + this.data.toString('utf16le').replace(/\0/g, '') + '\n' + err);
                 return '';
             }
         }

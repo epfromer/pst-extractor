@@ -40,6 +40,7 @@ import { PSTMessage } from '../PSTMessage/PSTMessage.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import * as long from 'long';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
+import { Log } from '../Log.class';
 
 // Class containing attachment information.
 export class PSTAttachment extends PSTObject {
@@ -103,9 +104,9 @@ export class PSTAttachment extends PSTObject {
                 let attachmentTable: PSTTableBC = new PSTTableBC(pstNodeInputStream);
                 return PSTUtil.createAppropriatePSTMessageObject(this.pstFile, this.descriptorIndexNode, attachmentTable, this.localDescriptorItems);
             } catch (err) {
-                err.printStackTrace();
+                Log.error('PSTAttachment::embeddedPSTMessage createAppropriatePSTMessageObject failed\n' + err)
+                throw err;
             }
-            return null;
         }
         return null;
     }

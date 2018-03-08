@@ -81,7 +81,6 @@ export class NodeMap {
         let lidx = long.fromNumber(idx);
         lidx = lidx.shiftLeft(32);
         lidx = lidx.or(key);
-        // console.log(lidx.toString())
         return lidx;
     }
 

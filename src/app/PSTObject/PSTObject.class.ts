@@ -242,12 +242,11 @@ export class PSTObject {
                     let descItem: PSTDescriptorItem = this.localDescriptorItems.get(item.entryValueReference);
                     try {
                         return descItem.getData();
-                    } catch (e) {
-                        Log.error('Exception reading binary item: reference ' + item.entryValueReference);
-                        return null;
+                    } catch (err) {
+                        Log.error('PSTObject::Exception reading binary item\n' + err);
+                        throw err;
                     }
                 }
-                Log.error('PSTObject::getBinaryItem External reference?');
             }
         }
         return null;

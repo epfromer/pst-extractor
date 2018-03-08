@@ -160,7 +160,8 @@ export class PSTNodeInputStream {
             }
             this.seek(long.ZERO);
         } catch (err) {
-            throw new Error('PSTNodeInputStream::detectZlib Unable to decompress reportedly compressed block\n' + err);
+            Log.error('PSTNodeInputStream::detectZlib Unable to decompress reportedly compressed block\n' + err);
+            throw err;
         }
     }
 

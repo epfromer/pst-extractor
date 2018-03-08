@@ -606,43 +606,8 @@ export class PSTUtil {
                 // convert and trim any nulls
                 return data.toString('utf16le').replace(/\0/g, '');
             }
-            debugger;
-
-            //         if (codepage == null) {
-            //             return new String(data);
-            //         } else {
-            //             codepage = codepage.toUpperCase(Locale.US);
-            //             if (codepage.contentEquals("ISO-8859-8-I")) {   //  Outlook hebrew encoding is not supported by Java
-            //                 codepage = "ISO-8859-8";      // next best thing is hebrew characters with wrong order
-            //             }
-            //             try {
-            //                 return new String(data, codepage);
-            //             } catch (UnsupportedEncodingException e) {
-            //                 return new String(data, "UTF-8");
-            //             }
-            //         }
-            //         /*
-            //         // if (codepage == null || codepage.toUpperCase().equals("UTF-8") ||
-            //         // codepage.toUpperCase().equals("UTF-7")) {
-            //         // // PST UTF-8 strings are not... really UTF-8
-            //         // // it seems that they just don't use multibyte chars at all.
-            //         // // indeed, with some crylic chars in there, the difficult chars
-            //         // are just converted to %3F(?)
-            //         // // I suspect that outlook actually uses RTF to store these
-            //         // problematic strings.
-            //         // StringBuffer sbOut = new StringBuffer();
-            //         // for (int x = 0; x < data.length; x++) {
-            //         // sbOut.append((char)(data[x] & 0xFF)); // just blindly accept the
-            //         // byte as a UTF char, seems right half the time
-            //         // }
-            //         // return new String(sbOut);
-            //         // } else {
-            //         // codepage = codepage.toUpperCase();
-            //         // return new String(data, codepage);
-            //         // }
-            //          */
         } catch (err) {
-            console.log('Unable to decode string');
+            Log.error('PSTUtil::createJavascriptString Unable to decode string\n' + err);
             throw err;
         }
     }
@@ -663,64 +628,6 @@ export class PSTUtil {
         return ch.match(/^[a-z0-9]+$/i) !== null;
     };
 
-    // Output a dump of data in hex format in the order it was read in
-    public static printHexFormatted(data: Buffer, pretty: boolean, indexes?: number[]) {
-        if (!indexes) {
-            indexes = [0];
-        }
-
-        // groups of two
-        if (pretty) {
-            console.log('---');
-        }
-        let tmpLongValue;
-        let line = '';
-        let nextIndex = 0;
-        let indexIndex = 0;
-        if (indexes.length > 0) {
-            nextIndex = indexes[0];
-            indexIndex++;
-        }
-        for (let x = 0; x < data.length; x++) {
-            tmpLongValue = data[x] & 0xff;
-
-            if (indexes.length > 0 && x == nextIndex && nextIndex < data.length) {
-                console.log('+');
-                line += '+';
-                while (indexIndex < indexes.length - 1 && indexes[indexIndex] <= nextIndex) {
-                    indexIndex++;
-                }
-                nextIndex = indexes[indexIndex];
-                // indexIndex++;
-            }
-
-            if (this.isAlphaNumeric(tmpLongValue.toString())) {
-                line += tmpLongValue;
-            } else {
-                line += '.';
-            }
-
-            // if (Long.toHexString(tmpLongValue).length() < 2) {
-            //     System.out.print("0");
-            // }
-            console.log(tmpLongValue.toString(16));
-            if (x % 2 == 1 && pretty) {
-                console.log(' ');
-            }
-            if (x % 16 == 15 && pretty) {
-                console.log(' ' + line);
-                console.log('');
-                line = '';
-            }
-        }
-        if (pretty) {
-            console.log(' ' + line);
-            console.log('---');
-            console.log(data.length);
-        } else {
-        }
-    }
-
     // decode a lump of data that has been encrypted with the compressible encryption
     public static decode(data: Buffer): Buffer {
         let temp;
@@ -731,20 +638,6 @@ export class PSTUtil {
 
         return data;
     }
-
-    // public static void printFormattedNumber(final String pref, final long number) {
-    //     System.out.print(pref);
-    //     printFormattedNumber(number);
-    // }
-
-    // public static void printFormattedNumber(final long number) {
-    //     System.out.print("dec: ");
-    //     System.out.print(number);
-    //     System.out.print(", hex: ");
-    //     System.out.print(Long.toHexString(number));
-    //     System.out.print(", bin: ");
-    //     System.out.println(Long.toBinaryString(number));
-    // }
 
     // Detect and load a PST Object from a file with the specified descriptor index
     public static detectAndLoadPSTObject(theFile: PSTFile, descriptorIndex: long): any;
