@@ -126,51 +126,6 @@ export class PSTTask extends PSTMessage {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(0x0000812a, PSTFile.PSETID_Task));
     }
 
-    public toString() {
-        return (
-            '\n messageClass: ' +
-            this.messageClass +
-            '\n subject: ' +
-            this.subject +
-            '\n importance: ' +
-            this.importance +
-            '\n transportMessageHeaders: ' +
-            this.transportMessageHeaders +
-            '\n taskStatus: ' +
-            this.taskStatus +
-            '\n percentComplete: ' +
-            this.percentComplete +
-            '\n isTeamTask: ' +
-            this.isTeamTask +
-            '\n taskDateCompleted: ' +
-            this.taskDateCompleted +
-            '\n taskActualEffort: ' +
-            this.taskActualEffort +
-            '\n taskEstimatedEffort: ' +
-            this.taskEstimatedEffort +
-            '\n taskVersion: ' +
-            this.taskVersion +
-            '\n isTaskComplete: ' +
-            this.isTaskComplete +
-            '\n taskOwner: ' +
-            this.taskOwner +
-            '\n taskAssigner: ' +
-            this.taskAssigner +
-            '\n taskLastUser: ' +
-            this.taskLastUser +
-            '\n taskOrdinal: ' +
-            this.taskOrdinal +
-            '\n isTaskRecurring: ' +
-            this.isTaskRecurring +
-            '\n taskRole: ' +
-            this.taskRole +
-            '\n taskOwnership: ' +
-            this.taskOwnership +
-            '\n acceptanceState: ' +
-            this.acceptanceState
-        );
-    }
-
     public toJSONstring(): string {
         return (
             'PSTTask:' +

@@ -163,7 +163,7 @@ export class PSTTableItem {
         if (this.entryValueType == 0x0005 || this.entryValueType == 0x0014) {
             // 64bit data
             if (this.data == null) {
-                return ret + "no data";
+                return ret + 'no data';
             }
             if (this.data.length == 8) {
                 let l: long = PSTUtil.convertLittleEndianBytesToLong(this.data, 0, 8);
@@ -175,6 +175,7 @@ export class PSTTableItem {
 
         if (this.entryValueType == 0x0040) {
             // It's a date...  TODO
+            debugger;
             let high: number = PSTUtil.convertLittleEndianBytesToLong(this.data, 4, 8).toNumber();
             let low: number = PSTUtil.convertLittleEndianBytesToLong(this.data, 0, 4).toNumber();
             // final Date d = PSTObject.filetimeToDate(high, low);
@@ -194,14 +195,20 @@ export class PSTTableItem {
     // private static SimpleTimeZone utcTimeZone = new SimpleTimeZone(0, "UTC");
 
     public toJSONstring(): string {
-        return JSON.stringify({
-            itemIndex: this.itemIndex,
-            entryType: this.entryType,
-            isExternalValueReference: this.isExternalValueReference,
-            entryValueReference: this.entryValueReference,
-            entryValueType: this.entryValueType,
-            data: this.data
-        }, null, 2);
+        return (
+            'PSTTableItem: ' +
+            JSON.stringify(
+                {
+                    itemIndex: this.itemIndex,
+                    entryType: this.entryType,
+                    isExternalValueReference: this.isExternalValueReference,
+                    entryValueReference: this.entryValueReference,
+                    entryValueType: this.entryValueType,
+                    data: this.data
+                },
+                null,
+                2
+            )
+        );
     }
-
 }

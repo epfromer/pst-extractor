@@ -44,36 +44,36 @@ export class PSTRecipient {
         this.details = recipientDetails;
     }
 
-    public getDisplayName(): string {
+    public get displayName(): string {
         return this.getString(0x3001);
     }
 
-    public getRecipientType(): number {
+    public get recipientType(): number {
         return this.getInt(0x0c15);
     }
 
-    public getEmailAddressType(): string {
+    public get emailAddressType(): string {
         return this.getString(0x3002);
     }
 
-    public getEmailAddress(): string {
+    public get emailAddress(): string {
         return this.getString(0x3003);
     }
 
-    public getRecipientFlags(): number {
+    public get recipientFlags(): number {
         return this.getInt(0x5ffd);
     }
 
-    public getRecipientOrder(): number {
+    public get recipientOrder(): number {
         return this.getInt(0x5fdf);
     }
 
     public getSmtpAddress(): string {
         // If the recipient address type is SMTP,
         // we can simply return the recipient address.
-        let addressType: string = this.getEmailAddressType();
+        let addressType: string = this.emailAddressType;
         if (addressType != null && addressType.toLowerCase() === "smtp") {
-            let addr: string = this.getEmailAddress();
+            let addr: string = this.emailAddress;
             if (addr != null && addr.length != 0) {
                 return addr;
             }
@@ -105,5 +105,23 @@ export class PSTRecipient {
             }
         }
         return 0;
+    }
+
+    public toJSONstring(): string {
+        return (
+            'PSTObject:' +
+            JSON.stringify(
+                {
+                    displayName: this.displayName,
+                    recipientType: this.recipientType,
+                    emailAddressType: this.emailAddressType,
+                    emailAddress: this.emailAddress,
+                    recipientFlags: this.recipientFlags,
+                    recipientOrder: this.recipientOrder,
+                },
+                null,
+                2
+            )
+        );
     }
 }

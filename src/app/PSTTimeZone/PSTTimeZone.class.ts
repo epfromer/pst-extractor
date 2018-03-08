@@ -30,10 +30,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { SystemTime } from "../SystemTime/SystemTime.class";
-import { Log } from "../Log.class";
-import { TZRule } from "../TZRule/TZRule.class";
-import { PSTUtil } from "../PSTUtil/PSTUtil.class";
+import { SystemTime } from '../SystemTime/SystemTime.class';
+import { Log } from '../Log.class';
+import { TZRule } from '../TZRule/TZRule.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 
 // Class containing time zone information
 export class PSTTimeZone {
@@ -47,7 +47,7 @@ export class PSTTimeZone {
 
     constructor(timeZoneData: Buffer, name?: string) {
         this.rule = null;
-        this._name = "";
+        this._name = '';
 
         debugger;
         // try {
@@ -159,4 +159,17 @@ export class PSTTimeZone {
     // public getStandardStart(): SystemTime {
     //     return this.rule.startStandard;
     // }
+
+    public toJSONstring(): string {
+        return (
+            'PSTTimeZone: ' +
+            JSON.stringify(
+                {
+                    _name: this._name
+                },
+                null,
+                2
+            )
+        );
+    }
 }

@@ -8,7 +8,18 @@ A spec from Microsoft on the PST file format is at https://msdn.microsoft.com/en
 Start with index.ts for sample code to walk the PST and print out the folder structure.
 
 To Do
-- try/catch
+- try/catch, throw
+    - add jsonstrings to err
+- ensure all jsonstrings have object name
 - dist list tests
 - debugger
 - 'not yet implemented'
+- PSTGlobalObjectId
+- PSTMessageStore needed?
+- PSTRecipient
+- coverage profiling
+- PSTTable::getNodeInfo
+- PSTTable7CItem needed?
+- same with PSTTableBCItem
+- PSTTableItem
+- PSTTimeZone

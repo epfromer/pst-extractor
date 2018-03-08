@@ -34,10 +34,6 @@ import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
 // Items found in the 7c tables
 export class PSTTable7CItem extends PSTTableItem {
-    public toString(): string {
-        return 'PSTTable7CItem: ' + super.toString();
-    }
-
     public toJSONstring(): string {
         return 'PSTTable7CItem: ' + super.toJSONstring();
     }

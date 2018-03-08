@@ -34,43 +34,67 @@ import { PSTUtil } from './../PSTUtil/PSTUtil.class';
 import { SystemTime } from '../SystemTime/SystemTime.class';
 
 export class TZRule {
-    private dtStart: SystemTime;
-    private lBias: number;
-    private lStandardBias: number;
-    private lDaylightBias: number;
-    private startStandard: SystemTime;
-    private startDaylight: SystemTime;
+
+    private _dtStart: SystemTime;
+    public get dtStart() {
+        return this._dtStart;
+    }
+
+    private _lBias: number;
+    public get lBias() {
+        return this._lBias;
+    }
+
+    private _lStandardBias: number;
+    public get lStandardBias() {
+        return this._lStandardBias;
+    }
+
+    private _lDaylightBias: number;
+    public get lDaylightBias() {
+        return this._lDaylightBias;
+    }
+
+    private _startStandard: SystemTime;
+    public get startStandard() {
+        return this._startStandard;
+    }
+
+    private _startDaylight: SystemTime;
+    public get startDaylight() {
+        return this._startDaylight;
+    }
 
     constructor(timeZoneData: Buffer, offset: number, dtStart?: SystemTime) {
         if (dtStart) {
-            this.dtStart = dtStart;
+            this._dtStart = dtStart;
             this.InitBiases(timeZoneData, offset);
             //const wStandardYear = PSTUtil.convertLittleEndianBytesToLong(timeZoneData, offset + 12, offset + 14);
-            this.startStandard = new SystemTime(timeZoneData, offset + 14);
+            this._startStandard = new SystemTime(timeZoneData, offset + 14);
             //final short wDaylightYear = (short) PSTObject.convertLittleEndianBytesToLong(timeZoneData, offset + 30, offset + 32);
-            this.startDaylight = new SystemTime(timeZoneData, offset + 32);
+            this._startDaylight = new SystemTime(timeZoneData, offset + 32);
         } else {
-            this.dtStart = new SystemTime(timeZoneData, offset);
+            this._dtStart = new SystemTime(timeZoneData, offset);
             this.InitBiases(timeZoneData, offset + 16);
-            this.startStandard = new SystemTime(timeZoneData, offset + 28);
-            this.startDaylight = new SystemTime(timeZoneData, offset + 44);
+            this._startStandard = new SystemTime(timeZoneData, offset + 28);
+            this._startDaylight = new SystemTime(timeZoneData, offset + 44);
         }
     }
 
     private InitBiases(timeZoneData: Buffer, offset: number) {
-        this.lBias = PSTUtil.convertLittleEndianBytesToLong(timeZoneData, offset, offset + 4).toNumber();
-        this.lStandardBias = PSTUtil.convertLittleEndianBytesToLong(timeZoneData, offset + 4, offset + 8).toNumber();
-        this.lDaylightBias = PSTUtil.convertLittleEndianBytesToLong(timeZoneData, offset + 8, offset + 12).toNumber();
+        this._lBias = PSTUtil.convertLittleEndianBytesToLong(timeZoneData, offset, offset + 4).toNumber();
+        this._lStandardBias = PSTUtil.convertLittleEndianBytesToLong(timeZoneData, offset + 4, offset + 8).toNumber();
+        this._lDaylightBias = PSTUtil.convertLittleEndianBytesToLong(timeZoneData, offset + 8, offset + 12).toNumber();
     }
 
     public isEqual(rhs: TZRule): boolean {
         return (
-            this.dtStart.isEqual(rhs.dtStart) &&
-            this.lBias == rhs.lBias &&
-            this.lStandardBias == rhs.lStandardBias &&
-            this.lDaylightBias == rhs.lDaylightBias &&
-            this.startStandard.isEqual(rhs.startStandard) &&
-            this.startDaylight.isEqual(rhs.startDaylight)
+            this._dtStart.isEqual(rhs._dtStart) &&
+            this._lBias == rhs._lBias &&
+            this._lStandardBias == rhs._lStandardBias &&
+            this._lDaylightBias == rhs._lDaylightBias &&
+            this._startStandard.isEqual(rhs._startStandard) &&
+            this._startDaylight.isEqual(rhs._startDaylight)
         );
     }
 }

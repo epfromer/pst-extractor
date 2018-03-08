@@ -54,7 +54,6 @@ export class PSTTable {
     protected numberOfIndexLevels = 0;
     private pstNodeInputStream: PSTNodeInputStream;
     private subNodeDescriptorItems: Map<number, PSTDescriptorItem> = null;
-    protected description = '';
 
     constructor(pstNodeInputStream: PSTNodeInputStream, subNodeDescriptorItems: Map<number, PSTDescriptorItem>) {
         this.subNodeDescriptorItems = subNodeDescriptorItems;
@@ -108,10 +107,30 @@ export class PSTTable {
         this.sizeOfItemValue = headerNodeInfo.pstNodeInputStream.read() & 0xff; // Size of value in key table
         this.numberOfIndexLevels = headerNodeInfo.pstNodeInputStream.read() & 0xff;
         this.hidRoot = headerNodeInfo.seekAndReadLong(long.fromValue(4), 4).toNumber();
-        this.description += 'Table (' + this.tableType + ')\n' + 'hidUserRoot: ' + this.hidUserRoot + ' - 0x' + 
-            this.hidUserRoot.toString(16) + '\n' + 'Size Of Keys: ' + this.sizeOfItemKey + ' - 0x' + 
-            this.hidUserRoot.toString(16) + '\n' + 'Size Of Values: ' + this.sizeOfItemValue + ' - 0x' + 
-            this.hidUserRoot.toString(16) + '\n' + 'hidRoot: ' + this.hidRoot + ' - 0x' + this.hidUserRoot.toString(16) + '\n';
+        this.description +=
+            'Table (' +
+            this.tableType +
+            ')\n' +
+            'hidUserRoot: ' +
+            this.hidUserRoot +
+            ' - 0x' +
+            this.hidUserRoot.toString(16) +
+            '\n' +
+            'Size Of Keys: ' +
+            this.sizeOfItemKey +
+            ' - 0x' +
+            this.hidUserRoot.toString(16) +
+            '\n' +
+            'Size Of Values: ' +
+            this.sizeOfItemValue +
+            ' - 0x' +
+            this.hidUserRoot.toString(16) +
+            '\n' +
+            'hidRoot: ' +
+            this.hidRoot +
+            ' - 0x' +
+            this.hidUserRoot.toString(16) +
+            '\n';
     }
 
     protected releaseRawData() {
@@ -138,7 +157,7 @@ export class PSTTable {
                 let subNodeIn: PSTNodeInputStream = new PSTNodeInputStream(this.pstNodeInputStream.pstFile, item);
                 subNodeInfo = new NodeInfo(0, subNodeIn.length.toNumber(), subNodeIn);
             } catch (err) {
-                throw new Error('IOException reading subNode: ' + hnid);
+                throw new Error('IOException reading subNode:\n' + err);
             }
 
             // return new NodeInfo(0, data.length, data);
@@ -152,11 +171,7 @@ export class PSTTable {
 
         let whichBlock: number = hnid >>> 16;
         if (whichBlock > this.arrayBlocks.length) {
-            // Block doesn't exist!
-            console.log("getNodeInfo: block doesn't exist! hnid = " + hnid);
-            console.log("getNodeInfo: block doesn't exist! whichBlock = " + whichBlock);
-            console.log('getNodeInfo: ' + this.arrayBlocks.length);
-            throw new Error("getNodeInfo: block doesn't exist!");
+            throw new Error("PSTTable::getNodeInfo: block doesn't exist: " + hnid + ', ' + whichBlock + ', ' + this.arrayBlocks.length);
         }
 
         // A normal node in a local heap
@@ -169,12 +184,32 @@ export class PSTTable {
         let iHeapNodePageMap = this.pstNodeInputStream.seekAndReadLong(long.fromValue(blockOffset), 2).toNumber() + blockOffset;
         let cAlloc = this.pstNodeInputStream.seekAndReadLong(long.fromValue(iHeapNodePageMap), 2).toNumber();
         if (index >= cAlloc + 1) {
-            throw new Error("getNodeInfo: node index doesn't exist! nid = " + hnid);
+            throw new Error("PSTTable::getNodeInfo: node index doesn't exist! nid = " + hnid);
         }
         iHeapNodePageMap += 2 * index + 2;
         let start = this.pstNodeInputStream.seekAndReadLong(long.fromValue(iHeapNodePageMap), 2).toNumber() + blockOffset;
         let end = this.pstNodeInputStream.seekAndReadLong(long.fromValue(iHeapNodePageMap + 2), 2).toNumber() + blockOffset;
 
         return new NodeInfo(start, end, this.pstNodeInputStream);
+    }
+
+    public toJSONstring(): string {
+        return (
+            'PSTTable: ' +
+            JSON.stringify(
+                {
+                    tableType: this.tableType,
+                    tableTypeByte: this.tableTypeByte,
+                    hidUserRoot: this.hidUserRoot,
+                    sizeOfItemKey: this.sizeOfItemKey,
+                    sizeOfItemValue: this.sizeOfItemValue,
+                    hidRoot: this.hidRoot,
+                    numberOfKeys: this.numberOfKeys,
+                    numberOfIndexLevels: this.numberOfIndexLevels,
+                },
+                null,
+                2
+            )
+        );
     }
 }

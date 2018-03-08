@@ -1,6 +1,3 @@
-import { PSTObject } from './../PSTObject/PSTObject.class';
-import { PSTTable } from '../PSTTable/PSTTable.class';
-import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 /**
  * Copyright 2010-2018 Richard Johnson, Orin Eman & Ed Pfromer
  *
@@ -33,6 +30,9 @@ import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
+import { PSTObject } from './../PSTObject/PSTObject.class';
+import { PSTTable } from '../PSTTable/PSTTable.class';
+import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { NodeInfo } from '../NodeInfo/NodeInfo.class';
@@ -109,7 +109,6 @@ export class PSTTableBC extends PSTTable {
             this.items.set(item.entryType.toNumber(), item);
             Log.debug2('PSTTableBC::constructor ' + item.toString());
         }
-
         this.releaseRawData();
     }
 
@@ -117,19 +116,4 @@ export class PSTTableBC extends PSTTable {
     public getItems(): Map<number, PSTTableBCItem> {
         return this.items;
     }
-
-    // @Override
-    // public String toString() {
-
-    //     if (this.isDescNotYetInitiated) {
-    //         this.isDescNotYetInitiated = false;
-
-    //         for (final Integer curItem : this.items.keySet()) {
-    //             this.descBuffer.append(this.items.get(curItem).toString() + "\n\n");
-    //         }
-    //         // description += item.toString()+"\n\n";
-    //     }
-
-    //     return this.description + this.descBuffer.toString();
-    // }
 }

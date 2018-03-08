@@ -197,7 +197,7 @@ export class PSTObject {
 
                     return PSTUtil.createJavascriptString(data, stringType, codepage);
                 } catch (err) {
-                    Log.error('PSTObject::getStringItem error decoding string');
+                    Log.error('PSTObject::getStringItem error decoding string\n' + err);
                     return '';
                 }
             }
@@ -263,10 +263,6 @@ export class PSTObject {
 
     public get displayName(): string {
         return this.getStringItem(0x3001);
-    }
-
-    public toString() {
-        return this.localDescriptorItems + '\n' + this.pstTableItems;
     }
 
     public toJSONstring(): string {

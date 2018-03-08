@@ -32,8 +32,9 @@
  */
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
+// Items found in the BC tables
 export class PSTTableBCItem extends PSTTableItem {
-    public toString() {
-        return 'Table Item: ' + super.toString();
+    public toJSONstring(): string {
+        return 'PSTTableBCItem: ' + super.toJSONstring();
     }
 }

@@ -66,4 +66,21 @@ export class ColumnDescriptor {
         this._cbData = nodeInfo.pstNodeInputStream.read(); // & 0xFFFF;
         this._iBit = nodeInfo.pstNodeInputStream.read(); // & 0xFFFF;
     }
+
+    public toJSONstring(): string {
+        return (
+            'ColumnDescriptor: ' +
+            JSON.stringify(
+                {
+                    _ibData: this._ibData,
+                    _cbData: this._cbData,
+                    _type: this._type,
+                    _iBit: this._iBit,
+                    _id: this._id,
+                },
+                null,
+                2
+            )
+        );
+    }
 }

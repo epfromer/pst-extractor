@@ -108,20 +108,6 @@ export class PSTTable7C extends PSTTable {
 
         // Read the Row Matrix
         this.rowNodeInfo = this.getNodeInfo(hnidRows);
-
-        this.description +=
-            'Number of keys: ' +
-            this.numberOfKeys +
-            '\nNumber of columns: ' +
-            this.numColumns +
-            '\nRow Size: ' +
-            this.TCI_bm +
-            '\nhidRowIndex: ' +
-            hidRowIndex +
-            '\nhnidRows: ' +
-            hnidRows +
-            '\n';
-
         let numberOfBlocks: number = Math.trunc(this.rowNodeInfo.length() / this.BLOCK_SIZE);
         let numberOfRowsPerBlock: number = Math.trunc(this.BLOCK_SIZE / this.TCI_bm);
         let blockPadding = this.BLOCK_SIZE - numberOfRowsPerBlock * this.TCI_bm;
@@ -156,8 +142,6 @@ export class PSTTable7C extends PSTTable {
         }
 
         let dataSetNumber = 0;
-        // while ( currentValueArrayStart + ((numColumns+7)/8) + TCI_1b <=
-        // rowNodeInfo.length())
         for (let rowCounter = 0; rowCounter < numberOfRecordsToReturn; rowCounter++) {
             let currentItem: Map<number, PSTTable7CItem> = new Map();
             // add on some padding for block boundries?
@@ -171,8 +155,6 @@ export class PSTTable7C extends PSTTable {
             } else {
                 if (currentValueArrayStart % this.BLOCK_SIZE > this.BLOCK_SIZE - this.TCI_bm) {
                     // adjust!
-                    // currentValueArrayStart += 8176 - (currentValueArrayStart
-                    // % 8176);
                     currentValueArrayStart += blockPadding;
                     if (currentValueArrayStart + this.TCI_bm > this.rowNodeInfo.length()) {
                         continue;
@@ -197,7 +179,6 @@ export class PSTTable7C extends PSTTable {
             if (this.overrideCol > -1) {
                 col = this.overrideCol - 1;
             }
-            //            for (; col < this.numColumns; ++col) {
             while (col < this.numColumns - 1) {
                 col++;
 
@@ -211,7 +192,6 @@ export class PSTTable7C extends PSTTable {
 
                 item = new PSTTable7CItem();
                 item.itemIndex = col;
-
                 item.entryValueType = this.columnDescriptors[col].type;
                 item.entryType = long.fromNumber(this.columnDescriptors[col].id);
                 item.entryValueReference = 0;
@@ -274,7 +254,6 @@ export class PSTTable7C extends PSTTable {
                         }
                         break;
                 }
-
                 currentItem.set(item.entryType.toNumber(), item);
             }
             itemList[dataSetNumber] = currentItem;
@@ -299,22 +278,25 @@ export class PSTTable7C extends PSTTable {
         return this.items.toString();
     }
 
-    public toString(): string {
-        return this.description;
-    }
-
     public toJSONstring(): string {
-
-
-        return JSON.stringify({
-            rowCount: this.rowCount,
-            items: this.items,
-            numColumns: this.numColumns,
-            TCI_bm: this.TCI_bm,
-            TCI_1b: this.TCI_1b,
-            overrideCol: this.overrideCol,
-            numberOfKeys: this.numberOfKeys,
-            itemsString: this.itemsString
-        }, null, 2);
+        return (
+            'PSTActivity: ' +
+            JSON.stringify(
+                {
+                    rowCount: this.rowCount,
+                    items: this.items,
+                    numColumns: this.numColumns,
+                    TCI_bm: this.TCI_bm,
+                    TCI_1b: this.TCI_1b,
+                    overrideCol: this.overrideCol,
+                    numberOfKeys: this.numberOfKeys,
+                    itemsString: this.itemsString
+                },
+                null,
+                2
+            ) +
+            '\n' +
+            super.toJSONstring()
+        );
     }
 }

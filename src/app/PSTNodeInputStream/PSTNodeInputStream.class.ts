@@ -405,21 +405,14 @@ export class PSTNodeInputStream {
         let lengthRead = this.readBlock(buf);
 
         PSTUtil.arraycopy(buf, 0, output, offset, lengthRead);
-        //System.arraycopy(buf, 0, output, offset, lengthRead);
 
         return lengthRead;
     }
 
-    // @Override
-    // public void reset() {
-    //     this.currentBlock = 0;
-    //     this.currentLocation = 0;
-    // }
-
-    // @Override
-    // public boolean markSupported() {
-    //     return false;
-    // }
+    public reset() {
+        this.currentBlock = 0;
+        this._currentLocation = long.ZERO;
+    }
 
     // Get the offsets (block positions) used in the array
     public getBlockOffsets(): long[] {
@@ -433,7 +426,6 @@ export class PSTNodeInputStream {
                 output.push(this.skipPoints[x].add(size));
             }
         }
-        // console.log(output.toString())
         return output;
     }
 
@@ -481,5 +473,21 @@ export class PSTNodeInputStream {
         let buffer = new Buffer(bytes);
         this.readCompletely(buffer);
         return PSTUtil.convertLittleEndianBytesToLong(buffer);
+    }
+
+    public toJSONstring(): string {
+        return (
+            'PSTNodeInputStream:' +
+            JSON.stringify(
+                {
+                    currentBlock: this.currentBlock,
+                    isZlib: this.isZlib,
+                    _currentLocation: this._currentLocation,
+                    _length: this._length,
+                    _encrypted: this._encrypted
+                },
+                null,
+                2
+            ));
     }
 }
