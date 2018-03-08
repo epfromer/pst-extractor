@@ -744,8 +744,6 @@ export class PSTMessage extends PSTObject {
             throw new Error('PSTMessage::getAttachment unable to fetch recipient number ' + recipientNumber);
         }
 
-        debugger;
-
         let recipientDetails: Map<number, PSTTableItem> = this.recipientTable.getItems()[recipientNumber];
 
         if (recipientDetails != null) {

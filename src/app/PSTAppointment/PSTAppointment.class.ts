@@ -30,7 +30,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTGlobalObjectId } from './../PSTGlobalObjectId/PSTGlobalObjectId.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
@@ -212,14 +211,6 @@ export class PSTAppointment extends PSTMessage {
         return this.getIntItem(0x3ff1);
     }
 
-    public get globalObjectId(): PSTGlobalObjectId {
-        return new PSTGlobalObjectId(this.getBinaryItem(this.pstFile.getNameToIdMapItem(0x00000003, PSTFile.PSETID_Meeting)));
-    }
-
-    public get cleanGlobalObjectId(): PSTGlobalObjectId {
-        return new PSTGlobalObjectId(this.getBinaryItem(this.pstFile.getNameToIdMapItem(0x00000023, PSTFile.PSETID_Meeting)));
-    }
-
     public toJSONstring(): string {
         return (
             'PSTAppointment: ' +
@@ -265,8 +256,6 @@ export class PSTAppointment extends PSTMessage {
                     isSilent: this.isSilent,
                     requiredAttendees: this.requiredAttendees,
                     localeId: this.localeId,
-                    globalObjectId: this.globalObjectId,
-                    cleanGlobalObjectId: this.cleanGlobalObjectId
                 },
                 null,
                 2

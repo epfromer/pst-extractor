@@ -37,11 +37,16 @@ import { Log } from './app/Log.class';
 import { PSTAttachment } from './app/PSTAttachment/PSTAttachment.class';
 import * as fs from 'fs';
 import * as fsext from 'fs-ext';
+import { PSTRecipient } from './app/PSTRecipient/PSTRecipient.class';
+
+// switches
+const saveAttachmentsToFS = false;
+const displaySender = true;
+const displayRecipients = true;
+const verbose = true;
 
 let depth = -1;
 let tmpDirIndex = 1;
-let saveAttachmentsToFS = true;
-let verbose = true;
 let col = 0;
 
 // make a dir for the attachments
@@ -89,6 +94,26 @@ function processFolder(folder: PSTFolder) {
             } else {
                 printDot();
             }
+
+            // display sender?
+            if (verbose && displaySender && email.messageClass === 'IPM.Note') {
+                let s = email.senderName + ', ' + email.senderEmailAddress;
+                console.log(getDepth(depth) + ' sender: ' + s);
+            }
+
+            // display recipients?
+            if (verbose && displayRecipients) {
+                for (let i = 0; i < email.numberOfRecipients; i++) {
+                    let recipient: PSTRecipient = email.getRecipient(i);
+                    let s = recipient.displayName;
+                    if (s !== recipient.smtpAddress) {
+                        s += ' (' + recipient.smtpAddress + ')';
+                    }
+                    console.log(getDepth(depth) + ' recipient: ' + s);
+                }
+            }
+
+            // save attachments to fs?
             if (email.hasAttachments && saveAttachmentsToFS) {
                 // make a temp dir for the attachments
                 try {

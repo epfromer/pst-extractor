@@ -68,7 +68,7 @@ export class PSTRecipient {
         return this.getInt(0x5fdf);
     }
 
-    public getSmtpAddress(): string {
+    public get smtpAddress(): string {
         // If the recipient address type is SMTP, we can simply return the recipient address.
         let addressType: string = this.emailAddressType;
         if (addressType != null && addressType.toLowerCase() === 'smtp') {
@@ -109,11 +109,12 @@ export class PSTRecipient {
             JSON.stringify(
                 {
                     displayName: this.displayName,
+                    smtpAddress: this.smtpAddress,
                     recipientType: this.recipientType,
                     emailAddressType: this.emailAddressType,
                     emailAddress: this.emailAddress,
                     recipientFlags: this.recipientFlags,
-                    recipientOrder: this.recipientOrder
+                    recipientOrder: this.recipientOrder,
                 },
                 null,
                 2

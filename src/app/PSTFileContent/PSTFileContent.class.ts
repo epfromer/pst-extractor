@@ -68,18 +68,6 @@ export class PSTFileContent {
         if (bytesRead <= 0 || bytesRead === buffer.length) {
             return;
         }
-        debugger;
-        throw new Error('not yet implemented');
-        // byte[] buffer = new byte[8192];
-        // int offset = read;
-        // while (offset < target.length) {
-        //     read = this.read(buffer);
-        //     if (read <= 0) {
-        //         break;
-        //     }
-        //     System.arraycopy(buffer, 0, target, offset, read);
-        //     offset += read;
-        // }
     }
 
     public toJSONstring(): string {

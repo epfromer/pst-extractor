@@ -13,9 +13,6 @@ To Do
 - ensure all jsonstrings have object name
 - dist list tests
 - debugger
-- 'not yet implemented'
-- PSTGlobalObjectId
-- PSTMessageStore needed?
 - PSTRecipient
 - coverage profiling
 - PSTTable::getNodeInfo
