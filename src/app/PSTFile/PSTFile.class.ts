@@ -40,7 +40,6 @@ import { OffsetIndexItem } from './../OffsetIndexItem/OffsetIndexItem.class';
 import { PSTObject } from './../PSTObject/PSTObject.class';
 import { PSTFileContent } from '../PSTFileContent/PSTFileContent.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
-import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import { Log } from '../Log.class';
@@ -48,7 +47,7 @@ import * as fs from 'fs';
 import * as fsext from 'fs-ext';
 import * as util from 'util';
 import * as long from 'long';
-import * as uuidparse from 'uuid-parse';
+const uuidparse = require('uuid-parse');
 
 export class PSTFile {
     public static ENCRYPTION_TYPE_NONE: number = 0;
@@ -74,9 +73,6 @@ export class PSTFile {
     public static PS_MAPI: number = 12;
     public static PSETID_AirSync: number = 13;
     public static PSETID_Sharing: number = 14;
-
-    // static private Properties propertyNames = null;
-    // static private boolean bFirstTime = true;
 
     private guidMap: Map<string, number> = new Map([
         ['00020329-0000-0000-C000-000000000046', 0],
@@ -183,14 +179,13 @@ export class PSTFile {
         let off: OffsetIndexItem = this.getOffsetIndexNode(nameToIdMapDescriptorNode.dataOffsetIndexIdentifier);
         let nodein = new PSTNodeInputStream(this, off);
         let bcTable = new PSTTableBC(nodein);
-        let tableItems: Map<number, PSTTableBCItem> = bcTable.getItems();
+        let tableItems: Map<number, PSTTableItem> = bcTable.getItems();
 
         // Get the guids
-        let guidEntry: PSTTableBCItem = tableItems.get(2);
+        let guidEntry: PSTTableItem = tableItems.get(2);
         this.guids = this.getData(guidEntry, localDescriptorItems);
-        let nGuids = this.guids.length / 16;
-        // final UUID[] uuidArray = new UUID[nGuids];
-        let uuidIndexes: number[] = [];
+        let nGuids = Math.trunc(this.guids.length / 16);
+        let guidIndexes: number[] = [];
         let offset = 0;
         for (let i = 0; i < nGuids; ++i) {
             let leftQuad: long = PSTUtil.convertLittleEndianBytesToLong(this.guids, offset, offset + 4);
@@ -206,19 +201,18 @@ export class PSTFile {
             let strUID: string = uuidparse.unparse(arrUID).toUpperCase();
 
             if (this.guidMap.has(strUID)) {
-                uuidIndexes[i] = this.guidMap.get(strUID);
+                guidIndexes[i] = this.guidMap.get(strUID);
             } else {
-                uuidIndexes[i] = -1; // We don't know this guid
+                guidIndexes[i] = -1; // We don't know this guid
             }
-            Log.debug2('PSTFile:: processNameToIdMap idx: ' + i + ', ' + strUID + ', ' + uuidIndexes[i]);
+            Log.debug2('PSTFile:: processNameToIdMap idx: ' + i + ', ' + strUID + ', ' + guidIndexes[i]);
             offset += 16;
         }
 
         // if we have a reference to an internal descriptor
-        let mapEntries: PSTTableBCItem = tableItems.get(3);
+        let mapEntries: PSTTableItem = tableItems.get(3);
         let nameToIdByte: Buffer = this.getData(mapEntries, localDescriptorItems);
-
-        let stringMapEntries: PSTTableBCItem = tableItems.get(4);
+        let stringMapEntries: PSTTableItem = tableItems.get(4);
         let stringNameToIdByte: Buffer = this.getData(stringMapEntries, localDescriptorItems);
 
         // process the entries
@@ -237,7 +231,7 @@ export class PSTFile {
                 } else if (guid == 2) {
                     guidIndex = PSTFile.PS_PUBLIC_STRINGS;
                 } else {
-                    guidIndex = uuidIndexes[guid - 3];
+                    guidIndex = guidIndexes[guid - 3];
                 }
                 PSTFile.nodeMap.setId(dwPropertyId, propId, guidIndex);
             } else {

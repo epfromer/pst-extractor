@@ -41,10 +41,9 @@ import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTTable7C } from '../PSTTable7C/PSTTable7C.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
-import { PSTTable7CItem } from '../PSTTable7CItem/PSTTable7CItem.class';
-import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
+import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
 // PST Message contains functions that are common across most MAPI objects.
 // Note that many of these functions may not be applicable for the item in question,
@@ -80,7 +79,7 @@ export class PSTMessage extends PSTObject {
         // do we have an entry for it?
         if (this.pstTableItems.has(0x1009)) {
             // is it a reference?
-            let item: PSTTableBCItem = this.pstTableItems.get(0x1009);
+            let item: PSTTableItem = this.pstTableItems.get(0x1009);
             if (item.data.length > 0) {
                 return LZFu.decode(item.data);
             }
@@ -442,7 +441,7 @@ export class PSTMessage extends PSTObject {
     // Plain text e-mail body
     public get body(): string {
         let cp: string = null;
-        let cpItem: PSTTableBCItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
+        let cpItem: PSTTableItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
         if (cpItem == null) {
             cpItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
         }
@@ -485,7 +484,7 @@ export class PSTMessage extends PSTObject {
     // HTML e-mail body
     public get bodyHTML(): string {
         let cp: string = null;
-        let cpItem: PSTTableBCItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
+        let cpItem: PSTTableItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
         if (cpItem == null) {
             cpItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
         }
@@ -645,7 +644,7 @@ export class PSTMessage extends PSTObject {
         let categories: string[] = [];
         if (this.pstTableItems.has(keywordCategory)) {
             try {
-                let item: PSTTableBCItem = this.pstTableItems.get(keywordCategory);
+                let item: PSTTableItem = this.pstTableItems.get(keywordCategory);
                 if (item.data.length == 0) {
                     return [];
                 }
@@ -711,8 +710,8 @@ export class PSTMessage extends PSTObject {
         }
 
         // we process the C7 table here, basically we just want the attachment local descriptor...
-        let attachmentDetails: Map<number, PSTTable7CItem> = this.attachmentTable.getItems()[attachmentNumber];
-        let attachmentTableItem: PSTTable7CItem = attachmentDetails.get(0x67f2);
+        let attachmentDetails: Map<number, PSTTableItem> = this.attachmentTable.getItems()[attachmentNumber];
+        let attachmentTableItem: PSTTableItem = attachmentDetails.get(0x67f2);
         let descriptorItemId = attachmentTableItem.entryValueReference;
 
         // get the local descriptor for the attachmentDetails table.
@@ -747,7 +746,7 @@ export class PSTMessage extends PSTObject {
 
         debugger;
 
-        let recipientDetails: Map<number, PSTTable7CItem> = this.recipientTable.getItems()[recipientNumber];
+        let recipientDetails: Map<number, PSTTableItem> = this.recipientTable.getItems()[recipientNumber];
 
         if (recipientDetails != null) {
             return new PSTRecipient(recipientDetails);

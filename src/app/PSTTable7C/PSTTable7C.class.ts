@@ -30,7 +30,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTTable7CItem } from './../PSTTable7CItem/PSTTable7CItem.class';
 import { ColumnDescriptor } from './ColumnDescriptor.class';
 import { PSTObject } from './../PSTObject/PSTObject.class';
 import { PSTTable } from '../PSTTable/PSTTable.class';
@@ -41,11 +40,12 @@ import { NodeInfo } from '../NodeInfo/NodeInfo.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { Log } from '../Log.class';
 import * as long from 'long';
+import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
 // Specific functions for the 7c table type ("Table Context").
 // This is used for attachments.
 export class PSTTable7C extends PSTTable {
-    private items: Map<number, PSTTable7CItem>[] = null;
+    private items: Map<number, PSTTableItem>[] = null;
     private numberOfDataSets = 0;
     private BLOCK_SIZE = 8176;
     private numColumns = 0;
@@ -114,8 +114,8 @@ export class PSTTable7C extends PSTTable {
         this.numberOfDataSets = Math.trunc(numberOfBlocks * numberOfRowsPerBlock + (this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm);
     }
 
-    public getItems(startAtRecord?: number, numberOfRecordsToReturn?: number): Map<number, PSTTable7CItem>[] {
-        let itemList: Map<number, PSTTable7CItem>[] = [];
+    public getItems(startAtRecord?: number, numberOfRecordsToReturn?: number): Map<number, PSTTableItem>[] {
+        let itemList: Map<number, PSTTableItem>[] = [];
         let setLocalList = false;
 
         // okay, work out the number of records we have
@@ -143,7 +143,7 @@ export class PSTTable7C extends PSTTable {
 
         let dataSetNumber = 0;
         for (let rowCounter = 0; rowCounter < numberOfRecordsToReturn; rowCounter++) {
-            let currentItem: Map<number, PSTTable7CItem> = new Map();
+            let currentItem: Map<number, PSTTableItem> = new Map();
             // add on some padding for block boundries?
             if (this.rowNodeInfo.pstNodeInputStream.pstFile.pstFileType == PSTFile.PST_TYPE_ANSI) {
                 if (currentValueArrayStart >= this.BLOCK_SIZE) {
@@ -167,7 +167,7 @@ export class PSTTable7C extends PSTTable {
             let id = this.rowNodeInfo.seekAndReadLong(long.fromNumber(currentValueArrayStart), 4);
 
             // Put into the item map as PidTagLtpRowId (0x67F2)
-            let item: PSTTable7CItem = new PSTTable7CItem();
+            let item: PSTTableItem = new PSTTableItem();
             item.itemIndex = -1;
             item.entryValueType = 3;
             item.entryType = long.fromNumber(0x67f2);
@@ -190,7 +190,7 @@ export class PSTTable7C extends PSTTable {
                     continue;
                 }
 
-                item = new PSTTable7CItem();
+                item = new PSTTableItem();
                 item.itemIndex = col;
                 item.entryValueType = this.columnDescriptors[col].type;
                 item.entryType = long.fromNumber(this.columnDescriptors[col].id);

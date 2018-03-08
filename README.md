@@ -19,8 +19,6 @@ To Do
 - PSTRecipient
 - coverage profiling
 - PSTTable::getNodeInfo
-- PSTTable7CItem needed?
-- same with PSTTableBCItem
 - PSTTableItem
 - PSTTimeZone
 - UUID

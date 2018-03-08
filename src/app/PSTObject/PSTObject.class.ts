@@ -30,7 +30,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
@@ -43,6 +42,7 @@ import { PSTMessage } from '../PSTMessage/PSTMessage.class';
 import { Log } from '../Log.class';
 import * as long from 'long';
 import { PSTTimeZone } from '../PSTTimeZone/PSTTimeZone.class';
+import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 var fromBits = require('math-float64-from-bits');
 
 // PST Object is the root class of most PST Items.
@@ -51,7 +51,7 @@ export class PSTObject {
     protected descriptorIndexNode: DescriptorIndexNode;
     protected localDescriptorItems: Map<number, PSTDescriptorItem> = null;
     private pstTableBC: PSTTableBC;
-    protected pstTableItems: Map<number, PSTTableBCItem>; // make this a JSON object?
+    protected pstTableItems: Map<number, PSTTableItem>; // make this a JSON object?
     protected table: PSTTableBC;
 
     constructor() {}
@@ -108,7 +108,7 @@ export class PSTObject {
         }
 
         if (this.pstTableItems.has(identifier)) {
-            let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+            let item: PSTTableItem = this.pstTableItems.get(identifier);
             return item.entryValueReference;
         }
         return defaultValue;
@@ -120,7 +120,7 @@ export class PSTObject {
         }
 
         if (this.pstTableItems.has(identifier)) {
-            let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+            let item: PSTTableItem = this.pstTableItems.get(identifier);
             return item.entryValueReference != 0;
         }
         return defaultValue;
@@ -132,7 +132,7 @@ export class PSTObject {
         }
 
         if (this.pstTableItems.has(identifier)) {
-            let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+            let item: PSTTableItem = this.pstTableItems.get(identifier);
             let longVersion: long = PSTUtil.convertLittleEndianBytesToLong(item.data);
 
             // convert double precision float to binary, then back to JS number
@@ -147,7 +147,7 @@ export class PSTObject {
         }
 
         if (this.pstTableItems.has(identifier)) {
-            let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+            let item: PSTTableItem = this.pstTableItems.get(identifier);
             if (item.entryValueType == 0x0003) {
                 // we are really just an int
                 return long.fromNumber(item.entryValueReference);
@@ -169,7 +169,7 @@ export class PSTObject {
             stringType = 0;
         }
 
-        let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+        let item: PSTTableItem = this.pstTableItems.get(identifier);
         if (item) {
             if (!codepage) {
                 codepage = this.stringCodepage;
@@ -207,7 +207,7 @@ export class PSTObject {
 
     public get stringCodepage(): string {
         // try and get the codepage
-        let cpItem: PSTTableBCItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
+        let cpItem: PSTTableItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
         if (cpItem == null) {
             cpItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
         }
@@ -219,7 +219,7 @@ export class PSTObject {
 
     public getDateItem(identifier: number): Date {
         if (this.pstTableItems.has(identifier)) {
-            let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+            let item: PSTTableItem = this.pstTableItems.get(identifier);
             if (item.data.length == 0) {
                 return new Date(0);
             }
@@ -232,7 +232,7 @@ export class PSTObject {
 
     protected getBinaryItem(identifier: number): Buffer {
         if (this.pstTableItems.has(identifier)) {
-            let item: PSTTableBCItem = this.pstTableItems.get(identifier);
+            let item: PSTTableItem = this.pstTableItems.get(identifier);
             if (item.entryValueType == 0x0102) {
                 if (!item.isExternalValueReference) {
                     return item.data;

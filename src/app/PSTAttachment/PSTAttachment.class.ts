@@ -38,8 +38,8 @@ import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTMessage } from '../PSTMessage/PSTMessage.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
-import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import * as long from 'long';
+import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
 // Class containing attachment information.
 export class PSTAttachment extends PSTObject {
@@ -76,7 +76,7 @@ export class PSTAttachment extends PSTObject {
     public get embeddedPSTMessage(): PSTMessage {
         let pstNodeInputStream: PSTNodeInputStream = null;
         if (this.getIntItem(0x3705) == PSTAttachment.ATTACHMENT_METHOD_EMBEDDED) {
-            let item: PSTTableBCItem = this.pstTableItems.get(0x3701);
+            let item: PSTTableItem = this.pstTableItems.get(0x3701);
             if (item.entryValueType == 0x0102) {
                 if (!item.isExternalValueReference) {
                     pstNodeInputStream = new PSTNodeInputStream(this.pstFile, item.data);
@@ -111,7 +111,7 @@ export class PSTAttachment extends PSTObject {
     }
 
     public get fileInputStream(): PSTNodeInputStream {
-        let attachmentDataObject: PSTTableBCItem = this.pstTableItems.get(0x3701);
+        let attachmentDataObject: PSTTableItem = this.pstTableItems.get(0x3701);
         if (!attachmentDataObject) {
             return null;
         } else if (attachmentDataObject.isExternalValueReference) {
@@ -124,13 +124,13 @@ export class PSTAttachment extends PSTObject {
     }
 
     public get filesize(): number {
-        let attachmentDataObject: PSTTableBCItem = this.pstTableItems.get(0x3701);
+        let attachmentDataObject: PSTTableItem = this.pstTableItems.get(0x3701);
         if (attachmentDataObject.isExternalValueReference) {
             let descriptorItemNested: PSTDescriptorItem = this.localDescriptorItems.get(attachmentDataObject.entryValueReference);
             if (descriptorItemNested == null) {
                 throw new Error('PSTAttachment::filesize missing attachment descriptor item for: ' + attachmentDataObject.entryValueReference);
             }
-            return descriptorItemNested.getDataSize();
+            return descriptorItemNested.dataSize;
         } else {
             // raw attachment data, right there!
             return attachmentDataObject.data.length;

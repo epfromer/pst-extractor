@@ -35,7 +35,6 @@ import { PSTFile } from './../PSTFile/PSTFile.class';
 import { DescriptorIndexNode } from './../DescriptorIndexNode/DescriptorIndexNode.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
-import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 
 // Object that represents the message store.
 // Not much use other than to get the "name" of the PST file.

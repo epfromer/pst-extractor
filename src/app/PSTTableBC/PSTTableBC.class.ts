@@ -32,16 +32,16 @@
  */
 import { PSTObject } from './../PSTObject/PSTObject.class';
 import { PSTTable } from '../PSTTable/PSTTable.class';
-import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { NodeInfo } from '../NodeInfo/NodeInfo.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
 import { Log } from '../Log.class';
+import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
 export class PSTTableBC extends PSTTable {
-    private items: Map<number, PSTTableBCItem> = new Map();
+    private items: Map<number, PSTTableItem> = new Map();
     private descBuffer = ''; // TODO - make this more efficient than string
     private isDescNotYetInitiated = false;
 
@@ -64,7 +64,7 @@ export class PSTTableBC extends PSTTable {
         // Read the key table
         let offset = 0;
         for (let x = 0; x < this.numberOfKeys; x++) {
-            let item = new PSTTableBCItem();
+            let item = new PSTTableItem();
             item.itemIndex = x;
             item.entryType = PSTUtil.convertLittleEndianBytesToLong(keyTableInfo, offset + 0, offset + 2);
             item.entryValueType = PSTUtil.convertLittleEndianBytesToLong(keyTableInfo, offset + 2, offset + 4).toNumber();
@@ -113,7 +113,7 @@ export class PSTTableBC extends PSTTable {
     }
 
     // Get the items parsed out of this table.
-    public getItems(): Map<number, PSTTableBCItem> {
+    public getItems(): Map<number, PSTTableItem> {
         return this.items;
     }
 }

@@ -67,8 +67,7 @@ export class PSTConversationIndex {
     }
 
     private decodeHeader(rawConversationIndex: Buffer) {
-        // According to the Spec the first byte is not included, but I believe
-        // the spec is incorrect!
+        // According to the Spec the first byte is not included, but I believe the spec is incorrect!
         let deliveryTimeHigh: long = PSTUtil.convertBigEndianBytesToLong(rawConversationIndex, 0, 4);
         let deliveryTimeLow: long = PSTUtil.convertBigEndianBytesToLong(rawConversationIndex, 4, 6);
         deliveryTimeLow = deliveryTimeLow.shiftLeft(16);

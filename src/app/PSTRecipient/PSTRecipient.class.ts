@@ -30,17 +30,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTTable7CItem } from './../PSTTable7CItem/PSTTable7CItem.class';
+import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
 // Class containing recipient information
 export class PSTRecipient {
-    private details: Map<number, PSTTable7CItem>;
+    private details: Map<number, PSTTableItem>;
 
     public static MAPI_TO = 1;
     public static MAPI_CC = 2;
     public static MAPI_BCC = 3;
 
-    constructor(recipientDetails: Map<number, PSTTable7CItem>) {
+    constructor(recipientDetails: Map<number, PSTTableItem>) {
         this.details = recipientDetails;
     }
 
@@ -85,7 +85,7 @@ export class PSTRecipient {
 
     private getString(id: number): string {
         if (this.details.has(id)) {
-            let item: PSTTable7CItem = this.details.get(id);
+            let item: PSTTableItem = this.details.get(id);
             return item.getStringValue();
         }
         return "";
@@ -93,7 +93,7 @@ export class PSTRecipient {
 
     private getInt(id: number): number {
         if (this.details.has(id)) {
-            let item: PSTTable7CItem = this.details.get(id);
+            let item: PSTTableItem = this.details.get(id);
             if (item.entryValueType == 0x0003) {
                 return item.entryValueReference;
             }

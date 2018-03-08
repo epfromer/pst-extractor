@@ -40,12 +40,12 @@ import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.cla
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTFolder } from '../PSTFolder/PSTFolder.class';
 import { PSTMessage } from '../PSTMessage/PSTMessage.class';
-import { PSTTableBCItem } from '../PSTTableBCItem/PSTTableBCItem.class';
 import { Log } from '../Log.class';
 import { PSTAppointment } from '../PSTAppointment/PSTAppointment.class';
 import { PSTContact } from '../PSTContact/PSTContact.class';
 import { PSTTask } from '../PSTTask/PSTTask.class';
 import * as long from 'long';
+import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
 // utility functions for PST components
 export class PSTUtil {
@@ -785,7 +785,7 @@ export class PSTUtil {
         table: PSTTableBC,
         localDescriptorItems: Map<number, PSTDescriptorItem>
     ): PSTMessage {
-        let item: PSTTableBCItem = table.getItems().get(0x001a);
+        let item: PSTTableItem = table.getItems().get(0x001a);
         let messageClass = '';
         if (item != null) {
             messageClass = item.getStringValue();

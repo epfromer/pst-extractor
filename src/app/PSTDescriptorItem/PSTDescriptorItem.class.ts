@@ -94,7 +94,7 @@ export class PSTDescriptorItem {
         return offsetsOut;
     }
 
-    public dataSize(): number {
+    public get dataSize(): number {
         return this._pstFile.getLeafSize(long.fromNumber(this.offsetIndexIdentifier));
     }
 
