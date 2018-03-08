@@ -69,18 +69,16 @@ export class PSTRecipient {
     }
 
     public getSmtpAddress(): string {
-        // If the recipient address type is SMTP,
-        // we can simply return the recipient address.
+        // If the recipient address type is SMTP, we can simply return the recipient address.
         let addressType: string = this.emailAddressType;
-        if (addressType != null && addressType.toLowerCase() === "smtp") {
+        if (addressType != null && addressType.toLowerCase() === 'smtp') {
             let addr: string = this.emailAddress;
             if (addr != null && addr.length != 0) {
                 return addr;
             }
         }
-        // Otherwise, we have to hope the SMTP address is
-        // present as the PidTagPrimarySmtpAddress property.
-        return this.getString(0x39FE);
+        // Otherwise, we have to hope the SMTP address is present as the PidTagPrimarySmtpAddress property.
+        return this.getString(0x39fe);
     }
 
     private getString(id: number): string {
@@ -88,7 +86,7 @@ export class PSTRecipient {
             let item: PSTTableItem = this.details.get(id);
             return item.getStringValue();
         }
-        return "";
+        return '';
     }
 
     private getInt(id: number): number {
@@ -99,9 +97,7 @@ export class PSTRecipient {
             }
 
             if (item.entryValueType == 0x0002) {
-                debugger;
-                // final short s = (short) item.entryValueReference;
-                // return s;
+                return item.entryValueReference;
             }
         }
         return 0;
@@ -117,7 +113,7 @@ export class PSTRecipient {
                     emailAddressType: this.emailAddressType,
                     emailAddress: this.emailAddress,
                     recipientFlags: this.recipientFlags,
-                    recipientOrder: this.recipientOrder,
+                    recipientOrder: this.recipientOrder
                 },
                 null,
                 2

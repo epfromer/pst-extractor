@@ -50,7 +50,7 @@ export class PSTConversationIndex {
     private _guid: UUID;
     public get guid(): UUID {
         return this._guid;
-    }
+    } 
 
     private _responseLevels: ResponseLevel[] = [];
     public get responseLevels(): ResponseLevel[] {

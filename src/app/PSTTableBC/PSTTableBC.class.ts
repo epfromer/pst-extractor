@@ -107,7 +107,7 @@ export class PSTTableBC extends PSTTable {
             offset = offset + 8;
 
             this.items.set(item.entryType.toNumber(), item);
-            Log.debug2('PSTTableBC::constructor ' + item.toString());
+            Log.debug1('PSTTableBC::constructor ' + item.toJSONstring());
         }
         this.releaseRawData();
     }

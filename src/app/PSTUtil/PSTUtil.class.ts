@@ -30,7 +30,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTDistList } from './../PSTDistList/PSTDistList.class';
 import { PSTRss } from './../PSTRss/PSTRss.class';
 import { PSTActivity } from './../PSTActivity/PSTActivity.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
@@ -828,16 +827,20 @@ export class PSTUtil {
                 // Log.debug1(activity.toJSONstring());
                 return activity;
             case 'IPM.Post.Rss':
+                // debugger;
                 // Rss Feed
-                debugger;
                 let rss = new PSTRss(theFile, folderIndexNode, table, localDescriptorItems);
-                Log.debug1(rss.toJSONstring());
+                // Log.debug1(rss.toJSONstring());
                 return rss;
             case 'IPM.DistList':
+                // debugger;
                 // Distribution list
-                debugger;
-                return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
+                let dl = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
+                // Log.debug1(dl.toJSONstring());
+                return dl;
+                // return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
             case 'IPM.Note.Rules.OofTemplate.Microsoft':
+                // debugger;
                 // Out of Office rule
                 let oof = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
                 // Log.debug1(oof.toJSONstring());

@@ -121,31 +121,6 @@ export class PSTTableItem {
         }
 
         return 'hex string';
-
-        // final StringBuffer outputBuffer = new StringBuffer();
-
-        // // we are not a normal string, give a hexish sort of output
-        // final StringBuffer hexOut = new StringBuffer();
-        // for (final byte element : this.data) {
-        //     final int valueChar = element & 0xff;
-        //     if (Character.isLetterOrDigit((char) valueChar)) {
-        //         outputBuffer.append((char) valueChar);
-        //         outputBuffer.append(" ");
-        //     } else {
-        //         outputBuffer.append(". ");
-        //     }
-        //     final String hexValue = Long.toHexString(valueChar);
-        //     hexOut.append(hexValue);
-        //     hexOut.append(" ");
-        //     if (hexValue.length() > 1) {
-        //         outputBuffer.append(" ");
-        //     }
-        // }
-        // outputBuffer.append("\n");
-        // outputBuffer.append("	");
-        // outputBuffer.append(hexOut);
-
-        // return new String(outputBuffer);
     }
 
     public toString(): string {
@@ -174,13 +149,11 @@ export class PSTTableItem {
         }
 
         if (this.entryValueType == 0x0040) {
-            // It's a date...  TODO
-            debugger;
-            let high: number = PSTUtil.convertLittleEndianBytesToLong(this.data, 4, 8).toNumber();
-            let low: number = PSTUtil.convertLittleEndianBytesToLong(this.data, 0, 4).toNumber();
-            // final Date d = PSTObject.filetimeToDate(high, low);
-            // this.dateFormatter.setTimeZone(utcTimeZone);
-            // return ret + this.dateFormatter.format(d);
+            // It's a date.
+            let high: long = PSTUtil.convertLittleEndianBytesToLong(this.data, 4, 8);
+            let low: long = PSTUtil.convertLittleEndianBytesToLong(this.data, 0, 4);
+            let d: Date = PSTUtil.filetimeToDate(high, low);
+            return d.toString();
         }
 
         if (this.entryValueType == 0x001f) {
@@ -190,9 +163,6 @@ export class PSTTableItem {
 
         return ret + this.getStringValue(this.entryValueType);
     }
-
-    // private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
-    // private static SimpleTimeZone utcTimeZone = new SimpleTimeZone(0, "UTC");
 
     public toJSONstring(): string {
         return (
@@ -204,7 +174,8 @@ export class PSTTableItem {
                     isExternalValueReference: this.isExternalValueReference,
                     entryValueReference: this.entryValueReference,
                     entryValueType: this.entryValueType,
-                    data: this.data
+                    data: this.data,
+                    string: this.toString()
                 },
                 null,
                 2
