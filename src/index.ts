@@ -43,6 +43,7 @@ import { PSTRecipient } from './app/PSTRecipient/PSTRecipient.class';
 const saveAttachmentsToFS = false;
 const displaySender = true;
 const displayRecipients = true;
+const displayBody = false;
 const verbose = true;
 
 let depth = -1;
@@ -114,6 +115,11 @@ function processFolder(folder: PSTFolder) {
                     }
                     console.log(getDepth(depth) + ' recipient: ' + s);
                 }
+            }
+
+            // display body?
+            if (verbose && displayBody) {
+                console.log(email.body);
             }
 
             // save attachments to fs?
