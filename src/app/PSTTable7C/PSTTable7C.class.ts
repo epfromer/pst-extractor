@@ -137,10 +137,6 @@ export class PSTTable7C extends PSTTable {
             numberOfRecordsToReturn = this.rowCount - startAtRecord;
         }
 
-        if (numberOfRecordsToReturn == 0) {
-            debugger;
-        }
-
         let dataSetNumber = 0;
         for (let rowCounter = 0; rowCounter < numberOfRecordsToReturn; rowCounter++) {
             let currentItem: Map<number, PSTTableItem> = new Map();

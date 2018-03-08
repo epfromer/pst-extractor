@@ -55,13 +55,6 @@ export class ResponseLevel {
         return this._random;
     }
 
-    public withOffset(anchorDate: Date): Date {
-        // TODO
-        debugger;
-        return new Date();
-        //return new Date(anchorDate.getTime() + this.timeDelta);
-    }
-
     public toJSONstring(): string {
         return (
             'ResponseLevel: ' +

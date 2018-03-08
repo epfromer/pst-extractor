@@ -352,8 +352,6 @@ export class PSTFile {
     private extractLEFileOffset(startOffset: long): long {
         let offset: long = long.ZERO;
         if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-            debugger;
-
             this.pstFileContent.seek(startOffset);
             let buffer = new Buffer(4);
             this.pstFileContent.readCompletely(buffer);

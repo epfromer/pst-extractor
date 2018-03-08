@@ -755,16 +755,24 @@ export class PSTUtil {
                 return sticky;
             case 'REPORT.IPM.Note.IPNRN':
                 // Read receipt
-                debugger;
+                // debugger;
+                Log.debug1('PSTUtil::createAppropriatePSTMessageObject REPORT.IPM.Note.IPNRN');
+                return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
             case 'REPORT.IPM.Note.IPNNRN':
                 // Not-read notification
-                debugger;
+                // debugger;
+                Log.debug1('PSTUtil::createAppropriatePSTMessageObject REPORT.IPM.Note.IPNNRN');
+                return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
             case 'IPM.Schedule.Meeting.Request':
                 // Meeting request
-                debugger;
+                // debugger;
+                Log.debug1('PSTUtil::createAppropriatePSTMessageObject IPM.Schedule.Meeting.Request');
+                return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
             case 'REPORT.IPM.Note.DR':
                 // Delivery receipt
-                debugger;
+                // debugger;
+                Log.debug1('PSTUtil::createAppropriatePSTMessageObject REPORT.IPM.Note.DR');
+                return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
             default:
                 Log.error('PSTUtil::createAppropriatePSTMessageObject unknown message type: ' + messageClass);
         }
