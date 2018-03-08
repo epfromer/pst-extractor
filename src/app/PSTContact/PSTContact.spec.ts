@@ -29,7 +29,7 @@ describe('PSTContact tests', () => {
         expect(folder.displayName).to.equal('Contacts');
     });
  
-    it('should have a contact', () => {
+    it('should have a contact with several fields', () => {
         let contact: PSTContact = folder.getNextChild();
         // console.log(contact.toJSONstring());
         expect(contact.messageClass).to.equal('IPM.Contact');
@@ -46,6 +46,9 @@ describe('PSTContact tests', () => {
         expect(contact.initials).to.equal('E.P.');
         expect(contact.keyword).to.equal('');
         expect(contact.language).to.equal('');
+        expect(contact.telexNumber).to.equal('');
+        expect(contact.note).to.contain('Never gonna let you down');
+        expect(contact.companyMainPhoneNumber).to.equal('');
         expect(contact.location).to.equal('');
         expect(contact.mhsCommonName).to.equal('');
         expect(contact.organizationalIdNumber).to.equal('');
@@ -56,6 +59,8 @@ describe('PSTContact tests', () => {
         expect(contact.title).to.equal('President');
         expect(contact.departmentName).to.equal('');
         expect(contact.officeLocation).to.equal('');
+        expect(contact.instantMessagingAddress).to.equal('');
+        expect(contact.email2EmailAddress).to.equal('');
         expect(contact.primaryTelephoneNumber).to.equal('');
         expect(contact.business2TelephoneNumber).to.equal('');
         expect(contact.mobileTelephoneNumber).to.equal('');
@@ -75,6 +80,7 @@ describe('PSTContact tests', () => {
         expect(contact.businessPoBox).to.equal('');
         expect(contact.isdnNumber).to.equal('');
         expect(contact.assistantTelephoneNumber).to.equal('');
+        expect(contact.fax2OriginalDisplayName).to.equal('');
         expect(contact.home2TelephoneNumber).to.equal('');
         expect(contact.assistant).to.equal('');
         expect(contact.hobbies).to.equal('');
@@ -124,34 +130,28 @@ describe('PSTContact tests', () => {
         expect(contact.email1EmailType).to.equal('');
         expect(contact.email2DisplayName).to.equal('');
         expect(contact.email2AddressType).to.equal('');
-        expect(contact.transportMessageHeaders).to.equal('');
-
-
+        expect(contact.email1EmailType).to.equal('');
+        expect(contact.email2DisplayName).to.equal('');
+        expect(contact.email2AddressType).to.equal('');
+        expect(contact.email2OriginalDisplayName).to.equal('');
+        expect(contact.email3DisplayName).to.equal('');
+        expect(contact.email3AddressType).to.equal('');
+        expect(contact.email3EmailAddress).to.equal('');
+        expect(contact.email3OriginalDisplayName).to.equal('');
+        expect(contact.fax1AddressType).to.equal('FAX');
+        expect(contact.fax1EmailAddress).to.equal('');
+        expect(contact.fax1OriginalDisplayName).to.equal('');
+        expect(contact.fax2AddressType).to.equal('FAX');
+        expect(contact.fax2EmailAddress).to.equal('');
+        expect(contact.fax3AddressType).to.equal('FAX');
+        expect(contact.fax3EmailAddress).to.equal('');
+        expect(contact.fax3OriginalDisplayName).to.equal('');
+        expect(contact.freeBusyLocation).to.equal('');
+        expect(contact.birthday).is.null;
+        expect(contact.anniversary).is.null;
         expect(contact.email1DisplayName).to.equal('Ed Pfromer (epfromer@gmail.com)');
         expect(contact.creationTime).to.eql(new Date("2018-03-05T20:27:06.017Z"));  
         expect(contact.displayName).to.equal('Ed Pfromer');
         expect(contact.rtfBody).to.contain('ever gonna let you down');
     });
 });
-
-    // "email1EmailType": "",
-    // "email2DisplayName": "",
-    // "email2AddressType": "",
-    // "email2EmailAddress": "",
-    // "email2OriginalDisplayName": "",
-    // "email3DisplayName": "",
-    // "email3AddressType": "",
-    // "email3EmailAddress": "",
-    // "email3OriginalDisplayName": "",
-    // "fax1AddressType": "FAX",
-    // "fax1EmailAddress": "",
-    // "fax1OriginalDisplayName": "",
-    // "fax2AddressType": "FAX",
-    // "fax2EmailAddress": "",
-    // "fax2OriginalDisplayName": "",
-    // "fax3AddressType": "FAX",
-    // "fax3EmailAddress": "",
-    // "fax3OriginalDisplayName": "",
-    // "freeBusyLocation": "",
-    // "birthday": null,
-    // "anniversary": null
