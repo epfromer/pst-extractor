@@ -555,10 +555,6 @@ export class PSTUtil {
     // LTP
     public static NID_TYPE_LTP = 0x1f;
 
-    // public String getItemsString() {
-    //     return this.items.toString();
-    // }
-
     // convert little endian bytes to long
     // TODO - can this be done by long library?
     public static convertLittleEndianBytesToLong(data: Buffer, start?: number, end?: number): long {
@@ -576,8 +572,6 @@ export class PSTUtil {
             tmpLongValue = long.fromNumber(data[x] & 0xff);
             offset = offset.xor(tmpLongValue);
         }
-
-        // console.log("PSTObject: convertLittleEndianBytesToLong = " + offset.toString());
 
         return offset;
     }
@@ -598,8 +592,6 @@ export class PSTUtil {
             let tmpLongValue = long.fromNumber(data[x] & 0xff);
             offset = offset.xor(tmpLongValue);
         }
-
-        // console.log("PSTObject: convertBigEndianBytesToLong = " + offset.toString());
 
         return offset;
     }
