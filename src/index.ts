@@ -97,7 +97,10 @@ function processFolder(folder: PSTFolder) {
 
             // display sender?
             if (verbose && displaySender && email.messageClass === 'IPM.Note') {
-                let s = email.senderName + ', ' + email.senderEmailAddress;
+                let s = email.senderName;
+                if (s !== email.senderEmailAddress) {
+                    s += ' (' + email.senderEmailAddress + ')';
+                }
                 console.log(getDepth(depth) + ' sender: ' + s);
             }
 

@@ -64,16 +64,7 @@ export class PSTTable {
         // 0xEC is HN (Heap-on-Node)
         pstNodeInputStream.seek(long.ZERO);
         let headdata = new Buffer(4);
-        pstNodeInputStream.readCompletely(headdata); // should be 4, 30, 236, 188
-        // if (!(headdata[0] === 4 &&
-        //       headdata[1] === 30 &&
-        //       headdata[2] === 236 &&
-        //       headdata[3] === 188)) {
-        //     PSTUtil.decode(headdata);
-        //     PSTUtil.printHexFormatted(headdata, true);
-        //     throw new Error("Unable to parse table, bad table type...");
-        // }
-
+        pstNodeInputStream.readCompletely(headdata); 
         this.tableTypeByte = headdata[3];
         switch (this.tableTypeByte) { // bClientSig
             case 0x7c: // Table Context (TC/HN)
@@ -99,7 +90,6 @@ export class PSTTable {
             let tmp = new Buffer(1024);
             headerNodeInfo.pstNodeInputStream.readCompletely(tmp);
             PSTUtil.printHexFormatted(tmp, true);
-            // System.out.println(PSTObject.compEnc[headerByte]);
             throw new Error("Unable to parse table, can't find BTHHEADER header information: " + headerByte);
         }
 
@@ -107,30 +97,6 @@ export class PSTTable {
         this.sizeOfItemValue = headerNodeInfo.pstNodeInputStream.read() & 0xff; // Size of value in key table
         this.numberOfIndexLevels = headerNodeInfo.pstNodeInputStream.read() & 0xff;
         this.hidRoot = headerNodeInfo.seekAndReadLong(long.fromValue(4), 4).toNumber();
-        this.description +=
-            'Table (' +
-            this.tableType +
-            ')\n' +
-            'hidUserRoot: ' +
-            this.hidUserRoot +
-            ' - 0x' +
-            this.hidUserRoot.toString(16) +
-            '\n' +
-            'Size Of Keys: ' +
-            this.sizeOfItemKey +
-            ' - 0x' +
-            this.hidUserRoot.toString(16) +
-            '\n' +
-            'Size Of Values: ' +
-            this.sizeOfItemValue +
-            ' - 0x' +
-            this.hidUserRoot.toString(16) +
-            '\n' +
-            'hidRoot: ' +
-            this.hidRoot +
-            ' - 0x' +
-            this.hidUserRoot.toString(16) +
-            '\n';
     }
 
     protected releaseRawData() {

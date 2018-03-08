@@ -13,7 +13,6 @@ To Do
 - ensure all jsonstrings have object name
 - dist list tests
 - debugger
-- PSTRecipient
 - coverage profiling
 - PSTTable::getNodeInfo
 - PSTTableItem
