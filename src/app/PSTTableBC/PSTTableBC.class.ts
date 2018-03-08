@@ -49,7 +49,7 @@ export class PSTTableBC extends PSTTable {
         super(pstNodeInputStream, new Map<number, PSTDescriptorItem>());
 
         if (this.tableTypeByte != 188) {
-            throw new Error('unable to create PSTTableBC, table does not appear to be a bc!');
+            throw new Error('PSTTableBC::constructor unable to create PSTTableBC, table does not appear to be a bc!');
         }
 
         // go through each of the entries

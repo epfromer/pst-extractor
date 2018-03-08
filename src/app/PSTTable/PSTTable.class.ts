@@ -64,7 +64,7 @@ export class PSTTable {
         // 0xEC is HN (Heap-on-Node)
         pstNodeInputStream.seek(long.ZERO);
         let headdata = new Buffer(4);
-        pstNodeInputStream.readCompletely(headdata); 
+        pstNodeInputStream.readCompletely(headdata);
         this.tableTypeByte = headdata[3];
         switch (this.tableTypeByte) { // bClientSig
             case 0x7c: // Table Context (TC/HN)
@@ -74,7 +74,7 @@ export class PSTTable {
                 this.tableType = 'bc'; // Property Context (PC/BTH)
                 break;
             default:
-                throw new Error('Unable to parse table, bad table type.  Unknown identifier: 0x' + headdata[3].toString(16));
+                throw new Error('PSTTable::constructor Unable to parse table, bad table type.  Unknown identifier: 0x' + headdata[3].toString(16));
         }
 
         this.hidUserRoot = pstNodeInputStream.seekAndReadLong(long.fromValue(4), 4).toNumber(); // hidUserRoot
@@ -89,8 +89,7 @@ export class PSTTable {
             headerNodeInfo.pstNodeInputStream.seek(long.fromValue(headerNodeInfo.startOffset));
             let tmp = new Buffer(1024);
             headerNodeInfo.pstNodeInputStream.readCompletely(tmp);
-            PSTUtil.printHexFormatted(tmp, true);
-            throw new Error("Unable to parse table, can't find BTHHEADER header information: " + headerByte);
+            throw new Error("PSTTable::constructor Unable to parse table, can't find BTHHEADER header information: " + headerByte);
         }
 
         this.sizeOfItemKey = headerNodeInfo.pstNodeInputStream.read() & 0xff; // Size of key in key table
@@ -171,7 +170,7 @@ export class PSTTable {
                     sizeOfItemValue: this.sizeOfItemValue,
                     hidRoot: this.hidRoot,
                     numberOfKeys: this.numberOfKeys,
-                    numberOfIndexLevels: this.numberOfIndexLevels,
+                    numberOfIndexLevels: this.numberOfIndexLevels
                 },
                 null,
                 2

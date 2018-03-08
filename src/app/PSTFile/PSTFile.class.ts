@@ -135,7 +135,7 @@ export class PSTFile {
         fs.readSync(this.pstFD, buffer, 0, 514, 0);
         let key = '!BDN';
         if (buffer[0] != key.charCodeAt(0) || buffer[1] != key.charCodeAt(1) || buffer[2] != key.charCodeAt(2) || buffer[3] != key.charCodeAt(3)) {
-            throw new Error('Invalid file header (expected: "!BDN"): ' + buffer);
+            throw new Error('PSTFile::open Invalid file header (expected: "!BDN"): ' + buffer);
         }
 
         // make sure we are using a supported version of a PST...
@@ -143,7 +143,7 @@ export class PSTFile {
             buffer[10] = PSTFile.PST_TYPE_ANSI;
         }
         if (buffer[10] !== PSTFile.PST_TYPE_ANSI && buffer[10] !== PSTFile.PST_TYPE_UNICODE && buffer[10] !== PSTFile.PST_TYPE_2013_UNICODE) {
-            throw new Error('Unrecognised PST File version: ' + buffer[10]);
+            throw new Error('PSTFile::open Unrecognised PST File version: ' + buffer[10]);
         }
         this._pstFileType = buffer[10];
 
@@ -154,7 +154,7 @@ export class PSTFile {
             this._encryptionType = buffer[513];
         }
         if (this._encryptionType === 0x02) {
-            throw new Error('PST is encrypted');
+            throw new Error('PSTFile::open PST is encrypted');
         }
 
         // build out name to id map

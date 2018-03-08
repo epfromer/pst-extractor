@@ -15,7 +15,4 @@ To Do
 - debugger
 - coverage profiling
 - PSTTable::getNodeInfo
-- PSTTableItem
-- PSTTimeZone
-- UUID
 - ResponseLevel

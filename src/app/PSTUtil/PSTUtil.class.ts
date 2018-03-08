@@ -665,7 +665,7 @@ export class PSTUtil {
                 return this.createAppropriatePSTMessageObject(theFile, folderIndexNode, table, localDescriptorItems);
             }
         } else {
-            throw new Error('Unknown child type with offset id: ' + folderIndexNode.localDescriptorsOffsetIndexIdentifier);
+            throw new Error('PSTUtil::detectAndLoadPSTObject Unknown child type with offset id: ' + folderIndexNode.localDescriptorsOffsetIndexIdentifier);
         }
     }
 

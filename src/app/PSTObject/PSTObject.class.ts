@@ -41,7 +41,6 @@ import { PSTFolder } from '../PSTFolder/PSTFolder.class';
 import { PSTMessage } from '../PSTMessage/PSTMessage.class';
 import { Log } from '../Log.class';
 import * as long from 'long';
-import { PSTTimeZone } from '../PSTTimeZone/PSTTimeZone.class';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 var fromBits = require('math-float64-from-bits');
 
@@ -248,14 +247,6 @@ export class PSTObject {
                     }
                 }
             }
-        }
-        return null;
-    }
-
-    protected getTimeZoneItem(identifier: number): PSTTimeZone {
-        let tzData: Buffer = this.getBinaryItem(identifier);
-        if (tzData != null && tzData.length != 0) {
-            return new PSTTimeZone(tzData);
         }
         return null;
     }
