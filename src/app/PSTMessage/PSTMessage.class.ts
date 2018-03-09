@@ -31,7 +31,6 @@
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
 import { LZFu } from './../LZFu/LZFu.class';
-import { PSTConversationIndex } from './../PSTConversationIndex/PSTConversationIndex.class';
 import { PSTAttachment } from './../PSTAttachment/PSTAttachment.class';
 import { PSTRecipient } from './../PSTRecipient/PSTRecipient.class';
 import { PSTObject } from '../PSTObject/PSTObject.class';
@@ -766,10 +765,6 @@ export class PSTMessage extends PSTObject {
         return this.getBinaryItem(0x3013);
     }
 
-    public get conversationIndex(): PSTConversationIndex {
-        return new PSTConversationIndex(this.getBinaryItem(0x0071));
-    }
-
     public get isConversationIndexTracking(): boolean {
         return this.getBooleanItem(0x3016, false);
     }
@@ -897,7 +892,6 @@ export class PSTMessage extends PSTObject {
                     numberOfAttachments: this.numberOfAttachments,
                     recipientsString: this.recipientsString,
                     conversationId: this.conversationId,
-                    conversationIndex: this.conversationIndex,
                     isConversationIndexTracking: this.isConversationIndexTracking
                 },
                 null,
