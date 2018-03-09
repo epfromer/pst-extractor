@@ -30,7 +30,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTRss } from './../PSTRss/PSTRss.class';
 import { PSTActivity } from './../PSTActivity/PSTActivity.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
@@ -722,7 +721,7 @@ export class PSTUtil {
             case 'IPM.Post.Rss':
                 // debugger;
                 // Rss Feed
-                let rss = new PSTRss(theFile, folderIndexNode, table, localDescriptorItems);
+                let rss = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
                 // Log.debug1(rss.toJSONstring());
                 return rss;
             case 'IPM.DistList':
