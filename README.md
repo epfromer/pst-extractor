@@ -8,5 +8,3 @@ A spec from Microsoft on the PST file format is at https://msdn.microsoft.com/en
 Start with index.ts for sample code to walk the PST and print out the folder structure.
 
 To Do
-- drive up code coverage with nyc/istanbul
-- embedded message

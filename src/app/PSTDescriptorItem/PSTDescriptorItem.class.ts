@@ -83,6 +83,9 @@ export class PSTDescriptorItem {
     }
 
     public getBlockOffsets(): number[] {
+
+        debugger;
+
         if (this.dataBlockOffsets != null) {
             return this.dataBlockOffsets;
         }

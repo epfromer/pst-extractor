@@ -123,6 +123,9 @@ export class PSTNodeInputStream {
                 // and replace our contents with that. firstly, if we have blocks, use that as the length
                 let outputStream: Buffer;
                 if (multiStreams) {
+
+                    debugger;
+
                     // Log.debug1('list of all index items')
                     // for (let i of this.indexItems) {
                     //     Log.debug1(i.toJSONstring());
@@ -197,6 +200,7 @@ export class PSTNodeInputStream {
     }
 
     private getBlockSkipPoints(data: Buffer) {
+
         if (data[0] != 0x1) {
             throw new Error('PSTNodeInputStream::loadFromOffsetItem Unable to process XBlock, incorrect identifier');
         }

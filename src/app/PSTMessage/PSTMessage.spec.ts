@@ -7,9 +7,32 @@ import { PSTFolder } from '../PSTFolder/PSTFolder.class';
 const resolve = require('path').resolve;
 const expect = chai.expect;
 let pstFile: PSTFile;
+let childFolders: PSTFolder[];
 
 before(() => {
     pstFile = new PSTFile(resolve('./src/testdata/michelle_lokay_000_1_1_1_1.pst'));
+
+    // get to this point in hierarchy
+    // Personal folders
+    //  |- Top of Personal Folders
+    //  |  |- Deleted Items
+    //  |  |- lokay-m
+    //  |  |  |- MLOKAY (Non-Privileged)
+
+    childFolders = pstFile.getRootFolder().getSubFolders();
+    expect(childFolders.length).to.equal(3);
+    let folder = childFolders[0];
+    expect(folder.subFolderCount).to.equal(2);
+    expect(folder.displayName).to.equal('Top of Personal Folders');
+    childFolders = folder.getSubFolders();
+    folder = childFolders[0];
+    expect(folder.displayName).to.equal('Deleted Items');
+    folder = childFolders[1];
+    expect(folder.displayName).to.equal('lokay-m');
+    childFolders = folder.getSubFolders();
+    folder = childFolders[0];
+    expect(folder.displayName).to.equal('MLOKAY (Non-Privileged)');
+    childFolders = folder.getSubFolders();
 });
 
 after(() => {
@@ -28,20 +51,6 @@ after(() => {
 
 describe('PSTMessage tests', () => {
     it('should have email messages', () => {
-        let childFolders: PSTFolder[] = pstFile.getRootFolder().getSubFolders();
-        expect(childFolders.length).to.equal(3);
-        let folder = childFolders[0];
-        expect(folder.subFolderCount).to.equal(2);
-        expect(folder.displayName).to.equal('Top of Personal Folders');
-        childFolders = folder.getSubFolders();
-        folder = childFolders[0];
-        expect(folder.displayName).to.equal('Deleted Items');
-        folder = childFolders[1];
-        expect(folder.displayName).to.equal('lokay-m');
-        childFolders = folder.getSubFolders();
-        folder = childFolders[0];
-        expect(folder.displayName).to.equal('MLOKAY (Non-Privileged)');
-        childFolders = folder.getSubFolders();
         expect(childFolders[0].displayName).to.equal('TW-Commercial Group');
         const comGroupFolder = childFolders[0];
         
@@ -154,5 +163,25 @@ describe('PSTMessage tests', () => {
         expect(msg.hasForwarded).to.equal(false);
         expect(msg.bodyHTML).to.equal('');
         expect(msg.senderEntryId.toString()).to.contain('JReames@br-inc.com');
+    });
+
+    // get this email, which uses block skip points
+    // Personal folders
+    //  |- Top of Personal Folders
+    //  |  |- Deleted Items
+    //  |  |- lokay-m
+    //  |  |  |- MLOKAY (Non-Privileged)
+    //  |  |  |  |- TW-Commercial Group
+    //  |  |  |  |- Systems
+    //  |  |  |  |- Sent Items
+    //  |  |  |  |- Personal
+    //  |  |  |  |  |- Email: 2097924 - Fwd: Enjoy fall in an Alamo midsize car -- just $169 a week!
+    it('should have email message which uses block skip points', () => {
+        expect(childFolders[3].displayName).to.equal('Personal');
+        const personalFolder = childFolders[3];
+        
+        let msg: PSTMessage = personalFolder.getNextChild();
+        expect(msg.messageClass).to.equal('IPM.Note');
+        expect(msg.subject).to.equal("Fwd: Enjoy fall in an Alamo midsize car -- just $169 a week!");
     });
 });
