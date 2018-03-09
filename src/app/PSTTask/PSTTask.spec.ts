@@ -52,6 +52,21 @@ describe('PSTTask tests', () => {
         expect(task.taskOwner).to.equal('Mountain Man');
         expect(task.taskStatus).to.equal(0); // not started
         expect(task.bodyPrefix).to.contain('Vanilla task, not started');
+        expect(task.importance).to.equal(1); 
+        expect(task.percentComplete).to.equal(0); 
+        expect(task.taskActualEffort).to.equal(0); 
+        expect(task.taskEstimatedEffort).to.equal(0); 
+        expect(task.taskVersion).to.equal(5); 
+        expect(task.taskOrdinal).to.equal(4294963296); 
+        expect(task.taskOwnership).to.equal(0); 
+        expect(task.acceptanceState).to.equal(0); 
+        expect(task.transportMessageHeaders).to.equal('');
+        expect(task.taskAssigner).to.equal('');
+        expect(task.taskLastUser).to.equal('');
+        expect(task.taskRole).to.equal('');
+        expect(task.isTeamTask).to.be.false;
+        expect(task.isTaskComplete).to.be.false;
+        expect(task.isTaskRecurring).to.be.false;
+        expect(task.taskDateCompleted).to.equal(null);
     });
 });
-
