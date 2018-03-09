@@ -48,5 +48,6 @@ describe('PSTObject tests', () => {
         let msg: PSTMessage = comGroupFolder.getNextChild();
         expect(msg.messageClass).to.equal('IPM.Note');
         expect(msg.stringCodepage).to.equal('us-ascii');
+        expect(msg.messageSize.toNumber()).to.equal(653764);
     });
 });

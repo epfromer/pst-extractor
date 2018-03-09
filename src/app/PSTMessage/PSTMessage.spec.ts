@@ -153,5 +153,6 @@ describe('PSTMessage tests', () => {
         expect(msg.colorCategories).to.eql([]);
         expect(msg.hasForwarded).to.equal(false);
         expect(msg.bodyHTML).to.equal('');
+        expect(msg.senderEntryId.toString()).to.contain('JReames@br-inc.com');
     });
 });
