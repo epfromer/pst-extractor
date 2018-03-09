@@ -39,32 +39,48 @@ import * as fs from 'fs';
 import * as fsext from 'fs-ext';
 import { PSTRecipient } from './app/PSTRecipient/PSTRecipient.class';
 
-// switches
-const saveAttachmentsToFS = false;
-const displaySender = true;
-const displayRecipients = true;
+const pstFolder = '/media/sf_Outlook/test/';
+const topOutputFolder = '/media/sf_Outlook/pst-extractor/';
+let outputFolder = '';
+const saveToFS = true;
+const displaySender = false;
+const displayRecipients = false;
 const displayBody = false;
 const verbose = true;
-
 let depth = -1;
-let tmpDirIndex = 1;
 let col = 0;
 
-// make a dir for the attachments
+// make a top level folder to hold content
 try {
-    if (saveAttachmentsToFS) {
-        fs.mkdirSync('/media/sf_Outlook/0pst-extractor/');
+    if (saveToFS) {
+        fs.mkdirSync(topOutputFolder);
     }
 } catch (err) {
+    Log.error(err);
 }
 
-let directoryListing = fs.readdirSync('/media/sf_Outlook/test');
+let directoryListing = fs.readdirSync(pstFolder);
 directoryListing.forEach(filename => {
-    console.log('/media/sf_Outlook/test/' + filename);
+    
+    console.log(pstFolder + filename);
+
+    // time for performance comparison to Java and improvement
     const start = Date.now();
-    let pstFile = new PSTFile('/media/sf_Outlook/test/' + filename);
+    let pstFile = new PSTFile(pstFolder + filename);
+
+    // make a sub folder for each PST 
+    try {
+        if (saveToFS) {
+            outputFolder = topOutputFolder + filename + '/';
+            fs.mkdirSync(outputFolder);
+        }
+    } catch (err) {
+        Log.error(err);
+    }
+
     console.log(pstFile.getMessageStore().getDisplayName());
     processFolder(pstFile.getRootFolder());
+    
     const end = Date.now();
     console.log('processed in ' + (end - start) + ' ms');
 });
@@ -96,68 +112,83 @@ function processFolder(folder: PSTFolder) {
                 printDot();
             }
 
-            // display sender?
+            // sender
+            let sender = email.senderName;
+            if (sender !== email.senderEmailAddress) {
+                sender += ' (' + email.senderEmailAddress + ')';
+            }
             if (verbose && displaySender && email.messageClass === 'IPM.Note') {
-                let s = email.senderName;
-                if (s !== email.senderEmailAddress) {
-                    s += ' (' + email.senderEmailAddress + ')';
-                }
-                console.log(getDepth(depth) + ' sender: ' + s);
+                console.log(getDepth(depth) + ' sender: ' + sender);
             }
 
-            // display recipients?
+            // recipients
+            let recipients = '';
+            for (let i = 0; i < email.numberOfRecipients; i++) {
+                let pstRecipient: PSTRecipient = email.getRecipient(i);
+                let recipient = pstRecipient.displayName;
+                if (recipient !== pstRecipient.smtpAddress) {
+                    recipient += ' (' + pstRecipient.smtpAddress + ')';
+                }
+                recipients += recipient;
+            }
             if (verbose && displayRecipients) {
-                for (let i = 0; i < email.numberOfRecipients; i++) {
-                    let recipient: PSTRecipient = email.getRecipient(i);
-                    let s = recipient.displayName;
-                    if (s !== recipient.smtpAddress) {
-                        s += ' (' + recipient.smtpAddress + ')';
-                    }
-                    console.log(getDepth(depth) + ' recipient: ' + s);
-                }
-            }
-
-            if (email.rtfBody != "") {
-                console.log(email.rtfBody);
+                console.log(getDepth(depth) + ' recipients: ' + recipients);
             }
 
             // display body?
             if (verbose && displayBody) {
                 console.log(email.body);
+                console.log(email.rtfBody);
             }
 
-            // save attachments to fs?
-            if (email.hasAttachments && saveAttachmentsToFS) {
-                // make a temp dir for the attachments
+            // save content to fs?
+            if (saveToFS) {
+                const emailFolder = outputFolder + email.descriptorNodeId + '/';
+
                 try {
-                    fs.mkdirSync('/media/sf_Outlook/0pst-extractor/' + tmpDirIndex);
+                    // make a dir for the attachments
+                    fs.mkdirSync(emailFolder);
+
+                    // save the email as a txt file
+                    const filename = emailFolder + email.descriptorNodeId + '.txt';
+                    if (verbose) {
+                        console.log('saving email to ' + filename);
+                    }
+                    const fd = fsext.openSync(filename, 'w');
+                    fsext.writeSync(fd, email.clientSubmitTime + '\r\n');
+                    fsext.writeSync(fd, 'From: ' + sender + '\r\n');
+                    fsext.writeSync(fd, 'To: ' + recipients + '\r\n');
+                    fsext.writeSync(fd, email.body);
+                    fsext.closeSync(fd);
                 } catch (err) {
-                    Log.debug1(err);
+                    Log.error(err);
                 }
 
                 // walk list of attachments and save to fs
                 for (let i = 0; i < email.numberOfAttachments; i++) {
-                    let attachment: PSTAttachment = email.getAttachment(i);
+                    const attachment: PSTAttachment = email.getAttachment(i);
                     Log.debug2(attachment.toJSONstring());
                     if (attachment.filename) {
-                        let filename = '/media/sf_Outlook/0pst-extractor/' + tmpDirIndex + '/' + attachment.filename;
+                        const filename = emailFolder + attachment.filename;
                         if (verbose) {
-                            Log.debug1('saving attachment to ' + filename);
+                            console.log('saving attachment to ' + filename);
                         }
-
-                        let fd = fsext.openSync(filename, 'w');
-                        let attachmentStream = attachment.fileInputStream;
-                        let bufferSize = 8176;
-                        let buffer = new Buffer(bufferSize);
-                        let bytesRead;
-                        do {
-                            bytesRead = attachmentStream.read(buffer);
-                            fsext.writeSync(fd, buffer, 0, bytesRead);
-                        } while (bytesRead == bufferSize);
-                        fsext.closeSync(fd);
+                        try {
+                            const fd = fsext.openSync(filename, 'w');
+                            const attachmentStream = attachment.fileInputStream;
+                            const bufferSize = 8176;
+                            const buffer = new Buffer(bufferSize);
+                            let bytesRead;
+                            do {
+                                bytesRead = attachmentStream.read(buffer);
+                                fsext.writeSync(fd, buffer, 0, bytesRead);
+                            } while (bytesRead == bufferSize);
+                            fsext.closeSync(fd);
+                        } catch (err) {
+                            Log.error(err);
+                        }
                     }
                 }
-                tmpDirIndex++;
             }
             email = folder.getNextChild();
         }

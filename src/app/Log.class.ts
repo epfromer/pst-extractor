@@ -22,7 +22,11 @@ export class Log {
         level: 'debug1',
         transports: [
             // colorize the output to the console
-            new winston.transports.Console({colorize: true})
+            new winston.transports.Console({colorize: true}),
+            new winston.transports.File({
+                filename: 'errors.log',
+                level: 'error'
+              })
         ]
     });
 
