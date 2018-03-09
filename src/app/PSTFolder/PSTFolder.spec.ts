@@ -55,5 +55,18 @@ describe('PSTFolder tests', () => {
         expect(childFolders[1].displayName).to.equal('Systems');
         expect(childFolders[2].displayName).to.equal('Sent Items');
         expect(childFolders[3].displayName).to.equal('Personal');
+        expect(folder.subFolderCount).to.equal(4);
+        expect(folder.associateContentCount).to.equal(0);
+        expect(folder.emailCount).to.equal(1);
+        expect(folder.folderType).to.equal(0);
+        expect(folder.contentCount).to.equal(1);
+        expect(folder.unreadCount).to.equal(0);
+        expect(folder.containerFlags).to.equal(0);
+        expect(folder.containerClass).to.equal('IPF.Note');
+        expect(folder.hasSubfolders).to.equal(true);
+
+        folder.moveChildCursorTo(0);
+        folder.moveChildCursorTo(1);
+        folder.moveChildCursorTo(100);
     });
 });
