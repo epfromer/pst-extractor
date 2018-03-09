@@ -60,6 +60,24 @@ describe('PSTAttachment tests', () => {
         expect(attachment.size).to.equal(8447);
         expect(attachment.longFilename).to.equal('rickroll.jpg');
         expect(attachment.creationTime).to.eql(new Date("2018-03-07T16:49:32.964Z"));
+        expect(attachment.modificationTime).to.eql(new Date("2018-03-07T16:49:32.959Z"));
+        expect(attachment.filename).to.equal('rickroll.jpg');
+        expect(attachment.attachMethod).to.equal(1);
+        expect(attachment.attachNum).to.equal(0);
+        expect(attachment.renderingPosition).to.equal(60);
+        expect(attachment.mimeSequence).to.equal(0);
+        expect(attachment.pathname).to.equal('');
+        expect(attachment.longPathname).to.equal('');
+        expect(attachment.mimeTag).to.equal('');
+        expect(attachment.contentId).to.equal('');
+        expect(attachment.attachmentContentDisposition).to.equal('');
+        expect(attachment.isAttachmentInvisibleInHtml).to.equal(false);
+        expect(attachment.isAttachmentInvisibleInRTF).to.equal(false);
+        expect(attachment.isAttachmentMhtmlRef).to.equal(false);
+        expect(attachment.filesize).to.equal(4796);
+        expect(attachment.fileInputStream).to.not.equal(null);
+        expect(attachment.attachSize).to.equal(8447);
+        expect(attachment.embeddedPSTMessage).to.equal(null);
     });
 
     it('should have email with word attachment', () => {

@@ -9,3 +9,4 @@ Start with index.ts for sample code to walk the PST and print out the folder str
 
 To Do
 - drive up code coverage with nyc/istanbul
+- embedded message
