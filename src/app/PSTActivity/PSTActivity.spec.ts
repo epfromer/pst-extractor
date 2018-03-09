@@ -38,5 +38,12 @@ describe('PSTActivity tests', () => {
         expect(activity.bodyPrefix).to.contain('But no one was home');
         expect(activity.logStart).to.eql(new Date("2018-03-06T21:09:00.000Z"));
         expect(activity.logEnd).to.eql(new Date("2018-03-06T21:09:00.000Z"));
+        expect(activity.importance).to.equal(1);
+        expect(activity.logDuration).to.equal(0);
+        expect(activity.logFlags).to.equal(0);
+        expect(activity.isDocumentPrinted).to.equal(false);
+        expect(activity.isDocumentSaved).to.equal(false);
+        expect(activity.isDocumentRouted).to.equal(false);
+        expect(activity.isDocumentPosted).to.equal(false);
     });
 });
