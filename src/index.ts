@@ -61,14 +61,13 @@ try {
 
 let directoryListing = fs.readdirSync(pstFolder);
 directoryListing.forEach(filename => {
-    
     console.log(pstFolder + filename);
 
     // time for performance comparison to Java and improvement
     const start = Date.now();
     let pstFile = new PSTFile(pstFolder + filename);
 
-    // make a sub folder for each PST 
+    // make a sub folder for each PST
     try {
         if (saveToFS) {
             outputFolder = topOutputFolder + filename + '/';
@@ -80,7 +79,7 @@ directoryListing.forEach(filename => {
 
     console.log(pstFile.getMessageStore().getDisplayName());
     processFolder(pstFile.getRootFolder());
-    
+
     const end = Date.now();
     console.log('processed in ' + (end - start) + ' ms');
 });
@@ -113,30 +112,10 @@ function processFolder(folder: PSTFolder) {
             }
 
             // sender
-            let sender = email.senderName;
-            if (sender !== email.senderEmailAddress) {
-                sender += ' (' + email.senderEmailAddress + ')';
-            }
-            if (verbose && displaySender && email.messageClass === 'IPM.Note') {
-                console.log(getDepth(depth) + ' sender: ' + sender);
-            }
+            let sender = getSender(email);
 
             // recipients
-            let recipients = '';
-            for (let i = 0; i < email.numberOfRecipients; i++) {
-                let pstRecipient: PSTRecipient = email.getRecipient(i);
-                let recipient = pstRecipient.displayName;
-                if (recipient !== pstRecipient.smtpAddress) {
-                    recipient += ' (' + pstRecipient.smtpAddress + ')';
-                }
-                if (i > 0) {
-                    recipient = '; ' + recipient;
-                }
-                recipients += recipient;
-            }
-            if (verbose && displayRecipients) {
-                console.log(getDepth(depth) + ' recipients: ' + recipients);
-            }
+            let recipients = getRecipients(email);
 
             // display body?
             if (verbose && displayBody) {
@@ -146,58 +125,103 @@ function processFolder(folder: PSTFolder) {
 
             // save content to fs?
             if (saveToFS) {
-                const emailFolder = outputFolder + email.descriptorNodeId + '/';
+                // create date string in format YYYY-MM-DD
+                let d = email.clientSubmitTime;
+                const month = ('0' + (d.getMonth()+1)).slice(-2);
+                const day = ('0' + d.getDate()).slice(-2);
+                const strDate = d.getFullYear() + '-' + month + '-' + day;
 
-                try {
-                    // make a dir for the attachments
-                    fs.mkdirSync(emailFolder);
-
-                    // save the email as a txt file
-                    const filename = emailFolder + email.descriptorNodeId + '.txt';
-                    if (verbose) {
-                        console.log('saving email to ' + filename);
-                    }
-                    const fd = fsext.openSync(filename, 'w');
-                    fsext.writeSync(fd, email.clientSubmitTime + '\r\n');
-                    fsext.writeSync(fd, 'From: ' + sender + '\r\n');
-                    fsext.writeSync(fd, 'To: ' + recipients + '\r\n');
-                    fsext.writeSync(fd, email.body);
-                    fsext.closeSync(fd);
-                } catch (err) {
-                    Log.error(err);
-                }
-
-                // walk list of attachments and save to fs
-                for (let i = 0; i < email.numberOfAttachments; i++) {
-                    const attachment: PSTAttachment = email.getAttachment(i);
-                    Log.debug2(attachment.toJSONstring());
-                    if (attachment.filename) {
-                        const filename = emailFolder + attachment.filename;
-                        if (verbose) {
-                            console.log('saving attachment to ' + filename);
-                        }
-                        try {
-                            const fd = fsext.openSync(filename, 'w');
-                            const attachmentStream = attachment.fileInputStream;
-                            const bufferSize = 8176;
-                            const buffer = new Buffer(bufferSize);
-                            let bytesRead;
-                            do {
-                                bytesRead = attachmentStream.read(buffer);
-                                fsext.writeSync(fd, buffer, 0, bytesRead);
-                            } while (bytesRead == bufferSize);
-                            fsext.closeSync(fd);
-                        } catch (err) {
-                            Log.error(err);
-                        }
+                // create a folder for each day (client submit time)
+                const emailFolder = outputFolder + strDate + '/';
+                if (!fs.existsSync(emailFolder)) {
+                    try {
+                        fs.mkdirSync(emailFolder);
+                    } catch (err) {
+                        Log.error(err);
                     }
                 }
+
+                doSaveToFS(email, emailFolder, sender, recipients);
             }
             email = folder.getNextChild();
         }
         depth--;
     }
     depth--;
+}
+
+function doSaveToFS(email: PSTMessage, emailFolder: string, sender: string, recipients: string) {
+    try {
+        // save the email as a txt file
+        const filename = emailFolder + email.descriptorNodeId + '.txt';
+        if (verbose) {
+            console.log('saving email to ' + filename);
+        }
+        const fd = fsext.openSync(filename, 'w');
+        fsext.writeSync(fd, email.clientSubmitTime + '\r\n');
+        fsext.writeSync(fd, 'From: ' + sender + '\r\n');
+        fsext.writeSync(fd, 'To: ' + recipients + '\r\n');
+        fsext.writeSync(fd, email.body);
+        fsext.closeSync(fd);
+    } catch (err) {
+        Log.error(err);
+    }
+
+    // walk list of attachments and save to fs
+    for (let i = 0; i < email.numberOfAttachments; i++) {
+        const attachment: PSTAttachment = email.getAttachment(i);
+        Log.debug2(attachment.toJSONstring());
+        if (attachment.filename) {
+            const filename = emailFolder + email.descriptorNodeId + '-' + attachment.longFilename;
+            if (verbose) {
+                console.log('saving attachment to ' + filename);
+            }
+            try {
+                const fd = fsext.openSync(filename, 'w');
+                const attachmentStream = attachment.fileInputStream;
+                const bufferSize = 8176;
+                const buffer = new Buffer(bufferSize);
+                let bytesRead;
+                do {
+                    bytesRead = attachmentStream.read(buffer);
+                    fsext.writeSync(fd, buffer, 0, bytesRead);
+                } while (bytesRead == bufferSize);
+                fsext.closeSync(fd);
+            } catch (err) {
+                Log.error(err);
+            }
+        }
+    }
+}
+
+function getSender(email: PSTMessage): string {
+    let sender = email.senderName;
+    if (sender !== email.senderEmailAddress) {
+        sender += ' (' + email.senderEmailAddress + ')';
+    }
+    if (verbose && displaySender && email.messageClass === 'IPM.Note') {
+        console.log(getDepth(depth) + ' sender: ' + sender);
+    }
+    return sender;
+}
+
+function getRecipients(email: PSTMessage): string {
+    let recipients = '';
+    for (let i = 0; i < email.numberOfRecipients; i++) {
+        let pstRecipient: PSTRecipient = email.getRecipient(i);
+        let recipient = pstRecipient.displayName;
+        if (pstRecipient.displayName && recipient !== pstRecipient.smtpAddress) {
+            recipient += ' (' + pstRecipient.smtpAddress + ')';
+        }
+        if (i > 0) {
+            recipient = '; ' + recipient;
+        }
+        recipients += recipient;
+    }
+    if (verbose && displayRecipients) {
+        console.log(getDepth(depth) + ' recipients: ' + recipients);
+    }
+    return recipients;
 }
 
 function printDot() {
