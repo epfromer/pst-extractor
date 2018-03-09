@@ -129,6 +129,9 @@ function processFolder(folder: PSTFolder) {
                 if (recipient !== pstRecipient.smtpAddress) {
                     recipient += ' (' + pstRecipient.smtpAddress + ')';
                 }
+                if (i > 0) {
+                    recipient = '; ' + recipient;
+                }
                 recipients += recipient;
             }
             if (verbose && displayRecipients) {
