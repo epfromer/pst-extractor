@@ -152,6 +152,6 @@ describe('PSTContact tests', () => {
         expect(contact.email1DisplayName).to.equal('Ed Pfromer (epfromer@gmail.com)');
         expect(contact.creationTime).to.eql(new Date("2018-03-05T20:27:06.017Z"));  
         expect(contact.displayName).to.equal('Ed Pfromer');
-        expect(contact.rtfBody).to.contain('ever gonna let you down');
+        expect(contact.bodyRTF).to.contain('ever gonna let you down');
     });
 });

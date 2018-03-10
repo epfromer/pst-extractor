@@ -698,6 +698,7 @@ export class PSTUtil {
             case 'IPM.Schedule.Meeting.Resp.Pos':
             case 'IPM.Schedule.Meeting.Resp.Tent':
             case 'IPM.Schedule.Meeting.Notification.Forward':
+            case 'IPM.Schedule.Meeting.Resp.Neg':
                 // appointment
                 // messageClass.startsWith('IPM.Schedule.Meeting')
                 let apt = new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);

@@ -75,7 +75,96 @@ export class PSTMessage extends PSTObject {
         }
     }
 
-    public get rtfBody(): string {
+    /*
+        Recipients
+    */
+    // find, extract and load up all of the attachments in this email
+    // necessary for the other operations.
+    private processRecipients() {
+        try {
+            let recipientTableKey = 0x0692;
+            if (this.recipientTable == null && this.localDescriptorItems != null && this.localDescriptorItems.has(recipientTableKey)) {
+                let item: PSTDescriptorItem = this.localDescriptorItems.get(recipientTableKey);
+                let descriptorItems: Map<number, PSTDescriptorItem> = null;
+                if (item.subNodeOffsetIndexIdentifier > 0) {
+                    descriptorItems = this.pstFile.getPSTDescriptorItems(long.fromNumber(item.subNodeOffsetIndexIdentifier));
+                }
+                this.recipientTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile, item), descriptorItems);
+            }
+        } catch (err) {
+            Log.error('PSTMessage::processRecipients\n' + err);
+            this.recipientTable = null;
+        }
+    }
+
+    // get the number of recipients for this message
+    public get numberOfRecipients(): number {
+        // if not loaded yet, get the recipients table
+        if (this.recipientTable === null) {
+            this.processRecipients();
+        }
+        return this.recipientTable ? this.recipientTable.rowCount : 0;
+    }
+
+    // get a specific recipient from this email.
+    public getRecipient(recipientNumber: number): PSTRecipient {
+        // if not loaded yet, get the recipients table
+        if (this.recipientTable === null) {
+            this.processRecipients();
+        }
+        
+        if (recipientNumber >= this.numberOfRecipients || recipientNumber >= this.recipientTable.getItems().length) {
+            throw new Error('PSTMessage::getAttachment unable to fetch recipient number ' + recipientNumber);
+        }
+        let recipientDetails: Map<number, PSTTableItem> = this.recipientTable.getItems()[recipientNumber];
+        return recipientDetails ? new PSTRecipient(recipientDetails) : null;
+    }
+
+    public get recipientsString(): string {
+        // if not loaded yet, get the recipients table
+        if (this.recipientTable === null) {
+            this.processRecipients();
+        }
+        return this.recipientTable ? this.recipientTable.itemsString : '';
+    }
+
+    // Non receipt notification requested
+    public get isNonReceiptNotificationRequested(): boolean {
+        return this.getIntItem(0x0c06) != 0;
+    }
+
+    // Originator non delivery report requested
+    public get isOriginatorNonDeliveryReportRequested(): boolean {
+        return this.getIntItem(0x0c08) != 0;
+    }
+
+    // Recipient type Integer 32-bit signed 0x01 => To 0x02 =>CC
+    public get recipientType(): number {
+        return this.getIntItem(0x0c15);
+    }
+
+    /*
+        Body (plain text, RTF, HTML)
+    */
+    // Plain text e-mail body
+    public get body(): string {
+        let cp: string = null;
+        let cpItem: PSTTableItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
+        if (cpItem == null) {
+            cpItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
+        }
+        if (cpItem != null) {
+            cp = PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
+        }
+        return this.getStringItem(0x1000, 0, cp);
+    }
+
+    // Plain text body prefix
+    public get bodyPrefix(): string {
+        return this.getStringItem(0x6619);
+    }
+
+    public get bodyRTF(): string {
         // do we have an entry for it?
         if (this.pstTableItems.has(0x1009)) {
             // is it a reference?
@@ -91,6 +180,127 @@ export class PSTMessage extends PSTObject {
         }
         return '';
     }
+
+    // RTF Sync Body CRC
+    public get rtfSyncBodyCRC(): number {
+        return this.getIntItem(0x1006);
+    }
+
+    // RTF Sync Body character count
+    public get rtfSyncBodyCount(): number {
+        return this.getIntItem(0x1007);
+    }
+
+    // RTF Sync body tag
+    public get rtfSyncBodyTag(): string {
+        return this.getStringItem(0x1008);
+    }
+
+    // RTF whitespace prefix count
+    public get rtfSyncPrefixCount(): number {
+        return this.getIntItem(0x1010);
+    }
+
+    // RTF whitespace tailing count
+    public get rtfSyncTrailingCount(): number {
+        return this.getIntItem(0x1011);
+    }
+
+    // HTML e-mail body
+    public get bodyHTML(): string {
+        let cp: string = null;
+        let cpItem: PSTTableItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
+        if (cpItem == null) {
+            cpItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
+        }
+        if (cpItem != null) {
+            cp = PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
+        }
+        return this.getStringItem(0x1013, 0, cp);
+    }
+
+    /*
+        Attachments
+    */
+    // attachment stuff here, not sure if these can just exist in emails or not,
+    // but a table key of 0x0671 would suggest that this is a property of the
+    // envelope rather than a specific email property
+    // find, extract and load up all of the attachments in this email
+    // necessary for the other operations.
+    private processAttachments() {
+        let attachmentTableKey = 0x0671;
+        if (this.attachmentTable == null && this.localDescriptorItems != null && this.localDescriptorItems.has(attachmentTableKey)) {
+            let item: PSTDescriptorItem = this.localDescriptorItems.get(attachmentTableKey);
+            let descriptorItems: Map<number, PSTDescriptorItem> = null;
+            if (item.subNodeOffsetIndexIdentifier > 0) {
+                descriptorItems = this.pstFile.getPSTDescriptorItems(long.fromValue(item.subNodeOffsetIndexIdentifier));
+            }
+            this.attachmentTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile, item), descriptorItems);
+        }
+    }
+
+    // get the number of attachments for this message
+    public get numberOfAttachments(): number {
+        try {
+            this.processAttachments();
+        } catch (err) {
+            Log.error('PSTMessage::numberOfAttachments\n' + err);
+            return 0;
+        }
+
+        // still nothing? must be no attachments...
+        if (this.attachmentTable == null) {
+            return 0;
+        }
+        return this.attachmentTable.rowCount;
+    }
+
+    // get a specific attachment from this email
+    public getAttachment(attachmentNumber: number): PSTAttachment {
+        this.processAttachments();
+
+        let attachmentCount = 0;
+        if (this.attachmentTable != null) {
+            attachmentCount = this.attachmentTable.rowCount;
+        }
+
+        if (attachmentNumber >= attachmentCount) {
+            throw new Error('PSTMessage::getAttachment unable to fetch attachment number ' + attachmentNumber);
+        }
+
+        // we process the C7 table here, basically we just want the attachment local descriptor...
+        let attachmentDetails: Map<number, PSTTableItem> = this.attachmentTable.getItems()[attachmentNumber];
+        let attachmentTableItem: PSTTableItem = attachmentDetails.get(0x67f2);
+        let descriptorItemId = attachmentTableItem.entryValueReference;
+
+        // get the local descriptor for the attachmentDetails table.
+        let descriptorItem: PSTDescriptorItem = this.localDescriptorItems.get(descriptorItemId);
+
+        // try and decode it
+        let attachmentData: Buffer = descriptorItem.getData();
+        if (attachmentData != null && attachmentData.length > 0) {
+            let attachmentDetailsTable: PSTTableBC = new PSTTableBC(new PSTNodeInputStream(this.pstFile, descriptorItem));
+
+            // create our all-precious attachment object.
+            // note that all the information that was in the c7 table is
+            // repeated in the eb table in attachment data.
+            // so no need to pass it...
+            let attachmentDescriptorItems: Map<number, PSTDescriptorItem> = new Map();
+            if (descriptorItem.subNodeOffsetIndexIdentifier > 0) {
+                attachmentDescriptorItems = this.pstFile.getPSTDescriptorItems(long.fromNumber(descriptorItem.subNodeOffsetIndexIdentifier));
+            }
+            return new PSTAttachment(this.pstFile, attachmentDetailsTable, attachmentDescriptorItems);
+        }
+
+        throw new Error(
+            'PSTMessage::getAttachment unable to fetch attachment number ' + attachmentNumber + ', unable to read attachment details table'
+        );
+    }
+
+    /*
+        Miscellaneous properties
+    */
+
 
     // get the importance of the email
     public get importance(): number {
@@ -318,23 +528,6 @@ export class PSTMessage extends PSTObject {
         return this.getStringItem(0x0078);
     }
 
-    // Recipient details
-
-    // Non receipt notification requested
-    public get isNonReceiptNotificationRequested(): boolean {
-        return this.getIntItem(0x0c06) != 0;
-    }
-
-    // Originator non delivery report requested
-    public get isOriginatorNonDeliveryReportRequested(): boolean {
-        return this.getIntItem(0x0c08) != 0;
-    }
-
-    // Recipient type Integer 32-bit signed 0x01 => To 0x02 =>CC
-    public get recipientType(): number {
-        return this.getIntItem(0x0c15);
-    }
-
     // Reply requested
     public get isReplyRequested(): boolean {
         return this.getIntItem(0x0c17) != 0;
@@ -360,8 +553,6 @@ export class PSTMessage extends PSTObject {
     public get senderEmailAddress(): string {
         return this.getStringItem(0x0c1f);
     }
-
-    // Non-transmittable message properties
 
     // Message size
     public get messageSize(): long {
@@ -438,62 +629,6 @@ export class PSTMessage extends PSTObject {
         return this.getIntItem(0x1016);
     }
 
-    // Plain text e-mail body
-    public get body(): string {
-        let cp: string = null;
-        let cpItem: PSTTableItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
-        if (cpItem == null) {
-            cpItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
-        }
-        if (cpItem != null) {
-            cp = PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
-        }
-        return this.getStringItem(0x1000, 0, cp);
-    }
-
-    // Plain text body prefix
-    public get bodyPrefix(): string {
-        return this.getStringItem(0x6619);
-    }
-
-    // RTF Sync Body CRC
-    public get rtfSyncBodyCRC(): number {
-        return this.getIntItem(0x1006);
-    }
-
-    // RTF Sync Body character count
-    public get rtfSyncBodyCount(): number {
-        return this.getIntItem(0x1007);
-    }
-
-    // RTF Sync body tag
-    public get rtfSyncBodyTag(): string {
-        return this.getStringItem(0x1008);
-    }
-
-    // RTF whitespace prefix count
-    public get rtfSyncPrefixCount(): number {
-        return this.getIntItem(0x1010);
-    }
-
-    // RTF whitespace tailing count
-    public get rtfSyncTrailingCount(): number {
-        return this.getIntItem(0x1011);
-    }
-
-    // HTML e-mail body
-    public get bodyHTML(): string {
-        let cp: string = null;
-        let cpItem: PSTTableItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
-        if (cpItem == null) {
-            cpItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
-        }
-        if (cpItem != null) {
-            cp = PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
-        }
-        return this.getStringItem(0x1013, 0, cp);
-    }
-
     // Message ID for this email as allocated per rfc2822
     public get internetMessageId(): string {
         return this.getStringItem(0x1035);
@@ -534,8 +669,7 @@ export class PSTMessage extends PSTObject {
         return (actionFlag & 0x4) > 0;
     }
 
-    // the date that this item had an action performed (eg. replied or
-    // forwarded)
+    // the date that this item had an action performed (eg. replied or forwarded)
     public get actionDate(): Date {
         return this.getDateItem(0x1082);
     }
@@ -564,53 +698,6 @@ export class PSTMessage extends PSTObject {
     // Attribute read only
     public get attrReadonly(): boolean {
         return this.getIntItem(0x10f6) != 0;
-    }
-
-    // find, extract and load up all of the attachments in this email
-    // necessary for the other operations.
-    private processRecipients() {
-        try {
-            let recipientTableKey = 0x0692;
-            if (this.recipientTable == null && this.localDescriptorItems != null && this.localDescriptorItems.has(recipientTableKey)) {
-                let item: PSTDescriptorItem = this.localDescriptorItems.get(recipientTableKey);
-                let descriptorItems: Map<number, PSTDescriptorItem> = null;
-                if (item.subNodeOffsetIndexIdentifier > 0) {
-                    descriptorItems = this.pstFile.getPSTDescriptorItems(long.fromNumber(item.subNodeOffsetIndexIdentifier));
-                }
-                this.recipientTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile, item), descriptorItems);
-            }
-        } catch (err) {
-            Log.error('PSTMessage::processRecipients\n' + err)
-            this.recipientTable = null;
-        }
-    }
-
-    // get the number of recipients for this message
-    public get numberOfRecipients(): number {
-        this.processRecipients();
-
-        // still nothing? must be no recipients...
-        if (this.recipientTable == null) {
-            return 0;
-        }
-        return this.recipientTable.rowCount;
-    }
-
-    // attachment stuff here, not sure if these can just exist in emails or not,
-    // but a table key of 0x0671 would suggest that this is a property of the
-    // envelope rather than a specific email property
-    // find, extract and load up all of the attachments in this email
-    // necessary for the other operations.
-    private processAttachments() {
-        let attachmentTableKey = 0x0671;
-        if (this.attachmentTable == null && this.localDescriptorItems != null && this.localDescriptorItems.has(attachmentTableKey)) {
-            let item: PSTDescriptorItem = this.localDescriptorItems.get(attachmentTableKey);
-            let descriptorItems: Map<number, PSTDescriptorItem> = null;
-            if (item.subNodeOffsetIndexIdentifier > 0) {
-                descriptorItems = this.pstFile.getPSTDescriptorItems(long.fromValue(item.subNodeOffsetIndexIdentifier));
-            }
-            this.attachmentTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile, item), descriptorItems);
-        }
     }
 
     // Start date Filetime
@@ -679,86 +766,6 @@ export class PSTMessage extends PSTObject {
             }
         }
         return categories;
-    }
-
-    // get the number of attachments for this message
-    public get numberOfAttachments(): number {
-        try {
-            this.processAttachments();
-        } catch (err) {
-            Log.error('PSTMessage::numberOfAttachments\n' + err);
-            return 0;
-        }
-
-        // still nothing? must be no attachments...
-        if (this.attachmentTable == null) {
-            return 0;
-        }
-        return this.attachmentTable.rowCount;
-    }
-
-    // get a specific attachment from this email
-    public getAttachment(attachmentNumber: number): PSTAttachment {
-        this.processAttachments();
-
-        let attachmentCount = 0;
-        if (this.attachmentTable != null) {
-            attachmentCount = this.attachmentTable.rowCount;
-        }
-
-        if (attachmentNumber >= attachmentCount) {
-            throw new Error('PSTMessage::getAttachment unable to fetch attachment number ' + attachmentNumber);
-        }
-
-        // we process the C7 table here, basically we just want the attachment local descriptor...
-        let attachmentDetails: Map<number, PSTTableItem> = this.attachmentTable.getItems()[attachmentNumber];
-        let attachmentTableItem: PSTTableItem = attachmentDetails.get(0x67f2);
-        let descriptorItemId = attachmentTableItem.entryValueReference;
-
-        // get the local descriptor for the attachmentDetails table.
-        let descriptorItem: PSTDescriptorItem = this.localDescriptorItems.get(descriptorItemId);
-
-        // try and decode it
-        let attachmentData: Buffer = descriptorItem.getData();
-        if (attachmentData != null && attachmentData.length > 0) {
-            let attachmentDetailsTable: PSTTableBC = new PSTTableBC(new PSTNodeInputStream(this.pstFile, descriptorItem));
-
-            // create our all-precious attachment object.
-            // note that all the information that was in the c7 table is
-            // repeated in the eb table in attachment data.
-            // so no need to pass it...
-            let attachmentDescriptorItems: Map<number, PSTDescriptorItem> = new Map();
-            if (descriptorItem.subNodeOffsetIndexIdentifier > 0) {
-                attachmentDescriptorItems = this.pstFile.getPSTDescriptorItems(long.fromNumber(descriptorItem.subNodeOffsetIndexIdentifier));
-            }
-            return new PSTAttachment(this.pstFile, attachmentDetailsTable, attachmentDescriptorItems);
-        }
-
-        throw new Error(
-            'PSTMessage::getAttachment unable to fetch attachment number ' + attachmentNumber + ', unable to read attachment details table'
-        );
-    }
-
-    // get a specific recipient from this email.
-    public getRecipient(recipientNumber: number): PSTRecipient {
-        if (recipientNumber >= this.numberOfRecipients || recipientNumber >= this.recipientTable.getItems().length) {
-            throw new Error('PSTMessage::getAttachment unable to fetch recipient number ' + recipientNumber);
-        }
-
-        let recipientDetails: Map<number, PSTTableItem> = this.recipientTable.getItems()[recipientNumber];
-
-        if (recipientDetails != null) {
-            return new PSTRecipient(recipientDetails);
-        }
-
-        return null;
-    }
-
-    public get recipientsString(): string {
-        if (this.recipientTable != null) {
-            return this.recipientTable.itemsString;
-        }
-        return 'No recipients table!';
     }
 
     public get conversationId(): Buffer {

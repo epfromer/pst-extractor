@@ -111,6 +111,10 @@ function processFolder(folder: PSTFolder) {
                 printDot();
             }
 
+            if (email.descriptorNodeId.toNumber() == 2146756) {
+                debugger;
+            }
+
             // sender
             let sender = getSender(email);
 
@@ -127,6 +131,9 @@ function processFolder(folder: PSTFolder) {
             if (saveToFS) {
                 // create date string in format YYYY-MM-DD
                 let d = email.clientSubmitTime;
+                if (!d) {
+                    d = email.creationTime;
+                }
                 const month = ('0' + (d.getMonth()+1)).slice(-2);
                 const day = ('0' + d.getDate()).slice(-2);
                 const strDate = d.getFullYear() + '-' + month + '-' + day;
@@ -206,6 +213,9 @@ function getSender(email: PSTMessage): string {
 }
 
 function getRecipients(email: PSTMessage): string {
+
+    let s = email.recipientsString;
+
     let recipients = '';
     for (let i = 0; i < email.numberOfRecipients; i++) {
         let pstRecipient: PSTRecipient = email.getRecipient(i);
