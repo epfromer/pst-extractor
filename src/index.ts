@@ -111,10 +111,6 @@ function processFolder(folder: PSTFolder) {
                 printDot();
             }
 
-            if (email.descriptorNodeId.toNumber() == 2146756) {
-                debugger;
-            }
-
             // sender
             let sender = getSender(email);
 
@@ -124,7 +120,7 @@ function processFolder(folder: PSTFolder) {
             // display body?
             if (verbose && displayBody) {
                 console.log(email.body);
-                console.log(email.rtfBody);
+                console.log(email.bodyRTF);
             }
 
             // save content to fs?
@@ -157,29 +153,31 @@ function processFolder(folder: PSTFolder) {
     depth--;
 }
 
-function doSaveToFS(email: PSTMessage, emailFolder: string, sender: string, recipients: string) {
+function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipients: string) {
     try {
-        // save the email as a txt file
-        const filename = emailFolder + email.descriptorNodeId + '.txt';
+        // save the msg as a txt file
+        const filename = emailFolder + msg.descriptorNodeId + '.txt';
         if (verbose) {
-            console.log('saving email to ' + filename);
+            console.log('saving msg to ' + filename);
         }
         const fd = fsext.openSync(filename, 'w');
-        fsext.writeSync(fd, email.clientSubmitTime + '\r\n');
+        fsext.writeSync(fd, msg.clientSubmitTime + '\r\n');
+        fsext.writeSync(fd, 'Type: ' + msg.messageClass + '\r\n');
         fsext.writeSync(fd, 'From: ' + sender + '\r\n');
         fsext.writeSync(fd, 'To: ' + recipients + '\r\n');
-        fsext.writeSync(fd, email.body);
+        fsext.writeSync(fd, 'Subject: ' + msg.subject);
+        fsext.writeSync(fd, msg.body);
         fsext.closeSync(fd);
     } catch (err) {
         Log.error(err);
     }
 
     // walk list of attachments and save to fs
-    for (let i = 0; i < email.numberOfAttachments; i++) {
-        const attachment: PSTAttachment = email.getAttachment(i);
+    for (let i = 0; i < msg.numberOfAttachments; i++) {
+        const attachment: PSTAttachment = msg.getAttachment(i);
         Log.debug2(attachment.toJSONstring());
         if (attachment.filename) {
-            const filename = emailFolder + email.descriptorNodeId + '-' + attachment.longFilename;
+            const filename = emailFolder + msg.descriptorNodeId + '-' + attachment.longFilename;
             if (verbose) {
                 console.log('saving attachment to ' + filename);
             }
@@ -213,25 +211,8 @@ function getSender(email: PSTMessage): string {
 }
 
 function getRecipients(email: PSTMessage): string {
-
-    let s = email.recipientsString;
-
-    let recipients = '';
-    for (let i = 0; i < email.numberOfRecipients; i++) {
-        let pstRecipient: PSTRecipient = email.getRecipient(i);
-        let recipient = pstRecipient.displayName;
-        if (pstRecipient.displayName && recipient !== pstRecipient.smtpAddress) {
-            recipient += ' (' + pstRecipient.smtpAddress + ')';
-        }
-        if (i > 0) {
-            recipient = '; ' + recipient;
-        }
-        recipients += recipient;
-    }
-    if (verbose && displayRecipients) {
-        console.log(getDepth(depth) + ' recipients: ' + recipients);
-    }
-    return recipients;
+    // could walk recipients table, but be fast and cheap
+    return email.displayTo;
 }
 
 function printDot() {

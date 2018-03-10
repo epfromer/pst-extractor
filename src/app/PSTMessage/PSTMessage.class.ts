@@ -44,6 +44,7 @@ import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 import { Log } from '../Log.class';
+import { OutlookProperties } from '../OutlookProperties'
 
 // PST Message contains functions that are common across most MAPI objects.
 // Note that many of these functions may not be applicable for the item in question,
@@ -78,8 +79,11 @@ export class PSTMessage extends PSTObject {
     /*
         Recipients
     */
-    // find, extract and load up all of the attachments in this email
-    // necessary for the other operations.
+    /**
+     * Find, extract and load up all of the attachments in this email
+     * @private
+     * @memberof PSTMessage
+     */
     private processRecipients() {
         try {
             let recipientTableKey = 0x0692;
@@ -97,18 +101,26 @@ export class PSTMessage extends PSTObject {
         }
     }
 
-    // get the number of recipients for this message
+    /**
+     * Get the recipients table.
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
     public get numberOfRecipients(): number {
-        // if not loaded yet, get the recipients table
         if (this.recipientTable === null) {
             this.processRecipients();
         }
         return this.recipientTable ? this.recipientTable.rowCount : 0;
     }
 
-    // get a specific recipient from this email.
+    /**
+     * Get specific recipient.
+     * @param {number} recipientNumber 
+     * @returns {PSTRecipient} 
+     * @memberof PSTMessage
+     */
     public getRecipient(recipientNumber: number): PSTRecipient {
-        // if not loaded yet, get the recipients table
         if (this.recipientTable === null) {
             this.processRecipients();
         }
@@ -120,38 +132,53 @@ export class PSTMessage extends PSTObject {
         return recipientDetails ? new PSTRecipient(recipientDetails) : null;
     }
 
-    public get recipientsString(): string {
-        // if not loaded yet, get the recipients table
-        if (this.recipientTable === null) {
-            this.processRecipients();
-        }
-        return this.recipientTable ? this.recipientTable.itemsString : '';
-    }
-
-    // Non receipt notification requested
+    /**
+     * Contains TRUE if a message sender wants notification of non-receipt for a specified recipient.
+     * https://msdn.microsoft.com/en-us/library/office/cc979208.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get isNonReceiptNotificationRequested(): boolean {
-        return this.getIntItem(0x0c06) != 0;
+        return this.getIntItem(OutlookProperties.PR_NON_RECEIPT_NOTIFICATION_REQUESTED) != 0;
     }
 
-    // Originator non delivery report requested
+    /**
+     * Contains TRUE if a message sender wants notification of non-deliver for a specified recipient.
+     * https://msdn.microsoft.com/en-us/library/ms987568(v=exchg.65).aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get isOriginatorNonDeliveryReportRequested(): boolean {
-        return this.getIntItem(0x0c08) != 0;
+        return this.getIntItem(OutlookProperties.PR_ORIGINATOR_NON_DELIVERY_REPORT_REQUESTED) != 0;
     }
 
-    // Recipient type Integer 32-bit signed 0x01 => To 0x02 =>CC
+    /**
+     * Contains the recipient type for a message recipient.
+     * https://msdn.microsoft.com/en-us/library/office/cc839620.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
     public get recipientType(): number {
-        return this.getIntItem(0x0c15);
+        return this.getIntItem(OutlookProperties.PR_RECIPIENT_TYPE);
     }
 
     /*
         Body (plain text, RTF, HTML)
     */
-    // Plain text e-mail body
+    /**
+     * Plain text message body.
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get body(): string {
         let cp: string = null;
-        let cpItem: PSTTableItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
+        let cpItem: PSTTableItem = this.pstTableItems.get(OutlookProperties.PR_MESSAGE_CODEPAGE); // PidTagMessageCodepage
         if (cpItem == null) {
-            cpItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
+            cpItem = this.pstTableItems.get(OutlookProperties.PR_INTERNET_CPID); // PidTagInternetCodepage
         }
         if (cpItem != null) {
             cp = PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
@@ -159,11 +186,23 @@ export class PSTMessage extends PSTObject {
         return this.getStringItem(0x1000, 0, cp);
     }
 
-    // Plain text body prefix
+    /**
+     * Plain text body prefix.
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get bodyPrefix(): string {
         return this.getStringItem(0x6619);
     }
 
+    /**
+     * Contains the Rich Text Format (RTF) version of the message text, usually in compressed form.
+     * https://technet.microsoft.com/en-us/library/cc815911
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get bodyRTF(): string {
         // do we have an entry for it?
         if (this.pstTableItems.has(0x1009)) {
@@ -181,14 +220,26 @@ export class PSTMessage extends PSTObject {
         return '';
     }
 
-    // RTF Sync Body CRC
+    /**
+     * Contains the cyclical redundancy check (CRC) computed for the message text.
+     * https://technet.microsoft.com/en-us/library/cc815532(v=office.15).aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
     public get rtfSyncBodyCRC(): number {
-        return this.getIntItem(0x1006);
+        return this.getIntItem(OutlookProperties.PR_RTF_SYNC_BODY_CRC);
     }
 
-    // RTF Sync Body character count
+    /**
+     * Contains a count of the significant characters of the message text.
+     * https://msdn.microsoft.com/en-us/library/windows/desktop/cc842324.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
     public get rtfSyncBodyCount(): number {
-        return this.getIntItem(0x1007);
+        return this.getIntItem(OutlookProperties.PR_RTF_SYNC_BODY_COUNT);
     }
 
     // RTF Sync body tag
@@ -226,7 +277,6 @@ export class PSTMessage extends PSTObject {
     // but a table key of 0x0671 would suggest that this is a property of the
     // envelope rather than a specific email property
     // find, extract and load up all of the attachments in this email
-    // necessary for the other operations.
     private processAttachments() {
         let attachmentTableKey = 0x0671;
         if (this.attachmentTable == null && this.localDescriptorItems != null && this.localDescriptorItems.has(attachmentTableKey)) {
@@ -247,12 +297,7 @@ export class PSTMessage extends PSTObject {
             Log.error('PSTMessage::numberOfAttachments\n' + err);
             return 0;
         }
-
-        // still nothing? must be no attachments...
-        if (this.attachmentTable == null) {
-            return 0;
-        }
-        return this.attachmentTable.rowCount;
+        return this.attachmentTable ? this.attachmentTable.rowCount : 0;
     }
 
     // get a specific attachment from this email
@@ -300,8 +345,6 @@ export class PSTMessage extends PSTObject {
     /*
         Miscellaneous properties
     */
-
-
     // get the importance of the email
     public get importance(): number {
         return this.getIntItem(0x0017, PSTMessage.IMPORTANCE_NORMAL);
@@ -897,7 +940,6 @@ export class PSTMessage extends PSTObject {
                     isFlagged: this.isFlagged,
                     colorCategories: this.colorCategories,
                     numberOfAttachments: this.numberOfAttachments,
-                    recipientsString: this.recipientsString,
                     conversationId: this.conversationId,
                     isConversationIndexTracking: this.isConversationIndexTracking
                 },

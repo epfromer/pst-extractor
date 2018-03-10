@@ -664,7 +664,9 @@ export class PSTUtil {
                 return this.createAppropriatePSTMessageObject(theFile, folderIndexNode, table, localDescriptorItems);
             }
         } else {
-            throw new Error('PSTUtil::detectAndLoadPSTObject Unknown child type with offset id: ' + folderIndexNode.localDescriptorsOffsetIndexIdentifier);
+            throw new Error(
+                'PSTUtil::detectAndLoadPSTObject Unknown child type with offset id: ' + folderIndexNode.localDescriptorsOffsetIndexIdentifier
+            );
         }
     }
 
@@ -731,7 +733,7 @@ export class PSTUtil {
                 let dl = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
                 // Log.debug1(dl.toJSONstring());
                 return dl;
-                // return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
+            // return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
             case 'IPM.Note.Rules.OofTemplate.Microsoft':
                 // debugger;
                 // Out of Office rule
