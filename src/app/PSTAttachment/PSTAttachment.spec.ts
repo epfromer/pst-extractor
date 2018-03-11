@@ -70,13 +70,10 @@ describe('PSTAttachment tests', () => {
         expect(attachment.longPathname).to.equal('');
         expect(attachment.mimeTag).to.equal('');
         expect(attachment.contentId).to.equal('');
-        expect(attachment.attachmentContentDisposition).to.equal('');
         expect(attachment.isAttachmentInvisibleInHtml).to.equal(false);
         expect(attachment.isAttachmentInvisibleInRTF).to.equal(false);
-        expect(attachment.isAttachmentMhtmlRef).to.equal(false);
         expect(attachment.filesize).to.equal(4796);
         expect(attachment.fileInputStream).to.not.equal(null);
-        expect(attachment.attachSize).to.equal(8447);
         expect(attachment.embeddedPSTMessage).to.equal(null);
     });
 

@@ -41,6 +41,7 @@ import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.cla
 import * as long from 'long';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 import { Log } from '../Log.class';
+import { OutlookProperties } from '../OutlookProperties';
 
 // Class containing attachment information.
 export class PSTAttachment extends PSTObject {
@@ -52,6 +53,13 @@ export class PSTAttachment extends PSTObject {
     public static ATTACHMENT_METHOD_EMBEDDED = 5;
     public static ATTACHMENT_METHOD_OLE = 6;
 
+    /**
+     * Creates an instance of PSTAttachment.
+     * @param {PSTFile} pstFile 
+     * @param {PSTTableBC} table 
+     * @param {Map<number, PSTDescriptorItem>} localDescriptorItems 
+     * @memberof PSTAttachment
+     */
     constructor(
         pstFile: PSTFile, // theFile
         table: PSTTableBC,
@@ -62,18 +70,45 @@ export class PSTAttachment extends PSTObject {
         this.prePopulate(pstFile, null, table, localDescriptorItems);
     }
 
+    /**
+     * The PR_ATTACH_SIZE property contains the sum, in bytes, of the sizes of all properties on an attachment.
+     * https://msdn.microsoft.com/en-us/library/gg156074(v=winembedded.70).aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTAttachment
+     */
     public get size(): number {
-        return this.getIntItem(0x0e20);
+        return this.getIntItem(OutlookProperties.PR_ATTACH_SIZE);
     }
 
+    /**
+     * Contains the creation date and time of a message.
+     * https://msdn.microsoft.com/en-us/library/office/cc765677.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTAttachment
+     */
     public get creationTime(): Date {
-        return this.getDateItem(0x3007);
+        return this.getDateItem(OutlookProperties.PR_CREATION_TIME);
     }
 
+    /**
+     * Contains the date and time when the object or subobject was last modified.
+     * https://msdn.microsoft.com/en-us/library/office/cc815689.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTAttachment
+     */
     public get modificationTime(): Date {
-        return this.getDateItem(0x3008);
+        return this.getDateItem(OutlookProperties.PR_LAST_MODIFICATION_TIME);
     }
 
+    /**
+     * Get an embedded message.
+     * @readonly
+     * @type {PSTMessage}
+     * @memberof PSTAttachment
+     */
     public get embeddedPSTMessage(): PSTMessage {
         let pstNodeInputStream: PSTNodeInputStream = null;
         if (this.getIntItem(0x3705) == PSTAttachment.ATTACHMENT_METHOD_EMBEDDED) {
@@ -111,8 +146,15 @@ export class PSTAttachment extends PSTObject {
         return null;
     }
 
+    /**
+     * The file input stream.
+     * https://msdn.microsoft.com/en-us/library/gg154634(v=winembedded.70).aspx
+     * @readonly
+     * @type {PSTNodeInputStream}
+     * @memberof PSTAttachment
+     */
     public get fileInputStream(): PSTNodeInputStream {
-        let attachmentDataObject: PSTTableItem = this.pstTableItems.get(0x3701);
+        let attachmentDataObject: PSTTableItem = this.pstTableItems.get(OutlookProperties.PR_ATTACH_DATA_BIN);
         if (!attachmentDataObject) {
             return null;
         } else if (attachmentDataObject.isExternalValueReference) {
@@ -124,8 +166,15 @@ export class PSTAttachment extends PSTObject {
         }
     }
 
+    /**
+     * Size of the attachment file itself.
+     * https://msdn.microsoft.com/en-us/library/gg154634(v=winembedded.70).aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTAttachment
+     */
     public get filesize(): number {
-        let attachmentDataObject: PSTTableItem = this.pstTableItems.get(0x3701);
+        let attachmentDataObject: PSTTableItem = this.pstTableItems.get(OutlookProperties.PR_ATTACH_DATA_BIN);
         if (attachmentDataObject.isExternalValueReference) {
             let descriptorItemNested: PSTDescriptorItem = this.localDescriptorItems.get(attachmentDataObject.entryValueReference);
             if (descriptorItemNested == null) {
@@ -138,86 +187,145 @@ export class PSTAttachment extends PSTObject {
         }
     }
 
-    // Attachment (short) filename ASCII or Unicode string
+    /**
+     * Contains an attachment's base file name and extension, excluding path.
+     * https://msdn.microsoft.com/en-us/library/office/cc842517.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTAttachment
+     */
     public get filename(): string {
-        return this.getStringItem(0x3704);
+        return this.getStringItem(OutlookProperties.PR_ATTACH_FILENAME);
     }
 
-    // Attachment method Integer 32-bit signed 0 => None (No attachment) 1 => By
-    // value 2 => By reference 3 => By reference resolve 4 => By reference only
-    // 5 => Embedded message 6 => OLE
+    /**
+     * Contains a MAPI-defined constant representing the way the contents of an attachment can be accessed.
+     * https://msdn.microsoft.com/en-us/library/office/cc815439.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTAttachment
+     */
     public get attachMethod(): number {
-        return this.getIntItem(0x3705);
+        return this.getIntItem(OutlookProperties.PR_ATTACH_METHOD);
     }
-
-    // Attachment size
-    public get attachSize(): number {
-        return this.getIntItem(0x0e20);
-    }
-
-    // Attachment number
+    
+    /**
+     * Contains a number that uniquely identifies the attachment within its parent message.
+     * https://msdn.microsoft.com/en-us/library/office/cc841969.aspx 
+     * @readonly
+     * @type {number}
+     * @memberof PSTAttachment
+     */
     public get attachNum(): number {
-        return this.getIntItem(0x0e21);
+        return this.getIntItem(OutlookProperties.PR_ATTACH_NUM);
     }
 
-    // Attachment long filename ASCII or Unicode string
+    /**
+     * Contains an attachment's long filename and extension, excluding path.
+     * https://msdn.microsoft.com/en-us/library/office/cc842157.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTAttachment
+     */
     public get longFilename(): string {
-        return this.getStringItem(0x3707);
+        return this.getStringItem(OutlookProperties.PR_ATTACH_LONG_FILENAME);
     }
 
-    // Attachment (short) pathname ASCII or Unicode string
+    /**
+     * Contains an attachment's fully-qualified path and filename.
+     * https://msdn.microsoft.com/en-us/library/office/cc839889.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTAttachment
+     */
     public get pathname(): string {
-        return this.getStringItem(0x3708);
+        return this.getStringItem(OutlookProperties.PR_ATTACH_PATHNAME);
     }
 
-    // Attachment Position Integer 32-bit signed
+    /**
+     * Contains an offset, in characters, to use in rendering an attachment within the main message text.
+     * https://msdn.microsoft.com/en-us/library/office/cc842381.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTAttachment
+     */
     public get renderingPosition(): number {
-        return this.getIntItem(0x370b);
+        return this.getIntItem(OutlookProperties.PR_RENDERING_POSITION);
     }
 
-    // Attachment long pathname ASCII or Unicode string
+    /**
+     * Contains an attachment's fully-qualified long path and filename.
+     * https://msdn.microsoft.com/en-us/library/office/cc815443.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTAttachment
+     */
     public get longPathname(): string {
-        return this.getStringItem(0x370d);
+        return this.getStringItem(OutlookProperties.PR_ATTACH_LONG_PATHNAME);
     }
 
-    // Attachment mime type ASCII or Unicode string
+    /**
+     * Contains formatting information about a Multipurpose Internet Mail Extensions (MIME) attachment.
+     * https://msdn.microsoft.com/en-us/library/office/cc842516.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTAttachment
+     */
     public get mimeTag(): string {
-        return this.getStringItem(0x370e);
+        return this.getStringItem(OutlookProperties.PR_ATTACH_MIME_TAG);
     }
 
-    // Attachment mime sequence
+    /**
+     * Contains the MIME sequence number of a MIME message attachment.
+     * https://msdn.microsoft.com/en-us/library/office/cc963256.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTAttachment
+     */
     public get mimeSequence(): number {
-        return this.getIntItem(0x3710);
+        return this.getIntItem(OutlookProperties.PR_ATTACH_MIME_SEQUENCE);
     }
 
-    // Attachment Content ID
+    /**
+     * Contains the content identification header of a Multipurpose Internet Mail Extensions (MIME) message attachment.
+     * https://msdn.microsoft.com/en-us/library/office/cc765868.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTAttachment
+     */
     public get contentId(): string {
-        return this.getStringItem(0x3712);
+        return this.getStringItem(OutlookProperties.PR_ATTACH_CONTENT_ID);
     }
 
-    // Attachment not available in HTML
+    /**
+     * Indicates that this attachment is not available to HTML rendering applications and should be ignored in Multipurpose Internet Mail Extensions (MIME) processing.
+     * https://msdn.microsoft.com/en-us/library/office/cc765876.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTAttachment
+     */
     public get isAttachmentInvisibleInHtml(): boolean {
-        let actionFlag = this.getIntItem(0x3714);
+        let actionFlag = this.getIntItem(OutlookProperties.PR_ATTACH_FLAGS);
         return (actionFlag & 0x1) > 0;
     }
 
-    // Attachment not available in RTF
+    /**
+     * Indicates that this attachment is not available to applications rendering in Rich Text Format (RTF) and should be ignored by MAPI.
+     * https://msdn.microsoft.com/en-us/library/office/cc765876.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTAttachment
+     */
     public get isAttachmentInvisibleInRTF(): boolean {
-        let actionFlag = this.getIntItem(0x3714);
+        let actionFlag = this.getIntItem(OutlookProperties.PR_ATTACH_FLAGS);
         return (actionFlag & 0x2) > 0;
     }
 
-    // Attachment is MHTML REF
-    public get isAttachmentMhtmlRef(): boolean {
-        let actionFlag = this.getIntItem(0x3714);
-        return (actionFlag & 0x4) > 0;
-    }
-
-    // Attachment content disposition
-    public get attachmentContentDisposition(): string {
-        return this.getStringItem(0x3716);
-    }
-
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTAttachment
+     */
     public toJSONstring(): string {
         return (
             'PSTAttachment: ' +
@@ -228,7 +336,6 @@ export class PSTAttachment extends PSTObject {
                     modificationTime: this.modificationTime,
                     filename: this.filename,
                     attachMethod: this.attachMethod,
-                    attachSize: this.attachSize,
                     attachNum: this.attachNum,
                     longFilename: this.longFilename,
                     pathname: this.pathname,
@@ -239,8 +346,6 @@ export class PSTAttachment extends PSTObject {
                     contentId: this.contentId,
                     isAttachmentInvisibleInHtml: this.isAttachmentInvisibleInHtml,
                     isAttachmentInvisibleInRTF: this.isAttachmentInvisibleInRTF,
-                    isAttachmentMhtmlRef: this.isAttachmentMhtmlRef,
-                    attachmentContentDisposition: this.attachmentContentDisposition
                 },
                 null,
                 2
