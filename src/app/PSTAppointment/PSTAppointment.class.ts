@@ -35,6 +35,7 @@ import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTMessage } from '../PSTMessage/PSTMessage.class';
+import { OutlookProperties } from '../OutlookProperties';
 
 // PSTAppointment is for Calendar items
 export class PSTAppointment extends PSTMessage {
@@ -47,150 +48,407 @@ export class PSTAppointment extends PSTMessage {
         super(pstFile, descriptorIndexNode, table, localDescriptorItems);
     }
 
+    /**
+     * Specifies if a meeting request should be sent as an iCal message.
+     * https://msdn.microsoft.com/en-us/library/office/cc839802.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTAppointment
+     */
     public get sendAsICAL(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008200, PSTFile.PSETID_Appointment));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidSendMeetingAsIcal, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Represents the user’s availability for an appointment.
+     * https://msdn.microsoft.com/en-us/library/office/cc841972.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTAppointment
+     */
     public get busyStatus(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008205, PSTFile.PSETID_Appointment));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidBusyStatus, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * The user is busy.
+     * https://msdn.microsoft.com/en-us/library/office/cc841972.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTAppointment
+     */
     public get showAsBusy(): boolean {
         return this.busyStatus == 2;
     }
 
+    /**
+     * Represents the location of an appointment.
+     * https://msdn.microsoft.com/en-us/library/office/cc842419.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTAppointment
+     */
     public get location(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008208, PSTFile.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLocation, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Represents the date and time when an appointment begins.
+     * https://msdn.microsoft.com/en-us/library/office/cc839929.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTAppointment
+     */
     public get startTime(): Date {
-        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x0000820d, PSTFile.PSETID_Appointment));
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentStartWhole, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Represents the date and time that an appointment ends.
+     * https://msdn.microsoft.com/en-us/library/office/cc815864.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTAppointment
+     */
     public get endTime(): Date {
-        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x0000820e, PSTFile.PSETID_Appointment));
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentEndWhole, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Represents the length of time, in minutes, when an appointment is scheduled.
+     * https://msdn.microsoft.com/en-us/library/office/cc842287.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTAppointment
+     */
     public get duration(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008213, PSTFile.PSETID_Appointment));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentDuration, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Specifies the color to use when displaying the calendar.
+     * https://msdn.microsoft.com/en-us/library/office/cc842274.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTAppointment
+     */
     public get color(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008214, PSTFile.PSETID_Appointment));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentColor, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Specifies whether or not the event is all day.
+     * https://msdn.microsoft.com/en-us/library/office/cc839901.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTAppointment
+     */
     public get subType(): boolean {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008215, PSTFile.PSETID_Appointment)) != 0;
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentSubType, OutlookProperties.PSETID_Appointment)) != 0;
     }
 
+    /**
+     * Specifies a bit field that describes the state of the object.
+     * https://msdn.microsoft.com/en-us/library/office/cc765762.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTAppointment
+     */
     public get meetingStatus(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008217, PSTFile.PSETID_Appointment));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentStateFlags, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Specifies the response status of an attendee.
+     * https://msdn.microsoft.com/en-us/library/office/cc839923.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTAppointment
+     */
     public get responseStatus(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008218, PSTFile.PSETID_Appointment));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidResponseStatus, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Specifies whether an appointment message is recurrent.
+     * https://msdn.microsoft.com/en-us/library/office/cc765772.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTAppointment
+     */
     public get isRecurring(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008223, PSTFile.PSETID_Appointment));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidRecurring, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Specifies the date and time within the recurrence pattern that the exception will replace.
+     * https://msdn.microsoft.com/en-us/library/office/cc842450.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTAppointment
+     */
     public get recurrenceBase(): Date {
-        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008228, PSTFile.PSETID_Appointment));
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidExceptionReplaceTime, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Specifies the recurrence type of the recurring series.
+     * https://msdn.microsoft.com/en-us/library/office/cc842135.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTAppointment
+     */
     public get recurrenceType(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008231, PSTFile.PSETID_Appointment));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidRecurrenceType, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Specifies a description of the recurrence pattern of the calendar object.
+     * https://msdn.microsoft.com/en-us/library/office/cc815733.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTAppointment
+     */
     public get recurrencePattern(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008232, PSTFile.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidRecurrencePattern, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Specifies the dates and times when a recurring series occurs by using one of the recurrence patterns and ranges that are specified in [MS-OXOCAL].
+     * https://msdn.microsoft.com/en-us/library/office/cc842017.aspx
+     * @readonly
+     * @type {Buffer}
+     * @memberof PSTAppointment
+     */
     public get recurrenceStructure(): Buffer {
-        return this.getBinaryItem(this.pstFile.getNameToIdMapItem(0x00008216, PSTFile.PSETID_Appointment));
+        return this.getBinaryItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentRecur, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Contains a stream that maps to the persisted format of a TZREG structure, which describes the time zone to be used for the start and end time of a recurring appointment or meeting request.
+     * https://msdn.microsoft.com/en-us/library/office/cc815376.aspx
+     * @readonly
+     * @type {Buffer}
+     * @memberof PSTAppointment
+     */
     public get timezone(): Buffer {
-        return this.getBinaryItem(this.pstFile.getNameToIdMapItem(0x00008233, PSTFile.PSETID_Appointment));
+        return this.getBinaryItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTimeZoneStruct, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Specifies a list of all the attendees except for the organizer, including resources and unsendable attendees.
+     * https://msdn.microsoft.com/en-us/library/office/cc815418.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTAppointment
+     */
     public get allAttendees(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008238, PSTFile.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAllAttendeesString, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Contains a list of all the sendable attendees who are also required attendees.
+     * https://msdn.microsoft.com/en-us/library/office/cc842502.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTAppointment
+     */
     public get toAttendees(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x0000823b, PSTFile.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidToAttendeesString, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Contains a list of all the sendable attendees who are also optional attendees.
+     * https://msdn.microsoft.com/en-us/library/office/cc839636.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTAppointment
+     */
     public get ccAttendees(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x0000823c, PSTFile.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidCcAttendeesString, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Specifies the sequence number of a Meeting object.
+     * https://msdn.microsoft.com/en-us/library/office/cc765937.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTAppointment
+     */
     public get appointmentSequence(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008201, PSTFile.PSETID_Appointment));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentSequence, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * Is a hosted meeting?
+     * https://msdn.microsoft.com/en-us/library/ee200872(v=exchg.80).aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTAppointment
+     */
     public get isOnlineMeeting(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008240, PSTFile.PSETID_Appointment));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidConferencingCheck, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {number}
+     * @memberof PSTAppointment
+     */
     public get netMeetingType(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008241, PSTFile.PSETID_Appointment));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008241, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {string}
+     * @memberof PSTAppointment
+     */
     public get netMeetingServer(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008242, PSTFile.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008242, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {string}
+     * @memberof PSTAppointment
+     */
     public get netMeetingOrganizerAlias(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008243, PSTFile.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008243, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTAppointment
+     */
     public get netMeetingAutostart(): boolean {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008245, PSTFile.PSETID_Appointment)) != 0;
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008245, OutlookProperties.PSETID_Appointment)) != 0;
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTAppointment
+     */
     public get conferenceServerAllowExternal(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008246, PSTFile.PSETID_Appointment));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008246, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {string}
+     * @memberof PSTAppointment
+     */
     public get netMeetingDocumentPathName(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008247, PSTFile.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008247, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {string}
+     * @memberof PSTAppointment
+     */
     public get netShowURL(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008248, PSTFile.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008248, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {Date}
+     * @memberof PSTAppointment
+     */
     public get attendeeCriticalChange(): Date {
-        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00000001, PSTFile.PSETID_Meeting));
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00000001, OutlookProperties.PSETID_Meeting));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {Date}
+     * @memberof PSTAppointment
+     */
     public get ownerCriticalChange(): Date {
-        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x0000001a, PSTFile.PSETID_Meeting));
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x0000001a, OutlookProperties.PSETID_Meeting));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {string}
+     * @memberof PSTAppointment
+     */
     public get conferenceServerPassword(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008249, PSTFile.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008249, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTAppointment
+     */
     public get appointmentCounterProposal(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008257, PSTFile.PSETID_Appointment));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008257, OutlookProperties.PSETID_Appointment));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTAppointment
+     */
     public get isSilent(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00000004, PSTFile.PSETID_Meeting));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00000004, OutlookProperties.PSETID_Meeting));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {string}
+     * @memberof PSTAppointment
+     */
     public get requiredAttendees(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00000006, PSTFile.PSETID_Meeting));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00000006, OutlookProperties.PSETID_Meeting));
     }
 
+    /**
+     * 
+     * 
+     * @readonly
+     * @type {number}
+     * @memberof PSTAppointment
+     */
     public get localeId(): number {
         return this.getIntItem(0x3ff1);
     }
 
+    /**
+     * JSON stringify the object properties.  Large fields (like body) aren't included.
+     * @returns {string} 
+     * @memberof PSTAppointment
+     */
     public toJSONstring(): string {
         return (
             'PSTAppointment: ' +

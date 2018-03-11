@@ -62,8 +62,6 @@ export class PSTFile {
     public static PSETID_Common: number = 1;
     public static PSETID_Address: number = 2;
     public static PS_INTERNET_HEADERS: number = 3;
-    public static PSETID_Appointment: number = 4;
-    public static PSETID_Meeting: number = 5;
     public static PSETID_Messaging: number = 7;
     public static PSETID_Note: number = 8;
     public static PSETID_PostRss: number = 9;
