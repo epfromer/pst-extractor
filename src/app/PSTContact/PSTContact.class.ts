@@ -35,6 +35,7 @@ import { PSTFile } from '../PSTFile/PSTFile.class';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { OutlookProperties } from '../OutlookProperties';
 
 export class PSTContact extends PSTMessage {
     constructor(
@@ -46,400 +47,868 @@ export class PSTContact extends PSTMessage {
         super(pstFile, descriptorIndexNode, table, localDescriptorItems);
     }
 
-    // Contact's Account name
+    /**
+     * Contains the recipient's account name.
+     * https://msdn.microsoft.com/en-us/library/office/cc842401.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get account(): string {
-        return this.getStringItem(0x3a00);
+        return this.getStringItem(OutlookProperties.PR_ACCOUNT);
     }
 
-    // Callback telephone number
+    /**
+     * Contains a telephone number that the message recipient can use to reach the sender.
+     * https://msdn.microsoft.com/en-us/library/office/cc839943.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get callbackTelephoneNumber(): string {
-        return this.getStringItem(0x3a02);
+        return this.getStringItem(OutlookProperties.PR_CALLBACK_TELEPHONE_NUMBER);
     }
 
-    // Contact's generational abbreviation FTK: Name suffix
+    /**
+     * Contains a generational abbreviation that follows the full name of the recipient.
+     * https://msdn.microsoft.com/en-us/library/office/cc842136.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get generation(): string {
-        return this.getStringItem(0x3a05);
+        return this.getStringItem(OutlookProperties.PR_GENERATION);
     }
 
-    // Contacts given name
+    /**
+     * Contains the first or given name of the recipient.
+     * https://msdn.microsoft.com/en-us/library/office/cc815351.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get givenName(): string {
-        return this.getStringItem(0x3a06);
+        return this.getStringItem(OutlookProperties.PR_GIVEN_NAME);
     }
 
-    // Contacts Government ID Number
+    /**
+     * Contains a government identifier for the recipient.
+     * https://msdn.microsoft.com/en-us/library/office/cc815890.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get governmentIdNumber(): string {
-        return this.getStringItem(0x3a07);
+        return this.getStringItem(OutlookProperties.PR_GOVERNMENT_ID_NUMBER);
     }
 
-    // Business/Office Telephone Number
+    /**
+     * Contains the primary telephone number of the recipient's place of business.
+     * https://msdn.microsoft.com/en-us/library/office/cc839937.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get businessTelephoneNumber(): string {
-        return this.getStringItem(0x3a08);
+        return this.getStringItem(OutlookProperties.PR_BUSINESS_TELEPHONE_NUMBER);
     }
 
-    // Home Telephone Number
+    /**
+     * Contains the primary telephone number of the recipient's home.
+     * https://msdn.microsoft.com/en-us/library/office/cc815389.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get homeTelephoneNumber(): string {
-        return this.getStringItem(0x3a09);
+        return this.getStringItem(OutlookProperties.PR_HOME_TELEPHONE_NUMBER);
     }
 
-    // Contacts initials
+    /**
+     * Contains the initials for parts of the full name of the recipient.
+     * https://msdn.microsoft.com/en-us/library/office/cc839843.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get initials(): string {
-        return this.getStringItem(0x3a0a);
+        return this.getStringItem(OutlookProperties.PR_INITIALS);
     }
 
-    // Keyword
+    /**
+     * Contains a keyword that identifies the recipient to the recipient's system administrator.
+     * https://msdn.microsoft.com/en-us/library/office/cc842250.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get keyword(): string {
-        return this.getStringItem(0x3a0b);
+        return this.getStringItem(OutlookProperties.PR_KEYWORD);
     }
 
-    // Contact's language
+    /**
+     * Contains a value that indicates the language in which the messaging user is writing messages.
+     * https://msdn.microsoft.com/en-us/library/office/cc839724.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get language(): string {
-        return this.getStringItem(0x3a0c);
+        return this.getStringItem(OutlookProperties.PR_LANGUAGE);
     }
 
-    // Contact's location
+    /**
+     * Contains the location of the recipient in a format that is useful to the recipient's organization.
+     * https://msdn.microsoft.com/en-us/library/office/cc815567.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get location(): string {
-        return this.getStringItem(0x3a0d);
+        return this.getStringItem(OutlookProperties.PR_LOCATION);
     }
 
-    // MHS Common Name
+    /**
+     * Contains the common name of the message handling system.
+     * https://msdn.microsoft.com/en-us/library/office/cc842474.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get mhsCommonName(): string {
-        return this.getStringItem(0x3a0f);
+        return this.getStringItem(OutlookProperties.PR_MHS_COMMON_NAME);
     }
 
-    // Organizational identification number
+    /**
+     * Contains an organizational ID number for the contact, such as an employee ID number.
+     * https://msdn.microsoft.com/en-us/library/office/cc765672.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get organizationalIdNumber(): string {
-        return this.getStringItem(0x3a10);
+        return this.getStringItem(OutlookProperties.PR_ORGANIZATIONAL_ID_NUMBER);
     }
 
-    // Contact's surname FTK: Last name
+    /**
+     * Contains the last or surname of the recipient.
+     * https://msdn.microsoft.com/en-us/library/office/cc765704.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get surname(): string {
-        return this.getStringItem(0x3a11);
+        return this.getStringItem(OutlookProperties.PR_SURNAME);
     }
 
-    // Original display name
+    /**
+     * Contains the original display name for an entry copied from an address book to a personal address book or other writable address book.
+     * https://msdn.microsoft.com/en-us/library/office/cc765709.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get originalDisplayName(): string {
-        return this.getStringItem(0x3a13);
+        return this.getStringItem(OutlookProperties.PR_ORIGINAL_DISPLAY_NAME);
     }
 
-    // Default Postal Address
+    /**
+     * Contains the recipient's postal address.
+     * https://msdn.microsoft.com/en-us/library/office/cc842549.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get postalAddress(): string {
-        return this.getStringItem(0x3a15);
+        return this.getStringItem(OutlookProperties.PR_POSTAL_ADDRESS);
     }
 
-    // Contact's company name
+    /**
+     * Contains the recipient's company name.
+     * https://msdn.microsoft.com/en-us/library/office/cc842192.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get companyName(): string {
-        return this.getStringItem(0x3a16);
+        return this.getStringItem(OutlookProperties.PT_UNICODE);
     }
 
-    // Contact's job title FTK: Profession
+    /**
+     * Contains the recipient's job title.
+     * https://msdn.microsoft.com/en-us/library/office/cc815831.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get title(): string {
-        return this.getStringItem(0x3a17);
+        return this.getStringItem(OutlookProperties.PR_TITLE);
     }
 
-    // Contact's department name Used in contact item
+    /**
+     * Contains a name for the department in which the recipient works.
+     * https://msdn.microsoft.com/en-us/library/office/cc839825.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get departmentName(): string {
-        return this.getStringItem(0x3a18);
+        return this.getStringItem(OutlookProperties.PR_DEPARTMENT_NAME);
     }
 
-    // Contact's office location
+    /**
+     * Contains the recipient's office location.
+     * https://msdn.microsoft.com/en-us/library/office/cc842269.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get officeLocation(): string {
-        return this.getStringItem(0x3a19);
+        return this.getStringItem(OutlookProperties.PR_OFFICE_LOCATION);
     }
 
-    // Primary Telephone
+    /**
+     * Contains the recipient's primary telephone number.
+     * https://msdn.microsoft.com/en-us/library/office/cc839969.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get primaryTelephoneNumber(): string {
-        return this.getStringItem(0x3a1a);
+        return this.getStringItem(OutlookProperties.PR_PRIMARY_TELEPHONE_NUMBER);
     }
 
-    // Contact's secondary office (business) phone number
+    /**
+     * Contains a secondary telephone number at the recipient's place of business.
+     * https://msdn.microsoft.com/en-us/library/office/cc841990.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get business2TelephoneNumber(): string {
-        return this.getStringItem(0x3a1b);
+        return this.getStringItem(OutlookProperties.PR_BUSINESS2_TELEPHONE_NUMBER);
     }
 
-    // Mobile Phone Number
+    /**
+     * Contains the recipient's cellular telephone number.
+     * https://msdn.microsoft.com/en-us/library/office/cc839798.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get mobileTelephoneNumber(): string {
-        return this.getStringItem(0x3a1c);
+        return this.getStringItem(OutlookProperties.PR_MOBILE_TELEPHONE_NUMBER);
     }
 
-    // Radio Phone Number
+    /**
+     * Contains the recipient's radio telephone number.
+     * https://msdn.microsoft.com/en-us/library/office/cc839806.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get radioTelephoneNumber(): string {
-        return this.getStringItem(0x3a1d);
+        return this.getStringItem(OutlookProperties.PR_RADIO_TELEPHONE_NUMBER);
     }
 
-    // Car Phone Number
+    /**
+     * Contains the recipient's car telephone number.
+     * https://msdn.microsoft.com/en-us/library/office/cc815394.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get carTelephoneNumber(): string {
-        return this.getStringItem(0x3a1e);
+        return this.getStringItem(OutlookProperties.PR_CAR_TELEPHONE_NUMBER);
     }
 
-    // Other Phone Number
+    /**
+     * Contains an alternate telephone number for the recipient.
+     * https://msdn.microsoft.com/en-us/library/office/cc839561.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get otherTelephoneNumber(): string {
-        return this.getStringItem(0x3a1f);
+        return this.getStringItem(OutlookProperties.PR_OTHER_TELEPHONE_NUMBER);
     }
 
-    // Transmittable display name
+    /**
+     * Contains a recipient's display name in a secure form that cannot be changed.
+     * https://msdn.microsoft.com/en-us/library/office/cc815723.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get transmittableDisplayName(): string {
-        return this.getStringItem(0x3a20);
+        return this.getStringItem(OutlookProperties.PR_TRANSMITABLE_DISPLAY_NAME);
     }
 
-    // Pager Phone Number
+    /**
+     * Contains the recipient's pager telephone number.
+     * https://msdn.microsoft.com/en-us/library/office/cc765824.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get pagerTelephoneNumber(): string {
-        return this.getStringItem(0x3a21);
+        return this.getStringItem(OutlookProperties.PR_PAGER_TELEPHONE_NUMBER);
     }
 
-    // Primary Fax Number
+    /**
+     * Contains the telephone number of the recipient's primary fax machine.
+     * https://msdn.microsoft.com/en-us/library/office/cc815713.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get primaryFaxNumber(): string {
-        return this.getStringItem(0x3a23);
+        return this.getStringItem(OutlookProperties.PR_PRIMARY_FAX_NUMBER);
     }
 
-    // Contact's office (business) fax number
+    /**
+     * Contains the telephone number of the recipient's business fax machine.
+     * https://msdn.microsoft.com/en-us/library/office/cc765799.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get businessFaxNumber(): string {
-        return this.getStringItem(0x3a24);
+        return this.getStringItem(OutlookProperties.PR_BUSINESS_FAX_NUMBER);
     }
 
-    // Contact's home fax number
+    /**
+     * Contains the telephone number of the recipient's home fax machine.
+     * https://msdn.microsoft.com/en-us/library/office/cc842109.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get homeFaxNumber(): string {
-        return this.getStringItem(0x3a25);
+        return this.getStringItem(OutlookProperties.PR_HOME_FAX_NUMBER);
     }
 
-    // Business Address Country
+    /**
+     * Contains the name of the recipient's country/region.
+     * https://msdn.microsoft.com/en-us/library/office/cc842494.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get businessAddressCountry(): string {
-        return this.getStringItem(0x3a26);
+        return this.getStringItem(OutlookProperties.PR_COUNTRY);
     }
 
-    // Business Address City
+    /**
+     * Contains the name of the recipient's locality, such as the town or city.
+     * https://msdn.microsoft.com/en-us/library/office/cc815711.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get businessAddressCity(): string {
-        return this.getStringItem(0x3a27);
+        return this.getStringItem(OutlookProperties.PR_LOCALITY);
     }
 
-    // Business Address State
+    /**
+     * Contains the name of the recipient's state or province.
+     * https://msdn.microsoft.com/en-us/library/office/cc839544.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get businessAddressStateOrProvince(): string {
-        return this.getStringItem(0x3a28);
+        return this.getStringItem(OutlookProperties.PR_STATE_OR_PROVINCE);
     }
 
-    // Business Address Street
+    /**
+     * Contains the recipient's street address.
+     * https://msdn.microsoft.com/en-us/library/office/cc765810.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get businessAddressStreet(): string {
-        return this.getStringItem(0x3a29);
+        return this.getStringItem(OutlookProperties.PR_STREET_ADDRESS);
     }
 
-    // Business Postal Code
+    /**
+     * Contains the postal code for the recipient's postal address.
+     * https://msdn.microsoft.com/en-us/library/office/cc839851.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get businessPostalCode(): string {
-        return this.getStringItem(0x3a2a);
+        return this.getStringItem(OutlookProperties.PR_POSTAL_CODE);
     }
 
-    // Business PO Box
+    /**
+     * Contains the number or identifier of the recipient's post office box.
+     * https://msdn.microsoft.com/en-us/library/office/cc815522.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get businessPoBox(): string {
-        return this.getStringItem(0x3a2b);
+        return this.getStringItem(OutlookProperties.PR_POST_OFFICE_BOX);
     }
 
-    // Telex Number
+    /**
+     * Contains the recipient's telex number.
+     * https://msdn.microsoft.com/en-us/library/office/cc765894.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get telexNumber(): string {
-        return this.getStringItem(0x3a2c);
+        return this.getStringItem(OutlookProperties.PR_TELEX_NUMBER);
     }
 
-    // ISDN Number
+    /**
+     * Contains the recipient's ISDN-capable telephone number.
+     * https://msdn.microsoft.com/en-us/library/office/cc765863.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get isdnNumber(): string {
-        return this.getStringItem(0x3a2d);
+        return this.getStringItem(OutlookProperties.PR_ISDN_NUMBER);
     }
 
-    // Assistant Phone Number
+    /**
+     * Contains the telephone number of the recipient's administrative assistant.
+     * https://msdn.microsoft.com/en-us/library/office/cc840012.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get assistantTelephoneNumber(): string {
-        return this.getStringItem(0x3a2e);
+        return this.getStringItem(OutlookProperties.PR_ASSISTANT_TELEPHONE_NUMBER);
     }
 
-    // Home Phone 2
+    /**
+     * Contains a secondary telephone number at the recipient's home.
+     * https://msdn.microsoft.com/en-us/library/office/cc815540.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get home2TelephoneNumber(): string {
-        return this.getStringItem(0x3a2f);
+        return this.getStringItem(OutlookProperties.PR_HOME2_TELEPHONE_NUMBER);
     }
 
-    // Assistant�s Name
+    /**
+     * Contains the name of the recipient's administrative assistant.
+     * https://msdn.microsoft.com/en-us/library/office/cc815319.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get assistant(): string {
-        return this.getStringItem(0x3a30);
+        return this.getStringItem(OutlookProperties.PR_ASSISTANT);
     }
 
-    // Hobbies
+    /**
+     * Contains the names of the hobbies of the messaging user.
+     * https://msdn.microsoft.com/en-us/library/office/cc815391.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get hobbies(): string {
-        return this.getStringItem(0x3a43);
+        return this.getStringItem(OutlookProperties.PR_HOBBIES);
     }
 
-    // Middle Name
+    /**
+     * Contains the middle name of a contact.
+     * https://msdn.microsoft.com/en-us/library/office/cc815329.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get middleName(): string {
-        return this.getStringItem(0x3a44);
+        return this.getStringItem(OutlookProperties.PR_MIDDLE_NAME);
     }
 
-    // Display Name Prefix (Contact Title)
+    /**
+     * Contains the display name prefix (such as Miss, Mr., Mrs.) for the messaging user.
+     * https://msdn.microsoft.com/en-us/library/office/cc765538.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get displayNamePrefix(): string {
-        return this.getStringItem(0x3a45);
+        return this.getStringItem(OutlookProperties.PR_DISPLAY_NAME_PREFIX);
     }
 
-    // Profession
+    /**
+     * Contains the profession of the user.
+     * https://msdn.microsoft.com/en-us/library/office/cc765792.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get profession(): string {
-        return this.getStringItem(0x3a46);
+        return this.getStringItem(OutlookProperties.PR_PROFESSION);
     }
 
-    // Preferred By Name
+    /**
+     * Contains the name of the mail user's referral.
+     * https://msdn.microsoft.com/en-us/library/office/cc765803.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get preferredByName(): string {
-        return this.getStringItem(0x3a47);
+        return this.getStringItem(OutlookProperties.PR_REFERRED_BY_NAME);
     }
 
-    // Spouse�s Name
+    /**
+     * Contains the user’s spouse name.
+     * https://msdn.microsoft.com/en-us/library/office/cc765832.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get spouseName(): string {
-        return this.getStringItem(0x3a48);
+        return this.getStringItem(OutlookProperties.PR_SPOUSE_NAME);
     }
 
-    // Computer Network Name
+    /**
+     * Contains the name of the network used to transmit the message.
+     * https://msdn.microsoft.com/en-us/library/office/cc839633.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get computerNetworkName(): string {
-        return this.getStringItem(0x3a49);
+        return this.getStringItem(OutlookProperties.PR_COMPUTER_NETWORK_NAME);
     }
 
-    // Customer ID
+    /**
+     * Contains the contact’s customer ID number.
+     * https://msdn.microsoft.com/en-us/library/office/cc842178.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get customerId(): string {
-        return this.getStringItem(0x3a4a);
+        return this.getStringItem(OutlookProperties.PR_CUSTOMER_ID);
     }
 
-    // TTY/TDD Phone
+    /**
+     * Contains the telephone number for the contact’s text telephone (TTY) or telecommunication device for the deaf (TDD).
+     * https://msdn.microsoft.com/en-us/library/office/cc765580.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get ttytddPhoneNumber(): string {
-        return this.getStringItem(0x3a4b);
+        return this.getStringItem(OutlookProperties.PR_TTYTDD_PHONE_NUMBER);
     }
 
-    // Ftp Site
+    /**
+     * Contains the contact’s File Transfer Protocol (FTP) URL. FTP is a protocol that is used to transfer data, as specified in [RFC959].
+     * https://msdn.microsoft.com/en-us/library/office/cc839830.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get ftpSite(): string {
-        return this.getStringItem(0x3a4c);
+        return this.getStringItem(OutlookProperties.PR_FTP_SITE);
     }
 
-    // Manager�s Name
+    /**
+     * Contains the name of the recipient's manager.
+     * https://msdn.microsoft.com/en-us/library/office/cc842009.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get managerName(): string {
-        return this.getStringItem(0x3a4e);
+        return this.getStringItem(OutlookProperties.PR_MANAGER_NAME);
     }
 
-    // Nickname
+    /**
+     * Contains the nickname of the contact.
+     * https://msdn.microsoft.com/en-us/library/office/cc765603.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get nickname(): string {
-        return this.getStringItem(0x3a4f);
+        return this.getStringItem(OutlookProperties.PR_NICKNAME);
     }
 
-    // Personal Home Page
+    /**
+     * Contains the URL of a user's personal home page.
+     * https://msdn.microsoft.com/en-us/library/office/cc765751.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get personalHomePage(): string {
-        return this.getStringItem(0x3a50);
+        return this.getStringItem(OutlookProperties.PR_PERSONAL_HOME_PAGE);
     }
 
-    // Business Home Page
+    /**
+     * Contains the URL of the home page for the business.
+     * https://msdn.microsoft.com/en-us/library/office/cc842385.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get businessHomePage(): string {
-        return this.getStringItem(0x3a51);
+        return this.getStringItem(OutlookProperties.PR_BUSINESS_HOME_PAGE);
     }
 
-    // Note
+    /**
+     * Get the note associated with the contact.
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get note(): string {
         return this.getStringItem(0x6619);
     }
 
+    /**
+     * Get a named string item from the map
+     * @param {number} key 
+     * @returns {string} 
+     * @memberof PSTContact
+     */
     public getNamedStringItem(key: number): string {
-        let id = this.pstFile.getNameToIdMapItem(key, PSTFile.PSETID_Address);
+        let id = this.pstFile.getNameToIdMapItem(key, OutlookProperties.PSETID_Address);
         if (id != -1) {
             return this.getStringItem(id);
         }
         return '';
     }
 
+    /**
+     * Specifies the first display name that corresponds to the e-mail address that is specified for the contact.
+     * https://msdn.microsoft.com/en-us/library/partnercenter/cc815564(v=office.14).aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get smtpAddress(): string {
-        return this.getNamedStringItem(0x00008084);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail1OriginalDisplayName);
     }
 
-    // Company Main Phone
+    /**
+     * Contains the main telephone number for a company
+     * https://msdn.microsoft.com/en-us/library/office/cc839651.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get companyMainPhoneNumber(): string {
-        return this.getStringItem(0x3a57);
+        return this.getStringItem(OutlookProperties.PR_COMPANY_MAIN_PHONE_NUMBER);
     }
 
-    // Children's names
+    /**
+     * Contains a list of names of children
+     * https://msdn.microsoft.com/en-us/library/office/cc839533.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get childrensNames(): string {
-        return this.getStringItem(0x3a58);
+        return this.getStringItem(OutlookProperties.PR_CHILDRENS_NAMES);
     }
 
-    // Home Address City
+    /**
+     * Contains the city for the recipient's home address.
+     * https://msdn.microsoft.com/en-us/library/office/cc815582.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get homeAddressCity(): string {
-        return this.getStringItem(0x3a59);
+        return this.getStringItem(OutlookProperties.PR_HOME_ADDRESS_CITY);
     }
 
-    // Home Address Country
+    /**
+     * Contains the county in a contact's address.
+     * https://msdn.microsoft.com/en-us/library/office/cc842548.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get homeAddressCountry(): string {
-        return this.getStringItem(0x3a5a);
+        return this.getStringItem(OutlookProperties.PR_HOME_ADDRESS_COUNTRY);
     }
 
-    // Home Address Postal Code
+    /**
+     * Contains the postal code for the user's home address.
+     * https://msdn.microsoft.com/en-us/library/office/cc815880.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get homeAddressPostalCode(): string {
-        return this.getStringItem(0x3a5b);
+        return this.getStringItem(OutlookProperties.PR_HOME_ADDRESS_POSTAL_CODE);
     }
 
-    // Home Address State or Province
+    /**
+     * Contains the state or province portion of a user's address.
+     * https://msdn.microsoft.com/en-us/library/office/cc839958.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get homeAddressStateOrProvince(): string {
-        return this.getStringItem(0x3a5c);
+        return this.getStringItem(OutlookProperties.PR_HOME_ADDRESS_STATE_OR_PROVINCE);
     }
 
-    // Home Address Street
+    /**
+     * Contains the street portion of a user's address.
+     * https://msdn.microsoft.com/en-us/library/office/cc841997.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get homeAddressStreet(): string {
-        return this.getStringItem(0x3a5d);
+        return this.getStringItem(OutlookProperties.PR_HOME_ADDRESS_STREET);
     }
 
-    // Home Address Post Office Box
+    /**
+     * Contains the post office box information for a user's address.
+     * https://msdn.microsoft.com/en-us/library/office/cc842440.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get homeAddressPostOfficeBox(): string {
-        return this.getStringItem(0x3a5e);
+        return this.getStringItem(OutlookProperties.PR_HOME_ADDRESS_POST_OFFICE_BOX);
     }
 
-    // Other Address City
+    /**
+     * Contains the name of the mail user's other locality, such as the town or city.
+     * https://msdn.microsoft.com/en-us/library/office/cc765881.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get otherAddressCity(): string {
-        return this.getStringItem(0x3a5f);
+        return this.getStringItem(OutlookProperties.PR_OTHER_ADDRESS_CITY);
     }
 
-    // Other Address Country
+    /**
+     * Contains the mail user's other country/region.
+     * https://msdn.microsoft.com/en-us/library/office/cc765814.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get otherAddressCountry(): string {
-        return this.getStringItem(0x3a60);
+        return this.getStringItem(OutlookProperties.PR_OTHER_ADDRESS_CITY);
     }
 
-    // Other Address Postal Code
+    /**
+     * Contains the postal code for the mail user's other postal address.
+     * https://msdn.microsoft.com/en-us/library/office/cc842261.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get otherAddressPostalCode(): string {
-        return this.getStringItem(0x3a61);
+        return this.getStringItem(OutlookProperties.PR_OTHER_ADDRESS_POSTAL_CODE);
     }
 
-    // Other Address State
+    /**
+     * Contains the name of state or province used in the other address.
+     * https://msdn.microsoft.com/en-us/library/office/cc815782.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get otherAddressStateOrProvince(): string {
-        return this.getStringItem(0x3a62);
+        return this.getStringItem(OutlookProperties.PR_OTHER_ADDRESS_STATE_OR_PROVINCE);
     }
 
-    // Other Address Street
+    /**
+     * Contains the mail user's other street address.
+     * https://msdn.microsoft.com/en-us/library/office/cc839546.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get otherAddressStreet(): string {
-        return this.getStringItem(0x3a63);
+        return this.getStringItem(OutlookProperties.PR_OTHER_ADDRESS_STREET);
     }
 
-    // Other Address Post Office box
+    /**
+     * Contains the post office box for a contact's other address.
+     * https://msdn.microsoft.com/en-us/library/office/cc842396.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get otherAddressPostOfficeBox(): string {
-        return this.getStringItem(0x3a64);
+        return this.getStringItem(OutlookProperties.PR_OTHER_ADDRESS_POST_OFFICE_BOX);
     }
 
     ///////////////////////////////////////////////////
     // Below are the values from the name to id map...
     ///////////////////////////////////////////////////
 
-    // File under FTK: File as
+    /**
+     * Specifies the name under which the contact is filed when displaying a list of contacts.
+     * https://msdn.microsoft.com/en-us/library/office/cc842002.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get fileUnder(): string {
-        return this.getNamedStringItem(0x00008005);
+        return this.getNamedStringItem(OutlookProperties.PidLidFileUnder);
     }
 
-    // Home Address
+    /**
+     * Specifies the complete address of the contact’s home address.
+     * https://msdn.microsoft.com/en-us/library/office/cc839539.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get homeAddress(): string {
-        return this.getNamedStringItem(0x0000801a);
+        return this.getNamedStringItem(OutlookProperties.PidLidHomeAddress);
     }
 
-    // Business Address
+    /**
+     * Specifies the contact's complete work address.
+     * https://msdn.microsoft.com/en-us/library/office/cc815905.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get workAddress(): string {
-        return this.getNamedStringItem(0x0000801b);
+        return this.getNamedStringItem(OutlookProperties.PidLidWorkAddress);
     }
 
-    // Other Address
+    /**
+     * Specifies the complete address of the contact’s other address.
+     * https://msdn.microsoft.com/en-us/library/office/cc815383.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get otherAddress(): string {
-        return this.getNamedStringItem(0x0000801c);
+        return this.getNamedStringItem(OutlookProperties.PidLidOtherAddress);
     }
 
-    // Selected Mailing Address
+    /**
+     * Specifies which physical address is the contact’s mailing address.
+     * https://msdn.microsoft.com/en-us/library/office/cc815430.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTContact
+     */
     public get postalAddressId(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008022, PSTFile.PSETID_Address));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidPostalAddressId, OutlookProperties.PSETID_Address));
     }
 
     // Webpage

@@ -59,8 +59,6 @@ export class PSTFile {
     public static PST_TYPE_UNICODE: number = 23;
     public static PST_TYPE_2013_UNICODE: number = 36;
     public static PS_PUBLIC_STRINGS: number = 0;
-    public static PSETID_Common: number = 1;
-    public static PSETID_Address: number = 2;
     public static PS_INTERNET_HEADERS: number = 3;
     public static PSETID_Messaging: number = 7;
     public static PSETID_Note: number = 8;

@@ -1150,7 +1150,7 @@ export class PSTMessage extends PSTObject {
      * @memberof PSTMessage
      */
     public get reminderSet(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidReminderSet, PSTFile.PSETID_Common));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidReminderSet, OutlookProperties.PSETID_Common));
     }
 
     /**
@@ -1161,7 +1161,7 @@ export class PSTMessage extends PSTObject {
      * @memberof PSTMessage
      */
     public get reminderDelta(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidReminderDelta, PSTFile.PSETID_Common));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidReminderDelta, OutlookProperties.PSETID_Common));
     }
 
     /**
