@@ -970,84 +970,126 @@ export class PSTMessage extends PSTObject {
         return this.getIntItem(OutlookProperties.PR_RESPONSIBILITY) != 0;
     }
 
-    // Compressed RTF in Sync Boolean
+    /**
+     * Contains TRUE if the PR_RTF_COMPRESSED (PidTagRtfCompressed) property has the same text content as the PR_BODY (PidTagBody) property for this message.
+     * https://msdn.microsoft.com/en-us/library/office/cc765844.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get isRTFInSync(): boolean {
-        return this.getIntItem(0x0e1f) != 0;
+        return this.getIntItem(OutlookProperties.PR_RTF_IN_SYNC) != 0;
     }
 
-    // URL computer name set
-    public get isURLCompNameSet(): boolean {
-        return this.getIntItem(0x0e62) != 0;
-    }
-
-    // Display BCC
+    /**
+     * Contains an ASCII list of the display names of any blind carbon copy (BCC) message recipients, separated by semicolons (;).
+     * https://msdn.microsoft.com/en-us/library/office/cc815730.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get displayBCC(): string {
-        return this.getStringItem(0x0e02);
+        return this.getStringItem(OutlookProperties.PR_DISPLAY_BCC);
     }
 
-    // Display CC
+    /**
+     * Contains an ASCII list of the display names of any carbon copy (CC) message recipients, separated by semicolons (;).
+     * https://msdn.microsoft.com/en-us/library/office/cc765528.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get displayCC(): string {
-        return this.getStringItem(0x0e03);
+        return this.getStringItem(OutlookProperties.PR_DISPLAY_CC);
     }
 
-    // Display To
+    /**
+     * Contains a list of the display names of the primary (To) message recipients, separated by semicolons (;).
+     * https://msdn.microsoft.com/en-us/library/office/cc839687.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get displayTo(): string {
-        return this.getStringItem(0x0e04);
+        return this.getStringItem(OutlookProperties.PR_DISPLAY_TO);
     }
 
-    // Message delivery time
+    /**
+     * Contains the date and time when a message was delivered.
+     * https://msdn.microsoft.com/en-us/library/office/cc841961.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTMessage
+     */
     public get messageDeliveryTime(): Date {
-        return this.getDateItem(0x0e06);
+        return this.getDateItem(OutlookProperties.PR_MESSAGE_DELIVERY_TIME);
     }
 
-    // Message content properties
-    public get nativeBodyType(): number {
-        return this.getIntItem(0x1016);
-    }
-
-    // Message ID for this email as allocated per rfc2822
+    /**
+     * Corresponds to the message ID field as specified in [RFC2822].
+     * https://msdn.microsoft.com/en-us/library/office/cc839521.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get internetMessageId(): string {
-        return this.getStringItem(0x1035);
+        return this.getStringItem(OutlookProperties.PR_INTERNET_MESSAGE_ID);
     }
 
-    // In-Reply-To
+    /**
+     * Contains the original message's PR_INTERNET_MESSAGE_ID (PidTagInternetMessageId) property value.
+     * https://msdn.microsoft.com/en-us/library/office/cc839776.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get inReplyToId(): string {
-        return this.getStringItem(0x1042);
+        return this.getStringItem(OutlookProperties.PR_IN_REPLY_TO_ID);
     }
 
-    // Return Path
+    /**
+     * Contains the value of a Multipurpose Internet Mail Extensions (MIME) message's Return-Path header field. The e-mail address of the message's sender.
+     * https://msdn.microsoft.com/en-us/library/office/cc765856.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get returnPath(): string {
-        return this.getStringItem(0x1046);
+        return this.getStringItem(OutlookProperties.PR_INTERNET_RETURN_PATH);
     }
 
-    // Icon index
+    /**
+     * Contains a number that indicates which icon to use when you display a group of e-mail objects.
+     * https://msdn.microsoft.com/en-us/library/office/cc815472.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
     public get iconIndex(): number {
-        return this.getIntItem(0x1080);
+        return this.getIntItem(OutlookProperties.PR_ICON_INDEX);
     }
 
-    // Action flag
-    // This relates to the replying / forwarding of messages.
-    // It is classified as "unknown" atm, so just provided here
-    // in case someone works out what all the various flags mean.
-    public get actionFlag(): number {
-        return this.getIntItem(0x1081);
+    /**
+     * Contains the last verb executed.
+     * Todo: Helper methods for each flag.
+     * https://msdn.microsoft.com/en-us/library/office/cc841968.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
+    public get lastVerbExecuted(): number {
+        return this.getIntItem(OutlookProperties.PR_LAST_VERB_EXECUTED);
     }
 
-    // is the action flag for this item "forward"?
-    public get hasForwarded(): boolean {
-        let actionFlag = this.getIntItem(0x1081);
-        return (actionFlag & 0x8) > 0;
-    }
-
-    // is the action flag for this item "replied"?
-    public get hasReplied(): boolean {
-        let actionFlag = this.getIntItem(0x1081);
-        return (actionFlag & 0x4) > 0;
-    }
-
-    // the date that this item had an action performed (eg. replied or forwarded)
-    public get actionDate(): Date {
-        return this.getDateItem(0x1082);
+    /**
+     * Contains the time when the last verb was executed.
+     * https://msdn.microsoft.com/en-us/library/office/cc839918.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTMessage
+     */
+    public get lastVerbExecutionTime(): Date {
+        return this.getDateItem(OutlookProperties.PR_LAST_VERB_EXECUTION_TIME);
     }
 
     // Disable full fidelity
@@ -1239,12 +1281,10 @@ export class PSTMessage extends PSTObject {
                     deleteAfterSubmit: this.deleteAfterSubmit,
                     responsibility: this.responsibility,
                     isRTFInSync: this.isRTFInSync,
-                    isURLCompNameSet: this.isURLCompNameSet,
                     displayBCC: this.displayBCC,
                     displayCC: this.displayCC,
                     displayTo: this.displayTo,
                     messageDeliveryTime: this.messageDeliveryTime,
-                    nativeBodyType: this.nativeBodyType,
                     bodyPrefix: this.bodyPrefix,
                     rtfSyncBodyCRC: this.rtfSyncBodyCRC,
                     rtfSyncBodyCount: this.rtfSyncBodyCount,
@@ -1255,9 +1295,7 @@ export class PSTMessage extends PSTObject {
                     inReplyToId: this.inReplyToId,
                     returnPath: this.returnPath,
                     iconIndex: this.iconIndex,
-                    actionFlag: this.actionFlag,
-                    hasReplied: this.hasReplied,
-                    actionDate: this.actionDate,
+                    lastVerbExecutionTime: this.lastVerbExecutionTime,
                     disableFullFidelity: this.disableFullFidelity,
                     urlCompName: this.urlCompName,
                     attrHidden: this.attrHidden,
