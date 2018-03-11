@@ -56,6 +56,12 @@ export class DescriptorIndexNode {
         return this._dataOffsetIndexIdentifier;
     }
 
+    /**
+     * Creates an instance of DescriptorIndexNode, a component of the internal descriptor b-tree.
+     * @param {Buffer} buffer 
+     * @param {number} pstFileType 
+     * @memberof DescriptorIndexNode
+     */
     constructor(buffer: Buffer, pstFileType: number) {
         if (pstFileType == PSTFile.PST_TYPE_ANSI) {
             this._descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 0, 4).toNumber();
@@ -71,6 +77,11 @@ export class DescriptorIndexNode {
         }
     }
 
+    /**
+     * JSON stringify the object properties.  
+     * @returns {string} 
+     * @memberof DescriptorIndexNode
+     */
     public toJSONstring(): string {
         return (
             'DescriptorIndexNode: ' +

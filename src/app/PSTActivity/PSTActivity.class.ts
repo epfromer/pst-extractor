@@ -35,9 +35,18 @@ import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTMessage } from '../PSTMessage/PSTMessage.class';
+import { OutlookProperties } from '../OutlookProperties';
 
-// PSTActivity represents Journal entries
 export class PSTActivity extends PSTMessage {
+    /**
+     * Creates an instance of PSTActivity.  Represents Journal entries, class IPM.Activity.
+     * https://msdn.microsoft.com/en-us/library/office/aa204771(v=office.11).aspx
+     * @param {PSTFile} pstFile 
+     * @param {DescriptorIndexNode} descriptorIndexNode 
+     * @param {PSTTableBC} [table] 
+     * @param {Map<number, PSTDescriptorItem>} [localDescriptorItems] 
+     * @memberof PSTActivity
+     */
     constructor(
         pstFile: PSTFile,
         descriptorIndexNode: DescriptorIndexNode,
@@ -47,56 +56,121 @@ export class PSTActivity extends PSTMessage {
         super(pstFile, descriptorIndexNode, table, localDescriptorItems);
     }
 
-    // Type
+    /**
+     * Contains the display name of the journaling application (for example, "MSWord"), and is typically a free-form attribute of a journal message, usually a string.
+     * https://msdn.microsoft.com/en-us/library/office/cc839662.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTActivity
+     */
     public get logType(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008700, PSTFile.PSETID_Log));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLogType, OutlookProperties.PSETID_Log));
     }
 
-    // Start
+    /**
+     * Represents the start date and time for the journal message.
+     * https://msdn.microsoft.com/en-us/library/office/cc842339.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTActivity
+     */
     public get logStart(): Date {
-        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008706, PSTFile.PSETID_Log));
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLogStart, OutlookProperties.PSETID_Log));
     }
 
-    // Duration
+    /**
+     * Represents the duration, in minutes, of a journal message.
+     * https://msdn.microsoft.com/en-us/library/office/cc765536.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTActivity
+     */
     public get logDuration(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008707, PSTFile.PSETID_Log));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLogDuration, OutlookProperties.PSETID_Log));
     }
 
-    // End
+    /**
+     * Represents the end date and time for the journal message.
+     * https://msdn.microsoft.com/en-us/library/office/cc839572.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTActivity
+     */
     public get logEnd(): Date {
-        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008708, PSTFile.PSETID_Log));
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLogEnd, OutlookProperties.PSETID_Log));
     }
 
-    // LogFlags
+    /**
+     * Contains metadata about the journal.
+     * https://msdn.microsoft.com/en-us/library/office/cc815433.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTActivity
+     */
     public get logFlags(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x0000870c, PSTFile.PSETID_Log));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLogFlags, OutlookProperties.PSETID_Log));
     }
 
-    // DocPrinted
+    /**
+     * Indicates whether the document was printed during journaling.
+     * https://msdn.microsoft.com/en-us/library/office/cc839873.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTActivity
+     */
     public get isDocumentPrinted(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x0000870e, PSTFile.PSETID_Log));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLogDocumentPrinted, OutlookProperties.PSETID_Log));
     }
 
-    // DocSaved
+    /**
+     * Indicates whether the document was saved during journaling.
+     * https://msdn.microsoft.com/en-us/library/office/cc815488.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTActivity
+     */
     public get isDocumentSaved(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x0000870f, PSTFile.PSETID_Log));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLogDocumentSaved, OutlookProperties.PSETID_Log));
     }
 
-    // DocRouted
+    /**
+     * Indicates whether the document was sent to a routing recipient during journaling.
+     * https://msdn.microsoft.com/en-us/library/office/cc839558.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTActivity
+     */
     public get isDocumentRouted(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008710, PSTFile.PSETID_Log));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLogDocumentRouted, OutlookProperties.PSETID_Log));
     }
 
-    // DocPosted
+    /**
+     * Indicates whether the document was sent by e-mail or posted to a server folder during journaling.
+     * https://msdn.microsoft.com/en-us/library/office/cc815353.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTActivity
+     */
     public get isDocumentPosted(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008711, PSTFile.PSETID_Log));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLogDocumentPosted, OutlookProperties.PSETID_Log));
     }
 
-    // Type Description
+    /**
+     * Describes the activity that is being recorded.
+     * https://msdn.microsoft.com/en-us/library/office/cc815500.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTActivity
+     */
     public get logTypeDesc(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008712, PSTFile.PSETID_Log));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLogTypeDesc, OutlookProperties.PSETID_Log));
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTActivity
+     */
     public toJSONstring(): string {
         return (
             'PSTActivity: ' +

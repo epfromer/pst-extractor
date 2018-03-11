@@ -1,5 +1,5 @@
 // See PSTMessage.class for details on these properties
-export enum OutlookProperties {
+export const enum OutlookProperties {
     PR_RTF_COMPRESSED = 0x1009,
     PR_NON_RECEIPT_NOTIFICATION_REQUESTED = 0x0C06,
     PR_ORIGINATOR_NON_DELIVERY_REPORT_REQUESTED = 0x0c08,
@@ -69,15 +69,27 @@ export enum OutlookProperties {
     PR_LAST_VERB_EXECUTION_TIME = 0x1082,
     PR_URL_COMP_NAME = 0x10F3,
     PR_ATTR_HIDDEN = 0x10f4,
-    PidLidTaskStartDate = 0x00008104,
-    PidLidTaskDueDate = 0x00008105,
-    PidLidReminderSet = 0x00008503,
-    PidLidReminderDelta = 0x00008501,
     PidTagConversationId = 0x3013,
     PidTagConversationIndexTracking = 0x3016,
     PR_EMAIL_ADDRESS = 0x3003,
     PR_ADDRTYPE = 0x3002,
     PR_COMMENT = 0x3004,
     PR_CREATION_TIME = 0x3007,
-    PR_LAST_MODIFICATION_TIME = 0x3008
+    PR_LAST_MODIFICATION_TIME = 0x3008,
+
+    PSETID_Log = 6,
+    PidLidLogType = 0x00008700,
+    PidLidTaskStartDate = 0x00008104,
+    PidLidTaskDueDate = 0x00008105,
+    PidLidReminderSet = 0x00008503,
+    PidLidReminderDelta = 0x00008501,
+    PidLidLogStart = 0x00008706,
+    PidLidLogDuration = 0x00008707,
+    PidLidLogEnd = 0x00008708,
+    PidLidLogFlags = 0x0000870C,
+    PidLidLogDocumentPrinted = 0x0000870E,
+    PidLidLogDocumentSaved = 0x0000870F,
+    PidLidLogDocumentRouted = 0x00008710,
+    PidLidLogDocumentPosted = 0x00008711,
+    PidLidLogTypeDesc = 0x00008712,
 }

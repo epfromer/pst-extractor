@@ -35,8 +35,15 @@ import { Log } from '../Log.class';
 
 // An implementation of the LZFu algorithm to decompress RTF content
 export class LZFu {
-    public static LZFU_HEADER = '{\\rtf1\\ansi\\mac\\deff0\\deftab720{\\fonttbl;}{\\f0\\fnil \\froman \\fswiss \\fmodern \\fscript \\fdecor MS Sans SerifSymbolArialTimes New RomanCourier{\\colortbl\\red0\\green0\\blue0\n\r\\par \\pard\\plain\\f0\\fs20\\b\\i\\u\\tab\\tx';
+    private static LZFU_HEADER = '{\\rtf1\\ansi\\mac\\deff0\\deftab720{\\fonttbl;}{\\f0\\fnil \\froman \\fswiss \\fmodern \\fscript \\fdecor MS Sans SerifSymbolArialTimes New RomanCourier{\\colortbl\\red0\\green0\\blue0\n\r\\par \\pard\\plain\\f0\\fs20\\b\\i\\u\\tab\\tx';
 
+    /**
+     * Decompress the buffer of RTF content using LZ
+     * @static
+     * @param {Buffer} data 
+     * @returns {string} 
+     * @memberof LZFu
+     */
     public static decode(data: Buffer): string {
         let compressedSize: number = PSTUtil.convertLittleEndianBytesToLong(data, 0, 4).toNumber();
         let uncompressedSize: number = PSTUtil.convertLittleEndianBytesToLong(data, 4, 8).toNumber();

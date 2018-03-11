@@ -57,12 +57,6 @@ enum PidTagMessageFlags {
     MSGFLAG_RESEND = 0x80
 }
 
-
-// PST Message contains functions that are common across most MAPI objects.
-// Note that many of these functions may not be applicable for the item in question,
-// however there seems to be no hard and fast outline for what properties apply to which
-// objects. For properties where no value is set, a blank value is returned (rather than
-// an exception being raised).
 export class PSTMessage extends PSTObject {
     public static IMPORTANCE_LOW = 0;
     public static IMPORTANCE_NORMAL = 1;
@@ -72,6 +66,18 @@ export class PSTMessage extends PSTObject {
     private recipientTable: PSTTable7C = null;
     private attachmentTable: PSTTable7C = null;
 
+    /**
+     * Creates an instance of PSTMessage. PST Message contains functions that are common across most MAPI objects.
+     * Note that many of these functions may not be applicable for the item in question,
+     * however there seems to be no hard and fast outline for what properties apply to which
+     * objects. For properties where no value is set, a blank value is returned (rather than
+     * an exception being raised).
+     * @param {PSTFile} pstFile 
+     * @param {DescriptorIndexNode} descriptorIndexNode 
+     * @param {PSTTableBC} [table] 
+     * @param {Map<number, PSTDescriptorItem>} [localDescriptorItems] 
+     * @memberof PSTMessage
+     */
     constructor(
         pstFile: PSTFile,
         descriptorIndexNode: DescriptorIndexNode,
@@ -1324,7 +1330,6 @@ export class PSTMessage extends PSTObject {
                     recipientReassignmentProhibited: this.recipientReassignmentProhibited,
                     originalSensitivity: this.originalSensitivity,
                     sensitivity: this.sensitivity,
-                    //pidTagSentRepresentingSearchKey: this.pidTagSentRepresentingSearchKey,
                     rcvdRepresentingName: this.rcvdRepresentingName,
                     bloriginalSubjectah: this.originalSubject,
                     replyRecipientNames: this.replyRecipientNames,
@@ -1341,7 +1346,6 @@ export class PSTMessage extends PSTObject {
                     isOriginatorNonDeliveryReportRequested: this.isOriginatorNonDeliveryReportRequested,
                     recipientType: this.recipientType,
                     isReplyRequested: this.isReplyRequested,
-                    //senderEntryId: this.senderEntryId,
                     senderName: this.senderName,
                     senderAddrtype: this.senderAddrtype,
                     senderEmailAddress: this.senderEmailAddress,

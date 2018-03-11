@@ -53,6 +53,13 @@ export class NodeInfo {
         return this._pstNodeInputStream;
     }
 
+    /**
+     * Creates an instance of NodeInfo, part of the node table.
+     * @param {number} start 
+     * @param {number} end 
+     * @param {PSTNodeInputStream} pstNodeInputStream 
+     * @memberof NodeInfo
+     */
     constructor(start: number, end: number, pstNodeInputStream: PSTNodeInputStream) {
         if (start > end) {
             throw new Error(`NodeInfo:: constructor Invalid NodeInfo parameters: start ${start} is greater than end ${end}`);
@@ -62,10 +69,22 @@ export class NodeInfo {
         this._pstNodeInputStream = pstNodeInputStream;
     }
 
+    /**
+     * Seek to position in node input stream and read a long
+     * @param {long} offset 
+     * @param {number} length 
+     * @returns {long} 
+     * @memberof NodeInfo
+     */
     public seekAndReadLong(offset: long, length: number): long {
         return this.pstNodeInputStream.seekAndReadLong(offset.add(this.startOffset), length);
     }
 
+    /**
+     * JSON stringify the object properties.  
+     * @returns {string} 
+     * @memberof NodeInfo
+     */
     public toJSONstring(): string {
         return (
             'NodeInfo: ' +

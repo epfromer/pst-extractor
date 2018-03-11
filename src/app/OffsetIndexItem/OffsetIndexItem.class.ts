@@ -53,6 +53,12 @@ export class OffsetIndexItem {
 
     private cRef: long;
 
+    /**
+     * Creates an instance of OffsetIndexItem, part of the node table.
+     * @param {Buffer} data 
+     * @param {number} pstFileType 
+     * @memberof OffsetIndexItem
+     */
     constructor(data: Buffer, pstFileType: number) {
         if (pstFileType == PSTFile.PST_TYPE_ANSI) {
             this._indexIdentifier = PSTUtil.convertLittleEndianBytesToLong(data, 0, 4);
@@ -67,6 +73,11 @@ export class OffsetIndexItem {
         }
     }
 
+    /**
+     * JSON stringify the object properties.  
+     * @returns {string} 
+     * @memberof OffsetIndexItem
+     */
     public toJSONstring(): string {
         return (
             'OffsetIndexItem: ' +
