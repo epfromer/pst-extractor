@@ -1158,13 +1158,12 @@ export class PSTMessage extends PSTObject {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidReminderDelta, PSTFile.PSETID_Common));
     }
 
-    // "flagged" items are actually emails with a due date.
-    // This convience method just checks to see if that is true.
-    public get isFlagged(): boolean {
-        return this.taskDueDate != null;
-    }
-
-    // get the categories defined for this message
+    /**
+     * Color categories
+     * @readonly
+     * @type {string[]}
+     * @memberof PSTMessage
+     */
     public get colorCategories(): string[] {
         let keywordCategory: number = PSTFile.getPublicStringToIdMapItem('Keywords');
 
@@ -1207,36 +1206,88 @@ export class PSTMessage extends PSTObject {
         return categories;
     }
 
+    /**
+     * Contains a computed value derived from other conversation-related properties. 
+     * https://msdn.microsoft.com/en-us/library/ee204279(v=exchg.80).aspx
+     * @readonly
+     * @type {Buffer}
+     * @memberof PSTMessage
+     */
     public get conversationId(): Buffer {
-        return this.getBinaryItem(0x3013);
+        return this.getBinaryItem(OutlookProperties.PidTagConversationId);
     }
 
+    /**
+     * Indicates whether the GUID portion of the PidTagConversationIndex property (section 2.641) is to be used to compute the PidTagConversationId property (section 2.640).
+     * https://msdn.microsoft.com/en-us/library/ee218393(v=exchg.80).aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get isConversationIndexTracking(): boolean {
-        return this.getBooleanItem(0x3016, false);
+        return this.getBooleanItem(OutlookProperties.PidTagConversationIndexTracking, false);
     }
 
+    /**
+     * Contains the messaging user's e-mail address.
+     * https://msdn.microsoft.com/en-us/library/office/cc842372.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get emailAddress(): string {
-        return this.getStringItem(0x3003);
+        return this.getStringItem(OutlookProperties.PR_EMAIL_ADDRESS);
     }
 
+    /**
+     * Contains the messaging user's e-mail address type, such as SMTP.
+     * https://msdn.microsoft.com/en-us/library/office/cc815548.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get addrType(): string {
-        return this.getStringItem(0x3002);
+        return this.getStringItem(OutlookProperties.PR_ADDRTYPE);
     }
 
+    /**
+     * Contains a comment about the purpose or content of an object.
+     * https://msdn.microsoft.com/en-us/library/office/cc842022.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get comment(): string {
-        return this.getStringItem(0x3004);
+        return this.getStringItem(OutlookProperties.PR_COMMENT);
     }
 
+    /**
+     * Contains the creation date and time of a message.
+     * https://msdn.microsoft.com/en-us/library/office/cc765677.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTMessage
+     */
     public get creationTime(): Date {
-        return this.getDateItem(0x3007);
+        return this.getDateItem(OutlookProperties.PR_CREATION_TIME);
     }
 
+    /**
+     * Contains the date and time when the object or subobject was last modified.
+     * https://msdn.microsoft.com/en-us/library/office/cc815689.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTMessage
+     */
     public get modificationTime(): Date {
         return this.getDateItem(0x3008);
     }
-
-    // note, not all fields (e.g. the body fields, pidTagSentRepresentingSearchKey, senderEntryId)
-    // are included in the JSON string.  caller can get those fields independently.
+    
+    /**
+     * JSON stringify the object properties.  Large fields (like body) aren't included.
+     * @returns {string} 
+     * @memberof PSTMessage
+     */
     public toJSONstring(): string {
         return (
             'PSTMessage:' +
@@ -1324,7 +1375,6 @@ export class PSTMessage extends PSTObject {
                     taskDueDate: this.taskDueDate,
                     reminderSet: this.reminderSet,
                     reminderDelta: this.reminderDelta,
-                    isFlagged: this.isFlagged,
                     colorCategories: this.colorCategories,
                     numberOfAttachments: this.numberOfAttachments,
                     conversationId: this.conversationId,

@@ -143,7 +143,6 @@ describe('PSTMessage tests', () => {
         expect(msg.returnPath).to.equal('JReames@br-inc.com');
         expect(msg.attrHidden).to.equal(false);
         expect(msg.reminderSet).to.equal(false);
-        expect(msg.isFlagged).to.equal(false);
         expect(msg.urlCompName).to.equal('');
         expect(msg.lastVerbExecutionTime).to.equal(null);
         expect(msg.taskStartDate).to.equal(null);

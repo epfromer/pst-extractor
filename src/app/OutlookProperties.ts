@@ -73,5 +73,11 @@ export enum OutlookProperties {
     PidLidTaskDueDate = 0x00008105,
     PidLidReminderSet = 0x00008503,
     PidLidReminderDelta = 0x00008501,
-    
+    PidTagConversationId = 0x3013,
+    PidTagConversationIndexTracking = 0x3016,
+    PR_EMAIL_ADDRESS = 0x3003,
+    PR_ADDRTYPE = 0x3002,
+    PR_COMMENT = 0x3004,
+    PR_CREATION_TIME = 0x3007,
+    PR_LAST_MODIFICATION_TIME = 0x3008
 }
