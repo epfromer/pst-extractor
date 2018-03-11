@@ -89,6 +89,99 @@ export class PSTMessage extends PSTObject {
     }
 
     /*
+        PidTagMessageFlags
+        https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
+    */
+    /**
+     * The message is marked as having been read.
+     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
+    public get isRead(): boolean {
+        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_READ) != 0;
+    }
+
+    /**
+     * The outgoing message has not been modified since the first time that it was saved; the incoming message has not been modified since it was delivered.
+     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
+    public get isUnmodified(): boolean {
+        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_UNMODIFIED) != 0;
+    }
+
+    /**
+     * The message is marked for sending as a result of a call to the RopSubmitMessage ROP
+     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
+    public get isSubmitted(): boolean {
+        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_SUBMIT) != 0;
+    }
+
+    /**
+     * The message is still being composed. It is saved, but has not been sent.
+     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
+    public get isUnsent(): boolean {
+        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_UNSENT) != 0;
+    }
+
+    /**
+     * The message has at least one attachment. 
+     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
+    public get hasAttachments(): boolean {
+        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_HASATTACH) != 0;
+    }
+
+    /**
+     * The user receiving the message was also the user who sent the message. 
+     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
+    public get isFromMe(): boolean {
+        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_FROMME) != 0;
+    }
+
+    /**
+     * The message is an FAI message.  An FAI Message object is used to store a variety of settings and 
+     * auxiliary data, including forms, views, calendar options, favorites, and category lists.
+     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
+    public get isAssociated(): boolean {
+        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_ASSOCIATED) != 0;
+    }
+
+    /**
+     * The message includes a request for a resend operation with a nondelivery report.  
+     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
+    public get isResent(): boolean {
+        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_RESEND) != 0;
+    }
+
+    /*
         Recipients
     */
     /**
@@ -308,10 +401,11 @@ export class PSTMessage extends PSTObject {
     /*
         Attachments
     */
-    // attachment stuff here, not sure if these can just exist in emails or not,
-    // but a table key of 0x0671 would suggest that this is a property of the
-    // envelope rather than a specific email property
-    // find, extract and load up all of the attachments in this email
+    /**
+     * Processes table which holds attachments.
+     * @private
+     * @memberof PSTMessage
+     */
     private processAttachments() {
         let attachmentTableKey = 0x0671;
         if (this.attachmentTable == null && this.localDescriptorItems != null && this.localDescriptorItems.has(attachmentTableKey)) {
@@ -530,214 +624,207 @@ export class PSTMessage extends PSTObject {
         return this.getStringItem(OutlookProperties.PR_TRANSPORT_MESSAGE_HEADERS);
     }
 
-    /*
-        PidTagMessageFlags
-        https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
-    */
-    /**
-     * The message is marked as having been read.
-     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
-     * @readonly
-     * @type {boolean}
-     * @memberof PSTMessage
-     */
-    public get isRead(): boolean {
-        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_READ) != 0;
-    }
-
-    /**
-     * The outgoing message has not been modified since the first time that it was saved; the incoming message has not been modified since it was delivered.
-     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
-     * @readonly
-     * @type {boolean}
-     * @memberof PSTMessage
-     */
-    public get isUnmodified(): boolean {
-        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_UNMODIFIED) != 0;
-    }
-
-    /**
-     * The message is marked for sending as a result of a call to the RopSubmitMessage ROP
-     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
-     * @readonly
-     * @type {boolean}
-     * @memberof PSTMessage
-     */
-    public get isSubmitted(): boolean {
-        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_SUBMIT) != 0;
-    }
-
-    /**
-     * The message is still being composed. It is saved, but has not been sent.
-     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
-     * @readonly
-     * @type {boolean}
-     * @memberof PSTMessage
-     */
-    public get isUnsent(): boolean {
-        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_UNSENT) != 0;
-    }
-
-    /**
-     * The message has at least one attachment. 
-     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
-     * @readonly
-     * @type {boolean}
-     * @memberof PSTMessage
-     */
-    public get hasAttachments(): boolean {
-        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_HASATTACH) != 0;
-    }
-
-    /**
-     * The user receiving the message was also the user who sent the message. 
-     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
-     * @readonly
-     * @type {boolean}
-     * @memberof PSTMessage
-     */
-    public get isFromMe(): boolean {
-        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_FROMME) != 0;
-    }
-
-    /**
-     * The message is an FAI message.  An FAI Message object is used to store a variety of settings and 
-     * auxiliary data, including forms, views, calendar options, favorites, and category lists.
-     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
-     * @readonly
-     * @type {boolean}
-     * @memberof PSTMessage
-     */
-    public get isAssociated(): boolean {
-        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_ASSOCIATED) != 0;
-    }
-
-    /**
-     * The message includes a request for a resend operation with a nondelivery report.  
-     * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
-     * @readonly
-     * @type {boolean}
-     * @memberof PSTMessage
-     */
-    public get isResent(): boolean {
-        return (this.getIntItem(OutlookProperties.PR_MESSAGE_FLAGS) & PidTagMessageFlags.MSGFLAG_RESEND) != 0;
-    }
-
     // Acknowledgment mode Integer 32-bit signed
     public get acknowledgementMode(): number {
         return this.getIntItem(0x0001);
     }
 
-    // Originator delivery report requested set if the sender wants a delivery
-    // report from all recipients 0 = false 0 != true
+    /**
+     * Contains TRUE if a message sender requests a delivery report for a particular recipient from the messaging system before the message is placed in the message store.
+     * https://msdn.microsoft.com/en-us/library/office/cc765845.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get originatorDeliveryReportRequested(): boolean {
-        return this.getIntItem(0x0023) != 0;
+        return this.getIntItem(OutlookProperties.PR_ORIGINATOR_DELIVERY_REPORT_REQUESTED) != 0;
     }
 
-    // 0x0025 0x0102 PR_PARENT_KEY Parent key Binary data Contains a GUID
-    // Priority Integer 32-bit signed -1 = NonUrgent 0 = Normal 1 = Urgent
+    /**
+     * Contains the relative priority of a message.
+     * https://msdn.microsoft.com/en-us/library/office/cc765646.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
     public get priority(): number {
         return this.getIntItem(0x0026);
     }
 
-    // Read Receipt Requested Boolean 0 = false 0 != true
+    /**
+     * Contains TRUE if a message sender wants the messaging system to generate a read report when the recipient has read a message.
+     * https://msdn.microsoft.com/en-us/library/office/cc842094.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get readReceiptRequested(): boolean {
-        return this.getIntItem(0x0029) != 0;
+        return this.getIntItem(OutlookProperties.PR_READ_RECEIPT_REQUESTED) != 0;
     }
 
-    // Recipient Reassignment Prohibited Boolean 0 = false 0 != true
+    /**
+     * Specifies whether adding additional recipients, when forwarding the message, is prohibited for the e-mail message.
+     * https://msdn.microsoft.com/en-us/library/office/cc979216.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get recipientReassignmentProhibited(): boolean {
-        return this.getIntItem(0x002b) != 0;
+        return this.getIntItem(OutlookProperties.PR_RECIPIENT_REASSIGNMENT_PROHIBITED) != 0;
     }
 
-    // Original sensitivity Integer 32-bit signed the sensitivity of the message
-    // before being replied to or forwarded 0 = None 1 = Personal 2 = Private 3
-    //  = Company Confidential
+    /**
+     * Contains the sensitivity value assigned by the sender of the first version of a message that is, the message before being forwarded or replied to.
+     * https://msdn.microsoft.com/en-us/library/cc839694(office.12).aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
     public get originalSensitivity(): number {
-        return this.getIntItem(0x002e);
+        return this.getIntItem(OutlookProperties.PR_ORIGINAL_SENSITIVITY);
     }
 
-    // Sensitivity Integer 32-bit signed sender's opinion of the sensitivity of
-    // an email 0 = None 1 = Personal 2 = Private 3 = Company Confidential
+    /**
+     * Contains a value that indicates the message sender's opinion of the sensitivity of a message.
+     * https://msdn.microsoft.com/en-us/library/office/cc839518.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
     public get sensitivity(): number {
-        return this.getIntItem(0x0036);
+        return this.getIntItem(OutlookProperties.PR_SENSITIVITY);
     }
-    // // 0x003f 0x0102 PR_RECEIVED_BY_ENTRYID (PidTagReceivedByEntr yId) Received
-    // // by entry identifier Binary data Contains recipient/sender structure
-    // // 0x0041 0x0102 PR_SENT_REPRESENTING_ENTRYID Sent representing entry
-    // // identifier Binary data Contains recipient/sender structure
-    // // 0x0043 0x0102 PR_RCVD_REPRESENTING_ENTRYID Received representing entry
-    // // identifier Binary data Contains recipient/sender structure
 
-    // Address book search key
+    /**
+     * Contains the search key for the messaging user represented by the sender.
+     * https://msdn.microsoft.com/en-us/magazine/cc842068.aspx
+     * @readonly
+     * @type {Buffer}
+     * @memberof PSTMessage
+     */
     public get pidTagSentRepresentingSearchKey(): Buffer {
-        return this.getBinaryItem(0x003b);
+        return this.getBinaryItem(OutlookProperties.PR_SENT_REPRESENTING_SEARCH_KEY);
     }
 
-    // Received representing name ASCII or Unicode string
+    /**
+     * Contains the display name for the messaging user who is represented by the receiving user.
+     * https://technet.microsoft.com/en-us/library/cc842260.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get rcvdRepresentingName(): string {
-        return this.getStringItem(0x0044);
+        return this.getStringItem(OutlookProperties.PR_RCVD_REPRESENTING_NAME);
     }
 
-    // Original subject ASCII or Unicode string
+    /**
+     * Contains the subject of an original message for use in a report about the message.
+     * https://msdn.microsoft.com/en-us/library/office/cc842182.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get originalSubject(): string {
-        return this.getStringItem(0x0049);
+        return this.getStringItem(OutlookProperties.PR_ORIGINAL_SUBJECT);
     }
 
-    // 0x004e 0x0040 PR_ORIGINAL_SUBMIT_TIME Original submit time Filetime
-    // Reply recipients names ASCII or Unicode string
+    /**
+     * Contains a list of display names for recipients that are to get a reply.
+     * https://msdn.microsoft.com/en-us/library/windows/desktop/cc815850.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get replyRecipientNames(): string {
-        return this.getStringItem(0x0050);
+        return this.getStringItem(OutlookProperties.PR_REPLY_RECIPIENT_NAMES);
     }
 
-    // My address in To field Boolean
+    /**
+     * Contains TRUE if this messaging user is specifically named as a primary (To) recipient of this message and is not part of a distribution list.
+     * https://technet.microsoft.com/en-us/library/cc815755
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get messageToMe(): boolean {
-        return this.getIntItem(0x0057) != 0;
+        return this.getIntItem(OutlookProperties.PR_MESSAGE_TO_ME) != 0;
     }
 
-    // My address in CC field Boolean
+    /**
+     * Contains TRUE if this messaging user is specifically named as a carbon copy (CC) recipient of this message and is not part of a distribution list.
+     * https://msdn.microsoft.com/en-us/library/office/cc839713.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get messageCcMe(): boolean {
-        return this.getIntItem(0x0058) != 0;
+        return this.getIntItem(OutlookProperties.PR_MESSAGE_CC_ME) != 0;
     }
 
-    // Indicates that the receiving mailbox owner is a primary or a carbon copy
-    // (Cc) recipient
+    /**
+     * Contains TRUE if this messaging user is specifically named as a primary (To), carbon copy (CC), or blind carbon copy (BCC) recipient of this message and is not part of a distribution list.
+     * https://msdn.microsoft.com/en-us/library/office/cc842268.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get messageRecipMe(): boolean {
-        return this.getIntItem(0x0059) != 0;
+        return this.getIntItem(OutlookProperties.PR_MESSAGE_RECIP_ME) != 0;
     }
 
-    // Response requested Boolean
+    /**
+     * Contains TRUE if the message sender wants a response to a meeting request.
+     * https://msdn.microsoft.com/en-us/library/office/cc839921.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get responseRequested(): boolean {
-        return this.getBooleanItem(0x0063);
+        return this.getBooleanItem(OutlookProperties.PR_RESPONSE_REQUESTED);
     }
 
-    // Sent representing address type ASCII or Unicode string Known values are
-    // SMTP, EX (Exchange) and UNKNOWN
-    public get sentRepresentingAddrtype(): string {
-        return this.getStringItem(0x0064);
-    }
-
-    // 0x0071 0x0102 PR_CONVERSATION_INDEX (PidTagConversationInd ex)
-    // Conversation index Binary data
-    // Original display BCC ASCII or Unicode string
+    /**
+     * Contains the display names of any carbon copy (CC) recipients of the original message.
+     * https://msdn.microsoft.com/en-us/magazine/cc815841(v=office.14).aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get originalDisplayBcc(): string {
-        return this.getStringItem(0x0072);
+        return this.getStringItem(OutlookProperties.PR_ORIGINAL_DISPLAY_BCC);
     }
 
-    // Original display CC ASCII or Unicode string
+    /**
+     * Contains the display names of any carbon copy (CC) recipients of the original message.
+     * https://msdn.microsoft.com/en-us/magazine/cc815841(v=office.14).aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get originalDisplayCc(): string {
-        return this.getStringItem(0x0073);
+        return this.getStringItem(OutlookProperties.PR_ORIGINAL_DISPLAY_CC);
     }
 
-    // Original display TO ASCII or Unicode string
+    /**
+     * Contains the display names of the primary (To) recipients of the original message.
+     * https://msdn.microsoft.com/en-us/magazine/cc842235(v=office.14).aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get originalDisplayTo(): string {
-        return this.getStringItem(0x0074);
+        return this.getStringItem(OutlookProperties.PR_ORIGINAL_DISPLAY_TO);
     }
 
-    // Received representing address type.
-    // Known values are SMTP, EX (Exchange) and UNKNOWN
+    /**
+     * Contains the address type for the messaging user who is represented by the user actually receiving the message.
+     * https://msdn.microsoft.com/en-us/library/office/cc842447.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get rcvdRepresentingAddrtype(): string {
-        return this.getStringItem(0x0077);
+        return this.getStringItem(OutlookProperties.PR_RCVD_REPRESENTING_ADDRTYPE);
     }
 
     // Received representing e-mail address
@@ -1059,7 +1146,6 @@ export class PSTMessage extends PSTObject {
                     messageCcMe: this.messageCcMe,
                     messageRecipMe: this.messageRecipMe,
                     responseRequested: this.responseRequested,
-                    sentRepresentingAddrtype: this.sentRepresentingAddrtype,
                     originalDisplayBcc: this.originalDisplayBcc,
                     originalDisplayCc: this.originalDisplayCc,
                     originalDisplayTo: this.originalDisplayTo,
