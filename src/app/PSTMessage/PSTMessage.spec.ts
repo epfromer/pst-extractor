@@ -107,7 +107,6 @@ describe('PSTMessage tests', () => {
         expect(msg.messageCcMe).to.equal(false);
         expect(msg.messageRecipMe).to.equal(false);
         expect(msg.responseRequested).to.equal(false);
-        expect(msg.sentRepresentingAddrtype).to.equal('SMTP');
         expect(msg.originalDisplayBcc).to.equal('');
         expect(msg.originalDisplayCc).to.equal('');
         expect(msg.originalDisplayTo).to.equal('');
@@ -122,7 +121,6 @@ describe('PSTMessage tests', () => {
         expect(msg.senderEmailAddress).to.equal('JReames@br-inc.com');
         expect(msg.internetArticleNumber).to.equal(0);
         expect(msg.primarySendAccount).to.equal('');
-        expect(msg.urlCompNamePostfix).to.equal(0);
         expect(msg.objectType).to.equal(0);
         expect(msg.deleteAfterSubmit).to.equal(false);
         expect(msg.responsibility).to.equal(false);

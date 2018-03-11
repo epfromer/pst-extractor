@@ -827,75 +827,147 @@ export class PSTMessage extends PSTObject {
         return this.getStringItem(OutlookProperties.PR_RCVD_REPRESENTING_ADDRTYPE);
     }
 
-    // Received representing e-mail address
+    /**
+     * Contains the e-mail address for the messaging user who is represented by the receiving user.
+     * https://msdn.microsoft.com/en-us/library/office/cc815875.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get rcvdRepresentingEmailAddress(): string {
-        return this.getStringItem(0x0078);
+        return this.getStringItem(OutlookProperties.PR_RCVD_REPRESENTING_EMAIL_ADDRESS);
     }
 
-    // Reply requested
+    /**
+     * Contains TRUE if a message sender requests a reply from a recipient.
+     * https://msdn.microsoft.com/en-us/library/office/cc815286.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get isReplyRequested(): boolean {
-        return this.getIntItem(0x0c17) != 0;
+        return this.getIntItem(OutlookProperties.PR_REPLY_REQUESTED) != 0;
     }
 
-    // Sending mailbox owner's address book entry ID
+    /**
+     * Contains the message sender's entry identifier.
+     * https://msdn.microsoft.com/en-us/library/office/cc815625.aspx
+     * @readonly
+     * @type {Buffer}
+     * @memberof PSTMessage
+     */
     public get senderEntryId(): Buffer {
-        return this.getBinaryItem(0x0c19);
+        return this.getBinaryItem(OutlookProperties.PR_SENDER_ENTRYID);
     }
 
-    // Sender name
+    /**
+     * Contains the message sender's display name.
+     * https://msdn.microsoft.com/en-us/library/office/cc815457.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get senderName(): string {
-        return this.getStringItem(0x0c1a);
+        return this.getStringItem(OutlookProperties.PR_SENDER_NAME);
     }
 
-    // Sender address type.
-    // Known values are SMTP, EX (Exchange) and UNKNOWN
+    /**
+     * Contains the message sender's e-mail address type.
+     * https://msdn.microsoft.com/en-us/library/office/cc815748.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get senderAddrtype(): string {
-        return this.getStringItem(0x0c1e);
+        return this.getStringItem(OutlookProperties.PR_SENDER_ADDRTYPE);
     }
 
-    // Sender e-mail address
+    /**
+     * Contains the message sender's e-mail address.
+     * https://msdn.microsoft.com/en-us/library/office/cc839670.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get senderEmailAddress(): string {
-        return this.getStringItem(0x0c1f);
+        return this.getStringItem(OutlookProperties.PR_SENDER_EMAIL_ADDRESS);
     }
 
-    // Message size
+    /**
+     * Contains the sum, in bytes, of the sizes of all properties on a message object
+     * https://technet.microsoft.com/en-us/library/cc842471
+     * @readonly
+     * @type {long}
+     * @memberof PSTMessage
+     */
     public get messageSize(): long {
-        return this.getLongItem(0x0e08);
+        return this.getLongItem(OutlookProperties.PR_MESSAGE_SIZE);
     }
 
-    // Internet article number
+    /**
+     * A number associated with an item in a message store.
+     * https://msdn.microsoft.com/en-us/library/office/cc815718.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
     public get internetArticleNumber(): number {
-        return this.getIntItem(0x0e23);
+        return this.getIntItem(OutlookProperties.PR_INTERNET_ARTICLE_NUMBER);
     }
 
-    // Server that the client should attempt to send the mail with
+    /**
+     * Contains a string that names the first server that is used to send the message.
+     * https://msdn.microsoft.com/en-us/library/office/cc815413.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get primarySendAccount(): string {
-        return this.getStringItem(0x0e28);
+        return this.getStringItem(OutlookProperties.PR_PRIMARY_SEND_ACCOUNT);
     }
 
-    // Server that the client is currently using to send mail
+    /**
+     * Specifies the server that a client is currently attempting to use to send e-mail.
+     * https://technet.microsoft.com/en-us/library/cc842327(v=office.14)
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get nextSendAcct(): string {
-        return this.getStringItem(0x0e29);
+        return this.getStringItem(OutlookProperties.PR_NEXT_SEND_ACCT);
     }
 
-    // URL computer name postfix
-    public get urlCompNamePostfix(): number {
-        return this.getIntItem(0x0e61);
-    }
-
-    // Object type
+    /**
+     * Contains the type of an object.
+     * https://msdn.microsoft.com/en-us/library/office/cc815487.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
     public get objectType(): number {
-        return this.getIntItem(0x0ffe);
+        return this.getIntItem(OutlookProperties.PR_OBJECT_TYPE);
     }
 
-    // Delete after submit
+    /**
+     * Contains TRUE if a client application wants MAPI to delete the associated message after submission.
+     * https://msdn.microsoft.com/en-us/library/office/cc842353.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get deleteAfterSubmit(): boolean {
-        return this.getIntItem(0x0e01) != 0;
+        return this.getIntItem(OutlookProperties.PR_DELETE_AFTER_SUBMIT) != 0;
     }
 
-    // Responsibility
+    /**
+     * Contains TRUE if some transport provider has already accepted responsibility for delivering the message to this recipient, and FALSE if the MAPI spooler considers that this transport provider should accept responsibility.
+     * https://msdn.microsoft.com/en-us/library/office/cc765767.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get responsibility(): boolean {
-        return this.getIntItem(0x0e0f) != 0;
+        return this.getIntItem(OutlookProperties.PR_RESPONSIBILITY) != 0;
     }
 
     // Compressed RTF in Sync Boolean
@@ -1163,7 +1235,6 @@ export class PSTMessage extends PSTObject {
                     internetArticleNumber: this.internetArticleNumber,
                     primarySendAccount: this.primarySendAccount,
                     nextSendAcct: this.nextSendAcct,
-                    urlCompNamePostfix: this.urlCompNamePostfix,
                     objectType: this.objectType,
                     deleteAfterSubmit: this.deleteAfterSubmit,
                     responsibility: this.responsibility,
