@@ -291,36 +291,36 @@ export class PSTAppointment extends PSTMessage {
     }
 
     /**
-     * 
-     * 
+     * Specifies the type of the meeting. 
+     * https://msdn.microsoft.com/en-us/library/ee158396(v=exchg.80).aspx
      * @readonly
      * @type {number}
      * @memberof PSTAppointment
      */
     public get netMeetingType(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008241, OutlookProperties.PSETID_Appointment));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidConferencingType, OutlookProperties.PSETID_Appointment));
     }
 
     /**
-     * 
-     * 
+     * Specifies the directory server to be used.
+     * https://msdn.microsoft.com/en-us/library/ee201516(v=exchg.80).aspx
      * @readonly
      * @type {string}
      * @memberof PSTAppointment
      */
     public get netMeetingServer(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008242, OutlookProperties.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidDirectory, OutlookProperties.PSETID_Appointment));
     }
 
     /**
-     * 
-     * 
+     * Specifies the email address of the organizer.
+     * https://msdn.microsoft.com/en-us/library/ee203317(v=exchg.80).aspx
      * @readonly
      * @type {string}
      * @memberof PSTAppointment
      */
     public get netMeetingOrganizerAlias(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008243, OutlookProperties.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidOrganizerAlias, OutlookProperties.PSETID_Appointment));
     }
 
     /**

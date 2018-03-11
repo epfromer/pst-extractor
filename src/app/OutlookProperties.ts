@@ -117,5 +117,7 @@ export const enum OutlookProperties {
     PidLidAppointmentSequence = 0x00008201,
     PidLidConferencingCheck = 0x00008240,
     PidLidConferencingType = 0x00008241,
+    PidLidDirectory = 0x00008242,
+    PidLidOrganizerAlias = 0x00008243,
     
 }
