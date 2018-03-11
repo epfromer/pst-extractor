@@ -1092,49 +1092,70 @@ export class PSTMessage extends PSTObject {
         return this.getDateItem(OutlookProperties.PR_LAST_VERB_EXECUTION_TIME);
     }
 
-    // Disable full fidelity
-    public get disableFullFidelity(): boolean {
-        return this.getIntItem(0x10f2) != 0;
-    }
-
-    // URL computer name
-    // Contains the .eml file name
+    /**
+     * The URL component name for a message.
+     * https://msdn.microsoft.com/en-us/library/office/cc815653.aspx
+     * @readonly
+     * @type {String}
+     * @memberof PSTMessage
+     */
     public get urlCompName(): String {
-        return this.getStringItem(0x10f3);
+        return this.getStringItem(OutlookProperties.PR_URL_COMP_NAME);
     }
 
-    // Attribute hidden
+    /**
+     * Specifies the hide or show status of a folder.
+     * https://msdn.microsoft.com/en-us/library/ee159038(v=exchg.80).aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get attrHidden(): boolean {
-        return this.getIntItem(0x10f4) != 0;
+        return this.getIntItem(OutlookProperties.PR_ATTR_HIDDEN) != 0;
     }
 
-    // Attribute system
-    public get attrSystem(): boolean {
-        return this.getIntItem(0x10f5) != 0;
-    }
-
-    // Attribute read only
-    public get attrReadonly(): boolean {
-        return this.getIntItem(0x10f6) != 0;
-    }
-
-    // Start date Filetime
+    /**
+     * Specifies the date on which the user expects work on the task to begin.
+     * https://technet.microsoft.com/en-us/library/cc815922(v=office.12).aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTMessage
+     */
     public get taskStartDate(): Date {
-        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008104, PSTFile.PSETID_Task));
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskStartDate, PSTFile.PSETID_Task));
     }
 
-    // Due date Filetime
+    /**
+     * Represents the date when the user expects to complete the task.
+     * https://technet.microsoft.com/en-us/library/cc839641(v=office.12).aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTMessage
+     */
     public get taskDueDate(): Date {
-        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00008105, PSTFile.PSETID_Task));
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskDueDate, PSTFile.PSETID_Task));
     }
 
-    // Is a reminder set on this object?
+    /**
+     * Specifies whether a reminder is set on the object.
+     * https://msdn.microsoft.com/en-us/library/office/cc765589.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTMessage
+     */
     public get reminderSet(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008503, PSTFile.PSETID_Common));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidReminderSet, PSTFile.PSETID_Common));
     }
 
+    /**
+     * Specifies the interval, in minutes, between the time when the reminder first becomes overdue and the start time of the calendar object.
+     * https://msdn.microsoft.com/en-us/library/office/cc765535.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
     public get reminderDelta(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008501, PSTFile.PSETID_Common));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidReminderDelta, PSTFile.PSETID_Common));
     }
 
     // "flagged" items are actually emails with a due date.
@@ -1296,11 +1317,8 @@ export class PSTMessage extends PSTObject {
                     returnPath: this.returnPath,
                     iconIndex: this.iconIndex,
                     lastVerbExecutionTime: this.lastVerbExecutionTime,
-                    disableFullFidelity: this.disableFullFidelity,
                     urlCompName: this.urlCompName,
                     attrHidden: this.attrHidden,
-                    attrSystem: this.attrSystem,
-                    attrReadonly: this.attrReadonly,
                     numberOfRecipients: this.numberOfRecipients,
                     taskStartDate: this.taskStartDate,
                     taskDueDate: this.taskDueDate,

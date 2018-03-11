@@ -141,10 +141,7 @@ describe('PSTMessage tests', () => {
         expect(msg.numberOfAttachments).to.equal(0);
         expect(msg.internetMessageId).to.equal('<OXDAXN4L22RH32V3FYRFYTV2QE0MXYONB@zlsvr22>');
         expect(msg.returnPath).to.equal('JReames@br-inc.com');
-        expect(msg.disableFullFidelity).to.equal(false);
         expect(msg.attrHidden).to.equal(false);
-        expect(msg.attrSystem).to.equal(false);
-        expect(msg.attrReadonly).to.equal(false);
         expect(msg.reminderSet).to.equal(false);
         expect(msg.isFlagged).to.equal(false);
         expect(msg.urlCompName).to.equal('');

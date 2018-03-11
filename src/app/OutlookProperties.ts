@@ -67,5 +67,11 @@ export enum OutlookProperties {
     PR_ICON_INDEX = 0x1080,
     PR_LAST_VERB_EXECUTED = 0x1081,
     PR_LAST_VERB_EXECUTION_TIME = 0x1082,
+    PR_URL_COMP_NAME = 0x10F3,
+    PR_ATTR_HIDDEN = 0x10f4,
+    PidLidTaskStartDate = 0x00008104,
+    PidLidTaskDueDate = 0x00008105,
+    PidLidReminderSet = 0x00008503,
+    PidLidReminderDelta = 0x00008501,
     
 }
