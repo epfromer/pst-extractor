@@ -324,124 +324,80 @@ export class PSTAppointment extends PSTMessage {
     }
 
     /**
-     * 
-     * 
-     * @readonly
-     * @type {boolean}
-     * @memberof PSTAppointment
-     */
-    public get netMeetingAutostart(): boolean {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008245, OutlookProperties.PSETID_Appointment)) != 0;
-    }
-
-    /**
-     * 
-     * 
-     * @readonly
-     * @type {boolean}
-     * @memberof PSTAppointment
-     */
-    public get conferenceServerAllowExternal(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008246, OutlookProperties.PSETID_Appointment));
-    }
-
-    /**
-     * 
-     * 
+     * Specifies the document to be launched when the user joins the meeting.
+     * https://msdn.microsoft.com/en-us/library/ee204395(v=exchg.80).aspx
      * @readonly
      * @type {string}
      * @memberof PSTAppointment
      */
     public get netMeetingDocumentPathName(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008247, OutlookProperties.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidCollaborateDoc, OutlookProperties.PSETID_Appointment));
     }
 
     /**
-     * 
-     * 
+     * The PidLidNetShowUrl property ([MS-OXPROPS] section 2.175) specifies the URL to be launched when the user joins the meeting
+     * https://msdn.microsoft.com/en-us/library/ee179451(v=exchg.80).aspx
      * @readonly
      * @type {string}
      * @memberof PSTAppointment
      */
     public get netShowURL(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008248, OutlookProperties.PSETID_Appointment));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidNetShowUrl, OutlookProperties.PSETID_Appointment));
     }
 
     /**
-     * 
-     * 
+     * Specifies the date and time at which the meeting-related object was sent.
+     * https://msdn.microsoft.com/en-us/library/ee237112(v=exchg.80).aspx
      * @readonly
      * @type {Date}
      * @memberof PSTAppointment
      */
     public get attendeeCriticalChange(): Date {
-        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x00000001, OutlookProperties.PSETID_Meeting));
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAttendeeCriticalChange, OutlookProperties.PSETID_Meeting));
     }
 
     /**
-     * 
-     * 
-     * @readonly
-     * @type {Date}
-     * @memberof PSTAppointment
-     */
-    public get ownerCriticalChange(): Date {
-        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x0000001a, OutlookProperties.PSETID_Meeting));
-    }
-
-    /**
-     * 
-     * 
-     * @readonly
-     * @type {string}
-     * @memberof PSTAppointment
-     */
-    public get conferenceServerPassword(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008249, OutlookProperties.PSETID_Appointment));
-    }
-
-    /**
-     * 
-     * 
+     * Indicates that this meeting response is a counter proposal.
+     * https://msdn.microsoft.com/en-us/magazine/cc815846.aspx
      * @readonly
      * @type {boolean}
      * @memberof PSTAppointment
      */
     public get appointmentCounterProposal(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008257, OutlookProperties.PSETID_Appointment));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentCounterProposal, OutlookProperties.PSETID_Appointment));
     }
 
     /**
-     * 
-     * 
+     * Indicates whether the user did not include any text in the body of the Meeting Response object.
+     * https://msdn.microsoft.com/en-us/library/ee159822(v=exchg.80).aspx
      * @readonly
      * @type {boolean}
      * @memberof PSTAppointment
      */
     public get isSilent(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00000004, OutlookProperties.PSETID_Meeting));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidIsSilent, OutlookProperties.PSETID_Meeting));
     }
 
     /**
-     * 
-     * 
+     * Identifies required attendees for the appointment or meeting.
+     * https://msdn.microsoft.com/en-us/library/ee160700(v=exchg.80).aspx
      * @readonly
      * @type {string}
      * @memberof PSTAppointment
      */
     public get requiredAttendees(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00000006, OutlookProperties.PSETID_Meeting));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidRequiredAttendees, OutlookProperties.PSETID_Meeting));
     }
 
     /**
-     * 
-     * 
+     * Contains the Windows Locale ID of the end-user who created this message.
+     * https://msdn.microsoft.com/en-us/library/ee201602(v=exchg.80).aspx
      * @readonly
      * @type {number}
      * @memberof PSTAppointment
      */
     public get localeId(): number {
-        return this.getIntItem(0x3ff1);
+        return this.getIntItem(OutlookProperties.PidTagMessageLocaleId);
     }
 
     /**
@@ -482,12 +438,8 @@ export class PSTAppointment extends PSTMessage {
                     netMeetingType: this.netMeetingType,
                     netMeetingServer: this.netMeetingServer,
                     netMeetingOrganizerAlias: this.netMeetingOrganizerAlias,
-                    netMeetingAutostart: this.netMeetingAutostart,
-                    conferenceServerAllowExternal: this.conferenceServerAllowExternal,
                     netMeetingDocumentPathName: this.netMeetingDocumentPathName,
                     attendeeCriticalChange: this.attendeeCriticalChange,
-                    ownerCriticalChange: this.ownerCriticalChange,
-                    conferenceServerPassword: this.conferenceServerPassword,
                     appointmentCounterProposal: this.appointmentCounterProposal,
                     isSilent: this.isSilent,
                     requiredAttendees: this.requiredAttendees,

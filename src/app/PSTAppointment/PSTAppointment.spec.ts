@@ -53,7 +53,6 @@ describe('PSTAppointment tests', () => {
         expect(appt.netMeetingServer).to.equal('');
         expect(appt.netMeetingOrganizerAlias).to.equal('');
         expect(appt.netMeetingDocumentPathName).to.equal('');
-        expect(appt.conferenceServerPassword).to.equal('');
         expect(appt.netShowURL).to.equal('');
         expect(appt.requiredAttendees).to.equal('');
         expect(appt.recurrencePattern).to.equal('every day from 10:00 AM to 11:00 AM');
@@ -73,13 +72,10 @@ describe('PSTAppointment tests', () => {
         expect(appt.sendAsICAL).to.be.false;
         expect(appt.subType).to.be.false;
         expect(appt.isOnlineMeeting).to.be.false;
-        expect(appt.netMeetingAutostart).to.be.false;
-        expect(appt.conferenceServerAllowExternal).to.be.false;
         expect(appt.appointmentCounterProposal).to.be.false;
         expect(appt.isSilent).to.be.false;
         expect(appt.recurrenceBase).to.equal(null);
         expect(appt.attendeeCriticalChange).to.equal(null);
-        expect(appt.ownerCriticalChange).to.equal(null);
         
     });
 });
