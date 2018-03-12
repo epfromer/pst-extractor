@@ -116,12 +116,17 @@ export class PSTFile {
     // file descriptor
     private pstFD: number;
 
+    /**
+     * Creates an instance of PSTFile.  File is opened in constructor.
+     * @param {string} fileName 
+     * @memberof PSTFile
+     */
     public constructor(fileName: string) {
         this._pstFilename = fileName;
         this.open();
     }
 
-    public open() {
+    private open() {
         // attempt to open file
         // confirm first 4 bytes are !BDN
         this.pstFD = fsext.openSync(this._pstFilename, 'r');
@@ -156,12 +161,20 @@ export class PSTFile {
         this.processNameToIDMap();
     }
 
+    /**
+     * Close the file.
+     * @memberof PSTFile
+     */
     public close() {
         fsext.closeSync(this.pstFD);
     }
 
+    /**
+     * Process name to ID map.
+     * @private
+     * @memberof PSTFile
+     */
     private processNameToIDMap() {
-        // process the name to id map
         let nameToIdMapDescriptorNode = this.getDescriptorIndexNode(long.fromNumber(97));
 
         // get the descriptors if we have them
@@ -243,6 +256,14 @@ export class PSTFile {
         }
     }
 
+    /**
+     * Get data from a descriptor and store in buffer.
+     * @private
+     * @param {PSTTableItem} item 
+     * @param {Map<number, PSTDescriptorItem>} localDescriptorItems 
+     * @returns {Buffer} 
+     * @memberof PSTFile
+     */
     private getData(item: PSTTableItem, localDescriptorItems: Map<number, PSTDescriptorItem>): Buffer {
         if (item.data.length != 0) {
             return item.data;
@@ -263,68 +284,92 @@ export class PSTFile {
         return mapDescriptorItem.getData();
     }
 
-    // TODO - resolve static issue (should these functions be static?  not so sure)
+
+    /**
+     * Get name to ID map item.
+     * @param {number} key 
+     * @param {number} idx 
+     * @returns {number} 
+     * @memberof PSTFile
+     */
     public getNameToIdMapItem(key: number, idx: number): number {
         return PSTFile.nodeMap.getId(key, idx);
     }
 
+    /**
+     * Get public string to id map item. 
+     * @static
+     * @param {string} key 
+     * @returns {number} 
+     * @memberof PSTFile
+     */
     public static getPublicStringToIdMapItem(key: string): number {
         return PSTFile.nodeMap.getId(key);    
     }
 
+    /**
+     * Get property name from id.
+     * @static
+     * @param {number} propertyId 
+     * @param {boolean} bNamed 
+     * @returns {string} 
+     * @memberof PSTFile
+     */
     public static getPropertyName(propertyId: number, bNamed: boolean): string {
         return PSTUtil.propertyName.get(propertyId);
     }
 
+    /**
+     * Get name to id map key.
+     * @static
+     * @param {number} propId 
+     * @returns {long} 
+     * @memberof PSTFile
+     */
     public static getNameToIdMapKey(propId: number): long {
         return PSTFile.nodeMap.getNumericName(propId);
     }
 
-    public static getPropertyDescription(entryType: number, entryValueType: number): string {
-        let ret = '';
-        if (entryType < 0x8000) {
-            let name = this.getPropertyName(entryType, false);
-            if (name != null) {
-                ret = name + ':' + entryValueType.toString(16) + ':';
-            } else {
-                ret = entryType.toString(16) + ':' + entryValueType.toString(16) + ':';
-            }
-        } else {
-            let type = PSTFile.getNameToIdMapKey(entryType);
-            if (!type) {
-                ret = '0xFFFF(' + entryType.toString(16) + '):' + entryValueType.toString(16) + ':';
-            } else {
-                let name = this.getPropertyName(type.toNumber(), true);
-                if (name != null) {
-                    ret = name + '(' + entryType.toString(16) + '):' + entryValueType.toString(16) + ':';
-                } else {
-                    ret = '0x' + type.toString(16) + '(' + entryType.toString(16) + '):' + entryValueType.toString(16) + ':';
-                }
-            }
-        }
-        return ret;
-    }
-
-    // Get the message store of the PST file.  Note that this doesn't really
-    // have much information, better to look under the root folder.
+    /**
+     * Get the message store of the PST file.  Note that this doesn't really
+     * have much information, better to look under the root folder.
+     * @returns {PSTMessageStore} 
+     * @memberof PSTFile
+     */
     public getMessageStore(): PSTMessageStore {
         let messageStoreDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(long.fromNumber(PSTFile.MESSAGE_STORE_DESCRIPTOR_IDENTIFIER));
         return new PSTMessageStore(this, messageStoreDescriptor);
     }
 
-    // get the root folder for the PST file
+    /**
+     * Get the root folder for the PST file
+     * @returns {PSTFolder} 
+     * @memberof PSTFile
+     */
     public getRootFolder(): PSTFolder {
         let rootFolderDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(long.fromValue(PSTFile.ROOT_FOLDER_DESCRIPTOR_IDENTIFIER));
         let output: PSTFolder = new PSTFolder(this, rootFolderDescriptor);
         return output;
     }
 
+    /**
+     * Read a leaf in the b-tree.
+     * @param {long} bid 
+     * @returns {PSTNodeInputStream} 
+     * @memberof PSTFile
+     */
     public readLeaf(bid: long): PSTNodeInputStream {
         // get the index node for the descriptor index
         let offsetItem = this.getOffsetIndexNode(bid);
         return new PSTNodeInputStream(this, offsetItem);
     }
 
+    /**
+     * Read the size of the specified leaf.
+     * @param {long} bid 
+     * @returns {number} 
+     * @memberof PSTFile
+     */
     public getLeafSize(bid: long): number {
         let offsetItem: OffsetIndexItem = this.getOffsetIndexNode(bid);
 
@@ -343,7 +388,13 @@ export class PSTFile {
         return PSTUtil.convertLittleEndianBytesToLong(data, 4, 8).toNumber();
     }
 
-    // get file offset, which is sorted in 8 little endian bytes
+    /**
+     * Get file offset, which is sorted in 8 little endian bytes
+     * @private
+     * @param {long} startOffset 
+     * @returns {long} 
+     * @memberof PSTFile
+     */
     private extractLEFileOffset(startOffset: long): long {
         let offset: long = long.ZERO;
         if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
@@ -372,7 +423,14 @@ export class PSTFile {
         return offset;
     }
 
-    // navigate PST B-tree
+    /**
+     * Navigate PST B-tree and find a specific item.
+     * @private
+     * @param {long} index 
+     * @param {boolean} descTree 
+     * @returns {Buffer} 
+     * @memberof PSTFile
+     */
     private findBtreeItem(index: long, descTree: boolean): Buffer {
         let btreeStartOffset: long;
         let fileTypeAdjustment: number;
@@ -537,18 +595,33 @@ export class PSTFile {
         throw new Error('PSTFile::findBtreeItem Unable to find node: ' + index + ' is desc: ' + descTree);
     }
 
-    // navigate the internal descriptor B-Tree and find a specific item
+    /**
+     * Get a descriptor index node in the b-tree
+     * @param {long} id 
+     * @returns {DescriptorIndexNode} 
+     * @memberof PSTFile
+     */
     public getDescriptorIndexNode(id: long): DescriptorIndexNode {
         Log.debug2('PSTFile::getDescriptorIndexNode ' + id.toString())
         return new DescriptorIndexNode(this.findBtreeItem(id, true), this._pstFileType);
     }
 
-    // navigate b-tree index and find specific item
+    /**
+     * Get an offset index node in the b-tree
+     * @param {long} id 
+     * @returns {OffsetIndexItem} 
+     * @memberof PSTFile
+     */
     public getOffsetIndexNode(id: long): OffsetIndexItem {
         return new OffsetIndexItem(this.findBtreeItem(id, false), this._pstFileType);
     }
 
-    // parse a PSTDescriptor and get all of its items
+    /**
+     * Parse a PSTDescriptor and get all of its items
+     * @param {long} localDescriptorsOffsetIndexIdentifier 
+     * @returns {Map<number, PSTDescriptorItem>} 
+     * @memberof PSTFile
+     */
     public getPSTDescriptorItems(localDescriptorsOffsetIndexIdentifier: long): Map<number, PSTDescriptorItem>;
     public getPSTDescriptorItems(inputStream: PSTNodeInputStream): Map<number, PSTDescriptorItem>;
     public getPSTDescriptorItems(arg: any): Map<number, PSTDescriptorItem> {
@@ -590,6 +663,11 @@ export class PSTFile {
         return output;
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTFile
+     */
     public toJSONstring(): string {
         return JSON.stringify({
             encryptionType: this.encryptionType,

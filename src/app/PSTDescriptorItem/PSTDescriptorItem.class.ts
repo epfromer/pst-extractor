@@ -56,6 +56,13 @@ export class PSTDescriptorItem {
         return this._offsetIndexIdentifier;
     }
 
+    /**
+     * Creates an instance of PSTDescriptorItem.
+     * @param {Buffer} data 
+     * @param {number} offset 
+     * @param {PSTFile} pstFile 
+     * @memberof PSTDescriptorItem
+     */
     constructor(data: Buffer, offset: number, pstFile: PSTFile) {
         this._pstFile = pstFile;
 
@@ -70,6 +77,11 @@ export class PSTDescriptorItem {
         }
     }
 
+    /**
+     * Get a node input stream from the offset index and read into a buffer.
+     * @returns {Buffer} 
+     * @memberof PSTDescriptorItem
+     */
     public getData(): Buffer {
         if (this.dataBlockData != null) {
             return this.dataBlockData;
@@ -82,6 +94,11 @@ export class PSTDescriptorItem {
         return this.dataBlockData;
     }
 
+    /**
+     * Get block offsets within current file.
+     * @returns {number[]} 
+     * @memberof PSTDescriptorItem
+     */
     public getBlockOffsets(): number[] {
 
         debugger;
@@ -97,10 +114,21 @@ export class PSTDescriptorItem {
         return offsetsOut;
     }
 
+    /**
+     * Get the size of this this leaf of the b-tree.
+     * @readonly
+     * @type {number}
+     * @memberof PSTDescriptorItem
+     */
     public get dataSize(): number {
         return this._pstFile.getLeafSize(long.fromNumber(this.offsetIndexIdentifier));
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTDescriptorItem
+     */
     public toJSONstring(): string {
         return (
             'PSTDescriptorItem: ' +

@@ -124,47 +124,6 @@ export class PSTTableItem {
         return 'hex string';
     }
 
-    public toString(): string {
-        let ret = PSTFile.getPropertyDescription(this.entryType.toNumber(), this.entryValueType);
-
-        if (this.entryValueType == 0x000b) {
-            return ret + (this.entryValueReference == 0 ? 'false' : 'true');
-        }
-
-        if (this.isExternalValueReference) {
-            // Either a true external reference, or entryValueReference contains the actual data
-            return ret + this.entryValueReference.toString(16) + '(' + this.entryValueReference + ')';
-        }
-
-        if (this.entryValueType == 0x0005 || this.entryValueType == 0x0014) {
-            // 64bit data
-            if (this.data == null) {
-                return ret + 'no data';
-            }
-            if (this.data.length == 8) {
-                let l: long = PSTUtil.convertLittleEndianBytesToLong(this.data, 0, 8);
-                return ret + l.toString(16) + '(' + l.toNumber() + ')';
-            } else {
-                return ret + 'invalid data length: ' + this.data.length;
-            }
-        }
-
-        if (this.entryValueType == 0x0040) {
-            // It's a date.
-            let high: long = PSTUtil.convertLittleEndianBytesToLong(this.data, 4, 8);
-            let low: long = PSTUtil.convertLittleEndianBytesToLong(this.data, 0, 4);
-            let d: Date = PSTUtil.filetimeToDate(high, low);
-            return d.toString();
-        }
-
-        if (this.entryValueType == 0x001f) {
-            // Unicode string and trim any nulls
-            return this.data.toString('utf16le').replace(/\0/g, '');
-        }
-
-        return ret + this.getStringValue(this.entryValueType);
-    }
-
     public toJSONstring(): string {
         return (
             'PSTTableItem: ' +
@@ -176,7 +135,6 @@ export class PSTTableItem {
                     entryValueReference: this.entryValueReference,
                     entryValueType: this.entryValueType,
                     data: this.data,
-                    string: this.toString()
                 },
                 null,
                 2

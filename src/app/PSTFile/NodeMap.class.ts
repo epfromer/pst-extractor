@@ -33,12 +33,23 @@
 import { Log } from '../Log.class';
 import * as long from 'long';
 
-// TODO - doco
+/**
+ * Stores node names (both alpha and numeric) in node maps for quick lookup.
+ * @export
+ * @class NodeMap
+ */
 export class NodeMap {
     private nameToId: Map<string, number> = new Map();
     private idToNumericName: Map<number, long> = new Map();
     private idToStringName: Map<number, string> = new Map();
 
+    /**
+     * Set a node into the map.
+     * @param {*} key 
+     * @param {number} propId 
+     * @param {number} [idx] 
+     * @memberof NodeMap
+     */
     public setId(key: any, propId: number, idx?: number) {
         if (typeof key === 'number') {
             let lkey = this.transformKey(key, idx);
@@ -54,6 +65,13 @@ export class NodeMap {
         }
     }
 
+    /**
+     * Get a node from the map.
+     * @param {*} key 
+     * @param {number} [idx] 
+     * @returns {number} 
+     * @memberof NodeMap
+     */
     public getId(key: any, idx?: number): number {
         let id: number;
         if (typeof key === 'number') {
@@ -69,6 +87,12 @@ export class NodeMap {
         return id;
     }
 
+    /**
+     * Get a node from the map.
+     * @param {number} propId 
+     * @returns {long} 
+     * @memberof NodeMap
+     */
     public getNumericName(propId: number): long {
         let lkey = this.idToNumericName.get(propId);
         if (!lkey) {
