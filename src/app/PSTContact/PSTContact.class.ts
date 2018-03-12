@@ -688,17 +688,6 @@ export class PSTContact extends PSTMessage {
     }
 
     /**
-     * Specifies the first display name that corresponds to the e-mail address that is specified for the contact.
-     * https://msdn.microsoft.com/en-us/library/partnercenter/cc815564(v=office.14).aspx
-     * @readonly
-     * @type {string}
-     * @memberof PSTContact
-     */
-    public get smtpAddress(): string {
-        return this.getNamedStringItem(OutlookProperties.PidLidEmail1OriginalDisplayName);
-    }
-
-    /**
      * Contains the main telephone number for a company
      * https://msdn.microsoft.com/en-us/library/office/cc839651.aspx
      * @readonly
@@ -911,171 +900,363 @@ export class PSTContact extends PSTMessage {
         return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidPostalAddressId, OutlookProperties.PSETID_Address));
     }
 
-    // Webpage
+    /**
+     * Specifies the contact’s business Web page URL.
+     * https://msdn.microsoft.com/en-us/library/office/cc842001.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get html(): string {
-        return this.getNamedStringItem(0x0000802b);
+        return this.getNamedStringItem(OutlookProperties.PidLidHtml);
     }
 
-    // Business Address City
+    /**
+     * Specifies the street portion of the contact's work mailing address.
+     * https://msdn.microsoft.com/en-us/library/office/cc815537.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get workAddressStreet(): string {
-        return this.getNamedStringItem(0x00008045);
+        return this.getNamedStringItem(OutlookProperties.PidLidWorkAddressStreet);
     }
 
-    // Business Address Street
+    /**
+     * Specifies the city or locality portion of the contact's work address.
+     * https://msdn.microsoft.com/en-us/library/office/cc765923.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get workAddressCity(): string {
-        return this.getNamedStringItem(0x00008046);
+        return this.getNamedStringItem(OutlookProperties.PidLidWorkAddressCity);
     }
 
-    // Business Address State
+    /**
+     * Specifies the state or province portion of the contact's work mailing address.
+     * https://msdn.microsoft.com/en-us/library/office/cc842152.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get workAddressState(): string {
-        return this.getNamedStringItem(0x00008047);
+        return this.getNamedStringItem(OutlookProperties.PidLidWorkAddressState);
     }
 
-    // Business Address Postal Code
+    /**
+     * Specifies the postal code (ZIP code) portion of the contact's work address.
+     * https://msdn.microsoft.com/en-us/library/office/cc842066.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get workAddressPostalCode(): string {
-        return this.getNamedStringItem(0x00008048);
+        return this.getNamedStringItem(OutlookProperties.PidLidWorkAddressPostalCode);
     }
 
-    // Business Address Country
+    /**
+     * Specifies the country or region portion of the contact's work address.
+     * https://msdn.microsoft.com/en-us/library/office/cc765698.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get workAddressCountry(): string {
-        return this.getNamedStringItem(0x00008049);
+        return this.getNamedStringItem(OutlookProperties.PidLidWorkAddressCountry);
     }
 
-    // Business Address Country
+    /**
+     * Specifies the post office box portion of the contact's work.
+     * https://msdn.microsoft.com/en-us/library/office/cc815563.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get workAddressPostOfficeBox(): string {
-        return this.getNamedStringItem(0x0000804a);
+        return this.getNamedStringItem(OutlookProperties.PidLidWorkAddressPostOfficeBox);
     }
 
-    // IM Address
+    /**
+     * Specifies the contact’s instant messaging address.
+     * https://msdn.microsoft.com/en-us/library/office/cc815607.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get instantMessagingAddress(): string {
-        return this.getNamedStringItem(0x00008062);
+        return this.getNamedStringItem(OutlookProperties.PidLidInstantMessagingAddress);
     }
 
-    // E-mail1 Display Name
+    /**
+     * Specifies the user-readable display name for the first e-mail address.
+     * https://msdn.microsoft.com/en-us/library/office/cc815460.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get email1DisplayName(): string {
-        return this.getNamedStringItem(0x00008080);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail1DisplayName);
     }
 
-    // E-mail1 Address Type
+    /**
+     * Specifies the address type of the first e-mail address.
+     * https://msdn.microsoft.com/en-us/library/office/cc815570.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get email1AddressType(): string {
-        return this.getNamedStringItem(0x00008082);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail1AddressType);
     }
 
-    // E-mail1 Address
+    /**
+     * Specifies the first e-mail address of the contact.
+     * https://msdn.microsoft.com/en-us/library/office/cc842050.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get email1EmailAddress(): string {
-        return this.getNamedStringItem(0x00008083);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail1EmailAddress);
     }
 
-    // E-mail1 Display Name
+    /**
+     * Specifies the first display name that corresponds to the e-mail address that is specified for the contact.
+     * https://msdn.microsoft.com/en-us/library/office/cc815564.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get email1OriginalDisplayName(): string {
-        return this.getNamedStringItem(0x00008084);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail1OriginalDisplayName);
     }
 
-    // E-mail1 type
-    public get email1EmailType(): string {
-        return this.getNamedStringItem(0x00008087);
-    }
-
-    // E-mail2 display name
+    /**
+     * Specifies the user-readable display name for the second e-mail address.
+     * https://msdn.microsoft.com/en-us/library/office/cc839675.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get email2DisplayName(): string {
-        return this.getNamedStringItem(0x00008090);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail2DisplayName);
     }
 
-    // E-mail2 address type
+    /**
+     * Specifies the address type of the second e-mail address.
+     * https://msdn.microsoft.com/en-us/library/office/cc815361.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get email2AddressType(): string {
-        return this.getNamedStringItem(0x00008092);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail2DisplayName);
     }
 
-    // E-mail2 e-mail address
+    /**
+     * Specifies the second e-mail address of the contact.
+     * https://msdn.microsoft.com/en-us/library/office/cc842205.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get email2EmailAddress(): string {
-        return this.getNamedStringItem(0x00008093);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail2EmailAddress);
     }
 
-    // E-mail2 original display name
+    /**
+     * Specifies the second display name that corresponds to the e-mail address specified for the contact.
+     * https://msdn.microsoft.com/en-us/library/office/cc765618.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get email2OriginalDisplayName(): string {
-        return this.getNamedStringItem(0x00008094);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail2OriginalDisplayName);
     }
 
-    // E-mail3 display name
+    /**
+     * Specifies the user-readable display name for the third e-mail address.
+     * https://msdn.microsoft.com/en-us/library/office/cc815669.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get email3DisplayName(): string {
-        return this.getNamedStringItem(0x000080a0);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail3DisplayName);
     }
 
-    // E-mail3 address type
+    /**
+     * Specifies the address type of the third e-mail address.
+     * https://msdn.microsoft.com/en-us/library/office/cc842438.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get email3AddressType(): string {
-        return this.getNamedStringItem(0x000080a2);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail3AddressType);
     }
 
-    // E-mail3 e-mail address
+    /**
+     * Specifies the third e-mail address of the contact.
+     * https://msdn.microsoft.com/en-us/library/office/cc815504.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get email3EmailAddress(): string {
-        return this.getNamedStringItem(0x000080a3);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail3EmailAddress);
     }
 
-    // E-mail3 original display name
+    /**
+     * Specifies the third display name that corresponds to the e-mail address that is specified for the contact.
+     * https://msdn.microsoft.com/en-us/library/office/cc815833.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get email3OriginalDisplayName(): string {
-        return this.getNamedStringItem(0x000080a4);
+        return this.getNamedStringItem(OutlookProperties.PidLidEmail3OriginalDisplayName);
     }
 
-    // Fax1 Address Type
+    /**
+     * Specifies the address type for the business fax address for a contact.
+     * https://msdn.microsoft.com/en-us/library/office/cc842026.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get fax1AddressType(): string {
-        return this.getNamedStringItem(0x000080b2);
+        return this.getNamedStringItem(OutlookProperties.PidLidFax1AddressType);
     }
 
-    // Fax1 Email Address
+    /**
+     * Specifies the e-mail address of the contact’s business fax.
+     * https://msdn.microsoft.com/en-us/library/office/cc765813.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get fax1EmailAddress(): string {
-        return this.getNamedStringItem(0x000080b3);
+        return this.getNamedStringItem(OutlookProperties.PidLidFax1EmailAddress);
     }
 
-    // Fax1 Original Display Name
+    /**
+     * Specifies the original display name of the contact’s business fax address.
+     * https://msdn.microsoft.com/en-us/library/office/cc765694.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get fax1OriginalDisplayName(): string {
-        return this.getNamedStringItem(0x000080b4);
+        return this.getNamedStringItem(OutlookProperties.PidLidFax1OriginalDisplayName);
     }
 
-    // Fax2 Address Type
+    /**
+     * Specifies the address type for the contact’s home fax address.
+     * https://msdn.microsoft.com/en-us/library/office/cc839741.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get fax2AddressType(): string {
-        return this.getNamedStringItem(0x000080c2);
+        return this.getNamedStringItem(OutlookProperties.PidLidFax2AddressType);
     }
 
-    // Fax2 Email Address
+    /**
+     * Specifies the e-mail address of the contact’s home fax address.
+     * https://msdn.microsoft.com/en-us/library/office/cc765668.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get fax2EmailAddress(): string {
-        return this.getNamedStringItem(0x000080c3);
+        return this.getNamedStringItem(OutlookProperties.PidLidFax2EmailAddress);
     }
 
-    // Fax2 Original Display Name
+    /**
+     * Specifies the original display name of the contact’s home fax address.
+     * https://msdn.microsoft.com/en-us/library/office/cc842101.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get fax2OriginalDisplayName(): string {
-        return this.getNamedStringItem(0x000080c4);
+        return this.getNamedStringItem(OutlookProperties.PidLidFax2OriginalDisplayName);
     }
 
-    // Fax3 Address Type
+    /**
+     * Specifies the address type for the other contact’s fax address.
+     * https://msdn.microsoft.com/en-us/library/office/cc839752.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get fax3AddressType(): string {
-        return this.getNamedStringItem(0x000080d2);
+        return this.getNamedStringItem(OutlookProperties.PidLidFax3AddressType);
     }
 
-    // Fax3 Email Address
+    /**
+     * Specifies the email address of the contact’s other fax address.
+     * https://msdn.microsoft.com/en-us/library/office/cc842217.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get fax3EmailAddress(): string {
-        return this.getNamedStringItem(0x000080d3);
+        return this.getNamedStringItem(OutlookProperties.PidLidFax3EmailAddress);
     }
 
-    // Fax3 Original Display Name
+    /**
+     * Specifies the original display name of the contact’s other fax address.
+     * https://msdn.microsoft.com/en-us/library/office/cc765682.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get fax3OriginalDisplayName(): string {
-        return this.getNamedStringItem(0x000080d4);
+        return this.getNamedStringItem(OutlookProperties.PidLidFax3OriginalDisplayName);
     }
 
-    // Free/Busy Location (URL)
+    /**
+     * Specifies a URL path from which a client can retrieve free/busy information for the contact as an iCal file, as specified in [MS-OXCICAL].
+     * https://msdn.microsoft.com/en-us/library/office/cc765766.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTContact
+     */
     public get freeBusyLocation(): string {
-        return this.getNamedStringItem(0x000080d8);
+        return this.getNamedStringItem(OutlookProperties.PidLidFreeBusyLocation);
     }
 
-    // Birthday
+    /**
+     * Contains the birthday of the contact.
+     * https://msdn.microsoft.com/en-us/library/office/cc842301.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTContact
+     */
     public get birthday(): Date {
-        return this.getDateItem(0x3a42);
+        return this.getDateItem(OutlookProperties.PidTagBirthday);
     }
 
-    // (Wedding) Anniversary
+    /**
+     * Contains the date of a user's wedding anniversary.
+     * https://msdn.microsoft.com/en-us/library/office/cc842132.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTContact
+     */
     public get anniversary(): Date {
-        return this.getDateItem(0x3a41);
+        return this.getDateItem(OutlookProperties.PidTagWeddingAnniversary);
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTContact
+     */
     public toJSONstring(): string {
         return (
             'PSTContact: ' +
@@ -1141,7 +1322,6 @@ export class PSTContact extends PSTMessage {
                     nickname: this.nickname,
                     personalHomePage: this.personalHomePage,
                     businessHomePage: this.businessHomePage,
-                    smtpAddress: this.smtpAddress,
                     companyMainPhoneNumber: this.companyMainPhoneNumber,
                     childrensNames: this.childrensNames,
                     homeAddressCity: this.homeAddressCity,
@@ -1173,7 +1353,6 @@ export class PSTContact extends PSTMessage {
                     email1AddressType: this.email1AddressType,
                     email1EmailAddress: this.email1EmailAddress,
                     email1OriginalDisplayName: this.email1OriginalDisplayName,
-                    email1EmailType: this.email1EmailType,
                     email2DisplayName: this.email2DisplayName,
                     email2AddressType: this.email2AddressType,
                     email2EmailAddress: this.email2EmailAddress,

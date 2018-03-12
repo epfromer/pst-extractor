@@ -97,7 +97,6 @@ describe('PSTContact tests', () => {
         expect(contact.nickname).to.equal('');
         expect(contact.personalHomePage).to.equal('');
         expect(contact.businessHomePage).to.equal('www.tomoab.com');
-        expect(contact.smtpAddress).to.equal('epfromer@gmail.com');
         expect(contact.childrensNames).to.equal('');
         expect(contact.homeAddressCity).to.equal('');
         expect(contact.homeAddressCountry).to.equal('');
@@ -127,10 +126,8 @@ describe('PSTContact tests', () => {
         expect(contact.email1AddressType).to.equal('SMTP');
         expect(contact.email1EmailAddress).to.equal('epfromer@gmail.com');
         expect(contact.email1OriginalDisplayName).to.equal('epfromer@gmail.com');
-        expect(contact.email1EmailType).to.equal('');
         expect(contact.email2DisplayName).to.equal('');
         expect(contact.email2AddressType).to.equal('');
-        expect(contact.email1EmailType).to.equal('');
         expect(contact.email2DisplayName).to.equal('');
         expect(contact.email2AddressType).to.equal('');
         expect(contact.email2OriginalDisplayName).to.equal('');
