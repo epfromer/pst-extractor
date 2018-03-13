@@ -57,7 +57,10 @@ export abstract class PSTObject {
      * Creates an instance of PSTObject, the root class of most PST Items.
      * @memberof PSTObject
      */
-    constructor() {}
+    constructor(pstTableItems?: Map<number, PSTTableItem>) {
+        // if table items already loaded, set them
+        this.pstTableItems = pstTableItems;
+    }
 
     /**
      * Load a descriptor from the PST.
@@ -345,6 +348,7 @@ export abstract class PSTObject {
 
     /**
      * Get the display name of this object.
+     * https://msdn.microsoft.com/en-us/library/office/cc842383.aspx
      * @readonly
      * @type {string}
      * @memberof PSTObject

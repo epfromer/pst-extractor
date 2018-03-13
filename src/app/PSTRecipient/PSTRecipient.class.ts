@@ -31,46 +31,86 @@
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
+import { OutlookProperties } from '../OutlookProperties';
+import { PSTObject } from '../PSTObject/PSTObject.class';
 
 // Class containing recipient information
-export class PSTRecipient {
-    private details: Map<number, PSTTableItem>;
+export class PSTRecipient extends PSTObject {
 
-    public static MAPI_TO = 1;
-    public static MAPI_CC = 2;
-    public static MAPI_BCC = 3;
-
+    /**
+     * Creates an instance of PSTRecipient.
+     * @param {Map<number, PSTTableItem>} recipientDetails 
+     * @memberof PSTRecipient
+     */
     constructor(recipientDetails: Map<number, PSTTableItem>) {
-        this.details = recipientDetails;
+        super(recipientDetails);
     }
 
-    public get displayName(): string {
-        return this.getString(0x3001);
-    }
-
+    /**
+     * Contains the recipient type for a message recipient.
+     * https://msdn.microsoft.com/en-us/library/office/cc839620.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTMessage
+     */
     public get recipientType(): number {
-        return this.getInt(0x0c15);
+        return this.getIntItem(OutlookProperties.PR_RECIPIENT_TYPE);
     }
 
-    public get emailAddressType(): string {
-        return this.getString(0x3002);
+    /**
+     * Contains the messaging user's e-mail address type, such as SMTP.
+     * https://msdn.microsoft.com/en-us/library/office/cc815548.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
+    public get addrType(): string {
+        return this.getStringItem(OutlookProperties.PR_ADDRTYPE);
     }
 
+    /**
+     * Contains the messaging user's e-mail address.
+     * https://msdn.microsoft.com/en-us/library/office/cc842372.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTMessage
+     */
     public get emailAddress(): string {
-        return this.getString(0x3003);
+        return this.getStringItem(OutlookProperties.PR_EMAIL_ADDRESS);
     }
 
+    /**
+     * Specifies a bit field that describes the recipient status.
+     * https://msdn.microsoft.com/en-us/library/office/cc815629.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTRecipient
+     */
     public get recipientFlags(): number {
-        return this.getInt(0x5ffd);
+        return this.getIntItem(OutlookProperties.PR_RECIPIENT_FLAGS);
     }
 
+    /**
+     * Specifies the location of the current recipient in the recipient table.
+     * https://msdn.microsoft.com/en-us/library/ee201359(v=exchg.80).aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTRecipient
+     */
     public get recipientOrder(): number {
-        return this.getInt(0x5fdf);
+        return this.getIntItem(OutlookProperties.PidTagRecipientOrder);
     }
 
+    /**
+     * Contains the SMTP address for the address book object.
+     * https://msdn.microsoft.com/en-us/library/office/cc842421.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTRecipient
+     */
     public get smtpAddress(): string {
         // If the recipient address type is SMTP, we can simply return the recipient address.
-        let addressType: string = this.emailAddressType;
+        let addressType: string = this.addrType;
         if (addressType != null && addressType.toLowerCase() === 'smtp') {
             let addr: string = this.emailAddress;
             if (addr != null && addr.length != 0) {
@@ -78,31 +118,14 @@ export class PSTRecipient {
             }
         }
         // Otherwise, we have to hope the SMTP address is present as the PidTagPrimarySmtpAddress property.
-        return this.getString(0x39fe);
+        return this.getStringItem(OutlookProperties.PR_SMTP_ADDRESS);
     }
 
-    private getString(id: number): string {
-        if (this.details.has(id)) {
-            let item: PSTTableItem = this.details.get(id);
-            return item.getStringValue();
-        }
-        return '';
-    }
-
-    private getInt(id: number): number {
-        if (this.details.has(id)) {
-            let item: PSTTableItem = this.details.get(id);
-            if (item.entryValueType == 0x0003) {
-                return item.entryValueReference;
-            }
-
-            if (item.entryValueType == 0x0002) {
-                return item.entryValueReference;
-            }
-        }
-        return 0;
-    }
-
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTRecipient
+     */
     public toJSONstring(): string {
         return (
             'PSTObject:' +
@@ -111,10 +134,10 @@ export class PSTRecipient {
                     displayName: this.displayName,
                     smtpAddress: this.smtpAddress,
                     recipientType: this.recipientType,
-                    emailAddressType: this.emailAddressType,
+                    addrType: this.addrType,
                     emailAddress: this.emailAddress,
                     recipientFlags: this.recipientFlags,
-                    recipientOrder: this.recipientOrder,
+                    recipientOrder: this.recipientOrder
                 },
                 null,
                 2

@@ -52,7 +52,8 @@ export class PSTMessageStore extends PSTObject {
     }
 
     /**
-     * Get the message store display name
+     * Get the display name
+     * https://msdn.microsoft.com/en-us/library/office/cc842383.aspx
      * @returns {string} 
      * @memberof PSTMessageStore
      */

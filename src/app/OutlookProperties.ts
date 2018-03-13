@@ -170,7 +170,10 @@ export const enum OutlookProperties {
     PR_CONTAINER_CLASS = 0x3613,
     PR_CONTAINER_FLAGS = 0x3600,
     PR_DISPLAY_NAME = 0x3001,
+    PR_RECIPIENT_FLAGS = 0x5FFD,
+    PR_SMTP_ADDRESS = 0x39FE,
 
+    PidTagRecipientOrder = 0x5FDF,
     PidTagConversationId = 0x3013,
     PidTagConversationIndexTracking = 0x3016,
     PidLidLogType = 0x00008700,
