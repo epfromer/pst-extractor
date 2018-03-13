@@ -41,16 +41,33 @@ import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import * as long from 'long';
 import { Log } from '../Log.class';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
+import { OutlookProperties } from '../OutlookProperties';
 
-// Represents a folder in the PST File.  Allows you to access child folders or items.
-// Items are accessed through a sort of cursor arrangement.  This allows for
-// incremental reading of a folder which may have _lots_ of emails.
+/**
+ * Represents a folder in the PST File.  Allows you to access child folders or items.
+ * Items are accessed through a sort of cursor arrangement.  This allows for
+ * incremental reading of a folder which may have _lots_ of emails.
+ * @export
+ * @class PSTFolder
+ * @extends {PSTObject}
+ */
 export class PSTFolder extends PSTObject {
     private subfoldersTable: PSTTable7C = null;
     private currentEmailIndex = 0;
     private emailsTable: PSTTable7C = null;
     private fallbackEmailsTable: DescriptorIndexNode[] = null;
 
+    /**
+     * Creates an instance of PSTFolder.
+     * Represents a folder in the PST File.  Allows you to access child folders or items.
+     * Items are accessed through a sort of cursor arrangement.  This allows for
+     * incremental reading of a folder which may have _lots_ of emails.
+     * @param {PSTFile} pstFile
+     * @param {DescriptorIndexNode} descriptorIndexNode
+     * @param {PSTTableBC} [table]
+     * @param {Map<number, PSTDescriptorItem>} [localDescriptorItems]
+     * @memberof PSTFolder
+     */
     constructor(
         pstFile: PSTFile,
         descriptorIndexNode: DescriptorIndexNode,
@@ -67,8 +84,11 @@ export class PSTFolder extends PSTObject {
         }
     }
 
-    // get all of the sub folders...
-    // there are not usually thousands, so we just do it in one big operation.
+    /**
+     * Get folders in one fell swoop, since there's not usually thousands of them.
+     * @returns {PSTFolder[]} 
+     * @memberof PSTFolder
+     */
     public getSubFolders(): PSTFolder[] {
         let output: PSTFolder[] = [];
         try {
@@ -80,12 +100,18 @@ export class PSTFolder extends PSTObject {
                 output.push(folder);
             }
         } catch (err) {
-            Log.error("PSTFolder::getSubFolders Can't get child folders for folder " + this.displayName + "\n" + err);
+            Log.error("PSTFolder::getSubFolders Can't get child folders for folder " + this.displayName + '\n' + err);
             throw err;
         }
         return output;
     }
 
+    /**
+     * Load subfolders table. 
+     * @private
+     * @returns 
+     * @memberof PSTFolder
+     */
     private initSubfoldersTable() {
         if (this.subfoldersTable) {
             return;
@@ -102,7 +128,7 @@ export class PSTFolder extends PSTObject {
             let pstNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem);
             this.subfoldersTable = new PSTTable7C(pstNodeInputStream, tmp);
         } catch (err) {
-            Log.error("PSTFolder::initSubfoldersTable Can't get child folders for folder " + this.displayName + "\n" + err);
+            Log.error("PSTFolder::initSubfoldersTable Can't get child folders for folder " + this.displayName + '\n' + err);
             throw err;
         }
     }
@@ -129,12 +155,17 @@ export class PSTFolder extends PSTObject {
             const pstNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem);
             this.emailsTable = new PSTTable7C(pstNodeInputStream, tmp, 0x67f2);
         } catch (err) {
-            Log.error("PSTFolder::initEmailsTable Can't get child folders for folder " + this.displayName + "\n" + err);
+            Log.error("PSTFolder::initEmailsTable Can't get child folders for folder " + this.displayName + '\n' + err);
             throw err;
         }
     }
 
-    // Get the next child of this folder. As there could be thousands of emails, we have these kind of cursor operations.
+    /**
+     * Get the next child of this folder. As there could be thousands of emails, we have these 
+     * kind of cursor operations.
+     * @returns {*} 
+     * @memberof PSTFolder
+     */
     public getNextChild(): any {
         this.initEmailsTable();
 
@@ -170,8 +201,12 @@ export class PSTFolder extends PSTObject {
         return null;
     }
 
-    //  move the internal folder cursor to the desired position
-    //  position 0 is before the first record.
+    /**
+     *  Move the internal folder cursor to the desired position position 0 is before the first record.
+     * @param {number} newIndex 
+     * @returns 
+     * @memberof PSTFolder
+     */
     public moveChildCursorTo(newIndex: number) {
         this.initEmailsTable();
 
@@ -185,7 +220,12 @@ export class PSTFolder extends PSTObject {
         this.currentEmailIndex = newIndex;
     }
 
-    // the number of child folders in this folder
+    /**
+     * The number of child folders in this folder
+     * @readonly
+     * @type {number}
+     * @memberof PSTFolder
+     */
     public get subFolderCount(): number {
         this.initSubfoldersTable();
         if (this.subfoldersTable != null) {
@@ -195,7 +235,12 @@ export class PSTFolder extends PSTObject {
         }
     }
 
-    // number of emails in this folder
+    /**
+     * Number of emails in this folder
+     * @readonly
+     * @type {number}
+     * @memberof PSTFolder
+     */
     public get emailCount(): number {
         this.initEmailsTable();
         if (this.emailsTable == null) {
@@ -204,40 +249,80 @@ export class PSTFolder extends PSTObject {
         return this.emailsTable.rowCount;
     }
 
+    /**
+     * Contains a constant that indicates the folder type.
+     * https://msdn.microsoft.com/en-us/library/office/cc815373.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTFolder
+     */
     public get folderType(): number {
-        return this.getIntItem(0x3601);
+        return this.getIntItem(OutlookProperties.PR_FOLDER_TYPE);
     }
 
-    // the number of emails in this folder this is as reported by the PST file,
-    // for a number calculated by the library use getEmailCount
+    /**
+     * Contains the number of messages in a folder, as computed by the message store.
+     * For a number calculated by the library use getEmailCount
+     * @readonly
+     * @type {number}
+     * @memberof PSTFolder
+     */
     public get contentCount(): number {
-        return this.getIntItem(0x3602);
+        return this.getIntItem(OutlookProperties.PR_CONTENT_COUNT);
     }
 
-    //  number unread content items
+    /**
+     * Contains the number of unread messages in a folder, as computed by the message store.
+     * https://msdn.microsoft.com/en-us/library/office/cc841964.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTFolder
+     */
     public get unreadCount(): number {
-        return this.getIntItem(0x3603);
+        return this.getIntItem(OutlookProperties.PR_CONTENT_UNREAD);
     }
 
-    //  does this folder have subfolders
-    //  once again, read from the PST, use getSubFolderCount if you want to know
-    //  what the library makes of it all
+
+    /**
+     * Contains TRUE if a folder contains subfolders.
+     * once again, read from the PST, use getSubFolderCount if you want to know
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTFolder
+     */
     public get hasSubfolders(): boolean {
-        return this.getIntItem(0x360a) != 0;
+        return this.getIntItem(OutlookProperties.PR_SUBFOLDERS) != 0;
     }
 
+    /**
+     * Contains a text string describing the type of a folder. Although this property is 
+     * generally ignored, versions of Microsoft® Exchange Server prior to Exchange Server 
+     * 2003 Mailbox Manager expect this property to be present.
+     * https://msdn.microsoft.com/en-us/library/office/cc839839.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTFolder
+     */
     public get containerClass(): string {
-        return this.getStringItem(0x3613);
+        return this.getStringItem(OutlookProperties.PR_CONTAINER_CLASS);
     }
 
-    public get associateContentCount(): number {
-        return this.getIntItem(0x3617);
-    }
-
+    /**
+     * Contains a bitmask of flags describing capabilities of an address book container.
+     * https://msdn.microsoft.com/en-us/library/office/cc839610.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTFolder
+     */
     public get containerFlags(): number {
-        return this.getIntItem(0x3600);
+        return this.getIntItem(OutlookProperties.PR_CONTAINER_FLAGS);
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTFolder
+     */
     public toJSONstring(): string {
         return (
             'PSTFolder:' +
@@ -250,7 +335,6 @@ export class PSTFolder extends PSTObject {
                     unreadCount: this.unreadCount,
                     hasSubfolders: this.hasSubfolders,
                     containerClass: this.containerClass,
-                    associateContentCount: this.associateContentCount,
                     containerFlags: this.containerFlags
                 },
                 null,

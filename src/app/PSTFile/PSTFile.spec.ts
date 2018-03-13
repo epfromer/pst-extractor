@@ -18,7 +18,7 @@ describe('PSTfile tests', () => {
         expect(pstFile.encryptionType).to.equal(1);
         expect(pstFile.pstFileType).to.equal(23);
         expect(pstFile.pstFilename).to.contain('michelle_lokay_000_1_1_1_1.pst');
-        expect(pstFile.getMessageStore().getDisplayName()).to.equal('Personal folders');
+        expect(pstFile.getMessageStore().displayName).to.equal('Personal folders');
         expect(pstFile.getRootFolder()).to.not.be.null;
     });
 });

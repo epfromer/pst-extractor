@@ -1286,7 +1286,7 @@ export class PSTMessage extends PSTObject {
      * @memberof PSTMessage
      */
     public get modificationTime(): Date {
-        return this.getDateItem(0x3008);
+        return this.getDateItem(OutlookProperties.PR_LAST_MODIFICATION_TIME);
     }
     
     /**

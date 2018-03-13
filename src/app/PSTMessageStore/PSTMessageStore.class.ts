@@ -35,22 +35,28 @@ import { PSTFile } from './../PSTFile/PSTFile.class';
 import { DescriptorIndexNode } from './../DescriptorIndexNode/DescriptorIndexNode.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
+import { OutlookProperties } from '../OutlookProperties';
 
-// Object that represents the message store.
-// Not much use other than to get the "name" of the PST file.
 export class PSTMessageStore extends PSTObject {
+
+    /**
+     * Creates an instance of PSTMessageStore.
+     * Not much use other than to get the "name" of the PST file.
+     * @param {PSTFile} pstFile 
+     * @param {DescriptorIndexNode} descriptorIndexNode 
+     * @memberof PSTMessageStore
+     */
     constructor(pstFile: PSTFile, descriptorIndexNode: DescriptorIndexNode) {
         super();
         this.loadDescriptor(pstFile, descriptorIndexNode);
     }
 
-    // get the message store display name
+    /**
+     * Get the message store display name
+     * @returns {string} 
+     * @memberof PSTMessageStore
+     */
     public getDisplayName(): string {
-        // attempt to find in the table.
-        let displayNameEntryType = 0x3001;
-        if (this.pstTableItems.has(displayNameEntryType)) {
-            return this.getStringItem(displayNameEntryType);
-        }
-        return '';
+        return this.pstTableItems.has(OutlookProperties.PR_DISPLAY_NAME) ? this.getStringItem(OutlookProperties.PR_DISPLAY_NAME) : '';
     }
 }

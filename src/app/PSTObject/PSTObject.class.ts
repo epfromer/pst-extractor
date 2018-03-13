@@ -42,10 +42,10 @@ import { PSTMessage } from '../PSTMessage/PSTMessage.class';
 import { Log } from '../Log.class';
 import * as long from 'long';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
+import { OutlookProperties } from '../OutlookProperties';
 var fromBits = require('math-float64-from-bits');
 
-// PST Object is the root class of most PST Items.
-export class PSTObject {
+export abstract class PSTObject {
     protected pstFile: PSTFile;
     protected descriptorIndexNode: DescriptorIndexNode;
     protected localDescriptorItems: Map<number, PSTDescriptorItem> = null;
@@ -53,8 +53,19 @@ export class PSTObject {
     protected pstTableItems: Map<number, PSTTableItem>; // make this a JSON object?
     protected table: PSTTableBC;
 
+    /**
+     * Creates an instance of PSTObject, the root class of most PST Items.
+     * @memberof PSTObject
+     */
     constructor() {}
 
+    /**
+     * Load a descriptor from the PST.
+     * @protected
+     * @param {PSTFile} pstFile 
+     * @param {DescriptorIndexNode} descriptorIndexNode 
+     * @memberof PSTObject
+     */
     protected loadDescriptor(pstFile: PSTFile, descriptorIndexNode: DescriptorIndexNode) {
         this.pstFile = pstFile;
         this.descriptorIndexNode = descriptorIndexNode;
@@ -70,6 +81,15 @@ export class PSTObject {
         }
     }
 
+    /**
+     * Get table items.
+     * @protected
+     * @param {PSTFile} theFile 
+     * @param {DescriptorIndexNode} folderIndexNode 
+     * @param {PSTTableBC} table 
+     * @param {Map<number, PSTDescriptorItem>} localDescriptorItems 
+     * @memberof PSTObject
+     */
     protected prePopulate(
         theFile: PSTFile,
         folderIndexNode: DescriptorIndexNode,
@@ -83,8 +103,13 @@ export class PSTObject {
         this.localDescriptorItems = localDescriptorItems;
     }
 
-    // get the descriptor identifier for this item which can be used for loading objects
-    // through detectAndLoadPSTObject(PSTFile theFile, long descriptorIndex)
+    /**
+     * Get the descriptor identifier for this item which can be used for loading objects
+     * through detectAndLoadPSTObject(PSTFile theFile, long descriptorIndex)
+     * @readonly
+     * @type {long}
+     * @memberof PSTObject
+     */
     public get descriptorNodeId(): long {
         // Prevent null pointer exceptions for embedded messages
         if (this.descriptorIndexNode != null) {
@@ -93,6 +118,12 @@ export class PSTObject {
         return long.ZERO;
     }
 
+    /**
+     * Get the node type for the descriptor id.
+     * @param {number} [descriptorIdentifier] 
+     * @returns {number} 
+     * @memberof PSTObject
+     */
     public getNodeType(descriptorIdentifier?: number): number {
         if (descriptorIdentifier) {
             return descriptorIdentifier & 0x1f;
@@ -101,6 +132,14 @@ export class PSTObject {
         }
     }
 
+    /**
+     * Get a number.
+     * @protected
+     * @param {number} identifier 
+     * @param {number} [defaultValue] 
+     * @returns {number} 
+     * @memberof PSTObject
+     */
     protected getIntItem(identifier: number, defaultValue?: number): number {
         if (!defaultValue) {
             defaultValue = 0;
@@ -113,6 +152,14 @@ export class PSTObject {
         return defaultValue;
     }
 
+    /**
+     * Get a boolean.
+     * @protected
+     * @param {number} identifier 
+     * @param {boolean} [defaultValue] 
+     * @returns {boolean} 
+     * @memberof PSTObject
+     */
     protected getBooleanItem(identifier: number, defaultValue?: boolean): boolean {
         if (defaultValue === undefined) {
             defaultValue = false;
@@ -125,6 +172,14 @@ export class PSTObject {
         return defaultValue;
     }
 
+    /**
+     * Get a double.
+     * @protected
+     * @param {number} identifier 
+     * @param {number} [defaultValue] 
+     * @returns {number} 
+     * @memberof PSTObject
+     */
     protected getDoubleItem(identifier: number, defaultValue?: number): number {
         if (defaultValue === undefined) {
             defaultValue = 0;
@@ -140,6 +195,15 @@ export class PSTObject {
         return defaultValue;
     }
 
+
+    /**
+     * Get a long.
+     * @protected
+     * @param {number} identifier 
+     * @param {long} [defaultValue] 
+     * @returns {long} 
+     * @memberof PSTObject
+     */
     protected getLongItem(identifier: number, defaultValue?: long): long {
         if (defaultValue === undefined) {
             defaultValue = long.ZERO;
@@ -163,6 +227,15 @@ export class PSTObject {
         return defaultValue;
     }
 
+    /**
+     * Get a string.
+     * @protected
+     * @param {number} identifier 
+     * @param {number} [stringType] 
+     * @param {string} [codepage] 
+     * @returns {string} 
+     * @memberof PSTObject
+     */
     protected getStringItem(identifier: number, stringType?: number, codepage?: string): string {
         if (!stringType) {
             stringType = 0;
@@ -204,6 +277,12 @@ export class PSTObject {
         return '';
     }
 
+    /**
+     * Get a codepage.
+     * @readonly
+     * @type {string}
+     * @memberof PSTObject
+     */
     public get stringCodepage(): string {
         // try and get the codepage
         let cpItem: PSTTableItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
@@ -216,6 +295,12 @@ export class PSTObject {
         return null;
     }
 
+    /**
+     * Get a date.
+     * @param {number} identifier 
+     * @returns {Date} 
+     * @memberof PSTObject
+     */
     public getDateItem(identifier: number): Date {
         if (this.pstTableItems.has(identifier)) {
             let item: PSTTableItem = this.pstTableItems.get(identifier);
@@ -229,6 +314,13 @@ export class PSTObject {
         return null;
     }
 
+    /**
+     * Get a blob.
+     * @protected
+     * @param {number} identifier 
+     * @returns {Buffer} 
+     * @memberof PSTObject
+     */
     protected getBinaryItem(identifier: number): Buffer {
         if (this.pstTableItems.has(identifier)) {
             let item: PSTTableItem = this.pstTableItems.get(identifier);
@@ -251,10 +343,21 @@ export class PSTObject {
         return null;
     }
 
+    /**
+     * Get the display name of this object.
+     * @readonly
+     * @type {string}
+     * @memberof PSTObject
+     */
     public get displayName(): string {
-        return this.getStringItem(0x3001);
+        return this.getStringItem(OutlookProperties.PR_DISPLAY_NAME);
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTObject
+     */
     public toJSONstring(): string {
         return (
             'PSTObject:' +

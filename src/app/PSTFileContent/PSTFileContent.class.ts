@@ -38,11 +38,21 @@ export class PSTFileContent {
     // node fs file descriptor
     private _pstFD: number;
 
+    /**
+     * Creates an instance of PSTFileContent.
+     * @param {number} pstFD 
+     * @memberof PSTFileContent
+     */
     constructor(pstFD: number) {
         this._pstFD = pstFD;
     }
 
-    // reads a single byte
+    /**
+     * Read a single byte from the PST file.
+     * @param {number} [position] 
+     * @returns {number} 
+     * @memberof PSTFileContent
+     */
     public read(position?: number): number {
         if (!position) {
             position = null;
@@ -53,11 +63,22 @@ export class PSTFileContent {
         return buffer[0];
     }
 
-    // seek to a specific position in file
+    /**
+     * Seek to a specific position in PST file.
+     * @param {long} index 
+     * @memberof PSTFileContent
+     */
     public seek(index: long) {
         fsext.seekSync(this._pstFD, index.toNumber(), 0);
     }
 
+    /**
+     * Read a complete section from the file, storing in the supplied buffer.
+     * @param {Buffer} buffer 
+     * @param {number} [position] 
+     * @returns 
+     * @memberof PSTFileContent
+     */
     public readCompletely(buffer: Buffer, position?: number) {
         if (!position) {
             position = null;
@@ -70,6 +91,11 @@ export class PSTFileContent {
         }
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTFileContent
+     */
     public toJSONstring(): string {
         return (
             'PSTDescriptorItem: ' +

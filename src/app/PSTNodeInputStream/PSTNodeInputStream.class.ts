@@ -71,6 +71,13 @@ export class PSTNodeInputStream {
         return this._encrypted;
     }
 
+    /**
+     * Creates an instance of PSTNodeInputStream.
+     * @param {PSTFile} pstFile 
+     * @param {Buffer} attachmentData 
+     * @param {boolean} [encrypted] 
+     * @memberof PSTNodeInputStream
+     */
     constructor(pstFile: PSTFile, attachmentData: Buffer, encrypted?:boolean);
     constructor(pstFile: PSTFile, descriptorItem: PSTDescriptorItem, encrypted?:boolean);
     constructor(pstFile: PSTFile, offsetItem: OffsetIndexItem, encrypted?:boolean);
@@ -106,6 +113,12 @@ export class PSTNodeInputStream {
         }
     }
 
+    /**
+     * Checks if the node is ZL compressed and unzips if so.
+     * @private
+     * @returns 
+     * @memberof PSTNodeInputStream
+     */
     private detectZlib() {
         // not really sure how this is meant to work, kind of going by feel here.
         if (this.length.lt(4)) {
@@ -168,6 +181,13 @@ export class PSTNodeInputStream {
         }
     }
 
+    /**
+     * Load data from offset in file.
+     * @private
+     * @param {OffsetIndexItem} offsetItem 
+     * @returns 
+     * @memberof PSTNodeInputStream
+     */
     private loadFromOffsetItem(offsetItem: OffsetIndexItem) {
         let bInternal = (offsetItem.indexIdentifier.toNumber() & 0x02) != 0;
 
@@ -199,6 +219,12 @@ export class PSTNodeInputStream {
         this._length = long.fromValue(this.allData.length);
     }
 
+    /**
+     * Get block skip points in file.
+     * @private
+     * @param {Buffer} data 
+     * @memberof PSTNodeInputStream
+     */
     private getBlockSkipPoints(data: Buffer) {
 
         if (data[0] != 0x1) {
@@ -243,6 +269,12 @@ export class PSTNodeInputStream {
         }
     }
 
+    /**
+     * Read from the stream.
+     * @param {Buffer} [output] 
+     * @returns 
+     * @memberof PSTNodeInputStream
+     */
     public read(output?: Buffer) {
         if (!output) {
             return this.readSingleByte();
@@ -251,7 +283,11 @@ export class PSTNodeInputStream {
         }
     }
 
-    // read a byte
+    /**
+     * Read a single byte from the input stream.
+     * @returns {number} 
+     * @memberof PSTNodeInputStream
+     */
     public readSingleByte(): number {
         // first deal with items < 8K and we have all the data already
         if (this.allData != null) {
@@ -298,8 +334,12 @@ export class PSTNodeInputStream {
 
     private totalLoopCount = 0;
 
-    // Read a block from the input stream, ensuring buffer is completely filled.
-    // Recommended block size = 8176 (size used internally by PSTs)
+    /**
+     * Read a block from the input stream, ensuring buffer is completely filled.
+     * Recommended block size = 8176 (size used internally by PSTs)
+     * @param {Buffer} target 
+     * @memberof PSTNodeInputStream
+     */
     public readCompletely(target: Buffer) {
         let offset = 0;
         let numRead = 0;
@@ -312,8 +352,13 @@ export class PSTNodeInputStream {
         }
     }
 
-    // Read a block from the input stream.
-    // Recommended block size = 8176 (size used internally by PSTs)
+    /**
+     * Read a block from the input stream.
+     * Recommended block size = 8176 (size used internally by PSTs)
+     * @param {Buffer} output 
+     * @returns {number} 
+     * @memberof PSTNodeInputStream
+     */
     public readBlock(output: Buffer): number {
         // this method is implemented in an attempt to make things a bit faster
         // than the byte-by-byte read() crap above.
@@ -396,6 +441,14 @@ export class PSTNodeInputStream {
         return totalBytesFilled;
     }
 
+    /**
+     * Read from the offset.
+     * @param {Buffer} output 
+     * @param {number} offset 
+     * @param {number} length 
+     * @returns {number} 
+     * @memberof PSTNodeInputStream
+     */
     public readFromOffset(output: Buffer, offset: number, length: number): number {
         if (this.currentLocation == this.length) {
             // EOF
@@ -414,12 +467,20 @@ export class PSTNodeInputStream {
         return lengthRead;
     }
 
+    /**
+     * Reset the file pointer (internally).
+     * @memberof PSTNodeInputStream
+     */
     public reset() {
         this.currentBlock = 0;
         this._currentLocation = long.ZERO;
     }
 
-    // Get the offsets (block positions) used in the array
+    /**
+     * Get the offsets (block positions) used in the array
+     * @returns {long[]} 
+     * @memberof PSTNodeInputStream
+     */
     public getBlockOffsets(): long[] {
         let output: long[] = [];
         if (this.skipPoints.length === 0) {
@@ -434,7 +495,12 @@ export class PSTNodeInputStream {
         return output;
     }
 
-    // seek within item
+    /**
+     * Seek within item.
+     * @param {long} location 
+     * @returns 
+     * @memberof PSTNodeInputStream
+     */
     public seek(location: long) {
         // not past the end!
         if (location.greaterThan(this.length)) {
@@ -473,6 +539,13 @@ export class PSTNodeInputStream {
         }
     }
 
+    /**
+     * Seek within stream and read a long.
+     * @param {long} location 
+     * @param {number} bytes 
+     * @returns {long} 
+     * @memberof PSTNodeInputStream
+     */
     public seekAndReadLong(location: long, bytes: number): long {
         this.seek(location);
         let buffer = new Buffer(bytes);
@@ -480,6 +553,11 @@ export class PSTNodeInputStream {
         return PSTUtil.convertLittleEndianBytesToLong(buffer);
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTNodeInputStream
+     */
     public toJSONstring(): string {
         return (
             'PSTNodeInputStream:' +
