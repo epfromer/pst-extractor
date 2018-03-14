@@ -131,7 +131,6 @@ export class PSTRecipient extends PSTObject {
             'PSTObject:' +
             JSON.stringify(
                 {
-                    displayName: this.displayName,
                     smtpAddress: this.smtpAddress,
                     recipientType: this.recipientType,
                     addrType: this.addrType,

@@ -63,8 +63,6 @@ describe('PSTTask tests', () => {
         expect(task.transportMessageHeaders).to.equal('');
         expect(task.taskAssigner).to.equal('');
         expect(task.taskLastUser).to.equal('');
-        expect(task.taskRole).to.equal('');
-        expect(task.isTeamTask).to.be.false;
         expect(task.isTaskComplete).to.be.false;
         expect(task.isTaskRecurring).to.be.false;
         expect(task.taskDateCompleted).to.equal(null);

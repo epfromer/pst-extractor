@@ -42,8 +42,6 @@ import { Log } from '../Log.class';
 import * as long from 'long';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
-// Specific functions for the 7c table type ("Table Context").
-// This is used for attachments.
 export class PSTTable7C extends PSTTable {
     private items: Map<number, PSTTableItem>[] = null;
     private numberOfDataSets = 0;
@@ -56,6 +54,13 @@ export class PSTTable7C extends PSTTable {
     private rowNodeInfo: NodeInfo = null;
     private keyMap: Map<number, number> = null;
 
+    /**
+     * Creates an instance of PSTTable7C ("Table Context").
+     * @param {PSTNodeInputStream} pstNodeInputStream 
+     * @param {Map<number, PSTDescriptorItem>} subNodeDescriptorItems 
+     * @param {number} [entityToExtract] 
+     * @memberof PSTTable7C
+     */
     constructor(pstNodeInputStream: PSTNodeInputStream, subNodeDescriptorItems: Map<number, PSTDescriptorItem>, entityToExtract?: number) {
         super(pstNodeInputStream, subNodeDescriptorItems);
 
@@ -114,6 +119,13 @@ export class PSTTable7C extends PSTTable {
         this.numberOfDataSets = Math.trunc(numberOfBlocks * numberOfRowsPerBlock + (this.rowNodeInfo.length() % this.BLOCK_SIZE) / this.TCI_bm);
     }
 
+    /**
+     * Get items from the table.
+     * @param {number} [startAtRecord] 
+     * @param {number} [numberOfRecordsToReturn] 
+     * @returns {Map<number, PSTTableItem>[]} 
+     * @memberof PSTTable7C
+     */
     public getItems(startAtRecord?: number, numberOfRecordsToReturn?: number): Map<number, PSTTableItem>[] {
         let itemList: Map<number, PSTTableItem>[] = [];
         let setLocalList = false;
@@ -263,10 +275,23 @@ export class PSTTable7C extends PSTTable {
         return itemList;
     }
 
+    /**
+     * Get the number of rows.
+     * @readonly
+     * @type {number}
+     * @memberof PSTTable7C
+     */
     public get rowCount(): number {
         return this.numberOfDataSets;
     }
 
+    /**
+     * list of items as string 
+     * TODO - make this JSON
+     * @readonly
+     * @type {string}
+     * @memberof PSTTable7C
+     */
     public get itemsString(): string {
         if (this.items == null) {
             return '';
@@ -274,6 +299,11 @@ export class PSTTable7C extends PSTTable {
         return this.items.toString();
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTTable7C
+     */
     public toJSONstring(): string {
         return (
             'PSTActivity: ' +

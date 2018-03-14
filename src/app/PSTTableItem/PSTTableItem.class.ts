@@ -91,6 +91,17 @@ export class PSTTableItem {
         return this._data;
     }
 
+    /**
+     * Creates an instance of PSTTableItem.
+     * @memberof PSTTableItem
+     */
+    constructor() {}
+
+    /**
+     * Get long value from table item.
+     * @returns 
+     * @memberof PSTTableItem
+     */
     public getLongValue() {
         if (this.data.length > 0) {
             return PSTUtil.convertLittleEndianBytesToLong(this.data);
@@ -98,7 +109,12 @@ export class PSTTableItem {
         return -1;
     }
 
-    // get a string value of the data
+    /**
+     * Get string value of data.
+     * @param {number} [stringType] 
+     * @returns {string} 
+     * @memberof PSTTableItem
+     */
     public getStringValue(stringType?: number): string {
         if (!stringType) {
             stringType = this.entryValueType;
@@ -124,6 +140,11 @@ export class PSTTableItem {
         return 'hex string';
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTTableItem
+     */
     public toJSONstring(): string {
         return (
             'PSTTableItem: ' +

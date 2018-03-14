@@ -77,7 +77,7 @@ directoryListing.forEach(filename => {
         Log.error(err);
     }
 
-    console.log(pstFile.getMessageStore().getDisplayName());
+    console.log(pstFile.getMessageStore().displayName;
     processFolder(pstFile.getRootFolder());
 
     const end = Date.now();

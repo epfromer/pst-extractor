@@ -45,6 +45,11 @@ export class PSTTableBC extends PSTTable {
     private descBuffer = ''; // TODO - make this more efficient than string
     private isDescNotYetInitiated = false;
 
+    /**
+     * Creates an instance of PSTTableBC ("Property Context").
+     * @param {PSTNodeInputStream} pstNodeInputStream 
+     * @memberof PSTTableBC
+     */
     constructor(pstNodeInputStream: PSTNodeInputStream) {
         super(pstNodeInputStream, new Map<number, PSTDescriptorItem>());
 
@@ -115,5 +120,28 @@ export class PSTTableBC extends PSTTable {
     // Get the items parsed out of this table.
     public getItems(): Map<number, PSTTableItem> {
         return this.items;
+    }
+
+        /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTTable7C
+     */
+    public toJSONstring(): string {
+        return (
+            'PSTTableBC: ' +
+            JSON.stringify(
+                {
+                    rowCount: this.rowCount,
+                    items: this.items,
+                    descBuffer: this.descBuffer,
+                    isDescNotYetInitiated: this.isDescNotYetInitiated,
+                },
+                null,
+                2
+            ) +
+            '\n' +
+            super.toJSONstring()
+        );
     }
 }

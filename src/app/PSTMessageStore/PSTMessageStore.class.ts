@@ -50,14 +50,4 @@ export class PSTMessageStore extends PSTObject {
         super();
         this.loadDescriptor(pstFile, descriptorIndexNode);
     }
-
-    /**
-     * Get the display name
-     * https://msdn.microsoft.com/en-us/library/office/cc842383.aspx
-     * @returns {string} 
-     * @memberof PSTMessageStore
-     */
-    public getDisplayName(): string {
-        return this.pstTableItems.has(OutlookProperties.PR_DISPLAY_NAME) ? this.getStringItem(OutlookProperties.PR_DISPLAY_NAME) : '';
-    }
 }

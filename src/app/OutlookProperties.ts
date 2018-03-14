@@ -257,5 +257,19 @@ export const enum OutlookProperties {
     PidLidFax3OriginalDisplayName = 0x000080D4,
     PidLidFreeBusyLocation = 0x000080D8,
     PidTagBirthday = 0x3A42,
-    PidTagWeddingAnniversary = 0x3A41
+    PidTagWeddingAnniversary = 0x3A41,
+    PidLidPercentComplete = 0x00008102,
+    PidLidTaskStatus = 0x00008101,  
+    PidLidTaskDateCompleted = 0x0000810F,
+    PidLidTaskActualEffort = 0x00008110,
+    PidLidTaskEstimatedEffort = 0x00008111,
+    PidLidTaskVersion = 0x00008112,
+    PidLidTaskComplete = 0x0000811C,
+    PidLidTaskOwner = 0x0000811F,
+    PidLidTaskAssigner = 0x00008121,
+    PidLidTaskLastUser = 0x00008122,
+    PidLidTaskOrdinal = 0x00008123,
+    PidLidTaskFRecurring = 0x00008126,
+    PidLidTaskOwnership = 0x00008129,
+    PidLidTaskAcceptanceState = 0x0000812A
 }

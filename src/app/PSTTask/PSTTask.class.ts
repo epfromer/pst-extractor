@@ -35,8 +35,17 @@ import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTMessage } from '../PSTMessage/PSTMessage.class';
+import { OutlookProperties } from '../OutlookProperties';
 
 export class PSTTask extends PSTMessage {
+    /**
+     * Creates an instance of PSTTask.
+     * @param {PSTFile} pstFile 
+     * @param {DescriptorIndexNode} descriptorIndexNode 
+     * @param {PSTTableBC} [table] 
+     * @param {Map<number, PSTDescriptorItem>} [localDescriptorItems] 
+     * @memberof PSTTask
+     */
     constructor(
         pstFile: PSTFile,
         descriptorIndexNode: DescriptorIndexNode,
@@ -46,86 +55,164 @@ export class PSTTask extends PSTMessage {
         super(pstFile, descriptorIndexNode, table, localDescriptorItems);
     }
 
-    // Status Integer 0 = Not started
+    /**
+     * Specifies the status of the user's progress on the task.
+     * https://msdn.microsoft.com/en-us/library/office/cc842120.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTTask
+     */
     public get taskStatus(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008101, PSTFile.PSETID_Task));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskStatus, PSTFile.PSETID_Task));
     }
 
-    // Percent Complete Floating point double precision (64-bit)
+    /**
+     * Indicates the progress the user has made on a task.
+     * https://msdn.microsoft.com/en-us/library/office/cc839932.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTTask
+     */
     public get percentComplete(): number {
-        return this.getDoubleItem(this.pstFile.getNameToIdMapItem(0x00008102, PSTFile.PSETID_Task));
+        return this.getDoubleItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidPercentComplete, PSTFile.PSETID_Task));
     }
 
-    // Is team task Boolean
-    public get isTeamTask(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008103, PSTFile.PSETID_Task));
-    }
-
-    // Date completed Filetime
+    /**
+     * Specifies the date when the user completes the task.
+     * https://msdn.microsoft.com/en-us/library/office/cc815753.aspx
+     * @readonly
+     * @type {Date}
+     * @memberof PSTTask
+     */
     public get taskDateCompleted(): Date {
-        return this.getDateItem(this.pstFile.getNameToIdMapItem(0x0000810f, PSTFile.PSETID_Task));
+        return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskDateCompleted, PSTFile.PSETID_Task));
     }
 
-    // Actual effort in minutes Integer 32-bit signed
+    /**
+     * Indicates the number of minutes that the user performed a task.
+     * https://msdn.microsoft.com/en-us/library/office/cc842253.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTTask
+     */
     public get taskActualEffort(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008110, PSTFile.PSETID_Task));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskActualEffort, PSTFile.PSETID_Task));
     }
 
-    // Total effort in minutes Integer 32-bit signed
+    /**
+     * Indicates the amount of time, in minutes, that the user expects to perform a task.
+     * https://msdn.microsoft.com/en-us/library/office/cc842485.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTTask
+     */
     public get taskEstimatedEffort(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008111, PSTFile.PSETID_Task));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskEstimatedEffort, PSTFile.PSETID_Task));
     }
 
-    // Task version Integer 32-bit signed FTK: Access count
+    /**
+     * Indicates which copy is the latest update of a task.
+     * https://msdn.microsoft.com/en-us/library/office/cc815510.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTTask
+     */
     public get taskVersion(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008112, PSTFile.PSETID_Task));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskVersion, PSTFile.PSETID_Task));
     }
 
-    // Complete Boolean
+    /**
+     * Indicates the task is complete.
+     * https://msdn.microsoft.com/en-us/library/office/cc839514.aspx
+     * @readonly
+     * @type {boolean}
+     * @memberof PSTTask
+     */
     public get isTaskComplete(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x0000811c, PSTFile.PSETID_Task));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskComplete, PSTFile.PSETID_Task));
     }
 
-    // Owner ASCII or Unicode string
+    /**
+     * Contains the name of the task owner.
+     * https://msdn.microsoft.com/en-us/library/office/cc842363.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTTask
+     */
     public get taskOwner(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x0000811f, PSTFile.PSETID_Task));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskOwner, PSTFile.PSETID_Task));
     }
 
-    // Delegator ASCII or Unicode string
+    /**
+     * Names the user who was last assigned the task.
+     * https://msdn.microsoft.com/en-us/library/office/cc815865.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTTask
+     */
     public get taskAssigner(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008121, PSTFile.PSETID_Task));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskAssigner, PSTFile.PSETID_Task));
     }
 
-    // Unknown ASCII or Unicode string
+    /**
+     * Names the most recent user who was the task owner.
+     * https://msdn.microsoft.com/en-us/library/office/cc842278.aspx
+     * @readonly
+     * @type {string}
+     * @memberof PSTTask
+     */
     public get taskLastUser(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008122, PSTFile.PSETID_Task));
+        return this.getStringItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskLastUser, PSTFile.PSETID_Task));
     }
 
-    // Ordinal Integer 32-bit signed
+    /**
+     * Provides an aid to custom sorting tasks.
+     * https://msdn.microsoft.com/en-us/library/office/cc765654.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTTask
+     */
     public get taskOrdinal(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008123, PSTFile.PSETID_Task));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskOrdinal, PSTFile.PSETID_Task));
     }
 
-    // Is recurring Boolean
+    /**
+     * Indicates whether the task includes a recurrence pattern.
+     * https://msdn.microsoft.com/en-us/library/office/cc765875.aspx
+     * @type {boolean}
+     * @memberof PSTTask
+     */
     public get isTaskRecurring(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(0x00008126, PSTFile.PSETID_Task));
+        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskFRecurring, PSTFile.PSETID_Task));
     }
 
-    // Role ASCII or Unicode string
-    public get taskRole(): string {
-        return this.getStringItem(this.pstFile.getNameToIdMapItem(0x00008127, PSTFile.PSETID_Task));
-    }
-
-    // Ownership Integer 32-bit signed
+    /**
+     * Indicates the role of the current user relative to the task.
+     * https://msdn.microsoft.com/en-us/library/office/cc842113.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTTask
+     */
     public get taskOwnership(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x00008129, PSTFile.PSETID_Task));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskOwnership, PSTFile.PSETID_Task));
     }
 
-    // Delegation State
+    /**
+     * Indicates the acceptance state of the task.
+     * https://msdn.microsoft.com/en-us/library/office/cc839689.aspx
+     * @readonly
+     * @type {number}
+     * @memberof PSTTask
+     */
     public get acceptanceState(): number {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(0x0000812a, PSTFile.PSETID_Task));
+        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskAcceptanceState, PSTFile.PSETID_Task));
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTTask
+     */
     public toJSONstring(): string {
         return (
             'PSTTask:' +
@@ -137,7 +224,6 @@ export class PSTTask extends PSTMessage {
                     transportMessageHeaders: this.transportMessageHeaders,
                     taskStatus: this.taskStatus,
                     percentComplete: this.percentComplete,
-                    isTeamTask: this.isTeamTask,
                     taskDateCompleted: this.taskDateCompleted,
                     taskActualEffort: this.taskActualEffort,
                     taskEstimatedEffort: this.taskEstimatedEffort,
@@ -148,7 +234,6 @@ export class PSTTask extends PSTMessage {
                     taskLastUser: this.taskLastUser,
                     taskOrdinal: this.taskOrdinal,
                     isTaskRecurring: this.isTaskRecurring,
-                    taskRole: this.taskRole,
                     taskOwnership: this.taskOwnership,
                     acceptanceState: this.acceptanceState
                 },

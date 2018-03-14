@@ -40,7 +40,7 @@ import * as long from 'long';
 // The PST Table is the workhorse of the whole system.
 // It allows for an item to be read and broken down into the individual properties that it consists of.
 // For most PST Objects, it appears that only 7c and bc table types are used.
-export class PSTTable {
+export abstract class PSTTable {
     protected tableType: string;
     protected tableTypeByte: number;
     protected hidUserRoot: number;
@@ -55,6 +55,14 @@ export class PSTTable {
     private pstNodeInputStream: PSTNodeInputStream;
     private subNodeDescriptorItems: Map<number, PSTDescriptorItem> = null;
 
+    /**
+     * Creates an instance of PSTTable.  The PST Table is the workhorse of the whole system. 
+     * It allows for an item to be read and broken down into the individual properties that it consists of.
+     * For most PST Objects, it appears that only 7C and BC table types are used.
+     * @param {PSTNodeInputStream} pstNodeInputStream 
+     * @param {Map<number, PSTDescriptorItem>} subNodeDescriptorItems 
+     * @memberof PSTTable
+     */
     constructor(pstNodeInputStream: PSTNodeInputStream, subNodeDescriptorItems: Map<number, PSTDescriptorItem>) {
         this.subNodeDescriptorItems = subNodeDescriptorItems;
         this.pstNodeInputStream = pstNodeInputStream;
@@ -98,15 +106,32 @@ export class PSTTable {
         this.hidRoot = headerNodeInfo.seekAndReadLong(long.fromValue(4), 4).toNumber();
     }
 
+    /**
+     * Release data.  
+     * @protected
+     * @memberof PSTTable
+     */
     protected releaseRawData() {
         this.subNodeDescriptorItems = null;
     }
 
-    //  get the number of items stored in this table.
+
+    /**
+     * Number of items in table.
+     * @readonly
+     * @type {number}
+     * @memberof PSTTable
+     */
     public get rowCount(): number {
         return this.numberOfKeys;
     }
 
+    /**
+     * Get information for the node in the b-tree.
+     * @param {number} hnid 
+     * @returns {NodeInfo} 
+     * @memberof PSTTable
+     */
     public getNodeInfo(hnid: number): NodeInfo {
         // Zero-length node?
         if (hnid == 0) {
@@ -158,6 +183,11 @@ export class PSTTable {
         return new NodeInfo(start, end, this.pstNodeInputStream);
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof PSTTable
+     */
     public toJSONstring(): string {
         return (
             'PSTTable: ' +

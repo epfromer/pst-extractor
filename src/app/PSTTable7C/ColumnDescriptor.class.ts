@@ -59,6 +59,12 @@ export class ColumnDescriptor {
         return this._id;
     }
 
+    /**
+     * Creates an instance of ColumnDescriptor.
+     * @param {NodeInfo} nodeInfo 
+     * @param {number} offset 
+     * @memberof ColumnDescriptor
+     */
     constructor(nodeInfo: NodeInfo, offset: number) {
         this._type = nodeInfo.seekAndReadLong(long.fromValue(offset), 2).toNumber(); // & 0xFFFF;
         this._id = nodeInfo.seekAndReadLong(long.fromValue(offset + 2), 2).toNumber(); // & 0xFFFF;
@@ -67,6 +73,11 @@ export class ColumnDescriptor {
         this._iBit = nodeInfo.pstNodeInputStream.read(); // & 0xFFFF;
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof ColumnDescriptor
+     */
     public toJSONstring(): string {
         return (
             'ColumnDescriptor: ' +
