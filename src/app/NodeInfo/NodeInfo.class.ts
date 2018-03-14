@@ -85,7 +85,7 @@ export class NodeInfo {
      * @returns {string} 
      * @memberof NodeInfo
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'NodeInfo: ' +
             JSON.stringify(

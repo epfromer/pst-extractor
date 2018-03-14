@@ -78,7 +78,7 @@ export class ColumnDescriptor {
      * @returns {string} 
      * @memberof ColumnDescriptor
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'ColumnDescriptor: ' +
             JSON.stringify(

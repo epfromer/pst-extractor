@@ -286,17 +286,16 @@ export class PSTTable7C extends PSTTable {
     }
 
     /**
-     * list of items as string 
-     * TODO - make this JSON
-     * @readonly
-     * @type {string}
+     * JSON stringify the items list.
+     * @returns {string} 
      * @memberof PSTTable7C
      */
-    public get itemsString(): string {
-        if (this.items == null) {
-            return '';
-        }
-        return this.items.toString();
+    public itemsJSON(): string {
+        let s = '';
+        this.items.forEach(item => {
+            s = s + JSON.stringify(item);
+        });
+        return s;
     }
 
     /**
@@ -304,25 +303,24 @@ export class PSTTable7C extends PSTTable {
      * @returns {string} 
      * @memberof PSTTable7C
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
-            'PSTActivity: ' +
+            'PSTTable7C: ' +
             JSON.stringify(
                 {
                     rowCount: this.rowCount,
-                    items: this.items,
                     numColumns: this.numColumns,
                     TCI_bm: this.TCI_bm,
                     TCI_1b: this.TCI_1b,
                     overrideCol: this.overrideCol,
                     numberOfKeys: this.numberOfKeys,
-                    itemsString: this.itemsString
+                    items: this.itemsJSON(),
                 },
                 null,
                 2
             ) +
             '\n' +
-            super.toJSONstring()
+            super.toJSON()
         );
     }
 }

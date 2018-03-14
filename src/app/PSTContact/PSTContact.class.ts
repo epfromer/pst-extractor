@@ -1257,7 +1257,7 @@ export class PSTContact extends PSTMessage {
      * @returns {string} 
      * @memberof PSTContact
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'PSTContact: ' +
             JSON.stringify(
@@ -1378,7 +1378,7 @@ export class PSTContact extends PSTMessage {
                 2
             ) +
             '\n' +
-            super.toJSONstring()
+            super.toJSON()
         );
     }
 }

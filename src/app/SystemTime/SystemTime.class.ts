@@ -99,7 +99,7 @@ export class SystemTime {
      * @returns {string} 
      * @memberof SystemTime
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'SystemTime: ' +
             JSON.stringify(

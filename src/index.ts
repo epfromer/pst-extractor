@@ -42,8 +42,8 @@ import { PSTRecipient } from './app/PSTRecipient/PSTRecipient.class';
 const pstFolder = '/media/sf_Outlook/test/';
 const topOutputFolder = '/media/sf_Outlook/pst-extractor/';
 let outputFolder = '';
-const saveToFS = true;
-const displaySender = false;
+const saveToFS = false;
+const displaySender = true;
 const displayRecipients = false;
 const displayBody = false;
 const verbose = true;
@@ -77,7 +77,7 @@ directoryListing.forEach(filename => {
         Log.error(err);
     }
 
-    console.log(pstFile.getMessageStore().displayName;
+    console.log(pstFile.getMessageStore().displayName);
     processFolder(pstFile.getRootFolder());
 
     const end = Date.now();
@@ -175,7 +175,7 @@ function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipi
     // walk list of attachments and save to fs
     for (let i = 0; i < msg.numberOfAttachments; i++) {
         const attachment: PSTAttachment = msg.getAttachment(i);
-        Log.debug2(attachment.toJSONstring());
+        // Log.debug1(attachment.toJSON());
         if (attachment.filename) {
             const filename = emailFolder + msg.descriptorNodeId + '-' + attachment.longFilename;
             if (verbose) {
@@ -200,6 +200,8 @@ function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipi
 }
 
 function getSender(email: PSTMessage): string {
+    Log.debug1(JSON.stringify(email, null, 2));
+
     let sender = email.senderName;
     if (sender !== email.senderEmailAddress) {
         sender += ' (' + email.senderEmailAddress + ')';

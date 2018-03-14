@@ -145,7 +145,7 @@ export class PSTTableItem {
      * @returns {string} 
      * @memberof PSTTableItem
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'PSTTableItem: ' +
             JSON.stringify(

@@ -73,15 +73,15 @@ export class PSTNodeInputStream {
 
     /**
      * Creates an instance of PSTNodeInputStream.
-     * @param {PSTFile} pstFile 
-     * @param {Buffer} attachmentData 
-     * @param {boolean} [encrypted] 
+     * @param {PSTFile} pstFile
+     * @param {Buffer} attachmentData
+     * @param {boolean} [encrypted]
      * @memberof PSTNodeInputStream
      */
-    constructor(pstFile: PSTFile, attachmentData: Buffer, encrypted?:boolean);
-    constructor(pstFile: PSTFile, descriptorItem: PSTDescriptorItem, encrypted?:boolean);
-    constructor(pstFile: PSTFile, offsetItem: OffsetIndexItem, encrypted?:boolean);
-    constructor(pstFile: PSTFile, arg: any, encrypted?:boolean) {
+    constructor(pstFile: PSTFile, attachmentData: Buffer, encrypted?: boolean);
+    constructor(pstFile: PSTFile, descriptorItem: PSTDescriptorItem, encrypted?: boolean);
+    constructor(pstFile: PSTFile, offsetItem: OffsetIndexItem, encrypted?: boolean);
+    constructor(pstFile: PSTFile, arg: any, encrypted?: boolean) {
         if (arg instanceof OffsetIndexItem) {
             this._pstFile = pstFile;
             this.pstFileContent = pstFile.pstFileContent;
@@ -116,7 +116,7 @@ export class PSTNodeInputStream {
     /**
      * Checks if the node is ZL compressed and unzips if so.
      * @private
-     * @returns 
+     * @returns
      * @memberof PSTNodeInputStream
      */
     private detectZlib() {
@@ -136,18 +136,17 @@ export class PSTNodeInputStream {
                 // and replace our contents with that. firstly, if we have blocks, use that as the length
                 let outputStream: Buffer;
                 if (multiStreams) {
-
                     debugger;
 
                     // Log.debug1('list of all index items')
                     // for (let i of this.indexItems) {
-                    //     Log.debug1(i.toJSONstring());
+                    //     Log.debug1(i.toJSON());
                     // }
                     // Log.debug1('----------------------')
                     // TODO - try this with different types of attachments, includin PDF
                     //  may be issue with zlib and PDF files. also, mutiple attachments.
                     for (let i of this.indexItems) {
-                        Log.debug1(i.toJSONstring());
+                        Log.debug1(i.toJSON());
                         let inData: Buffer = new Buffer(i.size);
                         this.pstFileContent.seek(i.fileOffset);
                         this.pstFileContent.readCompletely(inData);
@@ -184,8 +183,8 @@ export class PSTNodeInputStream {
     /**
      * Load data from offset in file.
      * @private
-     * @param {OffsetIndexItem} offsetItem 
-     * @returns 
+     * @param {OffsetIndexItem} offsetItem
+     * @returns
      * @memberof PSTNodeInputStream
      */
     private loadFromOffsetItem(offsetItem: OffsetIndexItem) {
@@ -222,11 +221,10 @@ export class PSTNodeInputStream {
     /**
      * Get block skip points in file.
      * @private
-     * @param {Buffer} data 
+     * @param {Buffer} data
      * @memberof PSTNodeInputStream
      */
     private getBlockSkipPoints(data: Buffer) {
-
         if (data[0] != 0x1) {
             throw new Error('PSTNodeInputStream::loadFromOffsetItem Unable to process XBlock, incorrect identifier');
         }
@@ -271,8 +269,8 @@ export class PSTNodeInputStream {
 
     /**
      * Read from the stream.
-     * @param {Buffer} [output] 
-     * @returns 
+     * @param {Buffer} [output]
+     * @returns
      * @memberof PSTNodeInputStream
      */
     public read(output?: Buffer) {
@@ -285,7 +283,7 @@ export class PSTNodeInputStream {
 
     /**
      * Read a single byte from the input stream.
-     * @returns {number} 
+     * @returns {number}
      * @memberof PSTNodeInputStream
      */
     public readSingleByte(): number {
@@ -337,7 +335,7 @@ export class PSTNodeInputStream {
     /**
      * Read a block from the input stream, ensuring buffer is completely filled.
      * Recommended block size = 8176 (size used internally by PSTs)
-     * @param {Buffer} target 
+     * @param {Buffer} target
      * @memberof PSTNodeInputStream
      */
     public readCompletely(target: Buffer) {
@@ -355,8 +353,8 @@ export class PSTNodeInputStream {
     /**
      * Read a block from the input stream.
      * Recommended block size = 8176 (size used internally by PSTs)
-     * @param {Buffer} output 
-     * @returns {number} 
+     * @param {Buffer} output
+     * @returns {number}
      * @memberof PSTNodeInputStream
      */
     public readBlock(output: Buffer): number {
@@ -443,10 +441,10 @@ export class PSTNodeInputStream {
 
     /**
      * Read from the offset.
-     * @param {Buffer} output 
-     * @param {number} offset 
-     * @param {number} length 
-     * @returns {number} 
+     * @param {Buffer} output
+     * @param {number} offset
+     * @param {number} length
+     * @returns {number}
      * @memberof PSTNodeInputStream
      */
     public readFromOffset(output: Buffer, offset: number, length: number): number {
@@ -478,7 +476,7 @@ export class PSTNodeInputStream {
 
     /**
      * Get the offsets (block positions) used in the array
-     * @returns {long[]} 
+     * @returns {long[]}
      * @memberof PSTNodeInputStream
      */
     public getBlockOffsets(): long[] {
@@ -497,8 +495,8 @@ export class PSTNodeInputStream {
 
     /**
      * Seek within item.
-     * @param {long} location 
-     * @returns 
+     * @param {long} location
+     * @returns
      * @memberof PSTNodeInputStream
      */
     public seek(location: long) {
@@ -541,9 +539,9 @@ export class PSTNodeInputStream {
 
     /**
      * Seek within stream and read a long.
-     * @param {long} location 
-     * @param {number} bytes 
-     * @returns {long} 
+     * @param {long} location
+     * @param {number} bytes
+     * @returns {long}
      * @memberof PSTNodeInputStream
      */
     public seekAndReadLong(location: long, bytes: number): long {
@@ -554,23 +552,14 @@ export class PSTNodeInputStream {
     }
 
     /**
-     * JSON stringify the object properties.
-     * @returns {string} 
+     * JSON the object, large buffers excluded.
+     * @returns {*} 
      * @memberof PSTNodeInputStream
      */
-    public toJSONstring(): string {
-        return (
-            'PSTNodeInputStream:' +
-            JSON.stringify(
-                {
-                    currentBlock: this.currentBlock,
-                    isZlib: this.isZlib,
-                    _currentLocation: this._currentLocation,
-                    _length: this._length,
-                    _encrypted: this._encrypted
-                },
-                null,
-                2
-            ));
+    public toJSON(): any {
+        return {
+            currentBlock: this.currentBlock,
+            isZlib: this.isZlib
+        };
     }
 }

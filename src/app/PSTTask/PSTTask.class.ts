@@ -213,7 +213,7 @@ export class PSTTask extends PSTMessage {
      * @returns {string} 
      * @memberof PSTTask
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'PSTTask:' +
             JSON.stringify(
@@ -241,7 +241,7 @@ export class PSTTask extends PSTMessage {
                 2
             ) +
             '\n' +
-            super.toJSONstring()
+            super.toJSON()
         );
     }
 }

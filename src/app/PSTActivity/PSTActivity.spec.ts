@@ -31,7 +31,7 @@ describe('PSTActivity tests', () => {
 
     it('root folder should have a journal entry', () => {
         let activity: PSTActivity = folder.getNextChild();
-        // console.log(activity.toJSONstring())
+        // console.log(activity.toJSON())
         expect(activity.messageClass).to.equal('IPM.Activity');
         expect(activity.subject).to.equal('called Ed');
         expect(activity.logTypeDesc).to.equal('Phone call');

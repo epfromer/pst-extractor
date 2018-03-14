@@ -126,7 +126,7 @@ export class PSTRecipient extends PSTObject {
      * @returns {string} 
      * @memberof PSTRecipient
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'PSTObject:' +
             JSON.stringify(

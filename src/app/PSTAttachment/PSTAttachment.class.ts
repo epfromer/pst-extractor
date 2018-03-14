@@ -326,7 +326,7 @@ export class PSTAttachment extends PSTObject {
      * @returns {string} 
      * @memberof PSTAttachment
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'PSTAttachment: ' +
             JSON.stringify(
@@ -351,7 +351,7 @@ export class PSTAttachment extends PSTObject {
                 2
             ) +
             '\n' +
-            super.toJSONstring()
+            super.toJSON()
         );
     }
 }

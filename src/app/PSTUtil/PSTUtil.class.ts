@@ -761,7 +761,7 @@ export class PSTUtil {
                 // Log.debug1(msg.body);
                 // Log.debug1(msg.numberOfRecipients.toString());
                 // Log.debug1(msg.colorCategories.toString());
-                // Log.debug1(msg.toJSONstring());
+                // Log.debug1(msg.toJSON());
                 return msg;
             case 'IPM.Appointment':
             case 'IPM.OLE.CLASS.{00061055-0000-0000-C000-000000000046}':
@@ -773,56 +773,56 @@ export class PSTUtil {
                 // appointment
                 // messageClass.startsWith('IPM.Schedule.Meeting')
                 let apt = new PSTAppointment(theFile, folderIndexNode, table, localDescriptorItems);
-                // Log.debug2(apt.toJSONstring());
+                // Log.debug2(apt.toJSON());
                 return apt;
             case 'IPM.Contact':
                 // contact
                 let contact = new PSTContact(theFile, folderIndexNode, table, localDescriptorItems);
-                // Log.debug2(contact.toJSONstring());
+                // Log.debug2(contact.toJSON());
                 return contact;
             case 'IPM.Task':
                 // task
                 let task = new PSTTask(theFile, folderIndexNode, table, localDescriptorItems);
-                // Log.debug2(task.toJSONstring());
+                // Log.debug2(task.toJSON());
                 return task;
             case 'IPM.Activity':
                 // journal entry
                 let activity = new PSTActivity(theFile, folderIndexNode, table, localDescriptorItems);
-                // Log.debug1(activity.toJSONstring());
+                // Log.debug1(activity.toJSON());
                 return activity;
             case 'IPM.Post.Rss':
                 // debugger;
                 // Rss Feed
                 let rss = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
-                // Log.debug1(rss.toJSONstring());
+                // Log.debug1(rss.toJSON());
                 return rss;
             case 'IPM.DistList':
                 // debugger;
                 // Distribution list
                 let dl = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
-                // Log.debug1(dl.toJSONstring());
+                // Log.debug1(dl.toJSON());
                 return dl;
             // return new PSTDistList(theFile, folderIndexNode, table, localDescriptorItems);
             case 'IPM.Note.Rules.OofTemplate.Microsoft':
                 // debugger;
                 // Out of Office rule
                 let oof = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
-                // Log.debug1(oof.toJSONstring());
+                // Log.debug1(oof.toJSON());
                 return oof;
             case 'IPM.Schedule.Meeting.Request':
                 // Meeting request
                 let meetReq = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
-                // Log.debug1(meetReq.toJSONstring());
+                // Log.debug1(meetReq.toJSON());
                 return meetReq;
             case 'REPORT.IPM.Note.NDR':
                 // Receipt of non-delivery
                 let ndr = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
-                // Log.debug1(ndr.toJSONstring());
+                // Log.debug1(ndr.toJSON());
                 return ndr;
             case 'IPM.StickyNote':
                 // Sticky note
                 let sticky = new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
-                // Log.debug1(sticky.toJSONstring());
+                // Log.debug1(sticky.toJSON());
                 return sticky;
             case 'REPORT.IPM.Note.IPNRN':
                 // Read receipt

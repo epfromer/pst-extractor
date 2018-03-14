@@ -78,7 +78,7 @@ export class OffsetIndexItem {
      * @returns {string} 
      * @memberof OffsetIndexItem
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'OffsetIndexItem: ' +
             JSON.stringify(

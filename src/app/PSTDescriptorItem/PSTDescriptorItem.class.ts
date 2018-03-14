@@ -129,7 +129,7 @@ export class PSTDescriptorItem {
      * @returns {string} 
      * @memberof PSTDescriptorItem
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'PSTDescriptorItem: ' +
             JSON.stringify(

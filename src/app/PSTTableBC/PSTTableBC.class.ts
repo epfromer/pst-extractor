@@ -112,36 +112,54 @@ export class PSTTableBC extends PSTTable {
             offset = offset + 8;
 
             this.items.set(item.entryType.toNumber(), item);
-            Log.debug2('PSTTableBC::constructor ' + item.toJSONstring());
+            Log.debug2('PSTTableBC::constructor ' + item.toJSON());
         }
         this.releaseRawData();
     }
 
-    // Get the items parsed out of this table.
+    /**
+     * Get the items parsed out of this table.
+     * @returns {Map<number, PSTTableItem>} 
+     * @memberof PSTTableBC
+     */
     public getItems(): Map<number, PSTTableItem> {
         return this.items;
     }
 
-        /**
+    /**
+     * JSON stringify the items list.
+     * @returns {string} 
+     * @memberof PSTTable7C
+     */
+    public itemsJSON(): string {
+        let s = '';
+        this.items.forEach(item => {
+            s = s + JSON.stringify(item);
+        });
+        return s;
+    }
+
+    /**
      * JSON stringify the object properties.
      * @returns {string} 
      * @memberof PSTTable7C
      */
-    public toJSONstring(): string {
-        return (
-            'PSTTableBC: ' +
-            JSON.stringify(
-                {
-                    rowCount: this.rowCount,
-                    items: this.items,
-                    descBuffer: this.descBuffer,
-                    isDescNotYetInitiated: this.isDescNotYetInitiated,
-                },
-                null,
-                2
-            ) +
-            '\n' +
-            super.toJSONstring()
-        );
+    public toJSON(): any {
+        // return (
+        //     'PSTTableBC: ' +
+        //     JSON.stringify(
+        //         {
+        //             rowCount: this.rowCount,
+        //             descBuffer: this.descBuffer,
+        //             isDescNotYetInitiated: this.isDescNotYetInitiated,
+        //             items: this.items,
+        //         },
+        //         null,
+        //         2
+        //     ) +
+        //     '\n' +
+        //     super.toJSON()
+        // );
+        return this;
     }
 }

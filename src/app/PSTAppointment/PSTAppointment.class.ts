@@ -405,7 +405,7 @@ export class PSTAppointment extends PSTMessage {
      * @returns {string} 
      * @memberof PSTAppointment
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'PSTAppointment: ' +
             JSON.stringify(
@@ -449,7 +449,7 @@ export class PSTAppointment extends PSTMessage {
                 2
             ) +
             '\n' +
-            super.toJSONstring()
+            super.toJSON()
         );
     }
 }

@@ -188,7 +188,7 @@ export abstract class PSTTable {
      * @returns {string} 
      * @memberof PSTTable
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'PSTTable: ' +
             JSON.stringify(

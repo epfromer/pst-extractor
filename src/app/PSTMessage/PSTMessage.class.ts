@@ -72,10 +72,10 @@ export class PSTMessage extends PSTObject {
      * however there seems to be no hard and fast outline for what properties apply to which
      * objects. For properties where no value is set, a blank value is returned (rather than
      * an exception being raised).
-     * @param {PSTFile} pstFile 
-     * @param {DescriptorIndexNode} descriptorIndexNode 
-     * @param {PSTTableBC} [table] 
-     * @param {Map<number, PSTDescriptorItem>} [localDescriptorItems] 
+     * @param {PSTFile} pstFile
+     * @param {DescriptorIndexNode} descriptorIndexNode
+     * @param {PSTTableBC} [table]
+     * @param {Map<number, PSTDescriptorItem>} [localDescriptorItems]
      * @memberof PSTMessage
      */
     constructor(
@@ -143,7 +143,7 @@ export class PSTMessage extends PSTObject {
     }
 
     /**
-     * The message has at least one attachment. 
+     * The message has at least one attachment.
      * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
      * @readonly
      * @type {boolean}
@@ -154,7 +154,7 @@ export class PSTMessage extends PSTObject {
     }
 
     /**
-     * The user receiving the message was also the user who sent the message. 
+     * The user receiving the message was also the user who sent the message.
      * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
      * @readonly
      * @type {boolean}
@@ -165,7 +165,7 @@ export class PSTMessage extends PSTObject {
     }
 
     /**
-     * The message is an FAI message.  An FAI Message object is used to store a variety of settings and 
+     * The message is an FAI message.  An FAI Message object is used to store a variety of settings and
      * auxiliary data, including forms, views, calendar options, favorites, and category lists.
      * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
      * @readonly
@@ -177,7 +177,7 @@ export class PSTMessage extends PSTObject {
     }
 
     /**
-     * The message includes a request for a resend operation with a nondelivery report.  
+     * The message includes a request for a resend operation with a nondelivery report.
      * https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
      * @readonly
      * @type {boolean}
@@ -227,15 +227,15 @@ export class PSTMessage extends PSTObject {
 
     /**
      * Get specific recipient.
-     * @param {number} recipientNumber 
-     * @returns {PSTRecipient} 
+     * @param {number} recipientNumber
+     * @returns {PSTRecipient}
      * @memberof PSTMessage
      */
     public getRecipient(recipientNumber: number): PSTRecipient {
         if (this.recipientTable === null) {
             this.processRecipients();
         }
-        
+
         if (recipientNumber >= this.numberOfRecipients || recipientNumber >= this.recipientTable.getItems().length) {
             throw new Error('PSTMessage::getAttachment unable to fetch recipient number ' + recipientNumber);
         }
@@ -442,8 +442,8 @@ export class PSTMessage extends PSTObject {
 
     /**
      * Get specific attachment from table using index.
-     * @param {number} attachmentNumber 
-     * @returns {PSTAttachment} 
+     * @param {number} attachmentNumber
+     * @returns {PSTAttachment}
      * @memberof PSTMessage
      */
     public getAttachment(attachmentNumber: number): PSTAttachment {
@@ -1213,7 +1213,7 @@ export class PSTMessage extends PSTObject {
     }
 
     /**
-     * Contains a computed value derived from other conversation-related properties. 
+     * Contains a computed value derived from other conversation-related properties.
      * https://msdn.microsoft.com/en-us/library/ee204279(v=exchg.80).aspx
      * @readonly
      * @type {Buffer}
@@ -1288,107 +1288,98 @@ export class PSTMessage extends PSTObject {
     public get modificationTime(): Date {
         return this.getDateItem(OutlookProperties.PR_LAST_MODIFICATION_TIME);
     }
-    
+
     /**
      * JSON stringify the object properties.  Large fields (like body) aren't included.
-     * @returns {string} 
+     * @returns {string}
      * @memberof PSTMessage
      */
-    public toJSONstring(): string {
-        return (
-            'PSTMessage:' +
-            JSON.stringify(
-                {
-                    messageClass: this.messageClass,
-                    emailAddress: this.emailAddress,
-                    subject: this.subject,
-                    addrType: this.addrType,
-                    comment: this.comment,
-                    creationTime: this.creationTime,
-                    modificationTime: this.modificationTime,
-                    importance: this.importance,
-                    transportMessageHeaders: this.transportMessageHeaders,
-                    clientSubmitTime: this.clientSubmitTime,
-                    receivedByName: this.receivedByName,
-                    sentRepresentingName: this.sentRepresentingName,
-                    sentRepresentingAddressType: this.sentRepresentingAddressType,
-                    sentRepresentingEmailAddress: this.sentRepresentingEmailAddress,
-                    conversationTopic: this.conversationTopic,
-                    receivedByAddressType: this.receivedByAddressType,
-                    receivedByAddress: this.receivedByAddress,
-                    isRead: this.isRead,
-                    isUnmodified: this.isUnmodified,
-                    isSubmitted: this.isSubmitted,
-                    isUnsent: this.isUnsent,
-                    hasAttachments: this.hasAttachments,
-                    isFromMe: this.isFromMe,
-                    isAssociated: this.isAssociated,
-                    isResent: this.isResent,
-                    acknowledgementMode: this.acknowledgementMode,
-                    originatorDeliveryReportRequested: this.originatorDeliveryReportRequested,
-                    readReceiptRequested: this.readReceiptRequested,
-                    recipientReassignmentProhibited: this.recipientReassignmentProhibited,
-                    originalSensitivity: this.originalSensitivity,
-                    sensitivity: this.sensitivity,
-                    rcvdRepresentingName: this.rcvdRepresentingName,
-                    bloriginalSubjectah: this.originalSubject,
-                    replyRecipientNames: this.replyRecipientNames,
-                    messageToMe: this.messageToMe,
-                    messageCcMe: this.messageCcMe,
-                    messageRecipMe: this.messageRecipMe,
-                    responseRequested: this.responseRequested,
-                    originalDisplayBcc: this.originalDisplayBcc,
-                    originalDisplayCc: this.originalDisplayCc,
-                    originalDisplayTo: this.originalDisplayTo,
-                    rcvdRepresentingAddrtype: this.rcvdRepresentingAddrtype,
-                    rcvdRepresentingEmailAddress: this.rcvdRepresentingEmailAddress,
-                    isNonReceiptNotificationRequested: this.isNonReceiptNotificationRequested,
-                    isOriginatorNonDeliveryReportRequested: this.isOriginatorNonDeliveryReportRequested,
-                    recipientType: this.recipientType,
-                    isReplyRequested: this.isReplyRequested,
-                    senderName: this.senderName,
-                    senderAddrtype: this.senderAddrtype,
-                    senderEmailAddress: this.senderEmailAddress,
-                    messageSize: this.messageSize,
-                    internetArticleNumber: this.internetArticleNumber,
-                    primarySendAccount: this.primarySendAccount,
-                    nextSendAcct: this.nextSendAcct,
-                    objectType: this.objectType,
-                    deleteAfterSubmit: this.deleteAfterSubmit,
-                    responsibility: this.responsibility,
-                    isRTFInSync: this.isRTFInSync,
-                    displayBCC: this.displayBCC,
-                    displayCC: this.displayCC,
-                    displayTo: this.displayTo,
-                    messageDeliveryTime: this.messageDeliveryTime,
-                    bodyPrefix: this.bodyPrefix,
-                    rtfSyncBodyCRC: this.rtfSyncBodyCRC,
-                    rtfSyncBodyCount: this.rtfSyncBodyCount,
-                    rtfSyncBodyTag: this.rtfSyncBodyTag,
-                    rtfSyncPrefixCount: this.rtfSyncPrefixCount,
-                    rtfSyncTrailingCount: this.rtfSyncTrailingCount,
-                    internetMessageId: this.internetMessageId,
-                    inReplyToId: this.inReplyToId,
-                    returnPath: this.returnPath,
-                    iconIndex: this.iconIndex,
-                    lastVerbExecutionTime: this.lastVerbExecutionTime,
-                    urlCompName: this.urlCompName,
-                    attrHidden: this.attrHidden,
-                    numberOfRecipients: this.numberOfRecipients,
-                    taskStartDate: this.taskStartDate,
-                    taskDueDate: this.taskDueDate,
-                    reminderSet: this.reminderSet,
-                    reminderDelta: this.reminderDelta,
-                    colorCategories: this.colorCategories,
-                    numberOfAttachments: this.numberOfAttachments,
-                    conversationId: this.conversationId,
-                    isConversationIndexTracking: this.isConversationIndexTracking
-                },
-                null,
-                2
-            ) +
-            '\n' +
-            super.toJSONstring()
-        );
+    public toJSON(): any {
+        return {
+            messageClass: this.messageClass,
+            emailAddress: this.emailAddress,
+            subject: this.subject,
+            addrType: this.addrType,
+            comment: this.comment,
+            creationTime: this.creationTime,
+            modificationTime: this.modificationTime,
+            importance: this.importance,
+            transportMessageHeaders: this.transportMessageHeaders,
+            clientSubmitTime: this.clientSubmitTime,
+            receivedByName: this.receivedByName,
+            sentRepresentingName: this.sentRepresentingName,
+            sentRepresentingAddressType: this.sentRepresentingAddressType,
+            sentRepresentingEmailAddress: this.sentRepresentingEmailAddress,
+            conversationTopic: this.conversationTopic,
+            receivedByAddressType: this.receivedByAddressType,
+            receivedByAddress: this.receivedByAddress,
+            isRead: this.isRead,
+            isUnmodified: this.isUnmodified,
+            isSubmitted: this.isSubmitted,
+            isUnsent: this.isUnsent,
+            hasAttachments: this.hasAttachments,
+            isFromMe: this.isFromMe,
+            isAssociated: this.isAssociated,
+            isResent: this.isResent,
+            acknowledgementMode: this.acknowledgementMode,
+            originatorDeliveryReportRequested: this.originatorDeliveryReportRequested,
+            readReceiptRequested: this.readReceiptRequested,
+            recipientReassignmentProhibited: this.recipientReassignmentProhibited,
+            originalSensitivity: this.originalSensitivity,
+            sensitivity: this.sensitivity,
+            rcvdRepresentingName: this.rcvdRepresentingName,
+            bloriginalSubjectah: this.originalSubject,
+            replyRecipientNames: this.replyRecipientNames,
+            messageToMe: this.messageToMe,
+            messageCcMe: this.messageCcMe,
+            messageRecipMe: this.messageRecipMe,
+            responseRequested: this.responseRequested,
+            originalDisplayBcc: this.originalDisplayBcc,
+            originalDisplayCc: this.originalDisplayCc,
+            originalDisplayTo: this.originalDisplayTo,
+            rcvdRepresentingAddrtype: this.rcvdRepresentingAddrtype,
+            rcvdRepresentingEmailAddress: this.rcvdRepresentingEmailAddress,
+            isNonReceiptNotificationRequested: this.isNonReceiptNotificationRequested,
+            isOriginatorNonDeliveryReportRequested: this.isOriginatorNonDeliveryReportRequested,
+            recipientType: this.recipientType,
+            isReplyRequested: this.isReplyRequested,
+            senderName: this.senderName,
+            senderAddrtype: this.senderAddrtype,
+            senderEmailAddress: this.senderEmailAddress,
+            messageSize: this.messageSize,
+            internetArticleNumber: this.internetArticleNumber,
+            primarySendAccount: this.primarySendAccount,
+            nextSendAcct: this.nextSendAcct,
+            objectType: this.objectType,
+            deleteAfterSubmit: this.deleteAfterSubmit,
+            responsibility: this.responsibility,
+            isRTFInSync: this.isRTFInSync,
+            displayBCC: this.displayBCC,
+            displayCC: this.displayCC,
+            displayTo: this.displayTo,
+            messageDeliveryTime: this.messageDeliveryTime,
+            bodyPrefix: this.bodyPrefix,
+            rtfSyncBodyCRC: this.rtfSyncBodyCRC,
+            rtfSyncBodyCount: this.rtfSyncBodyCount,
+            rtfSyncBodyTag: this.rtfSyncBodyTag,
+            rtfSyncPrefixCount: this.rtfSyncPrefixCount,
+            rtfSyncTrailingCount: this.rtfSyncTrailingCount,
+            internetMessageId: this.internetMessageId,
+            inReplyToId: this.inReplyToId,
+            returnPath: this.returnPath,
+            iconIndex: this.iconIndex,
+            lastVerbExecutionTime: this.lastVerbExecutionTime,
+            urlCompName: this.urlCompName,
+            attrHidden: this.attrHidden,
+            numberOfRecipients: this.numberOfRecipients,
+            taskStartDate: this.taskStartDate,
+            taskDueDate: this.taskDueDate,
+            reminderSet: this.reminderSet,
+            reminderDelta: this.reminderDelta,
+            colorCategories: this.colorCategories,
+            numberOfAttachments: this.numberOfAttachments,
+            conversationId: this.conversationId,
+            isConversationIndexTracking: this.isConversationIndexTracking,
+        };
     }
 }

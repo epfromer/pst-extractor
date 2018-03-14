@@ -51,7 +51,6 @@ export abstract class PSTObject {
     protected localDescriptorItems: Map<number, PSTDescriptorItem> = null;
     private pstTableBC: PSTTableBC;
     protected pstTableItems: Map<number, PSTTableItem>; // make this a JSON object?
-    protected table: PSTTableBC;
 
     /**
      * Creates an instance of PSTObject, the root class of most PST Items.
@@ -89,20 +88,20 @@ export abstract class PSTObject {
      * @protected
      * @param {PSTFile} theFile 
      * @param {DescriptorIndexNode} folderIndexNode 
-     * @param {PSTTableBC} table 
+     * @param {PSTTableBC} pstTableBC 
      * @param {Map<number, PSTDescriptorItem>} localDescriptorItems 
      * @memberof PSTObject
      */
     protected prePopulate(
         theFile: PSTFile,
         folderIndexNode: DescriptorIndexNode,
-        table: PSTTableBC,
+        pstTableBC: PSTTableBC,
         localDescriptorItems: Map<number, PSTDescriptorItem>
     ) {
         this.pstFile = theFile;
         this.descriptorIndexNode = folderIndexNode;
-        this.pstTableItems = table.getItems();
-        this.table = table;
+        this.pstTableItems = pstTableBC.getItems();
+        this.pstTableBC = pstTableBC;
         this.localDescriptorItems = localDescriptorItems;
     }
 
@@ -358,21 +357,23 @@ export abstract class PSTObject {
     }
 
     /**
-     * JSON stringify the object properties.
+     * JSON the object, large buffers excluded.
      * @returns {string} 
      * @memberof PSTObject
      */
-    public toJSONstring(): string {
-        return (
-            'PSTObject:' +
-            JSON.stringify(
-                {
-                    displayName: this.displayName,
-                },
-                null,
-                2
-            )
-        );
+    public toJSON(): any {
+        return this;
+        // return (
+        //     'PSTObject:' +
+        //     JSON.stringify(
+        //         {
+        //             displayName: this.displayName,
+        //             pstTableBC: this.pstTableBC,
+        //         },
+        //         null,
+        //         2
+        //     )
+        // );
     }
 
 }

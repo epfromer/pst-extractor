@@ -668,7 +668,7 @@ export class PSTFile {
      * @returns {string} 
      * @memberof PSTFile
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return JSON.stringify({
             encryptionType: this.encryptionType,
             pstFileType: this.pstFileType,

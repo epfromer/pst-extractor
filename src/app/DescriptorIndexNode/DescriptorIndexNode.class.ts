@@ -82,7 +82,7 @@ export class DescriptorIndexNode {
      * @returns {string} 
      * @memberof DescriptorIndexNode
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'DescriptorIndexNode: ' +
             JSON.stringify(

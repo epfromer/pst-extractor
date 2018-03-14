@@ -171,7 +171,7 @@ export class PSTActivity extends PSTMessage {
      * @returns {string} 
      * @memberof PSTActivity
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'PSTActivity: ' +
             JSON.stringify(
@@ -195,7 +195,7 @@ export class PSTActivity extends PSTMessage {
                 2
             ) +
             '\n' +
-            super.toJSONstring()
+            super.toJSON()
         );
     }
 }

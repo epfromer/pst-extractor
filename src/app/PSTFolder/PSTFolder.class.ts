@@ -323,7 +323,7 @@ export class PSTFolder extends PSTObject {
      * @returns {string} 
      * @memberof PSTFolder
      */
-    public toJSONstring(): string {
+    public toJSON(): string {
         return (
             'PSTFolder:' +
             JSON.stringify(
@@ -341,7 +341,7 @@ export class PSTFolder extends PSTObject {
                 2
             ) +
             '\n' +
-            super.toJSONstring()
+            super.toJSON()
         );
     }
 }
