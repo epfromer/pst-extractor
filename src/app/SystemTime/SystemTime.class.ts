@@ -42,6 +42,12 @@ export class SystemTime {
     private wSecond = 0;
     private wMilliseconds = 0;
 
+    /**
+     * Creates an instance of SystemTime.
+     * @param {Buffer} timeZoneData 
+     * @param {number} offset 
+     * @memberof SystemTime
+     */
     constructor(timeZoneData: Buffer, offset: number) {
         this.wYear = PSTUtil.convertLittleEndianBytesToLong(timeZoneData, offset, offset + 2)
             .and(0x7fff)
@@ -69,6 +75,12 @@ export class SystemTime {
             .toNumber();
     }
 
+    /**
+     * Determines if two times are equal.
+     * @param {SystemTime} rhs 
+     * @returns 
+     * @memberof SystemTime
+     */
     isEqual(rhs: SystemTime) {
         return (
             this.wYear === rhs.wYear &&
@@ -82,6 +94,11 @@ export class SystemTime {
         );
     }
 
+    /**
+     * JSON stringify the object properties.
+     * @returns {string} 
+     * @memberof SystemTime
+     */
     public toJSONstring(): string {
         return (
             'SystemTime: ' +

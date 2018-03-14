@@ -45,7 +45,11 @@ import { PSTTask } from '../PSTTask/PSTTask.class';
 import * as long from 'long';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
-// utility functions for PST components
+/**
+ * Utility functions for PST components
+ * @export
+ * @class PSTUtil
+ */
 export class PSTUtil {
     // substitution table for the compressible encryption type.
     public static compEnc = [
@@ -553,8 +557,15 @@ export class PSTUtil {
     // LTP
     public static NID_TYPE_LTP = 0x1f;
 
-    // convert little endian bytes to long
-    // TODO - can this be done by long library?
+    /**
+     * Convert little endian bytes to long
+     * @static
+     * @param {Buffer} data 
+     * @param {number} [start] 
+     * @param {number} [end] 
+     * @returns {long} 
+     * @memberof PSTUtil
+     */
     public static convertLittleEndianBytesToLong(data: Buffer, start?: number, end?: number): long {
         if (!start) {
             start = 0;
@@ -574,8 +585,15 @@ export class PSTUtil {
         return offset;
     }
 
-    // convert big endian bytes to long
-    // TODO - can this be done by long library?
+    /**
+     * Convert big endian bytes to long
+     * @static
+     * @param {Buffer} data 
+     * @param {number} [start] 
+     * @param {number} [end] 
+     * @returns {long} 
+     * @memberof PSTUtil
+     */
     public static convertBigEndianBytesToLong(data: Buffer, start?: number, end?: number): long {
         if (!start) {
             start = 0;
@@ -594,11 +612,26 @@ export class PSTUtil {
         return offset;
     }
 
-    // Handle strings using codepages.
+    /**
+     * Handle strings using codepages.
+     * @static
+     * @param {number} propertyId 
+     * @returns 
+     * @memberof PSTUtil
+     */
     public static getInternetCodePageCharset(propertyId: number) {
         return this.codePages.get(propertyId);
     }
 
+    /**
+     * Create JS string from buffer.
+     * @static
+     * @param {Buffer} data 
+     * @param {number} stringType 
+     * @param {string} codepage 
+     * @returns 
+     * @memberof PSTUtil
+     */
     public static createJavascriptString(data: Buffer, stringType: number, codepage: string) {
         try {
             if (stringType == 0x1f) {
@@ -611,8 +644,17 @@ export class PSTUtil {
         }
     }
 
-    // copy from one array to another
-    public static arraycopy(src: Buffer, srcPos: number, dest: Buffer, destPos: number, length: number) {
+   /**
+    * Copy from one array to another
+    * @static
+    * @param {Buffer} src 
+    * @param {number} srcPos 
+    * @param {Buffer} dest 
+    * @param {number} destPos 
+    * @param {number} length 
+    * @memberof PSTUtil
+    */
+   public static arraycopy(src: Buffer, srcPos: number, dest: Buffer, destPos: number, length: number) {
         // TODO FIX THIS - TOO SLOW?
         let s = srcPos;
         let d = destPos;
@@ -622,12 +664,23 @@ export class PSTUtil {
         }
     }
 
-    // determine if character is alphanumeric
+    /**
+     * Determine if character is alphanumeric
+     * 
+     * @static
+     * @memberof PSTUtil
+     */
     public static isAlphaNumeric = (ch: string) => {
         return ch.match(/^[a-z0-9]+$/i) !== null;
     };
 
-    // decode a lump of data that has been encrypted with the compressible encryption
+    /**
+     * Decode a lump of data that has been encrypted with the compressible encryption
+     * @static
+     * @param {Buffer} data 
+     * @returns {Buffer} 
+     * @memberof PSTUtil
+     */
     public static decode(data: Buffer): Buffer {
         let temp;
         for (let x = 0; x < data.length; x++) {
@@ -638,7 +691,14 @@ export class PSTUtil {
         return data;
     }
 
-    // Detect and load a PST Object from a file with the specified descriptor index
+    /**
+     * Detect and load a PST Object from a file with the specified descriptor index
+     * @static
+     * @param {PSTFile} theFile 
+     * @param {long} descriptorIndex 
+     * @returns {*} 
+     * @memberof PSTUtil
+     */
     public static detectAndLoadPSTObject(theFile: PSTFile, descriptorIndex: long): any;
     public static detectAndLoadPSTObject(theFile: PSTFile, folderIndexNode: DescriptorIndexNode): any;
     public static detectAndLoadPSTObject(theFile: PSTFile, arg: any): any {
@@ -670,8 +730,17 @@ export class PSTUtil {
         }
     }
 
-    // creates object based on message class
-    // see https://msdn.microsoft.com/en-us/vba/outlook-vba/articles/item-types-and-message-classes
+    /**
+     * Creates object based on message class
+     * https://msdn.microsoft.com/en-us/vba/outlook-vba/articles/item-types-and-message-classes
+     * @static
+     * @param {PSTFile} theFile 
+     * @param {DescriptorIndexNode} folderIndexNode 
+     * @param {PSTTableBC} table 
+     * @param {Map<number, PSTDescriptorItem>} localDescriptorItems 
+     * @returns {PSTMessage} 
+     * @memberof PSTUtil
+     */
     public static createAppropriatePSTMessageObject(
         theFile: PSTFile,
         folderIndexNode: DescriptorIndexNode,
@@ -782,12 +851,15 @@ export class PSTUtil {
     }
 
     /**
-    // Converts a Windows FILETIME into a {@link Date}. The Windows
-    // FILETIME structure holds a date and time associated with a
-    // file. The structure identifies a 64-bit integer specifying the
-    // number of 100-nanosecond intervals which have passed since
-    // January 1, 1601. This 64-bit value is split into the two double
-    // words stored in the structure.
+     * Converts a Windows FILETIME into a {@link Date}. The Windows FILETIME structure holds a date and time associated with a
+     * file. The structure identifies a 64-bit integer specifying the number of 100-nanosecond intervals which have passed since
+     * January 1, 1601. This 64-bit value is split into the two double words stored in the structure.
+     * 
+     * @static
+     * @param {long} hi 
+     * @param {long} low 
+     * @returns {Date} 
+     * @memberof PSTUtil
      */
     public static filetimeToDate(hi: long, low: long): Date {
         let h: long = hi.shiftLeft(32);
