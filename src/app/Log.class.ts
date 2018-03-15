@@ -1,32 +1,37 @@
-var winston = require('winston');
+const winston = require('winston');
+// const loggly = require('winston-loggly-bulk');
 
 export class Log {
-
     static logLevels = {
         error: 0,
         info: 1,
         debug1: 2,
         debug2: 3
-    }
-    
+    };
+
     static logColors = {
         error: 'red',
         info: 'yellow',
         debug1: 'blue',
         debug2: 'green'
-    }
-    
+    };
+
     static logger = new winston.Logger({
         levels: Log.logLevels,
         colors: Log.logColors,
         level: 'debug1',
         transports: [
-            // colorize the output to the console
-            new winston.transports.Console({colorize: true}),
+            new winston.transports.Console({ colorize: true }),
             new winston.transports.File({
                 filename: 'errors.log',
                 level: 'error'
-              })
+            }),
+            // new winston.transports.Loggly({
+            //     subdomain: 'epfromer',
+            //     token: "5b6ea74c-ba58-4af5-95bc-7a4d2d6207be",
+            //     tags: ["Winston-NodeJS"],
+            //     json: true
+            // })
         ]
     });
 
@@ -44,5 +49,9 @@ export class Log {
 
     static debug2(s: string) {
         Log.logger.debug2(s);
+    }
+
+    static flushLogsAndExit() {
+        // loggly.flushLogsAndExit();
     }
 }

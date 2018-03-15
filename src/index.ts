@@ -84,6 +84,12 @@ directoryListing.forEach(filename => {
     console.log('processed in ' + (end - start) + ' ms');
 });
 
+Log.flushLogsAndExit();
+
+/**
+ * Walk the folder tree recursively and process emails.
+ * @param {PSTFolder} folder 
+ */
 function processFolder(folder: PSTFolder) {
     depth++;
 
@@ -153,6 +159,13 @@ function processFolder(folder: PSTFolder) {
     depth--;
 }
 
+/**
+ * Save items to filesystem.
+ * @param {PSTMessage} msg 
+ * @param {string} emailFolder 
+ * @param {string} sender 
+ * @param {string} recipients 
+ */
 function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipients: string) {
     try {
         // save the msg as a txt file
@@ -199,6 +212,11 @@ function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipi
     }
 }
 
+/**
+ * Get the sender and display.
+ * @param {PSTMessage} email 
+ * @returns {string} 
+ */
 function getSender(email: PSTMessage): string {
 
     let sender = email.senderName;
@@ -211,11 +229,19 @@ function getSender(email: PSTMessage): string {
     return sender;
 }
 
+/**
+ * Get the recipients and display.
+ * @param {PSTMessage} email 
+ * @returns {string} 
+ */
 function getRecipients(email: PSTMessage): string {
     // could walk recipients table, but be fast and cheap
     return email.displayTo;
 }
 
+/**
+ * Print a dot representing a message.
+ */
 function printDot() {
     process.stdout.write('.');
     if (col++ > 100) {
@@ -224,6 +250,11 @@ function printDot() {
     }
 }
 
+/**
+ * Returns a string with visual indicattion of depth in tree.
+ * @param {number} depth 
+ * @returns {string} 
+ */
 function getDepth(depth: number): string {
     let sdepth = '';
     if (col > 0) {
