@@ -78,19 +78,7 @@ export class OffsetIndexItem {
      * @returns {string} 
      * @memberof OffsetIndexItem
      */
-    public toJSON(): string {
-        return (
-            'OffsetIndexItem: ' +
-            JSON.stringify(
-                {
-                    _indexIdentifier: this._indexIdentifier.toString(),
-                    _fileOffset: this._fileOffset.toString(),
-                    _size: this._size,
-                    cRef: this.cRef.toString()
-                },
-                null,
-                2
-            ) 
-        );
+    public toJSON(): any {
+        return this;
     }
 }

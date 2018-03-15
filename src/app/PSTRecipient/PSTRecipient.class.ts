@@ -36,10 +36,9 @@ import { PSTObject } from '../PSTObject/PSTObject.class';
 
 // Class containing recipient information
 export class PSTRecipient extends PSTObject {
-
     /**
      * Creates an instance of PSTRecipient.
-     * @param {Map<number, PSTTableItem>} recipientDetails 
+     * @param {Map<number, PSTTableItem>} recipientDetails
      * @memberof PSTRecipient
      */
     constructor(recipientDetails: Map<number, PSTTableItem>) {
@@ -123,24 +122,21 @@ export class PSTRecipient extends PSTObject {
 
     /**
      * JSON stringify the object properties.
-     * @returns {string} 
+     * @returns {string}
      * @memberof PSTRecipient
      */
-    public toJSON(): string {
-        return (
-            'PSTObject:' +
-            JSON.stringify(
-                {
-                    smtpAddress: this.smtpAddress,
-                    recipientType: this.recipientType,
-                    addrType: this.addrType,
-                    emailAddress: this.emailAddress,
-                    recipientFlags: this.recipientFlags,
-                    recipientOrder: this.recipientOrder
-                },
-                null,
-                2
-            )
+    public toJSON(): any {
+        let clone = Object.assign(
+            {
+                smtpAddress: this.smtpAddress,
+                recipientType: this.recipientType,
+                addrType: this.addrType,
+                emailAddress: this.emailAddress,
+                recipientFlags: this.recipientFlags,
+                recipientOrder: this.recipientOrder
+            },
+            this
         );
+        return clone;
     }
 }

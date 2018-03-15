@@ -40,10 +40,10 @@ import { OutlookProperties } from '../OutlookProperties';
 export class PSTTask extends PSTMessage {
     /**
      * Creates an instance of PSTTask.
-     * @param {PSTFile} pstFile 
-     * @param {DescriptorIndexNode} descriptorIndexNode 
-     * @param {PSTTableBC} [table] 
-     * @param {Map<number, PSTDescriptorItem>} [localDescriptorItems] 
+     * @param {PSTFile} pstFile
+     * @param {DescriptorIndexNode} descriptorIndexNode
+     * @param {PSTTableBC} [table]
+     * @param {Map<number, PSTDescriptorItem>} [localDescriptorItems]
      * @memberof PSTTask
      */
     constructor(
@@ -210,38 +210,33 @@ export class PSTTask extends PSTMessage {
 
     /**
      * JSON stringify the object properties.
-     * @returns {string} 
+     * @returns {string}
      * @memberof PSTTask
      */
-    public toJSON(): string {
-        return (
-            'PSTTask:' +
-            JSON.stringify(
-                {
-                    messageClass: this.messageClass,
-                    subject: this.subject,
-                    importance: this.importance,
-                    transportMessageHeaders: this.transportMessageHeaders,
-                    taskStatus: this.taskStatus,
-                    percentComplete: this.percentComplete,
-                    taskDateCompleted: this.taskDateCompleted,
-                    taskActualEffort: this.taskActualEffort,
-                    taskEstimatedEffort: this.taskEstimatedEffort,
-                    taskVersion: this.taskVersion,
-                    isTaskComplete: this.isTaskComplete,
-                    taskOwner: this.taskOwner,
-                    taskAssigner: this.taskAssigner,
-                    taskLastUser: this.taskLastUser,
-                    taskOrdinal: this.taskOrdinal,
-                    isTaskRecurring: this.isTaskRecurring,
-                    taskOwnership: this.taskOwnership,
-                    acceptanceState: this.acceptanceState
-                },
-                null,
-                2
-            ) +
-            '\n' +
-            super.toJSON()
+    public toJSON(): any {
+        let clone = Object.assign(
+            {
+                messageClass: this.messageClass,
+                subject: this.subject,
+                importance: this.importance,
+                transportMessageHeaders: this.transportMessageHeaders,
+                taskStatus: this.taskStatus,
+                percentComplete: this.percentComplete,
+                taskDateCompleted: this.taskDateCompleted,
+                taskActualEffort: this.taskActualEffort,
+                taskEstimatedEffort: this.taskEstimatedEffort,
+                taskVersion: this.taskVersion,
+                isTaskComplete: this.isTaskComplete,
+                taskOwner: this.taskOwner,
+                taskAssigner: this.taskAssigner,
+                taskLastUser: this.taskLastUser,
+                taskOrdinal: this.taskOrdinal,
+                isTaskRecurring: this.isTaskRecurring,
+                taskOwnership: this.taskOwnership,
+                acceptanceState: this.acceptanceState
+            },
+            this
         );
+        return clone;
     }
 }

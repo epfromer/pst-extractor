@@ -146,7 +146,6 @@ export class PSTNodeInputStream {
                     // TODO - try this with different types of attachments, includin PDF
                     //  may be issue with zlib and PDF files. also, mutiple attachments.
                     for (let i of this.indexItems) {
-                        Log.debug1(i.toJSON());
                         let inData: Buffer = new Buffer(i.size);
                         this.pstFileContent.seek(i.fileOffset);
                         this.pstFileContent.readCompletely(inData);

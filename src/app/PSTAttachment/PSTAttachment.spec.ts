@@ -30,7 +30,7 @@ describe('PSTAttachment tests', () => {
         let childFolders = subtreeFolder.getSubFolders();
         let folder = childFolders[10]; // Contacts
         let contact: PSTContact = folder.getNextChild();
-        // console.log(contact.toJSON())
+        // Log.debug1(JSON.stringify(activity, null, 2));
         expect(contact.messageClass).to.equal('IPM.Contact');
         expect(contact.hasAttachments).to.be.true;
 
@@ -42,7 +42,7 @@ describe('PSTAttachment tests', () => {
         
         // second attachment is never gonna give you up
         attachment = contact.getAttachment(1);
-        // console.log(attachment.toJSON())
+        // Log.debug1(JSON.stringify(activity, null, 2));
         expect(attachment.size).to.equal(8447);
         expect(attachment.longFilename).to.equal('rickroll.jpg');
         expect(attachment.creationTime).to.eql(new Date("2018-03-07T16:49:32.964Z"));
@@ -52,11 +52,11 @@ describe('PSTAttachment tests', () => {
         let childFolders = subtreeFolder.getSubFolders();
         let folder = childFolders[17];  // Tasks
         let task: PSTTask = folder.getNextChild();
-        // console.log(task.toJSON())
+        // Log.debug1(JSON.stringify(activity, null, 2));
         expect(task.messageClass).to.equal('IPM.Task');
         expect(task.hasAttachments).to.be.true;
         let attachment: PSTAttachment = task.getAttachment(0);
-        // console.log(attachment.toJSON())
+        // Log.debug1(JSON.stringify(activity, null, 2));
         expect(attachment.size).to.equal(8447);
         expect(attachment.longFilename).to.equal('rickroll.jpg');
         expect(attachment.creationTime).to.eql(new Date("2018-03-07T16:49:32.964Z"));
@@ -87,7 +87,7 @@ describe('PSTAttachment tests', () => {
         // Email: 2110308 - word attachment
         expect(msg.hasAttachments).to.be.true;
         let attachment: PSTAttachment = msg.getAttachment(0);
-        // console.log(attachment.toJSON())
+        // Log.debug1(JSON.stringify(activity, null, 2));
         expect(attachment.size).to.equal(54044);
         expect(attachment.longFilename).to.equal('OBA_2760.doc');
         expect(attachment.creationTime).to.eql(new Date("2018-03-07T16:26:20.724Z"));
@@ -104,7 +104,7 @@ describe('PSTAttachment tests', () => {
         // Email: 2110724 - excel attachment
         expect(msg.hasAttachments).to.be.true;
         let attachment: PSTAttachment = msg.getAttachment(0);
-        // console.log(attachment.toJSON())
+        // Log.debug1(JSON.stringify(activity, null, 2));
         expect(attachment.size).to.equal(31016);
         expect(attachment.longFilename).to.equal('RedRockA.xls');
         expect(attachment.creationTime).to.eql(new Date("2018-03-07T16:31:56.075Z"));
@@ -122,7 +122,7 @@ describe('PSTAttachment tests', () => {
         // Email: 2111140 - never gonna give you up
         expect(msg.hasAttachments).to.be.true;
         let attachment: PSTAttachment = msg.getAttachment(0);
-        // console.log(attachment.toJSON())
+        // Log.debug1(JSON.stringify(activity, null, 2));
         expect(attachment.size).to.equal(5020);
         expect(attachment.longFilename).to.equal('rickroll.jpg');
         expect(attachment.creationTime).to.eql(new Date("2018-03-07T16:43:36.995Z"));

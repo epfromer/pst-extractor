@@ -85,18 +85,7 @@ export class NodeInfo {
      * @returns {string} 
      * @memberof NodeInfo
      */
-    public toJSON(): string {
-        return (
-            'NodeInfo: ' +
-            JSON.stringify(
-                {
-                    _startOffset: this._startOffset,
-                    _endOffset: this._endOffset,
-                    length: this.length
-                },
-                null,
-                2
-            )
-        );
+    public toJSON(): any {
+        return this;
     }
 }

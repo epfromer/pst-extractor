@@ -31,7 +31,7 @@ describe('PSTContact tests', () => {
  
     it('should have a contact with several fields', () => {
         let contact: PSTContact = folder.getNextChild();
-        // console.log(contact.toJSON());
+        // Log.debug1(JSON.stringify(activity, null, 2));
         expect(contact.messageClass).to.equal('IPM.Contact');
         expect(contact.subject).to.equal('Ed Pfromer');
         expect(contact.importance).to.equal(1);

@@ -129,19 +129,7 @@ export class PSTDescriptorItem {
      * @returns {string} 
      * @memberof PSTDescriptorItem
      */
-    public toJSON(): string {
-        return (
-            'PSTDescriptorItem: ' +
-            JSON.stringify(
-                {
-                    _subNodeOffsetIndexIdentifier: this._subNodeOffsetIndexIdentifier,
-                    _descriptorIdentifier: this._descriptorIdentifier,
-                    _offsetIndexIdentifier: this._offsetIndexIdentifier,
-                    dataSize: this.dataSize
-                },
-                null,
-                2
-            ) 
-        );
+    public toJSON(): any {
+        return this;
     }
 }

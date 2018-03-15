@@ -108,11 +108,8 @@ export class PSTTableBC extends PSTTable {
                     }
                     break;
             }
-
             offset = offset + 8;
-
             this.items.set(item.entryType.toNumber(), item);
-            Log.debug2('PSTTableBC::constructor ' + item.toJSON());
         }
         this.releaseRawData();
     }
@@ -145,21 +142,6 @@ export class PSTTableBC extends PSTTable {
      * @memberof PSTTable7C
      */
     public toJSON(): any {
-        // return (
-        //     'PSTTableBC: ' +
-        //     JSON.stringify(
-        //         {
-        //             rowCount: this.rowCount,
-        //             descBuffer: this.descBuffer,
-        //             isDescNotYetInitiated: this.isDescNotYetInitiated,
-        //             items: this.items,
-        //         },
-        //         null,
-        //         2
-        //     ) +
-        //     '\n' +
-        //     super.toJSON()
-        // );
         return this;
     }
 }

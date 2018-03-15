@@ -78,20 +78,7 @@ export class ColumnDescriptor {
      * @returns {string} 
      * @memberof ColumnDescriptor
      */
-    public toJSON(): string {
-        return (
-            'ColumnDescriptor: ' +
-            JSON.stringify(
-                {
-                    _ibData: this._ibData,
-                    _cbData: this._cbData,
-                    _type: this._type,
-                    _iBit: this._iBit,
-                    _id: this._id,
-                },
-                null,
-                2
-            )
-        );
+    public toJSON(): any {
+        return this;
     }
 }

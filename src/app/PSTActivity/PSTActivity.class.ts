@@ -41,10 +41,10 @@ export class PSTActivity extends PSTMessage {
     /**
      * Creates an instance of PSTActivity.  Represents Journal entries, class IPM.Activity.
      * https://msdn.microsoft.com/en-us/library/office/aa204771(v=office.11).aspx
-     * @param {PSTFile} pstFile 
-     * @param {DescriptorIndexNode} descriptorIndexNode 
-     * @param {PSTTableBC} [table] 
-     * @param {Map<number, PSTDescriptorItem>} [localDescriptorItems] 
+     * @param {PSTFile} pstFile
+     * @param {DescriptorIndexNode} descriptorIndexNode
+     * @param {PSTTableBC} [table]
+     * @param {Map<number, PSTDescriptorItem>} [localDescriptorItems]
      * @memberof PSTActivity
      */
     constructor(
@@ -168,34 +168,29 @@ export class PSTActivity extends PSTMessage {
 
     /**
      * JSON stringify the object properties.
-     * @returns {string} 
+     * @returns {string}
      * @memberof PSTActivity
      */
-    public toJSON(): string {
-        return (
-            'PSTActivity: ' +
-            JSON.stringify(
-                {
-                    messageClass: this.messageClass,
-                    subject: this.subject,
-                    importance: this.importance,
-                    transportMessageHeaders: this.transportMessageHeaders,
-                    logType: this.logType,
-                    logStart: this.logStart,
-                    logDuration: this.logDuration,
-                    logEnd: this.logEnd,
-                    logFlags: this.logFlags,
-                    isDocumentPrinted: this.isDocumentPrinted,
-                    isDocumentSaved: this.isDocumentSaved,
-                    isDocumentRouted: this.isDocumentRouted,
-                    isDocumentPosted: this.isDocumentPosted,
-                    logTypeDesc: this.logTypeDesc
-                },
-                null,
-                2
-            ) +
-            '\n' +
-            super.toJSON()
+    public toJSON(): any {
+        let clone = Object.assign(
+            {
+                messageClass: this.messageClass,
+                subject: this.subject,
+                importance: this.importance,
+                transportMessageHeaders: this.transportMessageHeaders,
+                logType: this.logType,
+                logStart: this.logStart,
+                logDuration: this.logDuration,
+                logEnd: this.logEnd,
+                logFlags: this.logFlags,
+                isDocumentPrinted: this.isDocumentPrinted,
+                isDocumentSaved: this.isDocumentSaved,
+                isDocumentRouted: this.isDocumentRouted,
+                isDocumentPosted: this.isDocumentPosted,
+                logTypeDesc: this.logTypeDesc
+            },
+            this
         );
+        return clone;
     }
 }

@@ -31,7 +31,7 @@ describe('PSTAppointment tests', () => {
 
     it('should have two calendar items', () => {
         let appt: PSTAppointment = folder.getNextChild();
-        // console.log(appt.toJSON())
+        // Log.debug1(JSON.stringify(activity, null, 2));
         expect(appt.messageClass).to.equal('IPM.Appointment');
         expect(appt.subject).to.equal('get lunch');
         expect(appt.startTime).to.eql(new Date("2018-03-04T19:00:00.000Z"));
@@ -39,7 +39,7 @@ describe('PSTAppointment tests', () => {
         expect(appt.duration).to.equal(60);
 
         appt = folder.getNextChild();
-        // console.log(appt.toJSON())
+        // Log.debug1(JSON.stringify(activity, null, 2));
         expect(appt.messageClass).to.equal('IPM.Appointment');
         expect(appt.subject).to.equal('workout');
         expect(appt.creationTime).to.eql(new Date("2018-03-05T20:26:26.396Z"));

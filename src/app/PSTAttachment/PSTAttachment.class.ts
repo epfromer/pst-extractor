@@ -55,9 +55,9 @@ export class PSTAttachment extends PSTObject {
 
     /**
      * Creates an instance of PSTAttachment.
-     * @param {PSTFile} pstFile 
-     * @param {PSTTableBC} table 
-     * @param {Map<number, PSTDescriptorItem>} localDescriptorItems 
+     * @param {PSTFile} pstFile
+     * @param {PSTTableBC} table
+     * @param {Map<number, PSTDescriptorItem>} localDescriptorItems
      * @memberof PSTAttachment
      */
     constructor(
@@ -139,7 +139,7 @@ export class PSTAttachment extends PSTObject {
                 let attachmentTable: PSTTableBC = new PSTTableBC(pstNodeInputStream);
                 return PSTUtil.createAppropriatePSTMessageObject(this.pstFile, this.descriptorIndexNode, attachmentTable, this.localDescriptorItems);
             } catch (err) {
-                Log.error('PSTAttachment::embeddedPSTMessage createAppropriatePSTMessageObject failed\n' + err)
+                Log.error('PSTAttachment::embeddedPSTMessage createAppropriatePSTMessageObject failed\n' + err);
                 throw err;
             }
         }
@@ -208,10 +208,10 @@ export class PSTAttachment extends PSTObject {
     public get attachMethod(): number {
         return this.getIntItem(OutlookProperties.PR_ATTACH_METHOD);
     }
-    
+
     /**
      * Contains a number that uniquely identifies the attachment within its parent message.
-     * https://msdn.microsoft.com/en-us/library/office/cc841969.aspx 
+     * https://msdn.microsoft.com/en-us/library/office/cc841969.aspx
      * @readonly
      * @type {number}
      * @memberof PSTAttachment
@@ -323,35 +323,30 @@ export class PSTAttachment extends PSTObject {
 
     /**
      * JSON stringify the object properties.
-     * @returns {string} 
+     * @returns {string}
      * @memberof PSTAttachment
      */
-    public toJSON(): string {
-        return (
-            'PSTAttachment: ' +
-            JSON.stringify(
-                {
-                    size: this.size,
-                    creationTime: this.creationTime,
-                    modificationTime: this.modificationTime,
-                    filename: this.filename,
-                    attachMethod: this.attachMethod,
-                    attachNum: this.attachNum,
-                    longFilename: this.longFilename,
-                    pathname: this.pathname,
-                    renderingPosition: this.renderingPosition,
-                    longPathname: this.longPathname,
-                    mimeTag: this.mimeTag,
-                    mimeSequence: this.mimeSequence,
-                    contentId: this.contentId,
-                    isAttachmentInvisibleInHtml: this.isAttachmentInvisibleInHtml,
-                    isAttachmentInvisibleInRTF: this.isAttachmentInvisibleInRTF,
-                },
-                null,
-                2
-            ) +
-            '\n' +
-            super.toJSON()
+    public toJSON(): any {
+        let clone = Object.assign(
+            {
+                size: this.size,
+                creationTime: this.creationTime,
+                modificationTime: this.modificationTime,
+                filename: this.filename,
+                attachMethod: this.attachMethod,
+                attachNum: this.attachNum,
+                longFilename: this.longFilename,
+                pathname: this.pathname,
+                renderingPosition: this.renderingPosition,
+                longPathname: this.longPathname,
+                mimeTag: this.mimeTag,
+                mimeSequence: this.mimeSequence,
+                contentId: this.contentId,
+                isAttachmentInvisibleInHtml: this.isAttachmentInvisibleInHtml,
+                isAttachmentInvisibleInRTF: this.isAttachmentInvisibleInRTF
+            },
+            this
         );
+        return clone;
     }
 }

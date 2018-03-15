@@ -44,7 +44,7 @@ const topOutputFolder = '/media/sf_Outlook/pst-extractor/';
 let outputFolder = '';
 const saveToFS = false;
 const displaySender = true;
-const displayRecipients = false;
+const displayRecipients = true;
 const displayBody = false;
 const verbose = true;
 let depth = -1;
@@ -175,7 +175,7 @@ function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipi
     // walk list of attachments and save to fs
     for (let i = 0; i < msg.numberOfAttachments; i++) {
         const attachment: PSTAttachment = msg.getAttachment(i);
-        // Log.debug1(attachment.toJSON());
+        // Log.debug1(JSON.stringify(activity, null, 2));
         if (attachment.filename) {
             const filename = emailFolder + msg.descriptorNodeId + '-' + attachment.longFilename;
             if (verbose) {
@@ -200,7 +200,6 @@ function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipi
 }
 
 function getSender(email: PSTMessage): string {
-    Log.debug1(JSON.stringify(email, null, 2));
 
     let sender = email.senderName;
     if (sender !== email.senderEmailAddress) {

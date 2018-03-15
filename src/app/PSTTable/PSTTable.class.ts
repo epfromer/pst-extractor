@@ -56,11 +56,11 @@ export abstract class PSTTable {
     private subNodeDescriptorItems: Map<number, PSTDescriptorItem> = null;
 
     /**
-     * Creates an instance of PSTTable.  The PST Table is the workhorse of the whole system. 
+     * Creates an instance of PSTTable.  The PST Table is the workhorse of the whole system.
      * It allows for an item to be read and broken down into the individual properties that it consists of.
      * For most PST Objects, it appears that only 7C and BC table types are used.
-     * @param {PSTNodeInputStream} pstNodeInputStream 
-     * @param {Map<number, PSTDescriptorItem>} subNodeDescriptorItems 
+     * @param {PSTNodeInputStream} pstNodeInputStream
+     * @param {Map<number, PSTDescriptorItem>} subNodeDescriptorItems
      * @memberof PSTTable
      */
     constructor(pstNodeInputStream: PSTNodeInputStream, subNodeDescriptorItems: Map<number, PSTDescriptorItem>) {
@@ -107,14 +107,13 @@ export abstract class PSTTable {
     }
 
     /**
-     * Release data.  
+     * Release data.
      * @protected
      * @memberof PSTTable
      */
     protected releaseRawData() {
         this.subNodeDescriptorItems = null;
     }
-
 
     /**
      * Number of items in table.
@@ -128,8 +127,8 @@ export abstract class PSTTable {
 
     /**
      * Get information for the node in the b-tree.
-     * @param {number} hnid 
-     * @returns {NodeInfo} 
+     * @param {number} hnid
+     * @returns {NodeInfo}
      * @memberof PSTTable
      */
     public getNodeInfo(hnid: number): NodeInfo {
@@ -185,26 +184,23 @@ export abstract class PSTTable {
 
     /**
      * JSON stringify the object properties.
-     * @returns {string} 
+     * @returns {string}
      * @memberof PSTTable
      */
-    public toJSON(): string {
-        return (
-            'PSTTable: ' +
-            JSON.stringify(
-                {
-                    tableType: this.tableType,
-                    tableTypeByte: this.tableTypeByte,
-                    hidUserRoot: this.hidUserRoot,
-                    sizeOfItemKey: this.sizeOfItemKey,
-                    sizeOfItemValue: this.sizeOfItemValue,
-                    hidRoot: this.hidRoot,
-                    numberOfKeys: this.numberOfKeys,
-                    numberOfIndexLevels: this.numberOfIndexLevels
-                },
-                null,
-                2
-            )
+    public toJSON(): any {
+        let clone = Object.assign(
+            {
+                tableType: this.tableType,
+                tableTypeByte: this.tableTypeByte,
+                hidUserRoot: this.hidUserRoot,
+                sizeOfItemKey: this.sizeOfItemKey,
+                sizeOfItemValue: this.sizeOfItemValue,
+                hidRoot: this.hidRoot,
+                numberOfKeys: this.numberOfKeys,
+                numberOfIndexLevels: this.numberOfIndexLevels
+            },
+            this
         );
+        return clone;
     }
 }

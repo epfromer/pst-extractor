@@ -82,19 +82,7 @@ export class DescriptorIndexNode {
      * @returns {string} 
      * @memberof DescriptorIndexNode
      */
-    public toJSON(): string {
-        return (
-            'DescriptorIndexNode: ' +
-            JSON.stringify(
-                {
-                    parentDescriptorIndexIdentifier: this.parentDescriptorIndexIdentifier,
-                    _descriptorIdentifier: this._descriptorIdentifier,
-                    _localDescriptorsOffsetIndexIdentifier: this._localDescriptorsOffsetIndexIdentifier.toString(),
-                    _dataOffsetIndexIdentifier: this._dataOffsetIndexIdentifier.toString()
-                },
-                null,
-                2
-            )
-        );
+    public toJSON(): any {
+        return this;
     }
 }

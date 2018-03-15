@@ -286,41 +286,11 @@ export class PSTTable7C extends PSTTable {
     }
 
     /**
-     * JSON stringify the items list.
-     * @returns {string} 
-     * @memberof PSTTable7C
-     */
-    public itemsJSON(): string {
-        let s = '';
-        this.items.forEach(item => {
-            s = s + JSON.stringify(item);
-        });
-        return s;
-    }
-
-    /**
      * JSON stringify the object properties.
      * @returns {string} 
      * @memberof PSTTable7C
      */
-    public toJSON(): string {
-        return (
-            'PSTTable7C: ' +
-            JSON.stringify(
-                {
-                    rowCount: this.rowCount,
-                    numColumns: this.numColumns,
-                    TCI_bm: this.TCI_bm,
-                    TCI_1b: this.TCI_1b,
-                    overrideCol: this.overrideCol,
-                    numberOfKeys: this.numberOfKeys,
-                    items: this.itemsJSON(),
-                },
-                null,
-                2
-            ) +
-            '\n' +
-            super.toJSON()
-        );
+    public toJSON(): any {
+        return this;
     }
 }

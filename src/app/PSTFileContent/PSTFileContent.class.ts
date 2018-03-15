@@ -96,16 +96,7 @@ export class PSTFileContent {
      * @returns {string} 
      * @memberof PSTFileContent
      */
-    public toJSON(): string {
-        return (
-            'PSTDescriptorItem: ' +
-            JSON.stringify(
-                {
-                    _pstFD: this._pstFD
-                },
-                null,
-                2
-            ) 
-        );
+    public toJSON(): any {
+        return this;
     }
 }

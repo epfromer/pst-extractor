@@ -32,7 +32,7 @@ describe('PSTTask tests', () => {
     it('should have two tasks', () => {
         // fully loaded task
         let task: PSTTask = folder.getNextChild();
-        // console.log(task.toJSON())
+        // Log.debug1(JSON.stringify(activity, null, 2));
         expect(task.messageClass).to.equal('IPM.Task');
         expect(task.subject).to.equal('fully loaded task');
         expect(task.isTaskRecurring).to.be.true;
@@ -44,7 +44,7 @@ describe('PSTTask tests', () => {
 
         // basic task
         task = folder.getNextChild();
-        // console.log(task.toJSON())
+        // Log.debug1(JSON.stringify(activity, null, 2));
         expect(task.messageClass).to.equal('IPM.Task')
         expect(task.subject).to.equal('basic task')
         expect(task.isTaskRecurring).to.be.false;

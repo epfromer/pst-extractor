@@ -357,23 +357,11 @@ export abstract class PSTObject {
     }
 
     /**
-     * JSON the object, large buffers excluded.
+     * JSON the object.
      * @returns {string} 
      * @memberof PSTObject
      */
     public toJSON(): any {
         return this;
-        // return (
-        //     'PSTObject:' +
-        //     JSON.stringify(
-        //         {
-        //             displayName: this.displayName,
-        //             pstTableBC: this.pstTableBC,
-        //         },
-        //         null,
-        //         2
-        //     )
-        // );
     }
-
 }

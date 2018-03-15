@@ -99,7 +99,7 @@ export class PSTTableItem {
 
     /**
      * Get long value from table item.
-     * @returns 
+     * @returns
      * @memberof PSTTableItem
      */
     public getLongValue() {
@@ -111,8 +111,8 @@ export class PSTTableItem {
 
     /**
      * Get string value of data.
-     * @param {number} [stringType] 
-     * @returns {string} 
+     * @param {number} [stringType]
+     * @returns {string}
      * @memberof PSTTableItem
      */
     public getStringValue(stringType?: number): string {
@@ -142,24 +142,21 @@ export class PSTTableItem {
 
     /**
      * JSON stringify the object properties.
-     * @returns {string} 
+     * @returns {string}
      * @memberof PSTTableItem
      */
-    public toJSON(): string {
-        return (
-            'PSTTableItem: ' +
-            JSON.stringify(
-                {
-                    itemIndex: this.itemIndex,
-                    entryType: this.entryType,
-                    isExternalValueReference: this.isExternalValueReference,
-                    entryValueReference: this.entryValueReference,
-                    entryValueType: this.entryValueType,
-                    data: this.data,
-                },
-                null,
-                2
-            )
+    public toJSON(): any {
+        let clone = Object.assign(
+            {
+                itemIndex: this.itemIndex,
+                entryType: this.entryType,
+                isExternalValueReference: this.isExternalValueReference,
+                entryValueReference: this.entryValueReference,
+                entryValueType: this.entryValueType,
+                data: this.data
+            },
+            this
         );
+        return clone;
     }
 }

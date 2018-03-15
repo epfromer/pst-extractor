@@ -144,7 +144,9 @@ export class PSTAppointment extends PSTMessage {
      * @memberof PSTAppointment
      */
     public get subType(): boolean {
-        return this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentSubType, OutlookProperties.PSETID_Appointment)) != 0;
+        return (
+            this.getIntItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentSubType, OutlookProperties.PSETID_Appointment)) != 0
+        );
     }
 
     /**
@@ -291,7 +293,7 @@ export class PSTAppointment extends PSTMessage {
     }
 
     /**
-     * Specifies the type of the meeting. 
+     * Specifies the type of the meeting.
      * https://msdn.microsoft.com/en-us/library/ee158396(v=exchg.80).aspx
      * @readonly
      * @type {number}
@@ -364,7 +366,9 @@ export class PSTAppointment extends PSTMessage {
      * @memberof PSTAppointment
      */
     public get appointmentCounterProposal(): boolean {
-        return this.getBooleanItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentCounterProposal, OutlookProperties.PSETID_Appointment));
+        return this.getBooleanItem(
+            this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentCounterProposal, OutlookProperties.PSETID_Appointment)
+        );
     }
 
     /**
@@ -402,54 +406,49 @@ export class PSTAppointment extends PSTMessage {
 
     /**
      * JSON stringify the object properties.  Large fields (like body) aren't included.
-     * @returns {string} 
+     * @returns {string}
      * @memberof PSTAppointment
      */
-    public toJSON(): string {
-        return (
-            'PSTAppointment: ' +
-            JSON.stringify(
-                {
-                    messageClass: this.messageClass,
-                    subject: this.subject,
-                    importance: this.importance,
-                    transportMessageHeaders: this.transportMessageHeaders,
-                    sendAsICAL: this.sendAsICAL,
-                    busyStatus: this.busyStatus,
-                    showAsBusy: this.showAsBusy,
-                    location: this.location,
-                    startTime: this.startTime,
-                    endTime: this.endTime,
-                    duration: this.duration,
-                    color: this.color,
-                    subType: this.subType,
-                    meetingStatus: this.meetingStatus,
-                    isRecurring: this.isRecurring,
-                    recurrenceBase: this.recurrenceBase,
-                    recurrenceType: this.recurrenceType,
-                    recurrencePattern: this.recurrencePattern,
-                    recurrenceStructure: this.recurrenceStructure,
-                    timezone: this.timezone,
-                    allAttendees: this.allAttendees,
-                    toAttendees: this.toAttendees,
-                    ccAttendees: this.ccAttendees,
-                    appointmentSequence: this.appointmentSequence,
-                    isOnlineMeeting: this.isOnlineMeeting,
-                    netMeetingType: this.netMeetingType,
-                    netMeetingServer: this.netMeetingServer,
-                    netMeetingOrganizerAlias: this.netMeetingOrganizerAlias,
-                    netMeetingDocumentPathName: this.netMeetingDocumentPathName,
-                    attendeeCriticalChange: this.attendeeCriticalChange,
-                    appointmentCounterProposal: this.appointmentCounterProposal,
-                    isSilent: this.isSilent,
-                    requiredAttendees: this.requiredAttendees,
-                    localeId: this.localeId,
-                },
-                null,
-                2
-            ) +
-            '\n' +
-            super.toJSON()
+    public toJSON(): any {
+        let clone = Object.assign(
+            {
+                messageClass: this.messageClass,
+                subject: this.subject,
+                importance: this.importance,
+                transportMessageHeaders: this.transportMessageHeaders,
+                sendAsICAL: this.sendAsICAL,
+                busyStatus: this.busyStatus,
+                showAsBusy: this.showAsBusy,
+                location: this.location,
+                startTime: this.startTime,
+                endTime: this.endTime,
+                duration: this.duration,
+                color: this.color,
+                subType: this.subType,
+                meetingStatus: this.meetingStatus,
+                isRecurring: this.isRecurring,
+                recurrenceBase: this.recurrenceBase,
+                recurrenceType: this.recurrenceType,
+                recurrencePattern: this.recurrencePattern,
+                recurrenceStructure: this.recurrenceStructure,
+                timezone: this.timezone,
+                allAttendees: this.allAttendees,
+                toAttendees: this.toAttendees,
+                ccAttendees: this.ccAttendees,
+                appointmentSequence: this.appointmentSequence,
+                isOnlineMeeting: this.isOnlineMeeting,
+                netMeetingType: this.netMeetingType,
+                netMeetingServer: this.netMeetingServer,
+                netMeetingOrganizerAlias: this.netMeetingOrganizerAlias,
+                netMeetingDocumentPathName: this.netMeetingDocumentPathName,
+                attendeeCriticalChange: this.attendeeCriticalChange,
+                appointmentCounterProposal: this.appointmentCounterProposal,
+                isSilent: this.isSilent,
+                requiredAttendees: this.requiredAttendees,
+                localeId: this.localeId
+            },
+            this
         );
+        return clone;
     }
 }

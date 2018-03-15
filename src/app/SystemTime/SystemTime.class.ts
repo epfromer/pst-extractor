@@ -99,22 +99,7 @@ export class SystemTime {
      * @returns {string} 
      * @memberof SystemTime
      */
-    public toJSON(): string {
-        return (
-            'SystemTime: ' +
-            JSON.stringify(
-                {
-                    wYear: this.wYear,
-                    wMonth: this.wMonth,
-                    wDayOfWeek: this.wDayOfWeek,
-                    wDay: this.wDay,
-                    wHour: this.wHour,
-                    wMinute: this.wMinute,
-                    wSecond: this.wSecond,
-                    wMilliseconds: this.wMilliseconds,
-                },
-                null,
-                2
-            ));
+    public toJSON(): any {
+        return this;
     }
 }

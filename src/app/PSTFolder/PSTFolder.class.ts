@@ -86,7 +86,7 @@ export class PSTFolder extends PSTObject {
 
     /**
      * Get folders in one fell swoop, since there's not usually thousands of them.
-     * @returns {PSTFolder[]} 
+     * @returns {PSTFolder[]}
      * @memberof PSTFolder
      */
     public getSubFolders(): PSTFolder[] {
@@ -107,9 +107,9 @@ export class PSTFolder extends PSTObject {
     }
 
     /**
-     * Load subfolders table. 
+     * Load subfolders table.
      * @private
-     * @returns 
+     * @returns
      * @memberof PSTFolder
      */
     private initSubfoldersTable() {
@@ -161,9 +161,9 @@ export class PSTFolder extends PSTObject {
     }
 
     /**
-     * Get the next child of this folder. As there could be thousands of emails, we have these 
+     * Get the next child of this folder. As there could be thousands of emails, we have these
      * kind of cursor operations.
-     * @returns {*} 
+     * @returns {*}
      * @memberof PSTFolder
      */
     public getNextChild(): any {
@@ -203,8 +203,8 @@ export class PSTFolder extends PSTObject {
 
     /**
      *  Move the internal folder cursor to the desired position position 0 is before the first record.
-     * @param {number} newIndex 
-     * @returns 
+     * @param {number} newIndex
+     * @returns
      * @memberof PSTFolder
      */
     public moveChildCursorTo(newIndex: number) {
@@ -282,7 +282,6 @@ export class PSTFolder extends PSTObject {
         return this.getIntItem(OutlookProperties.PR_CONTENT_UNREAD);
     }
 
-
     /**
      * Contains TRUE if a folder contains subfolders.
      * once again, read from the PST, use getSubFolderCount if you want to know
@@ -295,8 +294,8 @@ export class PSTFolder extends PSTObject {
     }
 
     /**
-     * Contains a text string describing the type of a folder. Although this property is 
-     * generally ignored, versions of Microsoft® Exchange Server prior to Exchange Server 
+     * Contains a text string describing the type of a folder. Although this property is
+     * generally ignored, versions of Microsoft® Exchange Server prior to Exchange Server
      * 2003 Mailbox Manager expect this property to be present.
      * https://msdn.microsoft.com/en-us/library/office/cc839839.aspx
      * @readonly
@@ -320,28 +319,23 @@ export class PSTFolder extends PSTObject {
 
     /**
      * JSON stringify the object properties.
-     * @returns {string} 
+     * @returns {string}
      * @memberof PSTFolder
      */
-    public toJSON(): string {
-        return (
-            'PSTFolder:' +
-            JSON.stringify(
-                {
-                    subFolderCount: this.subFolderCount,
-                    emailCount: this.emailCount,
-                    folderType: this.folderType,
-                    contentCount: this.contentCount,
-                    unreadCount: this.unreadCount,
-                    hasSubfolders: this.hasSubfolders,
-                    containerClass: this.containerClass,
-                    containerFlags: this.containerFlags
-                },
-                null,
-                2
-            ) +
-            '\n' +
-            super.toJSON()
+    public toJSON(): any {
+        let clone = Object.assign(
+            {
+                subFolderCount: this.subFolderCount,
+                emailCount: this.emailCount,
+                folderType: this.folderType,
+                contentCount: this.contentCount,
+                unreadCount: this.unreadCount,
+                hasSubfolders: this.hasSubfolders,
+                containerClass: this.containerClass,
+                containerFlags: this.containerFlags
+            },
+            this
         );
+        return clone;
     }
 }
