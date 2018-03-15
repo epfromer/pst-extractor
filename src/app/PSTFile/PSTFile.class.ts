@@ -38,7 +38,6 @@ import { PSTDescriptorItem } from './../PSTDescriptorItem/PSTDescriptorItem.clas
 import { PSTNodeInputStream } from './../PSTNodeInputStream/PSTNodeInputStream.class';
 import { OffsetIndexItem } from './../OffsetIndexItem/OffsetIndexItem.class';
 import { PSTObject } from './../PSTObject/PSTObject.class';
-import { PSTFileContent } from '../PSTFileContent/PSTFileContent.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
@@ -104,11 +103,6 @@ export class PSTFile {
         return this._pstFilename;
     }
 
-    private _pstFileContent: PSTFileContent;
-    public get pstFileContent() {
-        return this._pstFileContent;
-    }
-
     // node tree maps
     private static nodeMap: NodeMap = new NodeMap();
 
@@ -129,7 +123,6 @@ export class PSTFile {
         // attempt to open file
         // confirm first 4 bytes are !BDN
         this.pstFD = fsext.openSync(this._pstFilename, 'r');
-        this._pstFileContent = new PSTFileContent(this.pstFD);
         let buffer = new Buffer(514);
         fs.readSync(this.pstFD, buffer, 0, 514, 0);
         let key = '!BDN';
@@ -380,8 +373,8 @@ export class PSTFile {
 
         // we only need the first 8 bytes
         let data: Buffer = new Buffer(8);
-        this.pstFileContent.seek(offsetItem.fileOffset);
-        this.pstFileContent.readCompletely(data);
+        this.seek(offsetItem.fileOffset);
+        this.readCompletely(data);
 
         // we are an array, get the sum of the sizes...
         return PSTUtil.convertLittleEndianBytesToLong(data, 4, 8).toNumber();
@@ -397,9 +390,9 @@ export class PSTFile {
     private extractLEFileOffset(startOffset: long): long {
         let offset: long = long.ZERO;
         if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-            this.pstFileContent.seek(startOffset);
+            this.seek(startOffset);
             let buffer = new Buffer(4);
-            this.pstFileContent.readCompletely(buffer);
+            this.readCompletely(buffer);
             offset = offset.or(buffer[3] & 0xff);
             offset = offset.shiftLeft(8);
             offset = offset.or(buffer[2] & 0xff);
@@ -408,9 +401,9 @@ export class PSTFile {
             offset = offset.shiftLeft(8);
             offset = offset.or(buffer[0] & 0xff);
         } else {
-            this.pstFileContent.seek(startOffset);
+            this.seek(startOffset);
             let buffer = new Buffer(8);
-            this.pstFileContent.readCompletely(buffer);
+            this.readCompletely(buffer);
             offset = offset.or(buffer[7] & 0xff);
             let tmpLongValue: number;
             for (let x = 6; x >= 0; x--) {
@@ -457,8 +450,8 @@ export class PSTFile {
         } else {
             fileTypeAdjustment = 496;
         }
-        this.pstFileContent.seek(btreeStartOffset.add(fileTypeAdjustment));
-        this.pstFileContent.readCompletely(buffer);
+        this.seek(btreeStartOffset.add(fileTypeAdjustment));
+        this.readCompletely(buffer);
 
         let b2 = new Buffer(2);
         b2[0] = 0xff80;
@@ -476,23 +469,23 @@ export class PSTFile {
                 len = 488;
             }
             let branchNodeItems = new Buffer(len);
-            this.pstFileContent.seek(btreeStartOffset);
-            this.pstFileContent.readCompletely(branchNodeItems);
+            this.seek(btreeStartOffset);
+            this.readCompletely(branchNodeItems);
 
             Log.debug2('PSTFile::findBtreeItem btreeStartOffset = ' + btreeStartOffset);
 
             let numberOfItems = 0;
             if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
                 let numberOfItemsBytes = new Buffer(2);
-                this.pstFileContent.readCompletely(numberOfItemsBytes);
+                this.readCompletely(numberOfItemsBytes);
                 numberOfItems = PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes).toNumber();
-                this.pstFileContent.readCompletely(numberOfItemsBytes);
+                this.readCompletely(numberOfItemsBytes);
             } else {
-                numberOfItems = this.pstFileContent.read();
-                this.pstFileContent.read(); // maxNumberOfItems
+                numberOfItems = this.read();
+                this.read(); // maxNumberOfItems
             }
-            let itemSize = this.pstFileContent.read(); // itemSize
-            let levelsToLeaf = this.pstFileContent.read();
+            let itemSize = this.read(); // itemSize
+            let levelsToLeaf = this.read();
 
             if (levelsToLeaf > 0) {
                 let found = false;
@@ -502,8 +495,8 @@ export class PSTFile {
                         if (indexIdOfFirstChildNode > index) {
                             // get the address for the child first node in this group
                             btreeStartOffset = this.extractLEFileOffset(btreeStartOffset.add((x - 1) * 12 + 8));
-                            this.pstFileContent.seek(btreeStartOffset.add(500));
-                            this.pstFileContent.readCompletely(buffer);
+                            this.seek(btreeStartOffset.add(500));
+                            this.readCompletely(buffer);
                             found = true;
                             break;
                         }
@@ -512,8 +505,8 @@ export class PSTFile {
                         if (indexIdOfFirstChildNode.greaterThan(index)) {
                             // get the address for the child first node in this group
                             btreeStartOffset = this.extractLEFileOffset(btreeStartOffset.add((x - 1) * 24 + 16));
-                            this.pstFileContent.seek(btreeStartOffset.add(fileTypeAdjustment));
-                            this.pstFileContent.readCompletely(buffer);
+                            this.seek(btreeStartOffset.add(fileTypeAdjustment));
+                            this.readCompletely(buffer);
                             found = true;
                             break;
                         }
@@ -523,12 +516,12 @@ export class PSTFile {
                     // it must be in the very last branch...
                     if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
                         btreeStartOffset = this.extractLEFileOffset(btreeStartOffset.add((numberOfItems - 1) * 12 + 8));
-                        this.pstFileContent.seek(btreeStartOffset.add(500));
-                        this.pstFileContent.readCompletely(buffer);
+                        this.seek(btreeStartOffset.add(500));
+                        this.readCompletely(buffer);
                     } else {
                         btreeStartOffset = this.extractLEFileOffset(btreeStartOffset.add((numberOfItems - 1) * 24 + 16));
-                        this.pstFileContent.seek(btreeStartOffset.add(fileTypeAdjustment));
-                        this.pstFileContent.readCompletely(buffer);
+                        this.seek(btreeStartOffset.add(fileTypeAdjustment));
+                        this.readCompletely(buffer);
                     }
                 }
             } else {
@@ -539,13 +532,13 @@ export class PSTFile {
                         if (descTree) {
                             // The 32-bit descriptor index b-tree leaf node item
                             buffer = new Buffer(4);
-                            this.pstFileContent.seek(btreeStartOffset.add(x * 16));
-                            this.pstFileContent.readCompletely(buffer);
+                            this.seek(btreeStartOffset.add(x * 16));
+                            this.readCompletely(buffer);
                             if (PSTUtil.convertLittleEndianBytesToLong(buffer).equals(index)) {
                                 // give me the offset index please!
                                 buffer = new Buffer(16);
-                                this.pstFileContent.seek(btreeStartOffset.add(x * 16));
-                                this.pstFileContent.readCompletely(buffer);
+                                this.seek(btreeStartOffset.add(x * 16));
+                                this.readCompletely(buffer);
                                 return buffer;
                             }
                         } else {
@@ -554,8 +547,8 @@ export class PSTFile {
                             if (indexIdOfFirstChildNode.equals(index)) {
                                 // we found it!
                                 buffer = new Buffer(12);
-                                this.pstFileContent.seek(btreeStartOffset.add(x * 12));
-                                this.pstFileContent.readCompletely(buffer);
+                                this.seek(btreeStartOffset.add(x * 12));
+                                this.readCompletely(buffer);
                                 Log.debug2('PSTFile::findBtreeItem ' + index.toString() + ' found!');
                                 return buffer;
                             }
@@ -564,13 +557,13 @@ export class PSTFile {
                         if (descTree) {
                             // The 64-bit descriptor index b-tree leaf node item
                             buffer = new Buffer(4);
-                            this.pstFileContent.seek(btreeStartOffset.add(x * 32));
-                            this.pstFileContent.readCompletely(buffer);
+                            this.seek(btreeStartOffset.add(x * 32));
+                            this.readCompletely(buffer);
                             if (PSTUtil.convertLittleEndianBytesToLong(buffer).equals(index)) {
                                 // give me the offset index please!
                                 buffer = new Buffer(32);
-                                this.pstFileContent.seek(btreeStartOffset.add(x * 32));
-                                this.pstFileContent.readCompletely(buffer);
+                                this.seek(btreeStartOffset.add(x * 32));
+                                this.readCompletely(buffer);
                                 Log.debug2('PSTFile::findBtreeItem ' + index.toString() + ' found!');
                                 return buffer;
                             }
@@ -580,8 +573,8 @@ export class PSTFile {
                             if (indexIdOfFirstChildNode.equals(index)) {
                                 // we found it
                                 buffer = new Buffer(24);
-                                this.pstFileContent.seek(btreeStartOffset.add(x * 24));
-                                this.pstFileContent.readCompletely(buffer);
+                                this.seek(btreeStartOffset.add(x * 24));
+                                this.readCompletely(buffer);
                                 Log.debug2('PSTFile::findBtreeItem ' + index.toString() + ' found!');
                                 return buffer;
                             }
@@ -660,6 +653,53 @@ export class PSTFile {
         }
 
         return output;
+    }
+
+    /* 
+        Basic file functions.
+    */
+    /**
+     * Read a single byte from the PST file.
+     * @param {number} [position] 
+     * @returns {number} 
+     * @memberof PSTFile
+     */
+    public read(position?: number): number {
+        if (!position) {
+            position = null;
+        }
+
+        let buffer = new Buffer(1);
+        fs.readSync(this.pstFD, buffer, 0, buffer.length, position);
+        return buffer[0];
+    }
+
+    /**
+     * Seek to a specific position in PST file.
+     * @param {long} index 
+     * @memberof PSTFile
+     */
+    public seek(index: long) {
+        fsext.seekSync(this.pstFD, index.toNumber(), 0);
+    }
+
+    /**
+     * Read a complete section from the file, storing in the supplied buffer.
+     * @param {Buffer} buffer 
+     * @param {number} [position] 
+     * @returns 
+     * @memberof PSTFile
+     */
+    public readCompletely(buffer: Buffer, position?: number) {
+        if (!position) {
+            position = null;
+        }
+
+        // attempt to fill the supplied buffer
+        let bytesRead = fs.readSync(this.pstFD, buffer, 0, buffer.length, position);
+        if (bytesRead <= 0 || bytesRead === buffer.length) {
+            return;
+        }
     }
 
     /**

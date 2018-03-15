@@ -33,7 +33,6 @@
 import { OffsetIndexItem } from './../OffsetIndexItem/OffsetIndexItem.class';
 import { PSTFile } from './../PSTFile/PSTFile.class';
 import { PSTObject } from './../PSTObject/PSTObject.class';
-import { PSTFileContent } from '../PSTFileContent/PSTFileContent.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
@@ -41,7 +40,6 @@ import * as zlib from 'zlib';
 import { Log } from '../Log.class';
 
 export class PSTNodeInputStream {
-    private pstFileContent: PSTFileContent; // TODO:  remove this and use pstFile.pstFileContent?
     private skipPoints: long[] = [];
     private indexItems: OffsetIndexItem[] = [];
     private currentBlock = 0;
@@ -84,7 +82,6 @@ export class PSTNodeInputStream {
     constructor(pstFile: PSTFile, arg: any, encrypted?: boolean) {
         if (arg instanceof OffsetIndexItem) {
             this._pstFile = pstFile;
-            this.pstFileContent = pstFile.pstFileContent;
             this._encrypted = pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
             this.loadFromOffsetItem(arg);
             this.currentBlock = 0;
@@ -92,7 +89,6 @@ export class PSTNodeInputStream {
             this.detectZlib();
         } else if (arg instanceof PSTDescriptorItem) {
             this._pstFile = pstFile;
-            this.pstFileContent = pstFile.pstFileContent;
             this._encrypted = pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
             // we want to get the first block of data and see what we are dealing with
             this.loadFromOffsetItem(pstFile.getOffsetIndexNode(long.fromNumber(arg.offsetIndexIdentifier)));
@@ -129,8 +125,8 @@ export class PSTNodeInputStream {
                 let multiStreams = false;
                 if (this.indexItems.length > 1) {
                     let i: OffsetIndexItem = this.indexItems[1];
-                    this.pstFileContent.seek(i.fileOffset);
-                    multiStreams = this.pstFileContent.read() === 0x78 && this.pstFileContent.read() === 0x9c;
+                    this.pstFile.seek(i.fileOffset);
+                    multiStreams = this.pstFile.read() === 0x78 && this.pstFile.read() === 0x9c;
                 }
                 // we are a compressed block, decompress the whole thing into a buffer
                 // and replace our contents with that. firstly, if we have blocks, use that as the length
@@ -147,8 +143,8 @@ export class PSTNodeInputStream {
                     //  may be issue with zlib and PDF files. also, mutiple attachments.
                     for (let i of this.indexItems) {
                         let inData: Buffer = new Buffer(i.size);
-                        this.pstFileContent.seek(i.fileOffset);
-                        this.pstFileContent.readCompletely(inData);
+                        this.pstFile.seek(i.fileOffset);
+                        this.pstFile.readCompletely(inData);
                         outputStream = zlib.unzipSync(inData);
                     }
                     this.indexItems = [];
@@ -190,8 +186,8 @@ export class PSTNodeInputStream {
         let bInternal = (offsetItem.indexIdentifier.toNumber() & 0x02) != 0;
 
         let data = new Buffer(offsetItem.size);
-        this.pstFileContent.seek(offsetItem.fileOffset);
-        this.pstFileContent.readCompletely(data);
+        this.pstFile.seek(offsetItem.fileOffset);
+        this.pstFile.readCompletely(data);
 
         if (bInternal) {
             // All internal blocks are at least 8 bytes long...
@@ -243,8 +239,8 @@ export class PSTNodeInputStream {
                 // get the details in this block and
                 let offsetItem = this.pstFile.getOffsetIndexNode(bid);
                 let blockData = new Buffer(offsetItem.size);
-                this.pstFileContent.seek(offsetItem.fileOffset);
-                this.pstFileContent.readCompletely(blockData);
+                this.pstFile.seek(offsetItem.fileOffset);
+                this.pstFile.readCompletely(blockData);
 
                 // recurse
                 this.getBlockSkipPoints(blockData);
@@ -315,8 +311,8 @@ export class PSTNodeInputStream {
 
         // get the next byte.
         let pos = item.fileOffset.add(this.currentLocation).subtract(skipPoint);
-        this.pstFileContent.seek(pos);
-        let output = this.pstFileContent.read();
+        this.pstFile.seek(pos);
+        let output = this.pstFile.read();
         if (output < 0) {
             return -1;
         }
@@ -396,7 +392,7 @@ export class PSTNodeInputStream {
             let offset: OffsetIndexItem = this.indexItems[this.currentBlock];
             let skipPoint = this.skipPoints[this.currentBlock];
             let currentPosInBlock = this.currentLocation.subtract(skipPoint).toNumber();
-            this.pstFileContent.seek(offset.fileOffset.add(currentPosInBlock));
+            this.pstFile.seek(offset.fileOffset.add(currentPosInBlock));
 
             let nextSkipPoint = skipPoint.add(offset.size);
             let bytesRemaining = output.length - totalBytesFilled;
@@ -409,7 +405,7 @@ export class PSTNodeInputStream {
             if (nextSkipPoint.greaterThanOrEqual(this.currentLocation.add(bytesRemaining))) {
                 // we can fill the output with the rest of our current block!
                 let chunk = new Buffer(bytesRemaining);
-                this.pstFileContent.readCompletely(chunk);
+                this.pstFile.readCompletely(chunk);
                 PSTUtil.arraycopy(chunk, 0, output, totalBytesFilled, bytesRemaining);
                 totalBytesFilled += bytesRemaining;
                 // we are done!
@@ -419,7 +415,7 @@ export class PSTNodeInputStream {
                 // we need to read out a whole chunk and keep going
                 let bytesToRead = offset.size - currentPosInBlock;
                 let chunk = new Buffer(bytesToRead);
-                this.pstFileContent.readCompletely(chunk);
+                this.pstFile.readCompletely(chunk);
                 PSTUtil.arraycopy(chunk, 0, output, totalBytesFilled, bytesToRead);
                 totalBytesFilled += bytesToRead;
                 this.currentBlock++;
@@ -532,7 +528,7 @@ export class PSTNodeInputStream {
         if (this.allData == null) {
             let blockStart = this.indexItems[this.currentBlock].fileOffset;
             let newFilePos: long = blockStart.add(location).subtract(skipPoint);
-            this.pstFileContent.seek(newFilePos);
+            this.pstFile.seek(newFilePos);
         }
     }
 
