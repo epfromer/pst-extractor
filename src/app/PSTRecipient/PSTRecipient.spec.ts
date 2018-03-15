@@ -4,6 +4,7 @@ import * as mocha from 'mocha';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { PSTFolder } from '../PSTFolder/PSTFolder.class';
 import { PSTMessage } from '../PSTMessage/PSTMessage.class';
+import { Log } from '../Log.class';
 const resolve = require('path').resolve;
 const expect = chai.expect;
 let pstFile: PSTFile;
@@ -58,6 +59,7 @@ describe('PSTRecipient tests', () => {
         expect(msg.senderEmailAddress).to.equal('Dennis.Lee@ENRON.com');
         expect(msg.displayTo).to.equal('Lindberg  Lorraine; Watson  Kimberly');
         let recipient: PSTRecipient = msg.getRecipient(0);
+        // Log.debug1(JSON.stringify(recipient, null, 2));
         expect(recipient.displayName).to.equal('Lindberg  Lorraine');
         expect(recipient.smtpAddress).to.equal('Lorraine.Lindberg@ENRON.com');
         recipient = msg.getRecipient(1);
@@ -73,6 +75,7 @@ describe('PSTRecipient tests', () => {
         expect(msg.sentRepresentingEmailAddress).to.equal('JReames@br-inc.com');
         expect(msg.displayTo).to.equal('Michelle Lokay (E-mail)');
         recipient = msg.getRecipient(0);
+        // Log.debug1(JSON.stringify(recipient, null, 2));
         expect(recipient.displayName).to.equal('Michelle Lokay (E-mail)');
         expect(recipient.smtpAddress).to.equal('michelle.lokay@enron.com');
     });
