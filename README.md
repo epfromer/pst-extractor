@@ -77,4 +77,4 @@ Contributions welcome; Please submit all pull requests the against master branch
 
 ## License
 
- - **ISC** : http://opensource.org/licenses/ISC
+ - **(Apache-2.0 OR GPL-3.0)** : null

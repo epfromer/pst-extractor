@@ -11,6 +11,18 @@
             "protocol": "inspector",
             "console": "integratedTerminal",
             "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "name": "index-min.ts",
+            "type": "node",
+            "request": "launch",
+            "args": ["src/index-min.ts"],
+            "runtimeArgs": ["-r", "ts-node/register"],
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "openOnSessionStart"
         }
+
     ]
 }
