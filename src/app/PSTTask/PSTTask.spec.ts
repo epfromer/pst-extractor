@@ -34,7 +34,6 @@ describe('PSTTask tests', () => {
         // fully loaded task
         let task: PSTTask = folder.getNextChild();
         Log.debug1(JSON.stringify(task, null, 2));
-        Log.error('foo')
         expect(task.messageClass).to.equal('IPM.Task');
         expect(task.subject).to.equal('fully loaded task');
         expect(task.isTaskRecurring).to.be.true;
