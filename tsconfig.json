@@ -1,9 +1,12 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "noImplicitAny": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "declaration": true,
+        "outDir": "./dist",
+        "strict": true
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
 }

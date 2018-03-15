@@ -39,7 +39,7 @@ import * as long from 'long';
 // It is like a pointer to an element in the PST file, everything has one...
 export class DescriptorIndexNode {
     private parentDescriptorIndexIdentifier: number;
-    private itemType: number;
+    private itemType = 0;
 
     private _descriptorIdentifier: number;
     public get descriptorIdentifier(): number {

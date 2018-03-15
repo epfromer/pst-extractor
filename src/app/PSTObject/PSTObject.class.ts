@@ -47,7 +47,7 @@ var fromBits = require('math-float64-from-bits');
 
 export abstract class PSTObject {
     protected pstFile: PSTFile;
-    protected descriptorIndexNode: DescriptorIndexNode;
+    protected descriptorIndexNode: DescriptorIndexNode | null = null;
     protected localDescriptorItems: Map<number, PSTDescriptorItem> = null;
     private pstTableBC: PSTTableBC;
     protected pstTableItems: Map<number, PSTTableItem>; 
@@ -94,7 +94,7 @@ export abstract class PSTObject {
      */
     protected prePopulate(
         theFile: PSTFile,
-        folderIndexNode: DescriptorIndexNode,
+        folderIndexNode: DescriptorIndexNode | null,
         pstTableBC: PSTTableBC,
         localDescriptorItems: Map<number, PSTDescriptorItem>
     ) {
