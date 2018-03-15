@@ -50,7 +50,7 @@ export abstract class PSTObject {
     protected descriptorIndexNode: DescriptorIndexNode;
     protected localDescriptorItems: Map<number, PSTDescriptorItem> = null;
     private pstTableBC: PSTTableBC;
-    protected pstTableItems: Map<number, PSTTableItem>; // make this a JSON object?
+    protected pstTableItems: Map<number, PSTTableItem>; 
 
     /**
      * Creates an instance of PSTObject, the root class of most PST Items.

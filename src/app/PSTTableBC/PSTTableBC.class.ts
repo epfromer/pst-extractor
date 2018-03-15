@@ -42,7 +42,6 @@ import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
 export class PSTTableBC extends PSTTable {
     private items: Map<number, PSTTableItem> = new Map();
-    private descBuffer = ''; // TODO - make this more efficient than string
     private isDescNotYetInitiated = false;
 
     /**
@@ -64,7 +63,6 @@ export class PSTTableBC extends PSTTable {
         keyTableInfoNodeInfo.pstNodeInputStream.readCompletely(keyTableInfo);
         this.numberOfKeys = Math.trunc(keyTableInfo.length / (this.sizeOfItemKey + this.sizeOfItemValue));
         if (this.numberOfKeys == 0) { debugger; }
-        this.descBuffer += 'Number of entries: ' + this.numberOfKeys + '\n';
 
         // Read the key table
         let offset = 0;

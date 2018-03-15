@@ -85,8 +85,7 @@ export class PSTFile {
         ['00020328-0000-0000-C000-000000000046', 12],
         ['71035549-0739-4DCB-9163-00F0580DBBDF', 13],
         ['00062040-0000-0000-C000-000000000046', 14]
-    ]);
-    private guids: Buffer;
+    ]); 
 
     // the type of encryption the files uses
     private _encryptionType = 0;
@@ -191,18 +190,18 @@ export class PSTFile {
 
         // Get the guids
         let guidEntry: PSTTableItem = tableItems.get(2);
-        this.guids = this.getData(guidEntry, localDescriptorItems);
-        let nGuids = Math.trunc(this.guids.length / 16);
+        let guids = this.getData(guidEntry, localDescriptorItems);
+        let nGuids = Math.trunc(guids.length / 16);
         let guidIndexes: number[] = [];
         let offset = 0;
         for (let i = 0; i < nGuids; ++i) {
-            let leftQuad: long = PSTUtil.convertLittleEndianBytesToLong(this.guids, offset, offset + 4);
+            let leftQuad: long = PSTUtil.convertLittleEndianBytesToLong(guids, offset, offset + 4);
             leftQuad = leftQuad.shiftLeft(32);
-            let midQuad: long = PSTUtil.convertLittleEndianBytesToLong(this.guids, offset + 4, offset + 6);
+            let midQuad: long = PSTUtil.convertLittleEndianBytesToLong(guids, offset + 4, offset + 6);
             midQuad = midQuad.shiftLeft(16);
-            let rightQuad: long = PSTUtil.convertLittleEndianBytesToLong(this.guids, offset + 6, offset + 8);
+            let rightQuad: long = PSTUtil.convertLittleEndianBytesToLong(guids, offset + 6, offset + 8);
             let mostSigBits: long = leftQuad.or(midQuad).or(rightQuad);
-            let leastSigBits: long = PSTUtil.convertBigEndianBytesToLong(this.guids, offset + 8, offset + 16);
+            let leastSigBits: long = PSTUtil.convertBigEndianBytesToLong(guids, offset + 8, offset + 16);
             let mostBuffer: number[] = mostSigBits.toBytes();
             let leastBuffer: number[] = leastSigBits.toBytes();
             let arrUID = [].concat(mostBuffer, leastBuffer);
