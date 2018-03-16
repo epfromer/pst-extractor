@@ -30,7 +30,7 @@
     "url": "git+https://github.com/epfromer/pst-extractor.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ed Pfromer (epfromer@gmail.com)",
   "license": "(Apache-2.0 OR GPL-3.0)",
   "bugs": {
     "url": "https://github.com/epfromer/pst-extractor/issues"
