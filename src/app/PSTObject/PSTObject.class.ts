@@ -48,17 +48,23 @@ var fromBits = require('math-float64-from-bits');
 export abstract class PSTObject {
     protected pstFile: PSTFile;
     protected descriptorIndexNode: DescriptorIndexNode | null = null;
-    protected localDescriptorItems: Map<number, PSTDescriptorItem> = null;
-    private pstTableBC: PSTTableBC;
-    protected pstTableItems: Map<number, PSTTableItem>; 
+    protected localDescriptorItems: Map<number, PSTDescriptorItem> | null = null;
+    private pstTableBC: PSTTableBC | null = null;
+    protected pstTableItems: Map<number, PSTTableItem> | null = null; 
 
     /**
      * Creates an instance of PSTObject, the root class of most PST Items.
      * @memberof PSTObject
      */
-    constructor(pstTableItems?: Map<number, PSTTableItem>) {
-        // if table items already loaded, set them
-        this.pstTableItems = pstTableItems;
+    constructor(pstFile: PSTFile, descriptorIndexNode?: DescriptorIndexNode, pstTableItems?: Map<number, PSTTableItem>) {
+        this.pstFile = pstFile;
+
+        if (descriptorIndexNode) {
+            this.loadDescriptor(descriptorIndexNode);
+        }
+        if (pstTableItems) {
+           this.pstTableItems = pstTableItems;
+        }
     }
 
     /**
@@ -68,8 +74,7 @@ export abstract class PSTObject {
      * @param {DescriptorIndexNode} descriptorIndexNode 
      * @memberof PSTObject
      */
-    protected loadDescriptor(pstFile: PSTFile, descriptorIndexNode: DescriptorIndexNode) {
-        this.pstFile = pstFile;
+    private loadDescriptor(descriptorIndexNode: DescriptorIndexNode) {
         this.descriptorIndexNode = descriptorIndexNode;
 
         // get the table items for this descriptor
@@ -79,7 +84,7 @@ export abstract class PSTObject {
         this.pstTableItems = this.pstTableBC.getItems();
 
         if (descriptorIndexNode.localDescriptorsOffsetIndexIdentifier.notEquals(long.ZERO)) {
-            this.localDescriptorItems = pstFile.getPSTDescriptorItems(descriptorIndexNode.localDescriptorsOffsetIndexIdentifier);
+            this.localDescriptorItems = this.pstFile.getPSTDescriptorItems(descriptorIndexNode.localDescriptorsOffsetIndexIdentifier);
         }
     }
 
@@ -93,16 +98,14 @@ export abstract class PSTObject {
      * @memberof PSTObject
      */
     protected prePopulate(
-        theFile: PSTFile,
         folderIndexNode: DescriptorIndexNode | null,
         pstTableBC: PSTTableBC,
-        localDescriptorItems: Map<number, PSTDescriptorItem>
+        localDescriptorItems?: Map<number, PSTDescriptorItem>
     ) {
-        this.pstFile = theFile;
         this.descriptorIndexNode = folderIndexNode;
         this.pstTableItems = pstTableBC.getItems();
         this.pstTableBC = pstTableBC;
-        this.localDescriptorItems = localDescriptorItems;
+        this.localDescriptorItems = localDescriptorItems ? localDescriptorItems : null;
     }
 
     /**
@@ -116,8 +119,9 @@ export abstract class PSTObject {
         // Prevent null pointer exceptions for embedded messages
         if (this.descriptorIndexNode != null) {
             return long.fromNumber(this.descriptorIndexNode.descriptorIdentifier);
+        } else {
+            return long.ZERO;
         }
-        return long.ZERO;
     }
 
     /**
@@ -129,8 +133,10 @@ export abstract class PSTObject {
     public getNodeType(descriptorIdentifier?: number): number {
         if (descriptorIdentifier) {
             return descriptorIdentifier & 0x1f;
-        } else {
+        } else if (this.descriptorIndexNode) {
             return this.descriptorIndexNode.descriptorIdentifier & 0x1f;
+        } else {
+            return -1;
         }
     }
 
@@ -146,10 +152,11 @@ export abstract class PSTObject {
         if (!defaultValue) {
             defaultValue = 0;
         }
-
-        if (this.pstTableItems.has(identifier)) {
-            let item: PSTTableItem = this.pstTableItems.get(identifier);
-            return item.entryValueReference;
+        if (this.pstTableItems && this.pstTableItems.has(identifier)) {
+            let item = this.pstTableItems.get(identifier);
+            if (item) {
+                return item.entryValueReference;
+            }
         }
         return defaultValue;
     }
@@ -166,10 +173,11 @@ export abstract class PSTObject {
         if (defaultValue === undefined) {
             defaultValue = false;
         }
-
-        if (this.pstTableItems.has(identifier)) {
-            let item: PSTTableItem = this.pstTableItems.get(identifier);
-            return item.entryValueReference != 0;
+        if (this.pstTableItems && this.pstTableItems.has(identifier)) {
+            let item = this.pstTableItems.get(identifier);
+            if (item) {
+                return item.entryValueReference != 0;
+            }
         }
         return defaultValue;
     }
@@ -186,13 +194,14 @@ export abstract class PSTObject {
         if (defaultValue === undefined) {
             defaultValue = 0;
         }
+        if (this.pstTableItems && this.pstTableItems.has(identifier)) {
+            let item = this.pstTableItems.get(identifier);
+            if (item) {
+                let longVersion: long = PSTUtil.convertLittleEndianBytesToLong(item.data);
 
-        if (this.pstTableItems.has(identifier)) {
-            let item: PSTTableItem = this.pstTableItems.get(identifier);
-            let longVersion: long = PSTUtil.convertLittleEndianBytesToLong(item.data);
-
-            // convert double precision float to binary, then back to JS number
-            return fromBits('00' + longVersion.toString(2));
+                // convert double precision float to binary, then back to JS number
+                return fromBits('00' + longVersion.toString(2));
+            }
         }
         return defaultValue;
     }
@@ -210,13 +219,12 @@ export abstract class PSTObject {
         if (defaultValue === undefined) {
             defaultValue = long.ZERO;
         }
-
-        if (this.pstTableItems.has(identifier)) {
-            let item: PSTTableItem = this.pstTableItems.get(identifier);
-            if (item.entryValueType == 0x0003) {
+        if (this.pstTableItems && this.pstTableItems.has(identifier)) {
+            let item = this.pstTableItems.get(identifier);
+            if (item && item.entryValueType == 0x0003) {
                 // we are really just an int
                 return long.fromNumber(item.entryValueReference);
-            } else if (item.entryValueType == 0x0014) {
+            } else if (item && item.entryValueType == 0x0014) {
                 // we are a long
                 if (item.data != null && item.data.length == 8) {
                     return PSTUtil.convertLittleEndianBytesToLong(item.data, 0, 8);
@@ -242,8 +250,7 @@ export abstract class PSTObject {
         if (!stringType) {
             stringType = 0;
         }
-
-        let item: PSTTableItem = this.pstTableItems.get(identifier);
+        let item = this.pstTableItems ? this.pstTableItems.get(identifier) : undefined;
         if (item) {
             if (!codepage) {
                 codepage = this.stringCodepage;
@@ -261,10 +268,10 @@ export abstract class PSTObject {
 
             if (this.localDescriptorItems != null && this.localDescriptorItems.has(item.entryValueReference)) {
                 // we have a hit!
-                let descItem: PSTDescriptorItem = this.localDescriptorItems.get(item.entryValueReference);
+                let descItem = this.localDescriptorItems.get(item.entryValueReference);
 
                 try {
-                    let data: Buffer = descItem.getData();
+                    let data = descItem ? descItem.getData() : null;
                     if (data == null) {
                         return '';
                     }
@@ -287,14 +294,14 @@ export abstract class PSTObject {
      */
     public get stringCodepage(): string {
         // try and get the codepage
-        let cpItem: PSTTableItem = this.pstTableItems.get(0x3ffd); // PidTagMessageCodepage
+        let cpItem = this.pstTableItems ? this.pstTableItems.get(0x3ffd) : null; // PidTagMessageCodepage
         if (cpItem == null) {
-            cpItem = this.pstTableItems.get(0x3fde); // PidTagInternetCodepage
+            cpItem = this.pstTableItems ? this.pstTableItems.get(0x3fde) : null; // PidTagInternetCodepage
         }
         if (cpItem != null) {
             return PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
         }
-        return null;
+        return '';
     }
 
     /**
@@ -303,15 +310,17 @@ export abstract class PSTObject {
      * @returns {Date} 
      * @memberof PSTObject
      */
-    public getDateItem(identifier: number): Date {
-        if (this.pstTableItems.has(identifier)) {
-            let item: PSTTableItem = this.pstTableItems.get(identifier);
-            if (item.data.length == 0) {
+    public getDateItem(identifier: number): Date  | null {
+        if (this.pstTableItems && this.pstTableItems.has(identifier)) {
+            let item = this.pstTableItems.get(identifier);
+            if (item && item.data.length == 0) {
                 return new Date(0);
             }
-            let hi = PSTUtil.convertLittleEndianBytesToLong(item.data, 4, 8);
-            let low = PSTUtil.convertLittleEndianBytesToLong(item.data, 0, 4);
-            return PSTUtil.filetimeToDate(hi, low);
+            if (item) {
+                let hi = PSTUtil.convertLittleEndianBytesToLong(item.data, 4, 8);
+                let low = PSTUtil.convertLittleEndianBytesToLong(item.data, 0, 4);
+                return PSTUtil.filetimeToDate(hi, low);
+            }
         }
         return null;
     }
@@ -323,18 +332,18 @@ export abstract class PSTObject {
      * @returns {Buffer} 
      * @memberof PSTObject
      */
-    protected getBinaryItem(identifier: number): Buffer {
-        if (this.pstTableItems.has(identifier)) {
-            let item: PSTTableItem = this.pstTableItems.get(identifier);
-            if (item.entryValueType == 0x0102) {
+    protected getBinaryItem(identifier: number): Buffer | null {
+        if (this.pstTableItems && this.pstTableItems.has(identifier)) {
+            let item = this.pstTableItems.get(identifier);
+            if (item && item.entryValueType == 0x0102) {
                 if (!item.isExternalValueReference) {
                     return item.data;
                 }
                 if (this.localDescriptorItems != null && this.localDescriptorItems.has(item.entryValueReference)) {
                     // we have a hit!
-                    let descItem: PSTDescriptorItem = this.localDescriptorItems.get(item.entryValueReference);
+                    let descItem = this.localDescriptorItems.get(item.entryValueReference);
                     try {
-                        return descItem.getData();
+                        return descItem ? descItem.getData() : null;
                     } catch (err) {
                         Log.error('PSTObject::Exception reading binary item\n' + err);
                         throw err;

@@ -74,7 +74,7 @@ export class PSTActivity extends PSTMessage {
      * @type {Date}
      * @memberof PSTActivity
      */
-    public get logStart(): Date {
+    public get logStart(): Date | null {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLogStart, OutlookProperties.PSETID_Log));
     }
 
@@ -96,7 +96,7 @@ export class PSTActivity extends PSTMessage {
      * @type {Date}
      * @memberof PSTActivity
      */
-    public get logEnd(): Date {
+    public get logEnd(): Date | null {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidLogEnd, OutlookProperties.PSETID_Log));
     }
 

@@ -61,13 +61,14 @@ export class PSTAttachment extends PSTObject {
      * @memberof PSTAttachment
      */
     constructor(
-        pstFile: PSTFile, // theFile
+        pstFile: PSTFile, 
         table: PSTTableBC,
         localDescriptorItems: Map<number, PSTDescriptorItem>
     ) {
-        super();
+        super(pstFile);
+
         // pre-populate folder object with values
-        this.prePopulate(pstFile, null, table, localDescriptorItems);
+        this.prePopulate(null, table, localDescriptorItems);
     }
 
     /**
@@ -88,7 +89,7 @@ export class PSTAttachment extends PSTObject {
      * @type {Date}
      * @memberof PSTAttachment
      */
-    public get creationTime(): Date {
+    public get creationTime(): Date | null {
         return this.getDateItem(OutlookProperties.PR_CREATION_TIME);
     }
 
@@ -99,7 +100,7 @@ export class PSTAttachment extends PSTObject {
      * @type {Date}
      * @memberof PSTAttachment
      */
-    public get modificationTime(): Date {
+    public get modificationTime(): Date | null {
         return this.getDateItem(OutlookProperties.PR_LAST_MODIFICATION_TIME);
     }
 
@@ -109,25 +110,27 @@ export class PSTAttachment extends PSTObject {
      * @type {PSTMessage}
      * @memberof PSTAttachment
      */
-    public get embeddedPSTMessage(): PSTMessage {
-        let pstNodeInputStream: PSTNodeInputStream = null;
+    public get embeddedPSTMessage(): PSTMessage | null {
+        let pstNodeInputStream: PSTNodeInputStream | null = null;
         if (this.getIntItem(0x3705) == PSTAttachment.ATTACHMENT_METHOD_EMBEDDED) {
-            let item: PSTTableItem = this.pstTableItems.get(0x3701);
-            if (item.entryValueType == 0x0102) {
+            let item = this.pstTableItems ? this.pstTableItems.get(0x3701) : null;
+            if (item && item.entryValueType == 0x0102) {
                 if (!item.isExternalValueReference) {
                     pstNodeInputStream = new PSTNodeInputStream(this.pstFile, item.data);
                 } else {
                     // We are in trouble!
                     throw new Error('PSTAttachment::getEmbeddedPSTMessage External reference in getEmbeddedPSTMessage()!');
                 }
-            } else if (item.entryValueType == 0x000d) {
+            } else if (item && item.entryValueType == 0x000d) {
                 let descriptorItem = PSTUtil.convertLittleEndianBytesToLong(item.data, 0, 4).toNumber();
-                let descriptorItemNested: PSTDescriptorItem = this.localDescriptorItems.get(descriptorItem);
-                pstNodeInputStream = new PSTNodeInputStream(this.pstFile, descriptorItemNested);
-                if (descriptorItemNested.subNodeOffsetIndexIdentifier > 0) {
-                    this.localDescriptorItems = this.pstFile.getPSTDescriptorItems(
-                        long.fromNumber(descriptorItemNested.subNodeOffsetIndexIdentifier)
-                    );
+                let descriptorItemNested = this.localDescriptorItems ? this.localDescriptorItems.get(descriptorItem) : null;
+                if (descriptorItemNested) {
+                    pstNodeInputStream = new PSTNodeInputStream(this.pstFile, descriptorItemNested);
+                    if (descriptorItemNested && descriptorItemNested.subNodeOffsetIndexIdentifier > 0) {
+                        this.localDescriptorItems = this.pstFile.getPSTDescriptorItems(
+                            long.fromNumber(descriptorItemNested.subNodeOffsetIndexIdentifier)
+                        );
+                    }
                 }
             }
 
@@ -153,17 +156,20 @@ export class PSTAttachment extends PSTObject {
      * @type {PSTNodeInputStream}
      * @memberof PSTAttachment
      */
-    public get fileInputStream(): PSTNodeInputStream {
-        let attachmentDataObject: PSTTableItem = this.pstTableItems.get(OutlookProperties.PR_ATTACH_DATA_BIN);
+    public get fileInputStream(): PSTNodeInputStream | null {
+        let attachmentDataObject = this.pstTableItems ? this.pstTableItems.get(OutlookProperties.PR_ATTACH_DATA_BIN) : null;
         if (!attachmentDataObject) {
             return null;
         } else if (attachmentDataObject.isExternalValueReference) {
-            let descriptorItemNested: PSTDescriptorItem = this.localDescriptorItems.get(attachmentDataObject.entryValueReference);
-            return new PSTNodeInputStream(this.pstFile, descriptorItemNested);
+            let descriptorItemNested = this.localDescriptorItems ? this.localDescriptorItems.get(attachmentDataObject.entryValueReference) : null;
+            if (descriptorItemNested) {
+                return new PSTNodeInputStream(this.pstFile, descriptorItemNested);
+            }
         } else {
             // internal value references are never encrypted
             return new PSTNodeInputStream(this.pstFile, attachmentDataObject.data, false);
         }
+        return null;
     }
 
     /**

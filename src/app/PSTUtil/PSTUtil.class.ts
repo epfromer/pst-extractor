@@ -619,7 +619,7 @@ export class PSTUtil {
      * @returns 
      * @memberof PSTUtil
      */
-    public static getInternetCodePageCharset(propertyId: number) {
+    public static getInternetCodePageCharset(propertyId: number): string {
         return this.codePages.get(propertyId);
     }
 
@@ -632,7 +632,7 @@ export class PSTUtil {
      * @returns 
      * @memberof PSTUtil
      */
-    public static createJavascriptString(data: Buffer, stringType: number, codepage: string) {
+    public static createJavascriptString(data: Buffer, stringType: number, codepage: string): string {
         try {
             if (stringType == 0x1f) {
                 // convert and trim any nulls
@@ -642,6 +642,7 @@ export class PSTUtil {
             Log.error('PSTUtil::createJavascriptString Unable to decode string\n' + err);
             throw err;
         }
+        return '';
     }
 
    /**
@@ -743,7 +744,7 @@ export class PSTUtil {
      */
     public static createAppropriatePSTMessageObject(
         theFile: PSTFile,
-        folderIndexNode: DescriptorIndexNode,
+        folderIndexNode: DescriptorIndexNode | null,
         table: PSTTableBC,
         localDescriptorItems: Map<number, PSTDescriptorItem>
     ): PSTMessage {

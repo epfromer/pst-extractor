@@ -77,7 +77,7 @@ export class PSTNodeInputStream {
      * @memberof PSTNodeInputStream
      */
     constructor(pstFile: PSTFile, attachmentData: Buffer, encrypted?: boolean);
-    constructor(pstFile: PSTFile, descriptorItem: PSTDescriptorItem, encrypted?: boolean);
+    constructor(pstFile: PSTFile, descriptorItem: PSTDescriptorItem | undefined, encrypted?: boolean);
     constructor(pstFile: PSTFile, offsetItem: OffsetIndexItem, encrypted?: boolean);
     constructor(pstFile: PSTFile, arg: any, encrypted?: boolean) {
         if (arg instanceof OffsetIndexItem) {

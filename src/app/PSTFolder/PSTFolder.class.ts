@@ -74,13 +74,10 @@ export class PSTFolder extends PSTObject {
         table?: PSTTableBC,
         localDescriptorItems?: Map<number, PSTDescriptorItem>
     ) {
-        super();
+        super(pstFile, descriptorIndexNode);
         if (table) {
             // pre-populate folder object with values
-            this.prePopulate(pstFile, descriptorIndexNode, table, localDescriptorItems);
-        } else {
-            // load folder object
-            this.loadDescriptor(pstFile, descriptorIndexNode);
+            this.prePopulate(descriptorIndexNode, table, localDescriptorItems);
         }
     }
 

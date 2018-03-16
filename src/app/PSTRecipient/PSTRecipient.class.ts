@@ -33,6 +33,7 @@
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 import { OutlookProperties } from '../OutlookProperties';
 import { PSTObject } from '../PSTObject/PSTObject.class';
+import { PSTFile } from '../PSTFile/PSTFile.class';
 
 // Class containing recipient information
 export class PSTRecipient extends PSTObject {
@@ -41,8 +42,8 @@ export class PSTRecipient extends PSTObject {
      * @param {Map<number, PSTTableItem>} recipientDetails
      * @memberof PSTRecipient
      */
-    constructor(recipientDetails: Map<number, PSTTableItem>) {
-        super(recipientDetails);
+    constructor(pstFile: PSTFile, recipientDetails: Map<number, PSTTableItem>) {
+        super(pstFile, undefined, recipientDetails);
     }
 
     /**

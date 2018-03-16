@@ -58,8 +58,8 @@ enum PidTagMessageFlags {
 }
 
 export class PSTMessage extends PSTObject {
-    private recipientTable: PSTTable7C = null;
-    private attachmentTable: PSTTable7C = null;
+    private recipientTable: PSTTable7C | null = null;
+    private attachmentTable: PSTTable7C | null = null;
 
     /**
      * Creates an instance of PSTMessage. PST Message contains functions that are common across most MAPI objects.
@@ -76,16 +76,13 @@ export class PSTMessage extends PSTObject {
     constructor(
         pstFile: PSTFile,
         descriptorIndexNode: DescriptorIndexNode,
-        table?: PSTTableBC,
+        pstTableBC?: PSTTableBC,
         localDescriptorItems?: Map<number, PSTDescriptorItem>
     ) {
-        super();
-        if (table) {
+        super(pstFile, descriptorIndexNode);
+        if (pstTableBC) {
             // pre-populate folder object with values
-            this.prePopulate(pstFile, descriptorIndexNode, table, localDescriptorItems);
-        } else {
-            // load folder object
-            this.loadDescriptor(pstFile, descriptorIndexNode);
+            this.prePopulate(descriptorIndexNode, pstTableBC, localDescriptorItems);
         }
     }
 
@@ -194,9 +191,9 @@ export class PSTMessage extends PSTObject {
         try {
             let recipientTableKey = 0x0692;
             if (this.recipientTable == null && this.localDescriptorItems != null && this.localDescriptorItems.has(recipientTableKey)) {
-                let item: PSTDescriptorItem = this.localDescriptorItems.get(recipientTableKey);
-                let descriptorItems: Map<number, PSTDescriptorItem> = null;
-                if (item.subNodeOffsetIndexIdentifier > 0) {
+                let item: PSTDescriptorItem | undefined = this.localDescriptorItems.get(recipientTableKey);
+                let descriptorItems: Map<number, PSTDescriptorItem> | null = null;
+                if (item && item.subNodeOffsetIndexIdentifier > 0) {
                     descriptorItems = this.pstFile.getPSTDescriptorItems(long.fromNumber(item.subNodeOffsetIndexIdentifier));
                 }
                 this.recipientTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile, item), descriptorItems);
@@ -235,7 +232,7 @@ export class PSTMessage extends PSTObject {
             throw new Error('PSTMessage::getAttachment unable to fetch recipient number ' + recipientNumber);
         }
         let recipientDetails: Map<number, PSTTableItem> = this.recipientTable.getItems()[recipientNumber];
-        return recipientDetails ? new PSTRecipient(recipientDetails) : null;
+        return recipientDetails ? new PSTRecipient(this.pstFile, recipientDetails) : null;
     }
 
     /**

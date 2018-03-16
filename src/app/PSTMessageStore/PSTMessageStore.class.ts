@@ -38,7 +38,6 @@ import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.cla
 import { OutlookProperties } from '../OutlookProperties';
 
 export class PSTMessageStore extends PSTObject {
-
     /**
      * Creates an instance of PSTMessageStore.
      * Not much use other than to get the "name" of the PST file.
@@ -47,7 +46,6 @@ export class PSTMessageStore extends PSTObject {
      * @memberof PSTMessageStore
      */
     constructor(pstFile: PSTFile, descriptorIndexNode: DescriptorIndexNode) {
-        super();
-        this.loadDescriptor(pstFile, descriptorIndexNode);
+        super(pstFile, descriptorIndexNode);
     }
 }

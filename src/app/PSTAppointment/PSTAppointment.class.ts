@@ -99,7 +99,7 @@ export class PSTAppointment extends PSTMessage {
      * @type {Date}
      * @memberof PSTAppointment
      */
-    public get startTime(): Date {
+    public get startTime(): Date | null {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentStartWhole, OutlookProperties.PSETID_Appointment));
     }
 
@@ -110,7 +110,7 @@ export class PSTAppointment extends PSTMessage {
      * @type {Date}
      * @memberof PSTAppointment
      */
-    public get endTime(): Date {
+    public get endTime(): Date | null {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentEndWhole, OutlookProperties.PSETID_Appointment));
     }
 
@@ -189,7 +189,7 @@ export class PSTAppointment extends PSTMessage {
      * @type {Date}
      * @memberof PSTAppointment
      */
-    public get recurrenceBase(): Date {
+    public get recurrenceBase(): Date | null {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidExceptionReplaceTime, OutlookProperties.PSETID_Appointment));
     }
 
@@ -222,7 +222,7 @@ export class PSTAppointment extends PSTMessage {
      * @type {Buffer}
      * @memberof PSTAppointment
      */
-    public get recurrenceStructure(): Buffer {
+    public get recurrenceStructure(): Buffer | null {
         return this.getBinaryItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAppointmentRecur, OutlookProperties.PSETID_Appointment));
     }
 
@@ -233,7 +233,7 @@ export class PSTAppointment extends PSTMessage {
      * @type {Buffer}
      * @memberof PSTAppointment
      */
-    public get timezone(): Buffer {
+    public get timezone(): Buffer | null {
         return this.getBinaryItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTimeZoneStruct, OutlookProperties.PSETID_Appointment));
     }
 
@@ -354,7 +354,7 @@ export class PSTAppointment extends PSTMessage {
      * @type {Date}
      * @memberof PSTAppointment
      */
-    public get attendeeCriticalChange(): Date {
+    public get attendeeCriticalChange(): Date | null {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidAttendeeCriticalChange, OutlookProperties.PSETID_Meeting));
     }
 
