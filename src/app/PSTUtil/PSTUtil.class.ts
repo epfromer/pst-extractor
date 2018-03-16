@@ -619,7 +619,7 @@ export class PSTUtil {
      * @returns 
      * @memberof PSTUtil
      */
-    public static getInternetCodePageCharset(propertyId: number): string {
+    public static getInternetCodePageCharset(propertyId: number): string | undefined {
         return this.codePages.get(propertyId);
     }
 
@@ -632,7 +632,8 @@ export class PSTUtil {
      * @returns 
      * @memberof PSTUtil
      */
-    public static createJavascriptString(data: Buffer, stringType: number, codepage: string): string {
+    public static createJavascriptString(data: Buffer, stringType: number, codepage?: string): string {
+        // TODO - codepage is not used...
         try {
             if (stringType == 0x1f) {
                 // convert and trim any nulls
@@ -714,7 +715,7 @@ export class PSTUtil {
                 new PSTNodeInputStream(theFile, theFile.getOffsetIndexNode(folderIndexNode.dataOffsetIndexIdentifier))
             );
 
-            let localDescriptorItems: Map<number, PSTDescriptorItem> = null;
+            let localDescriptorItems: Map<number, PSTDescriptorItem> | undefined = undefined;
             if (folderIndexNode.localDescriptorsOffsetIndexIdentifier != 0) {
                 localDescriptorItems = theFile.getPSTDescriptorItems(folderIndexNode.localDescriptorsOffsetIndexIdentifier);
             }
@@ -744,11 +745,11 @@ export class PSTUtil {
      */
     public static createAppropriatePSTMessageObject(
         theFile: PSTFile,
-        folderIndexNode: DescriptorIndexNode | null,
+        folderIndexNode: DescriptorIndexNode,
         table: PSTTableBC,
-        localDescriptorItems: Map<number, PSTDescriptorItem>
+        localDescriptorItems?: Map<number, PSTDescriptorItem>
     ): PSTMessage {
-        let item: PSTTableItem = table.getItems().get(0x001a);
+        let item = table.getItems().get(0x001a);
         let messageClass = '';
         if (item != null) {
             messageClass = item.getStringValue();

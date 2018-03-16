@@ -1237,7 +1237,7 @@ export class PSTContact extends PSTMessage {
      * @type {Date}
      * @memberof PSTContact
      */
-    public get birthday(): Date {
+    public get birthday(): Date | null {
         return this.getDateItem(OutlookProperties.PidTagBirthday);
     }
 
@@ -1248,7 +1248,7 @@ export class PSTContact extends PSTMessage {
      * @type {Date}
      * @memberof PSTContact
      */
-    public get anniversary(): Date {
+    public get anniversary(): Date | null {
         return this.getDateItem(OutlookProperties.PidTagWeddingAnniversary);
     }
 

@@ -61,6 +61,12 @@ export class PSTMessage extends PSTObject {
     private recipientTable: PSTTable7C | null = null;
     private attachmentTable: PSTTable7C | null = null;
 
+    public static IMPORTANCE_LOW = 0;
+    public static IMPORTANCE_NORMAL = 1;
+    public static IMPORTANCE_HIGH = 2;
+    public static RECIPIENT_TYPE_TO = 1;
+    public static RECIPIENT_TYPE_CC = 2;
+
     /**
      * Creates an instance of PSTMessage. PST Message contains functions that are common across most MAPI objects.
      * Note that many of these functions may not be applicable for the item in question,
@@ -192,7 +198,7 @@ export class PSTMessage extends PSTObject {
             let recipientTableKey = 0x0692;
             if (this.recipientTable == null && this.localDescriptorItems != null && this.localDescriptorItems.has(recipientTableKey)) {
                 let item: PSTDescriptorItem | undefined = this.localDescriptorItems.get(recipientTableKey);
-                let descriptorItems: Map<number, PSTDescriptorItem> | null = null;
+                let descriptorItems: Map<number, PSTDescriptorItem> | null = new Map();
                 if (item && item.subNodeOffsetIndexIdentifier > 0) {
                     descriptorItems = this.pstFile.getPSTDescriptorItems(long.fromNumber(item.subNodeOffsetIndexIdentifier));
                 }
@@ -223,15 +229,18 @@ export class PSTMessage extends PSTObject {
      * @returns {PSTRecipient}
      * @memberof PSTMessage
      */
-    public getRecipient(recipientNumber: number): PSTRecipient {
-        if (this.recipientTable === null) {
+    public getRecipient(recipientNumber: number): PSTRecipient | null {
+        if (!this.recipientTable) {
             this.processRecipients();
+        }
+        if (!this.recipientTable) {
+            throw new Error('PSTMessage::getRecipient recipientTable is null')
         }
 
         if (recipientNumber >= this.numberOfRecipients || recipientNumber >= this.recipientTable.getItems().length) {
-            throw new Error('PSTMessage::getAttachment unable to fetch recipient number ' + recipientNumber);
+            throw new Error('PSTMessage::getRecipient unable to fetch recipient number ' + recipientNumber);
         }
-        let recipientDetails: Map<number, PSTTableItem> = this.recipientTable.getItems()[recipientNumber];
+        let recipientDetails = this.recipientTable.getItems()[recipientNumber];
         return recipientDetails ? new PSTRecipient(this.pstFile, recipientDetails) : null;
     }
 
@@ -273,20 +282,18 @@ export class PSTMessage extends PSTObject {
     */
     /**
      * Plain text message body.
+     * https://msdn.microsoft.com/en-us/library/office/cc765874.aspx
      * @readonly
      * @type {string}
      * @memberof PSTMessage
      */
     public get body(): string {
-        let cp: string = null;
-        let cpItem: PSTTableItem = this.pstTableItems.get(OutlookProperties.PR_MESSAGE_CODEPAGE); // PidTagMessageCodepage
-        if (cpItem == null) {
-            cpItem = this.pstTableItems.get(OutlookProperties.PR_INTERNET_CPID); // PidTagInternetCodepage
+        let codepage = this.getCodepage();
+        if (codepage) {
+            return this.getStringItem(OutlookProperties.PR_BODY, 0, codepage);
+        } else {
+            return this.getStringItem(OutlookProperties.PR_BODY);
         }
-        if (cpItem != null) {
-            cp = PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
-        }
-        return this.getStringItem(0x1000, 0, cp);
     }
 
     /**
@@ -308,16 +315,18 @@ export class PSTMessage extends PSTObject {
      */
     public get bodyRTF(): string {
         // do we have an entry for it?
-        if (this.pstTableItems.has(0x1009)) {
+        if (this.pstTableItems && this.pstTableItems.has(0x1009)) {
             // is it a reference?
-            let item: PSTTableItem = this.pstTableItems.get(0x1009);
-            if (item.data.length > 0) {
+            let item = this.pstTableItems.get(0x1009);
+            if (item && item.data.length > 0) {
                 return LZFu.decode(item.data);
             }
-            let ref = item.entryValueReference;
-            let descItem: PSTDescriptorItem = this.localDescriptorItems.get(ref);
-            if (descItem != null) {
-                return LZFu.decode(descItem.getData());
+            let ref = item ? item.entryValueReference : null;
+            if (ref) {
+                let descItem = this.localDescriptorItems ? this.localDescriptorItems.get(ref) : null;
+                if (descItem != null) {
+                    return LZFu.decode(descItem.getData());
+                }
             }
         }
         return '';
@@ -379,21 +388,36 @@ export class PSTMessage extends PSTObject {
     }
 
     /**
+     * Gets codepage to use.
+     * TODO - does this work?
+     * @private
+     * @returns {(string | null | undefined)} 
+     * @memberof PSTMessage
+     */
+    private getCodepage(): string | null | undefined {
+        let cpItem = this.pstTableItems ? this.pstTableItems.get(OutlookProperties.PR_INTERNET_CPID) : null;
+        if (cpItem == null) {
+            cpItem = this.pstTableItems ? this.pstTableItems.get(OutlookProperties.PR_MESSAGE_CODEPAGE) : null;
+        }
+        if (cpItem != null) {
+            return PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
+        }
+        return null;
+    }
+
+    /**
      * Contains the HTML version of the message text.
      * @readonly
      * @type {string}
      * @memberof PSTMessage
      */
     public get bodyHTML(): string {
-        let cp: string = null;
-        let cpItem: PSTTableItem = this.pstTableItems.get(OutlookProperties.PR_INTERNET_CPID); // PidTagInternetCodepage
-        if (cpItem == null) {
-            cpItem = this.pstTableItems.get(OutlookProperties.PR_MESSAGE_CODEPAGE); // PidTagMessageCodepage
+        let codepage = this.getCodepage();
+        if (codepage) {
+            return this.getStringItem(OutlookProperties.PR_BODY_HTML, 0, codepage);
+        } else {
+            return this.getStringItem(OutlookProperties.PR_BODY_HTML);
         }
-        if (cpItem != null) {
-            cp = PSTUtil.getInternetCodePageCharset(cpItem.entryValueReference);
-        }
-        return this.getStringItem(OutlookProperties.PR_BODY_HTML, 0, cp);
     }
 
     /*
@@ -407,9 +431,9 @@ export class PSTMessage extends PSTObject {
     private processAttachments() {
         let attachmentTableKey = 0x0671;
         if (this.attachmentTable == null && this.localDescriptorItems != null && this.localDescriptorItems.has(attachmentTableKey)) {
-            let item: PSTDescriptorItem = this.localDescriptorItems.get(attachmentTableKey);
-            let descriptorItems: Map<number, PSTDescriptorItem> = null;
-            if (item.subNodeOffsetIndexIdentifier > 0) {
+            let item = this.localDescriptorItems.get(attachmentTableKey);
+            let descriptorItems: Map<number, PSTDescriptorItem> = new Map();
+            if (item && item.subNodeOffsetIndexIdentifier > 0) {
                 descriptorItems = this.pstFile.getPSTDescriptorItems(long.fromValue(item.subNodeOffsetIndexIdentifier));
             }
             this.attachmentTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile, item), descriptorItems);
@@ -445,18 +469,32 @@ export class PSTMessage extends PSTObject {
         if (this.attachmentTable != null) {
             attachmentCount = this.attachmentTable.rowCount;
         }
-
+        if (!this.attachmentTable) {
+            throw new Error('PSTMessage::getAttachment attachmentTable is null');
+        }
+        if (!this.localDescriptorItems) {
+            throw new Error('PSTMessage::getAttachment localDescriptorItems is null');
+        }
         if (attachmentNumber >= attachmentCount) {
             throw new Error('PSTMessage::getAttachment unable to fetch attachment number ' + attachmentNumber);
         }
 
         // we process the C7 table here, basically we just want the attachment local descriptor...
-        let attachmentDetails: Map<number, PSTTableItem> = this.attachmentTable.getItems()[attachmentNumber];
-        let attachmentTableItem: PSTTableItem = attachmentDetails.get(0x67f2);
+        let attachmentDetails = this.attachmentTable.getItems()[attachmentNumber];
+        let attachmentTableItem = attachmentDetails.get(0x67f2);
+        if (!attachmentTableItem) {
+            throw new Error('PSTMessage::getAttachment attachmentTableItem is null');
+        }
         let descriptorItemId = attachmentTableItem.entryValueReference;
+        if (!descriptorItemId) {
+            throw new Error('PSTMessage::getAttachment descriptorItemId is null');
+        }
 
         // get the local descriptor for the attachmentDetails table.
-        let descriptorItem: PSTDescriptorItem = this.localDescriptorItems.get(descriptorItemId);
+        let descriptorItem = this.localDescriptorItems.get(descriptorItemId);
+        if (!descriptorItem) {
+            throw new Error('PSTMessage::getAttachment descriptorItem is null');
+        }
 
         // try and decode it
         let attachmentData: Buffer = descriptorItem.getData();
@@ -530,7 +568,7 @@ export class PSTMessage extends PSTObject {
      * @type {Date}
      * @memberof PSTMessage
      */
-    public get clientSubmitTime(): Date {
+    public get clientSubmitTime(): Date | null {
         return this.getDateItem(OutlookProperties.PR_CLIENT_SUBMIT_TIME);
     }
 
@@ -700,7 +738,7 @@ export class PSTMessage extends PSTObject {
      * @type {Buffer}
      * @memberof PSTMessage
      */
-    public get pidTagSentRepresentingSearchKey(): Buffer {
+    public get pidTagSentRepresentingSearchKey(): Buffer | null {
         return this.getBinaryItem(OutlookProperties.PR_SENT_REPRESENTING_SEARCH_KEY);
     }
 
@@ -854,7 +892,7 @@ export class PSTMessage extends PSTObject {
      * @type {Buffer}
      * @memberof PSTMessage
      */
-    public get senderEntryId(): Buffer {
+    public get senderEntryId(): Buffer | null {
         return this.getBinaryItem(OutlookProperties.PR_SENDER_ENTRYID);
     }
 
@@ -1019,7 +1057,7 @@ export class PSTMessage extends PSTObject {
      * @type {Date}
      * @memberof PSTMessage
      */
-    public get messageDeliveryTime(): Date {
+    public get messageDeliveryTime(): Date | null {
         return this.getDateItem(OutlookProperties.PR_MESSAGE_DELIVERY_TIME);
     }
 
@@ -1086,7 +1124,7 @@ export class PSTMessage extends PSTObject {
      * @type {Date}
      * @memberof PSTMessage
      */
-    public get lastVerbExecutionTime(): Date {
+    public get lastVerbExecutionTime(): Date | null {
         return this.getDateItem(OutlookProperties.PR_LAST_VERB_EXECUTION_TIME);
     }
 
@@ -1119,7 +1157,7 @@ export class PSTMessage extends PSTObject {
      * @type {Date}
      * @memberof PSTMessage
      */
-    public get taskStartDate(): Date {
+    public get taskStartDate(): Date | null {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskStartDate, PSTFile.PSETID_Task));
     }
 
@@ -1130,7 +1168,7 @@ export class PSTMessage extends PSTObject {
      * @type {Date}
      * @memberof PSTMessage
      */
-    public get taskDueDate(): Date {
+    public get taskDueDate(): Date | null {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskDueDate, PSTFile.PSETID_Task));
     }
 
@@ -1166,35 +1204,37 @@ export class PSTMessage extends PSTObject {
         let keywordCategory: number = PSTFile.getPublicStringToIdMapItem('Keywords');
 
         let categories: string[] = [];
-        if (this.pstTableItems.has(keywordCategory)) {
+        if (this.pstTableItems && this.pstTableItems.has(keywordCategory)) {
             try {
-                let item: PSTTableItem = this.pstTableItems.get(keywordCategory);
-                if (item.data.length == 0) {
+                let item = this.pstTableItems.get(keywordCategory);
+                if (item && item.data.length == 0) {
                     return [];
                 }
-                let categoryCount: number = item.data[0];
-                if (categoryCount > 0) {
-                    let categories: string[] = [];
-                    let offsets: number[] = [];
-                    for (let x = 0; x < categoryCount; x++) {
-                        offsets[x] = PSTUtil.convertBigEndianBytesToLong(item.data, x * 4 + 1, (x + 1) * 4 + 1).toNumber();
-                    }
-                    for (let x = 0; x < offsets.length - 1; x++) {
-                        let start = offsets[x];
-                        let end = offsets[x + 1];
+                if (item) {
+                    let categoryCount: number = item.data[0];
+                    if (categoryCount > 0) {
+                        let categories: string[] = [];
+                        let offsets: number[] = [];
+                        for (let x = 0; x < categoryCount; x++) {
+                            offsets[x] = PSTUtil.convertBigEndianBytesToLong(item.data, x * 4 + 1, (x + 1) * 4 + 1).toNumber();
+                        }
+                        for (let x = 0; x < offsets.length - 1; x++) {
+                            let start = offsets[x];
+                            let end = offsets[x + 1];
+                            let length = end - start;
+                            let buf: Buffer = new Buffer(length);
+                            PSTUtil.arraycopy(item.data, start, buf, 0, length);
+                            let name: string = new Buffer(buf).toString();
+                            categories[x] = name;
+                        }
+                        let start = offsets[offsets.length - 1];
+                        let end = item.data.length;
                         let length = end - start;
                         let buf: Buffer = new Buffer(length);
                         PSTUtil.arraycopy(item.data, start, buf, 0, length);
                         let name: string = new Buffer(buf).toString();
-                        categories[x] = name;
+                        categories[categories.length - 1] = name;
                     }
-                    let start = offsets[offsets.length - 1];
-                    let end = item.data.length;
-                    let length = end - start;
-                    let buf: Buffer = new Buffer(length);
-                    PSTUtil.arraycopy(item.data, start, buf, 0, length);
-                    let name: string = new Buffer(buf).toString();
-                    categories[categories.length - 1] = name;
                 }
             } catch (err) {
                 Log.error('PSTMessage::colorCategories Unable to decode category data\n' + err);
@@ -1211,7 +1251,7 @@ export class PSTMessage extends PSTObject {
      * @type {Buffer}
      * @memberof PSTMessage
      */
-    public get conversationId(): Buffer {
+    public get conversationId(): Buffer | null {
         return this.getBinaryItem(OutlookProperties.PidTagConversationId);
     }
 
@@ -1266,7 +1306,7 @@ export class PSTMessage extends PSTObject {
      * @type {Date}
      * @memberof PSTMessage
      */
-    public get creationTime(): Date {
+    public get creationTime(): Date | null {
         return this.getDateItem(OutlookProperties.PR_CREATION_TIME);
     }
 
@@ -1277,7 +1317,7 @@ export class PSTMessage extends PSTObject {
      * @type {Date}
      * @memberof PSTMessage
      */
-    public get modificationTime(): Date {
+    public get modificationTime(): Date | null {
         return this.getDateItem(OutlookProperties.PR_LAST_MODIFICATION_TIME);
     }
 

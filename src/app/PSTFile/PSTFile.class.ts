@@ -116,10 +116,7 @@ export class PSTFile {
      */
     public constructor(fileName: string) {
         this._pstFilename = fileName;
-        this.open();
-    }
 
-    private open() {
         // attempt to open file
         // confirm first 4 bytes are !BDN
         this.pstFD = fsext.openSync(this._pstFilename, 'r');
@@ -174,6 +171,9 @@ export class PSTFile {
         if (nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier) {
             localDescriptorItems = this.getPSTDescriptorItems(nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier);
         }
+        if (!localDescriptorItems) {
+            throw new Error('PSTFile::processNameToIDMap localDescriptorItems is null');
+        }
 
         // process the map
         let off: OffsetIndexItem = this.getOffsetIndexNode(nameToIdMapDescriptorNode.dataOffsetIndexIdentifier);
@@ -182,7 +182,11 @@ export class PSTFile {
         let tableItems: Map<number, PSTTableItem> = bcTable.getItems();
 
         // Get the guids
-        let guidEntry: PSTTableItem = tableItems.get(2);
+        let guidEntry = tableItems.get(2);
+        if (!guidEntry) {
+            throw new Error('PSTFile::processNameToIDMap guidEntry is null');
+        }
+
         let guids = this.getData(guidEntry, localDescriptorItems);
         let nGuids = Math.trunc(guids.length / 16);
         let guidIndexes: number[] = [];
@@ -195,13 +199,18 @@ export class PSTFile {
             let rightQuad: long = PSTUtil.convertLittleEndianBytesToLong(guids, offset + 6, offset + 8);
             let mostSigBits: long = leftQuad.or(midQuad).or(rightQuad);
             let leastSigBits: long = PSTUtil.convertBigEndianBytesToLong(guids, offset + 8, offset + 16);
-            let mostBuffer: number[] = mostSigBits.toBytes();
-            let leastBuffer: number[] = leastSigBits.toBytes();
-            let arrUID = [].concat(mostBuffer, leastBuffer);
+
+            // weird that need to cast below to any to get tsc error to go away - why?
+            // see https://github.com/Microsoft/TypeScript/issues/6436
+            let mostBuffer: number[] = (mostSigBits as any).toBytes();
+            let leastBuffer: number[] = (leastSigBits as any).toBytes();
+
+            let arrUID = mostBuffer.concat(leastBuffer);
             let strUID: string = uuidparse.unparse(arrUID).toUpperCase();
 
-            if (this.guidMap.has(strUID)) {
-                guidIndexes[i] = this.guidMap.get(strUID);
+            let guid = this.guidMap.get(strUID);
+            if (guid) {
+                guidIndexes[i] = guid;
             } else {
                 guidIndexes[i] = -1; // We don't know this guid
             }
@@ -210,14 +219,20 @@ export class PSTFile {
         }
 
         // if we have a reference to an internal descriptor
-        let mapEntries: PSTTableItem = tableItems.get(3);
+        let mapEntries = tableItems.get(3);
+        if (!mapEntries) {
+            throw new Error('PSTFile::processNameToIDMap mapEntries is null');
+        }
         let nameToIdByte: Buffer = this.getData(mapEntries, localDescriptorItems);
-        let stringMapEntries: PSTTableItem = tableItems.get(4);
+        let stringMapEntries = tableItems.get(4);
+        if (!stringMapEntries) {
+            throw new Error('PSTFile::processNameToIDMap stringMapEntries is null');
+        }
         let stringNameToIdByte: Buffer = this.getData(stringMapEntries, localDescriptorItems);
 
         // process the entries
         for (let x = 0; x + 8 < nameToIdByte.length; x += 8) {
-            let dwPropertyId: number = PSTUtil.convertLittleEndianBytesToLong(nameToIdByte, x, x + 4).toNumber();
+            let key: number = PSTUtil.convertLittleEndianBytesToLong(nameToIdByte, x, x + 4).toNumber();
             let guid: number = PSTUtil.convertLittleEndianBytesToLong(nameToIdByte, x + 4, x + 6).toNumber();
             let propId: number = PSTUtil.convertLittleEndianBytesToLong(nameToIdByte, x + 6, x + 8).toNumber();
 
@@ -233,17 +248,15 @@ export class PSTFile {
                 } else {
                     guidIndex = guidIndexes[guid - 3];
                 }
-                PSTFile.nodeMap.setId(dwPropertyId, propId, guidIndex);
+                PSTFile.nodeMap.setId(key, propId, guidIndex);
             } else {
                 // identifier is a string
-                // dwPropertyId is byte offset into the String stream
-                // in which the string name of the property is stored.
-                let len = PSTUtil.convertLittleEndianBytesToLong(stringNameToIdByte, dwPropertyId, dwPropertyId + 4).toNumber();
+                // key is byte offset into the String stream in which the string name of the property is stored.
+                let len = PSTUtil.convertLittleEndianBytesToLong(stringNameToIdByte, key, key + 4).toNumber();
                 let keyByteValue = new Buffer(len);
-                PSTUtil.arraycopy(stringNameToIdByte, dwPropertyId + 4, keyByteValue, 0, keyByteValue.length);
+                PSTUtil.arraycopy(stringNameToIdByte, key + 4, keyByteValue, 0, keyByteValue.length);
                 propId += 0x8000;
-                let key = keyByteValue.toString('utf16le').replace(/\0/g, '');
-                PSTFile.nodeMap.setId(key, propId);
+                PSTFile.nodeMap.setId(keyByteValue.toString('utf16le').replace(/\0/g, ''), propId);
             }
         }
     }
@@ -269,7 +282,7 @@ export class PSTFile {
             throw new Error('PSTFile::getData Attempting to get non-binary data in PSTFile.getData()');
         }
 
-        let mapDescriptorItem: PSTDescriptorItem = localDescriptorItems.get(item.entryValueReference);
+        let mapDescriptorItem = localDescriptorItems.get(item.entryValueReference);
         if (mapDescriptorItem == null) {
             throw new Error('PSTFile::getData Descriptor not found: ' + item.entryValueReference);
         }
@@ -307,7 +320,7 @@ export class PSTFile {
      * @returns {string} 
      * @memberof PSTFile
      */
-    public static getPropertyName(propertyId: number, bNamed: boolean): string {
+    public static getPropertyName(propertyId: number, bNamed: boolean): string | undefined {
         return PSTUtil.propertyName.get(propertyId);
     }
 
@@ -318,7 +331,7 @@ export class PSTFile {
      * @returns {long} 
      * @memberof PSTFile
      */
-    public static getNameToIdMapKey(propId: number): long {
+    public static getNameToIdMapKey(propId: number): long | undefined {
         return PSTFile.nodeMap.getNumericName(propId);
     }
 
@@ -665,12 +678,13 @@ export class PSTFile {
      * @memberof PSTFile
      */
     public read(position?: number): number {
-        if (!position) {
-            position = null;
+        let pos = null;
+        if (position) {
+            pos = position;
         }
 
         let buffer = new Buffer(1);
-        fs.readSync(this.pstFD, buffer, 0, buffer.length, position);
+        fs.readSync(this.pstFD, buffer, 0, buffer.length, pos);
         return buffer[0];
     }
 
@@ -691,12 +705,13 @@ export class PSTFile {
      * @memberof PSTFile
      */
     public readCompletely(buffer: Buffer, position?: number) {
-        if (!position) {
-            position = null;
+        let pos = null;
+        if (position) {
+            pos = position;
         }
 
         // attempt to fill the supplied buffer
-        let bytesRead = fs.readSync(this.pstFD, buffer, 0, buffer.length, position);
+        let bytesRead = fs.readSync(this.pstFD, buffer, 0, buffer.length, pos);
         if (bytesRead <= 0 || bytesRead === buffer.length) {
             return;
         }

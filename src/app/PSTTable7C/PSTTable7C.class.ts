@@ -43,7 +43,7 @@ import * as long from 'long';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 
 export class PSTTable7C extends PSTTable {
-    private items: Map<number, PSTTableItem>[] = null;
+    private items: Map<number, PSTTableItem>[] = [];
     private numberOfDataSets = 0;
     private BLOCK_SIZE = 8176;
     private numColumns = 0;
@@ -51,8 +51,8 @@ export class PSTTable7C extends PSTTable {
     private TCI_1b = 0;
     private columnDescriptors: ColumnDescriptor[] = [];
     private overrideCol = -1;
-    private rowNodeInfo: NodeInfo = null;
-    private keyMap: Map<number, number> = null;
+    private rowNodeInfo: NodeInfo;
+    private keyMap: Map<number, number>;
 
     /**
      * Creates an instance of PSTTable7C ("Table Context").
@@ -61,7 +61,7 @@ export class PSTTable7C extends PSTTable {
      * @param {number} [entityToExtract] 
      * @memberof PSTTable7C
      */
-    constructor(pstNodeInputStream: PSTNodeInputStream, subNodeDescriptorItems: Map<number, PSTDescriptorItem>, entityToExtract?: number) {
+    constructor(pstNodeInputStream: PSTNodeInputStream, subNodeDescriptorItems?: Map<number, PSTDescriptorItem>, entityToExtract?: number) {
         super(pstNodeInputStream, subNodeDescriptorItems);
 
         if (this.tableTypeByte != 0x7c) {
@@ -69,10 +69,13 @@ export class PSTTable7C extends PSTTable {
         }
 
         // TCINFO header is in the hidUserRoot node
-        let tcHeaderNode: NodeInfo = this.getNodeInfo(this.hidUserRoot);
-        let offset = 0;
+        let tcHeaderNode = this.getNodeInfo(this.hidUserRoot);
+        if (!tcHeaderNode) {
+            throw new Error('PSTTable7C::constructor tcHeaderNode is null');
+        }
 
         // get the TCINFO header information
+        let offset = 0;
         this.numColumns = tcHeaderNode.seekAndReadLong(long.fromNumber(offset + 1), 1).toNumber();
         let TCI_4b: number = tcHeaderNode.seekAndReadLong(long.fromNumber(offset + 2), 2).toNumber();
         let TCI_2b: number = tcHeaderNode.seekAndReadLong(long.fromNumber(offset + 4), 2).toNumber();
@@ -100,7 +103,10 @@ export class PSTTable7C extends PSTTable {
 
         // Read the key table
         this.keyMap = new Map();
-        let keyTableInfo: NodeInfo = this.getNodeInfo(this.hidRoot);
+        let keyTableInfo = this.getNodeInfo(this.hidRoot);
+        if (!keyTableInfo) {
+            throw new Error('PSTTable7C::constructor keyTableInfo is null');
+        }
         this.numberOfKeys = Math.trunc(keyTableInfo.length() / (this.sizeOfItemKey + this.sizeOfItemValue));
         offset = 0;
         for (let x = 0; x < this.numberOfKeys; x++) {
@@ -112,7 +118,11 @@ export class PSTTable7C extends PSTTable {
         }
 
         // Read the Row Matrix
-        this.rowNodeInfo = this.getNodeInfo(hnidRows);
+        let rowNodeInfo = this.getNodeInfo(hnidRows);
+        if (!rowNodeInfo) {
+            throw new Error('PSTTable7C::constructor rowNodeInfo is null');
+        }
+        this.rowNodeInfo = rowNodeInfo;
         let numberOfBlocks: number = Math.trunc(this.rowNodeInfo.length() / this.BLOCK_SIZE);
         let numberOfRowsPerBlock: number = Math.trunc(this.BLOCK_SIZE / this.TCI_bm);
         let blockPadding = this.BLOCK_SIZE - numberOfRowsPerBlock * this.TCI_bm;
@@ -140,6 +150,10 @@ export class PSTTable7C extends PSTTable {
             numberOfRecordsToReturn = this.numberOfDataSets;
             startAtRecord = 0;
             setLocalList = true;
+        }
+
+        if (numberOfRecordsToReturn === undefined) {
+            numberOfRecordsToReturn = 0;
         }
 
         // repeat the reading process for every dataset
@@ -255,10 +269,12 @@ export class PSTTable7C extends PSTTable {
                             item.data = new Buffer(0);
                             break;
                         } else {
-                            let entryInfo: NodeInfo = this.getNodeInfo(item.entryValueReference);
-                            item.data = new Buffer(entryInfo.length());
-                            entryInfo.pstNodeInputStream.seek(long.fromNumber(entryInfo.startOffset));
-                            entryInfo.pstNodeInputStream.readCompletely(item.data);
+                            let entryInfo = this.getNodeInfo(item.entryValueReference);
+                            if (entryInfo) {
+                                item.data = new Buffer(entryInfo.length());
+                                entryInfo.pstNodeInputStream.seek(long.fromNumber(entryInfo.startOffset));
+                                entryInfo.pstNodeInputStream.readCompletely(item.data);
+                            }
                         }
                         break;
                 }

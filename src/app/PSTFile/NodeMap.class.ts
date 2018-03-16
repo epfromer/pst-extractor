@@ -51,7 +51,7 @@ export class NodeMap {
      * @memberof NodeMap
      */
     public setId(key: any, propId: number, idx?: number) {
-        if (typeof key === 'number') {
+        if (typeof key === 'number' && idx !== undefined) {
             let lkey = this.transformKey(key, idx);
             this.nameToId.set(lkey.toString(), propId);
             this.idToNumericName.set(propId, lkey);
@@ -73,8 +73,8 @@ export class NodeMap {
      * @memberof NodeMap
      */
     public getId(key: any, idx?: number): number {
-        let id: number;
-        if (typeof key === 'number') {
+        let id: number | undefined = undefined;
+        if (typeof key === 'number' && idx) {
             id = this.nameToId.get(this.transformKey(key, idx).toString());
         } else if (typeof key === 'string') {
             id = this.nameToId.get(key);
@@ -93,7 +93,7 @@ export class NodeMap {
      * @returns {long} 
      * @memberof NodeMap
      */
-    public getNumericName(propId: number): long {
+    public getNumericName(propId: number): long | undefined {
         let lkey = this.idToNumericName.get(propId);
         if (!lkey) {
             Log.debug2("NodeMap::getNumericName Name to Id mapping not found, propId = " + propId);

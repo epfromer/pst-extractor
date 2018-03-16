@@ -37,7 +37,7 @@ import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
 
 export class PSTDescriptorItem {
-    private dataBlockData: Buffer;
+    private dataBlockData: Buffer | null = null;
     private dataBlockOffsets: number[] = [];
     private _pstFile: PSTFile;
 

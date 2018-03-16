@@ -43,7 +43,7 @@ export class PSTNodeInputStream {
     private skipPoints: long[] = [];
     private indexItems: OffsetIndexItem[] = [];
     private currentBlock = 0;
-    private allData: Buffer = null;
+    private allData: Buffer | null = null;
     private isZlib = false;
 
     private _currentLocation: long = long.ZERO;
@@ -80,21 +80,14 @@ export class PSTNodeInputStream {
     constructor(pstFile: PSTFile, descriptorItem: PSTDescriptorItem | undefined, encrypted?: boolean);
     constructor(pstFile: PSTFile, offsetItem: OffsetIndexItem, encrypted?: boolean);
     constructor(pstFile: PSTFile, arg: any, encrypted?: boolean) {
+        this._pstFile = pstFile;
         if (arg instanceof OffsetIndexItem) {
-            this._pstFile = pstFile;
             this._encrypted = pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
             this.loadFromOffsetItem(arg);
-            this.currentBlock = 0;
-            this.currentLocation = long.ZERO;
-            this.detectZlib();
         } else if (arg instanceof PSTDescriptorItem) {
-            this._pstFile = pstFile;
             this._encrypted = pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
             // we want to get the first block of data and see what we are dealing with
             this.loadFromOffsetItem(pstFile.getOffsetIndexNode(long.fromNumber(arg.offsetIndexIdentifier)));
-            this.currentBlock = 0;
-            this.currentLocation = long.ZERO;
-            this.detectZlib();
         } else if (arg instanceof Buffer) {
             this.allData = arg;
             this._length = long.fromNumber(this.allData.length);
@@ -103,10 +96,10 @@ export class PSTNodeInputStream {
             } else {
                 this._encrypted = pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE;
             }
-            this.currentBlock = 0;
-            this.currentLocation = long.ZERO;
-            this.detectZlib();
         }
+        this.currentBlock = 0;
+        this.currentLocation = long.ZERO;
+        this.detectZlib();
     }
 
     /**
@@ -130,7 +123,7 @@ export class PSTNodeInputStream {
                 }
                 // we are a compressed block, decompress the whole thing into a buffer
                 // and replace our contents with that. firstly, if we have blocks, use that as the length
-                let outputStream: Buffer;
+                let outputStream: Buffer |  null = null;
                 if (multiStreams) {
                     debugger;
 
@@ -162,11 +155,10 @@ export class PSTNodeInputStream {
                     this.readCompletely(inData);
                     outputStream = zlib.unzipSync(inData);
                 }
-                let output: Buffer = outputStream;
-                this.allData = output;
+                this.allData = outputStream;
                 this.currentLocation = long.ZERO;
                 this.currentBlock = 0;
-                this._length = long.fromNumber(this.allData.length);
+                this._length = this.allData ? long.fromNumber(this.allData.length) : long.ZERO;
             }
             this.seek(long.ZERO);
         } catch (err) {

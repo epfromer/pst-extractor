@@ -132,13 +132,16 @@ function processFolder(folder: PSTFolder) {
             // save content to fs?
             if (saveToFS) {
                 // create date string in format YYYY-MM-DD
+                let strDate = '';
                 let d = email.clientSubmitTime;
-                if (!d) {
+                if (!d && email.creationTime) {
                     d = email.creationTime;
                 }
-                const month = ('0' + (d.getMonth()+1)).slice(-2);
-                const day = ('0' + d.getDate()).slice(-2);
-                const strDate = d.getFullYear() + '-' + month + '-' + day;
+                if (d) {
+                    const month = ('0' + (d.getMonth()+1)).slice(-2);
+                    const day = ('0' + d.getDate()).slice(-2);
+                    strDate = d.getFullYear() + '-' + month + '-' + day;
+                }
 
                 // create a folder for each day (client submit time)
                 const emailFolder = outputFolder + strDate + '/';
@@ -197,14 +200,16 @@ function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipi
             try {
                 const fd = fsext.openSync(filename, 'w');
                 const attachmentStream = attachment.fileInputStream;
-                const bufferSize = 8176;
-                const buffer = new Buffer(bufferSize);
-                let bytesRead;
-                do {
-                    bytesRead = attachmentStream.read(buffer);
-                    fsext.writeSync(fd, buffer, 0, bytesRead);
-                } while (bytesRead == bufferSize);
-                fsext.closeSync(fd);
+                if (attachmentStream) {
+                    const bufferSize = 8176;
+                    const buffer = new Buffer(bufferSize);
+                    let bytesRead;
+                    do {
+                        bytesRead = attachmentStream.read(buffer);
+                        fsext.writeSync(fd, buffer, 0, bytesRead);
+                    } while (bytesRead == bufferSize);
+                    fsext.closeSync(fd);
+                }
             } catch (err) {
                 Log.error(err);
             }

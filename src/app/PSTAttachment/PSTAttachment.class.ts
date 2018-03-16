@@ -140,7 +140,9 @@ export class PSTAttachment extends PSTObject {
 
             try {
                 let attachmentTable: PSTTableBC = new PSTTableBC(pstNodeInputStream);
-                return PSTUtil.createAppropriatePSTMessageObject(this.pstFile, this.descriptorIndexNode, attachmentTable, this.localDescriptorItems);
+                if (this.localDescriptorItems && this.descriptorIndexNode) {
+                    return PSTUtil.createAppropriatePSTMessageObject(this.pstFile, this.descriptorIndexNode, attachmentTable, this.localDescriptorItems);
+                }
             } catch (err) {
                 Log.error('PSTAttachment::embeddedPSTMessage createAppropriatePSTMessageObject failed\n' + err);
                 throw err;
@@ -180,17 +182,18 @@ export class PSTAttachment extends PSTObject {
      * @memberof PSTAttachment
      */
     public get filesize(): number {
-        let attachmentDataObject: PSTTableItem = this.pstTableItems.get(OutlookProperties.PR_ATTACH_DATA_BIN);
-        if (attachmentDataObject.isExternalValueReference) {
-            let descriptorItemNested: PSTDescriptorItem = this.localDescriptorItems.get(attachmentDataObject.entryValueReference);
+        let attachmentDataObject = this.pstTableItems ? this.pstTableItems.get(OutlookProperties.PR_ATTACH_DATA_BIN) : null;
+        if (attachmentDataObject && attachmentDataObject.isExternalValueReference) {
+            let descriptorItemNested = this.localDescriptorItems ? this.localDescriptorItems.get(attachmentDataObject.entryValueReference) : null;
             if (descriptorItemNested == null) {
                 throw new Error('PSTAttachment::filesize missing attachment descriptor item for: ' + attachmentDataObject.entryValueReference);
             }
             return descriptorItemNested.dataSize;
-        } else {
+        } else if (attachmentDataObject) {
             // raw attachment data, right there!
             return attachmentDataObject.data.length;
         }
+        return 0;
     }
 
     /**

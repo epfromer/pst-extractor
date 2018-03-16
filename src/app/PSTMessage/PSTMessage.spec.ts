@@ -153,7 +153,10 @@ describe('PSTMessage tests', () => {
         expect(msg.priority).to.equal(0);
         expect(msg.colorCategories).to.eql([]);
         expect(msg.bodyHTML).to.equal('');
-        expect(msg.senderEntryId.toString()).to.contain('JReames@br-inc.com');
+        expect(msg.senderEntryId).to.not.be.null;
+        if (msg.senderEntryId) {
+            expect(msg.senderEntryId.toString()).to.contain('JReames@br-inc.com');
+        }
     });
 
     // get this email, which uses block skip points

@@ -17,6 +17,7 @@ export const enum OutlookProperties {
     PR_RTF_SYNC_BODY_TAG = 0x1008,
     PR_RTF_SYNC_PREFIX_COUNT = 0x1010,
     PR_RTF_SYNC_TRAILING_COUNT = 0x1011,
+    PR_BODY = 0x1000,
     PR_BODY_HTML = 0x1013,
     PR_IMPORTANCE = 0x0017,
     PR_MESSAGE_CLASS = 0x001A,

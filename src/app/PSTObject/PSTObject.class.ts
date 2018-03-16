@@ -292,7 +292,7 @@ export abstract class PSTObject {
      * @type {string}
      * @memberof PSTObject
      */
-    public get stringCodepage(): string {
+    public get stringCodepage(): string | undefined {
         // try and get the codepage
         let cpItem = this.pstTableItems ? this.pstTableItems.get(0x3ffd) : null; // PidTagMessageCodepage
         if (cpItem == null) {

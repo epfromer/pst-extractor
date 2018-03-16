@@ -53,7 +53,7 @@ export abstract class PSTTable {
     protected numberOfKeys = 0;
     protected numberOfIndexLevels = 0;
     private pstNodeInputStream: PSTNodeInputStream;
-    private subNodeDescriptorItems: Map<number, PSTDescriptorItem> = null;
+    private subNodeDescriptorItems: Map<number, PSTDescriptorItem> = new Map();
 
     /**
      * Creates an instance of PSTTable.  The PST Table is the workhorse of the whole system.
@@ -63,8 +63,10 @@ export abstract class PSTTable {
      * @param {Map<number, PSTDescriptorItem>} subNodeDescriptorItems
      * @memberof PSTTable
      */
-    constructor(pstNodeInputStream: PSTNodeInputStream, subNodeDescriptorItems: Map<number, PSTDescriptorItem>) {
-        this.subNodeDescriptorItems = subNodeDescriptorItems;
+    constructor(pstNodeInputStream: PSTNodeInputStream, subNodeDescriptorItems?: Map<number, PSTDescriptorItem>) {
+        if (subNodeDescriptorItems) {
+            this.subNodeDescriptorItems = subNodeDescriptorItems;
+        }
         this.pstNodeInputStream = pstNodeInputStream;
         this.arrayBlocks = pstNodeInputStream.getBlockOffsets();
 
@@ -88,7 +90,11 @@ export abstract class PSTTable {
         this.hidUserRoot = pstNodeInputStream.seekAndReadLong(long.fromValue(4), 4).toNumber(); // hidUserRoot
 
         // all tables should have a BTHHEADER at hnid == 0x20
-        let headerNodeInfo: NodeInfo = this.getNodeInfo(0x20);
+        let headerNodeInfo = this.getNodeInfo(0x20);
+        if (!headerNodeInfo) {
+            throw new Error('PSTTable::constructor headerNodeInfo is null');
+        }
+
         headerNodeInfo.pstNodeInputStream.seek(long.fromValue(headerNodeInfo.startOffset));
         let headerByte = headerNodeInfo.pstNodeInputStream.read() & 0xff;
         if (headerByte != 0xb5) {
@@ -112,7 +118,7 @@ export abstract class PSTTable {
      * @memberof PSTTable
      */
     protected releaseRawData() {
-        this.subNodeDescriptorItems = null;
+        this.subNodeDescriptorItems.clear();
     }
 
     /**
@@ -131,7 +137,7 @@ export abstract class PSTTable {
      * @returns {NodeInfo}
      * @memberof PSTTable
      */
-    public getNodeInfo(hnid: number): NodeInfo {
+    public getNodeInfo(hnid: number): NodeInfo | null {
         // Zero-length node?
         if (hnid == 0) {
             return new NodeInfo(0, 0, this.pstNodeInputStream);
@@ -139,14 +145,14 @@ export abstract class PSTTable {
 
         // Is it a subnode ID?
         if (this.subNodeDescriptorItems && this.subNodeDescriptorItems.has(hnid)) {
-            let item: PSTDescriptorItem = this.subNodeDescriptorItems.get(hnid);
-            let subNodeInfo: NodeInfo = null;
+            let item = this.subNodeDescriptorItems.get(hnid);
+            let subNodeInfo = null;
 
             try {
                 let subNodeIn: PSTNodeInputStream = new PSTNodeInputStream(this.pstNodeInputStream.pstFile, item);
                 subNodeInfo = new NodeInfo(0, subNodeIn.length.toNumber(), subNodeIn);
             } catch (err) {
-                throw new Error('IOException reading subNode:\n' + err);
+                throw new Error('PSTTable::getNodeInfo: IOException reading subNode:\n' + err);
             }
 
             // return new NodeInfo(0, data.length, data);

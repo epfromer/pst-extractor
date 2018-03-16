@@ -84,7 +84,7 @@ export class PSTTask extends PSTMessage {
      * @type {Date}
      * @memberof PSTTask
      */
-    public get taskDateCompleted(): Date {
+    public get taskDateCompleted(): Date | null {
         return this.getDateItem(this.pstFile.getNameToIdMapItem(OutlookProperties.PidLidTaskDateCompleted, PSTFile.PSETID_Task));
     }
 

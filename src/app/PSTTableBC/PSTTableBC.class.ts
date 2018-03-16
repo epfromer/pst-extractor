@@ -57,7 +57,11 @@ export class PSTTableBC extends PSTTable {
         }
 
         // go through each of the entries
-        let keyTableInfoNodeInfo: NodeInfo = this.getNodeInfo(this.hidRoot);
+        let keyTableInfoNodeInfo = this.getNodeInfo(this.hidRoot);
+        if (!keyTableInfoNodeInfo) {
+            throw new Error('PSTTableBC::constructor keyTableInfoNodeInfo is null');
+        }
+
         let keyTableInfo: Buffer = new Buffer(keyTableInfoNodeInfo.length());
         keyTableInfoNodeInfo.pstNodeInputStream.seek(long.fromValue(keyTableInfoNodeInfo.startOffset));
         keyTableInfoNodeInfo.pstNodeInputStream.readCompletely(keyTableInfo);

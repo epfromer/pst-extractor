@@ -51,32 +51,48 @@ describe('PSTRecipient tests', () => {
         childFolders = folder.getSubFolders();
         expect(childFolders[0].displayName).to.equal('TW-Commercial Group');
         const comGroupFolder = childFolders[0];
-        
+
         let msg: PSTMessage = comGroupFolder.getNextChild();
         expect(msg.messageClass).to.equal('IPM.Note');
         expect(msg.subject).to.equal("New OBA's");
         expect(msg.senderName).to.equal('Lee  Dennis');
         expect(msg.senderEmailAddress).to.equal('Dennis.Lee@ENRON.com');
         expect(msg.displayTo).to.equal('Lindberg  Lorraine; Watson  Kimberly');
-        let recipient: PSTRecipient = msg.getRecipient(0);
-        // Log.debug1(JSON.stringify(recipient, null, 2));
-        expect(recipient.displayName).to.equal('Lindberg  Lorraine');
-        expect(recipient.smtpAddress).to.equal('Lorraine.Lindberg@ENRON.com');
+
+        let recipient = msg.getRecipient(0);
+        expect(recipient).is.not.null;
+        if (recipient) {
+            // Log.debug1(JSON.stringify(recipient, null, 2));
+            expect(recipient.displayName).to.equal('Lindberg  Lorraine');
+            expect(recipient.smtpAddress).to.equal('Lorraine.Lindberg@ENRON.com');
+        }
+            
         recipient = msg.getRecipient(1);
-        expect(recipient.displayName).to.equal('Watson  Kimberly');
-        expect(recipient.smtpAddress).to.equal('Kimberly.Watson@ENRON.com');
+        expect(recipient).is.not.null;
+        if (recipient) {
+                expect(recipient.displayName).to.equal('Watson  Kimberly');
+                expect(recipient.smtpAddress).to.equal('Kimberly.Watson@ENRON.com');
+        }
+
         recipient = msg.getRecipient(2);
-        expect(recipient.displayName).to.equal('Lee  Dennis');
-        expect(recipient.smtpAddress).to.equal('Dennis.Lee@ENRON.com');
-        
+        expect(recipient).is.not.null;
+        if (recipient) {
+            expect(recipient.displayName).to.equal('Lee  Dennis');
+            expect(recipient.smtpAddress).to.equal('Dennis.Lee@ENRON.com');
+        }
+
         msg = comGroupFolder.getNextChild();
         expect(msg.messageClass).to.equal('IPM.Note');
-        expect(msg.subject).to.equal("I/B Link Capacity for November and December 2001");
+        expect(msg.subject).to.equal('I/B Link Capacity for November and December 2001');
         expect(msg.sentRepresentingEmailAddress).to.equal('JReames@br-inc.com');
         expect(msg.displayTo).to.equal('Michelle Lokay (E-mail)');
+
         recipient = msg.getRecipient(0);
-        // Log.debug1(JSON.stringify(recipient, null, 2));
-        expect(recipient.displayName).to.equal('Michelle Lokay (E-mail)');
-        expect(recipient.smtpAddress).to.equal('michelle.lokay@enron.com');
+        expect(recipient).is.not.null;
+        if (recipient) {
+            // Log.debug1(JSON.stringify(recipient, null, 2));
+            expect(recipient.displayName).to.equal('Michelle Lokay (E-mail)');
+            expect(recipient.smtpAddress).to.equal('michelle.lokay@enron.com');
+        }
     });
 });

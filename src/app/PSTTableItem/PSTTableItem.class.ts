@@ -51,7 +51,7 @@ export class PSTTableItem {
         return this._itemIndex;
     }
 
-    private _entryType: long;
+    private _entryType: long = long.ZERO;
     public set entryType(val) {
         this._entryType = val;
     }

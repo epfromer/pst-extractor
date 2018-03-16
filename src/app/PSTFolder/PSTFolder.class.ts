@@ -52,10 +52,9 @@ import { OutlookProperties } from '../OutlookProperties';
  * @extends {PSTObject}
  */
 export class PSTFolder extends PSTObject {
-    private subfoldersTable: PSTTable7C = null;
     private currentEmailIndex = 0;
-    private emailsTable: PSTTable7C = null;
-    private fallbackEmailsTable: DescriptorIndexNode[] = null;
+    private subfoldersTable: PSTTable7C | null =  null;
+    private emailsTable: PSTTable7C | null =  null;
 
     /**
      * Creates an instance of PSTFolder.
@@ -90,11 +89,14 @@ export class PSTFolder extends PSTObject {
         let output: PSTFolder[] = [];
         try {
             this.initSubfoldersTable();
-            let itemMapSet: Map<number, PSTTableItem>[] = this.subfoldersTable.getItems();
-            for (let itemMap of itemMapSet) {
-                let item: PSTTableItem = itemMap.get(26610);
-                let folder: PSTFolder = PSTUtil.detectAndLoadPSTObject(this.pstFile, long.fromNumber(item.entryValueReference));
-                output.push(folder);
+            if (this.subfoldersTable) {
+                let itemMapSet = this.subfoldersTable.getItems();
+                for (let itemMap of itemMapSet) {
+                    let item = itemMap.get(26610);
+                    if (item) {
+                        output.push(PSTUtil.detectAndLoadPSTObject(this.pstFile, long.fromNumber(item.entryValueReference)));
+                    }
+                }
             }
         } catch (err) {
             Log.error("PSTFolder::getSubFolders Can't get child folders for folder " + this.displayName + '\n' + err);
@@ -113,11 +115,14 @@ export class PSTFolder extends PSTObject {
         if (this.subfoldersTable) {
             return;
         }
+        if(!this.descriptorIndexNode) {
+            throw new Error('PSTFolder::initSubfoldersTable descriptorIndexNode is null');
+        }
 
         let folderDescriptorIndex: long = long.fromValue(this.descriptorIndexNode.descriptorIdentifier + 11);
         try {
             let folderDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(folderDescriptorIndex);
-            let tmp: Map<number, PSTDescriptorItem> = null;
+            let tmp = undefined;
             if (folderDescriptor.localDescriptorsOffsetIndexIdentifier.greaterThan(0)) {
                 tmp = this.pstFile.getPSTDescriptorItems(folderDescriptor.localDescriptorsOffsetIndexIdentifier);
             }
@@ -132,7 +137,7 @@ export class PSTFolder extends PSTObject {
 
     // get all of the children
     private initEmailsTable() {
-        if (this.emailsTable != null || this.fallbackEmailsTable != null) {
+        if (this.emailsTable != null) {
             return;
         }
 
@@ -140,11 +145,14 @@ export class PSTFolder extends PSTObject {
         if (this.getNodeType() == PSTUtil.NID_TYPE_SEARCH_FOLDER) {
             return;
         }
+        if(!this.descriptorIndexNode) {
+            throw new Error('PSTFolder::initEmailsTable descriptorIndexNode is null');
+        }
 
         try {
             let folderDescriptorIndex = this.descriptorIndexNode.descriptorIdentifier + 12;
             let folderDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(long.fromNumber(folderDescriptorIndex));
-            let tmp: Map<number, PSTDescriptorItem> = null;
+            let tmp = undefined;
             if (folderDescriptor.localDescriptorsOffsetIndexIdentifier.greaterThan(0)) {
                 tmp = this.pstFile.getPSTDescriptorItems(folderDescriptor.localDescriptorsOffsetIndexIdentifier);
             }
@@ -174,23 +182,13 @@ export class PSTFolder extends PSTObject {
 
             // get the emails from the rows
             let rows: Map<number, PSTTableItem>[] = this.emailsTable.getItems(this.currentEmailIndex, 1);
-            let emailRow: PSTTableItem = rows[0].get(0x67f2);
-            if (emailRow.itemIndex == -1) {
+            let emailRow = rows[0].get(0x67f2);
+            if ((emailRow && emailRow.itemIndex == -1) || !emailRow) {
                 // no more!
                 return null;
             }
 
             let childDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(long.fromNumber(emailRow.entryValueReference));
-            let child: PSTObject = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor);
-            this.currentEmailIndex++;
-            return child;
-        } else if (this.fallbackEmailsTable != null) {
-            if (this.currentEmailIndex >= this.contentCount || this.currentEmailIndex >= this.fallbackEmailsTable.length) {
-                // no more!
-                return null;
-            }
-            // get the emails from the rows
-            let childDescriptor: DescriptorIndexNode = this.fallbackEmailsTable[this.currentEmailIndex];
             let child: PSTObject = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor);
             this.currentEmailIndex++;
             return child;

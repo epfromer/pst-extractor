@@ -59,3 +59,9 @@
 {"level":"error","message":"foo","timestamp":"2018-03-15T15:09:34.119Z"}
 {"level":"error","message":"foo","timestamp":"2018-03-15T15:09:39.334Z"}
 {"level":"error","message":"foo","timestamp":"2018-03-15T15:09:39.580Z"}
+{"level":"error","message":"PSTFolder::initSubfoldersTable Can't get child folders for folder \nReferenceError: offset is not defined","timestamp":"2018-03-16T15:03:25.549Z"}
+{"level":"error","message":"PSTFolder::getSubFolders Can't get child folders for folder \nReferenceError: offset is not defined","timestamp":"2018-03-16T15:03:25.550Z"}
+{"level":"error","message":"PSTFolder::initSubfoldersTable Can't get child folders for folder \nReferenceError: offset is not defined","timestamp":"2018-03-16T15:03:49.075Z"}
+{"level":"error","message":"PSTFolder::getSubFolders Can't get child folders for folder \nReferenceError: offset is not defined","timestamp":"2018-03-16T15:03:49.076Z"}
+{"level":"error","message":"PSTFolder::initSubfoldersTable Can't get child folders for folder SPAM Search Folder 2\nError: PSTFile::findBtreeItem Unable to find 8750 is desc: true","timestamp":"2018-03-16T18:56:52.319Z"}
+{"level":"error","message":"PSTFolder::getSubFolders Can't get child folders for folder Root - Mailbox\nError: PSTFile::findBtreeItem Unable to find 8750 is desc: true","timestamp":"2018-03-16T18:56:52.320Z"}
