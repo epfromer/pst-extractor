@@ -2,7 +2,8 @@
   "name": "pst-extractor",
   "version": "1.0.0",
   "description": "Extract objects from MS Outlook/Exchange PST files",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "nyc --reporter=html mocha --opts mocha.opts",

@@ -31,13 +31,13 @@
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
 import { NodeMap } from './NodeMap.class';
-import { PSTFolder } from './../PSTFolder/PSTFolder.class';
-import { PSTMessageStore } from './../PSTMessageStore/PSTMessageStore.class';
-import { DescriptorIndexNode } from './../DescriptorIndexNode/DescriptorIndexNode.class';
-import { PSTDescriptorItem } from './../PSTDescriptorItem/PSTDescriptorItem.class';
-import { PSTNodeInputStream } from './../PSTNodeInputStream/PSTNodeInputStream.class';
-import { OffsetIndexItem } from './../OffsetIndexItem/OffsetIndexItem.class';
-import { PSTObject } from './../PSTObject/PSTObject.class';
+import { PSTFolder } from '../PSTFolder/PSTFolder.class';
+import { PSTMessageStore } from '../PSTMessageStore/PSTMessageStore.class';
+import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
+import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
+import { OffsetIndexItem } from '../OffsetIndexItem/OffsetIndexItem.class';
+import { PSTObject } from '../PSTObject/PSTObject.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';

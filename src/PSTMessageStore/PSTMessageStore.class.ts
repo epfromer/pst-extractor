@@ -32,7 +32,7 @@
  */
 import { PSTObject } from './../PSTObject/PSTObject.class';
 import { PSTFile } from './../PSTFile/PSTFile.class';
-import { DescriptorIndexNode } from './../DescriptorIndexNode/DescriptorIndexNode.class';
+import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import { OutlookProperties } from '../OutlookProperties';

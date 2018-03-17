@@ -1,6 +1,6 @@
-import { PSTMessage } from './app/PSTMessage/PSTMessage.class';
-import { PSTFile } from './app/PSTFile/PSTFile.class';
-import { PSTFolder } from './app/PSTFolder/PSTFolder.class';
+import { PSTMessage } from './PSTMessage/PSTMessage.class';
+import { PSTFile } from './PSTFile/PSTFile.class';
+import { PSTFolder } from './PSTFolder/PSTFolder.class';
 const resolve = require('path').resolve;
 
 let depth = -1;

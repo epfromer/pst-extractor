@@ -32,7 +32,7 @@
  */
 import { OffsetIndexItem } from './../OffsetIndexItem/OffsetIndexItem.class';
 import { PSTFile } from './../PSTFile/PSTFile.class';
-import { PSTObject } from './../PSTObject/PSTObject.class';
+import { PSTObject } from '../PSTObject/PSTObject.class';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
