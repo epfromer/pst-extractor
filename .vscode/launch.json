@@ -2,10 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "index.ts",
+            "name": "test.ts",
             "type": "node",
             "request": "launch",
-            "args": ["src/index.ts"],
+            "args": ["src/test.ts"],
             "runtimeArgs": ["-r", "ts-node/register"],
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",
@@ -13,10 +13,10 @@
             "internalConsoleOptions": "openOnSessionStart"
         },
         {
-            "name": "index-min.ts",
+            "name": "test-min.ts",
             "type": "node",
             "request": "launch",
-            "args": ["src/index-min.ts"],
+            "args": ["src/test-min.ts"],
             "runtimeArgs": ["-r", "ts-node/register"],
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",

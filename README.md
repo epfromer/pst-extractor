@@ -34,15 +34,15 @@ Start with test.ts for sample code to walk the PST and print out the folder stru
 A simple test-min.ts script like this.
 
 ```
-import { PSTMessage } from './app/PSTMessage/PSTMessage.class';
-import { PSTFile } from './app/PSTFile/PSTFile.class';
-import { PSTFolder } from './app/PSTFolder/PSTFolder.class';
+import { PSTMessage } from 'pst-extractor';
+import { PSTFile } from 'pst-extractor';
+import { PSTFolder } from 'pst-extractor';
 const resolve = require('path').resolve;
 
 let depth = -1;
 let col = 0;
 
-const pstFile = new PSTFile(resolve('./src/testdata/michelle_lokay_000_1_1_1_1.pst'));
+const pstFile = new PSTFile(resolve('/path/to/some/pst.pst'));
 console.log(pstFile.getMessageStore().displayName);
 processFolder(pstFile.getRootFolder());
 
