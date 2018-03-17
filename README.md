@@ -29,9 +29,9 @@ A spec from Microsoft on the PST file format is at https://msdn.microsoft.com/en
 
 ## Usage
 
-Start with index.ts for sample code to walk the PST and print out the folder structure to the console. Also, most of the major objects have Mocha test specs which show how the object attributes can be accessed.
+Start with test.ts for sample code to walk the PST and print out the folder structure to the console. Also, most of the major objects have Mocha test specs which show how the object attributes can be accessed.
 
-A simple index-min.ts script like this.
+A simple test-min.ts script like this.
 
 ```
 import { PSTMessage } from './app/PSTMessage/PSTMessage.class';
