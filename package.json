@@ -44,7 +44,6 @@
     "@types/long": "^3.0.32",
     "@types/mocha": "^2.2.48",
     "@types/node": "^9.4.7",
-    "@types/typescript": "^2.0.0",
     "@types/winston": "^2.3.8",
     "chai": "^4.1.2",
     "chai-datetime": "^1.5.0",
