@@ -55,6 +55,7 @@ export class PSTFolder extends PSTObject {
     private currentEmailIndex = 0;
     private subfoldersTable: PSTTable7C | null =  null;
     private emailsTable: PSTTable7C | null =  null;
+    private fallbackEmailsTable: DescriptorIndexNode[] | null = null;
 
     /**
      * Creates an instance of PSTFolder.
@@ -137,7 +138,7 @@ export class PSTFolder extends PSTObject {
 
     // get all of the children
     private initEmailsTable() {
-        if (this.emailsTable != null) {
+        if (this.emailsTable || this.fallbackEmailsTable) {
             return;
         }
 
@@ -160,8 +161,19 @@ export class PSTFolder extends PSTObject {
             const pstNodeInputStream = new PSTNodeInputStream(this.pstFile, offsetIndexItem);
             this.emailsTable = new PSTTable7C(pstNodeInputStream, tmp, 0x67f2);
         } catch (err) {
-            Log.error("PSTFolder::initEmailsTable Can't get child folders for folder " + this.displayName + '\n' + err);
-            throw err;
+            // fallback to children as listed in the descriptor b-tree
+            Log.error(`PSTFolder::initEmailsTable Can't get child folders for folder {this.displayName}, resorting to using alternate tree`);
+            let tree = this.pstFile.getChildDescriptorTree();
+            this.fallbackEmailsTable = [];
+            let allChildren = tree.get(this.descriptorIndexNode.descriptorIdentifier);
+            if (allChildren) {
+                // remove items that aren't messages
+                for (let node of allChildren) {
+                    if (node != null && this.getNodeType(node.descriptorIdentifier) == PSTUtil.NID_TYPE_NORMAL_MESSAGE) {
+                        this.fallbackEmailsTable.push(node);
+                    }
+                }
+            }
         }
     }
 
@@ -174,13 +186,13 @@ export class PSTFolder extends PSTObject {
     public getNextChild(): any {
         this.initEmailsTable();
 
-        if (this.emailsTable != null) {
+        if (this.emailsTable) {
             if (this.currentEmailIndex == this.contentCount) {
                 // no more!
                 return null;
             }
 
-            // get the emails from the rows
+            // get the emails from the rows in the main email table
             let rows: Map<number, PSTTableItem>[] = this.emailsTable.getItems(this.currentEmailIndex, 1);
             let emailRow = rows[0].get(0x67f2);
             if ((emailRow && emailRow.itemIndex == -1) || !emailRow) {
@@ -188,8 +200,18 @@ export class PSTFolder extends PSTObject {
                 return null;
             }
 
-            let childDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(long.fromNumber(emailRow.entryValueReference));
-            let child: PSTObject = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor);
+            let childDescriptor = this.pstFile.getDescriptorIndexNode(long.fromNumber(emailRow.entryValueReference));
+            let child = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor);
+            this.currentEmailIndex++;
+            return child;
+        } else if (this.fallbackEmailsTable) {
+            if (this.currentEmailIndex >= this.contentCount || this.currentEmailIndex >= this.fallbackEmailsTable.length) {
+                // no more!
+                return null;
+            }
+
+            let childDescriptor = this.fallbackEmailsTable[this.currentEmailIndex];
+            let child = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor);
             this.currentEmailIndex++;
             return child;
         }

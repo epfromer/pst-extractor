@@ -198,6 +198,7 @@ Package | Version | Dev
 [fs-ext](https://www.npmjs.com/package/fs-ext) | ^1.0.0 | ✖
 [long](https://www.npmjs.com/package/long) | ^4.0.0 | ✖
 [math-float64-from-bits](https://www.npmjs.com/package/math-float64-from-bits) | ^1.0.0 | ✖
+[rimraf](https://www.npmjs.com/package/rimraf) | ^2.6.2 | ✖
 [uuid-parse](https://www.npmjs.com/package/uuid-parse) | ^1.0.0 | ✖
 [winston](https://www.npmjs.com/package/winston) | ^2.4.1 | ✖
 [winston-loggly](https://www.npmjs.com/package/winston-loggly) | ^1.3.1 | ✖
@@ -206,29 +207,28 @@ Package | Version | Dev
 [@types/debug](https://www.npmjs.com/package/@types/debug) | 0.0.30 | ✔
 [@types/fs-ext](https://www.npmjs.com/package/@types/fs-ext) | 0.0.29 | ✔
 [@types/long](https://www.npmjs.com/package/@types/long) | ^3.0.32 | ✔
-[@types/mocha](https://www.npmjs.com/package/@types/mocha) | ^2.2.48 | ✔
-[@types/node](https://www.npmjs.com/package/@types/node) | ^9.4.7 | ✔
-[@types/typescript](https://www.npmjs.com/package/@types/typescript) | ^2.0.0 | ✔
-[@types/winston](https://www.npmjs.com/package/@types/winston) | ^2.3.8 | ✔
+[@types/mocha](https://www.npmjs.com/package/@types/mocha) | ^5.0.0 | ✔
+[@types/node](https://www.npmjs.com/package/@types/node) | ^9.6.2 | ✔
+[@types/winston](https://www.npmjs.com/package/@types/winston) | ^2.3.9 | ✔
 [chai](https://www.npmjs.com/package/chai) | ^4.1.2 | ✔
 [chai-datetime](https://www.npmjs.com/package/chai-datetime) | ^1.5.0 | ✔
 [debug](https://www.npmjs.com/package/debug) | ^3.1.0 | ✔
-[mocha](https://www.npmjs.com/package/mocha) | ^5.0.4 | ✔
+[mocha](https://www.npmjs.com/package/mocha) | ^5.0.5 | ✔
 [node-readme](https://www.npmjs.com/package/node-readme) | ^0.1.9 | ✔
 [nyc](https://www.npmjs.com/package/nyc) | ^11.6.0 | ✔
 [source-map-support](https://www.npmjs.com/package/source-map-support) | ^0.5.4 | ✔
 [supports-color](https://www.npmjs.com/package/supports-color) | ^5.3.0 | ✔
 [ts-node](https://www.npmjs.com/package/ts-node) | ^5.0.1 | ✔
-[typescript](https://www.npmjs.com/package/typescript) | ^2.7.2 | ✔
+[typescript](https://www.npmjs.com/package/typescript) | ^2.8.1 | ✔
 
 
 ## Contributing
 
-Contributions welcome; Please submit all pull requests the against master branch. If your pull request contains JavaScript patches or features, you should include relevant unit tests. Please check the [Contributing Guidelines](contributing.md) for more details. Thanks!
+Contributions welcome; Please submit all pull requests the against master branch. If your pull request contains JavaScript patches or features, you should include relevant unit tests. Please check the [Contributing Guidelines](contributng.md) for more details. Thanks!
 
 ## Author
 
-Ed Pfromer, epfromer@gmail.com
+Ed Pfromer (epfromer@gmail.com)
 
 ## License
 

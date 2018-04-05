@@ -47,6 +47,7 @@ import * as fsext from 'fs-ext';
 import * as util from 'util';
 import * as long from 'long';
 const uuidparse = require('uuid-parse');
+const assert = require('assert');
 
 export class PSTFile {
     public static ENCRYPTION_TYPE_NONE: number = 0;
@@ -102,6 +103,9 @@ export class PSTFile {
     public get pstFilename(): string {
         return this._pstFilename;
     }
+
+    // b-tree
+    private childrenDescriptorTree: Map<number, DescriptorIndexNode[]> | null = null;
 
     // node tree maps
     private static nodeMap: NodeMap = new NodeMap();
@@ -666,6 +670,119 @@ export class PSTFile {
         }
 
         return output;
+    }
+
+    /**
+     * Build the children descriptor tree, used as a fallback when the nodes
+     * that list file contents are broken.
+     * @returns 
+     * @memberof PSTFile
+     */
+    public getChildDescriptorTree() {
+        if (!this.childrenDescriptorTree) {
+            let btreeStartOffset = long.ZERO;
+            if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+                btreeStartOffset = this.extractLEFileOffset(long.fromValue(188));
+            } else {
+                btreeStartOffset = this.extractLEFileOffset(long.fromValue(224));
+            }
+            this.childrenDescriptorTree = new Map();
+            this.processDescriptorBTree(btreeStartOffset);
+        }
+        return this.childrenDescriptorTree;
+    }
+
+    /**
+     * Recursively walk PST descriptor tree and create internal version.
+     * @private
+     * @param {long} btreeStartOffset 
+     * @memberof PSTFile
+     */
+    private processDescriptorBTree(btreeStartOffset: long) {
+        let fileTypeAdjustment: number;
+
+        let temp = new Buffer(2);
+        if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+            fileTypeAdjustment = 500;
+        } else if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
+            fileTypeAdjustment = 0x1000 - 24;
+        } else {
+            fileTypeAdjustment = 496;
+        }
+        this.seek(btreeStartOffset.add(fileTypeAdjustment));
+        this.readCompletely(temp);
+
+        if (temp[0] == 129 && temp[1] == 129) {
+
+            if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+                this.seek(btreeStartOffset.add(496));
+            } else if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
+                this.seek(btreeStartOffset.add(4056));
+            } else {
+                this.seek(btreeStartOffset.add(488));
+            }
+
+            let numberOfItems = 0;
+            if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
+                let numberOfItemsBytes = new Buffer(2);
+                this.readCompletely(numberOfItemsBytes);
+                numberOfItems = PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes).toNumber();
+                this.readCompletely(numberOfItemsBytes);
+                let maxNumberOfItems = PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes).toNumber();
+            } else {
+                numberOfItems = this.read();
+                this.read(); // maxNumberOfItems
+            }
+            this.read(); // itemSize
+            let levelsToLeaf: number = this.read();
+
+            if (levelsToLeaf > 0) {
+                for (let x = 0; x < numberOfItems; x++) {
+                    if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+                        let branchNodeItemStartIndex = btreeStartOffset.add(12 * x);
+                        let nextLevelStartsAt = this.extractLEFileOffset(branchNodeItemStartIndex.add(8));
+                        this.processDescriptorBTree(nextLevelStartsAt);
+                    } else {
+                        let branchNodeItemStartIndex = btreeStartOffset.add(24 * x);
+                        let nextLevelStartsAt = this.extractLEFileOffset(branchNodeItemStartIndex.add(16));
+                        this.processDescriptorBTree(nextLevelStartsAt);
+                    }
+                }
+            } else {
+                for (let x = 0; x < numberOfItems; x++) {
+                    if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+                        this.seek(btreeStartOffset.add(x * 16));
+                        temp = new Buffer(16);
+                        this.readCompletely(temp);
+                    } else {
+                        this.seek(btreeStartOffset.add(x * 32));
+                        temp = new Buffer(32);
+                        this.readCompletely(temp);
+                    }
+
+                    let tempNode = new DescriptorIndexNode(temp, this._pstFileType);
+
+                    // we don't want to be children of ourselves...
+                    if (tempNode.parentDescriptorIndexIdentifier == tempNode.descriptorIdentifier) {
+                        // skip!
+                    } else if (this.childrenDescriptorTree!.has(tempNode.parentDescriptorIndexIdentifier)) {
+                        // add this entry to the existing list of children
+                        let children = this.childrenDescriptorTree!.get(tempNode.parentDescriptorIndexIdentifier);
+                        if (!children) {
+                            throw new Error('PSTFile::processDescriptorBTree children is null');
+                        }
+                        children.push(tempNode);
+                    } else {
+                        // create a new entry and add this one to that
+                        let children: DescriptorIndexNode[] = [];
+                        children.push(tempNode);
+                        this.childrenDescriptorTree!.set(tempNode.parentDescriptorIndexIdentifier, children);
+                    }
+                }
+            }
+        } else {
+            throw new Error('PSTFile::processDescriptorBTree Unable to read descriptor node, is not a descriptor');
+        }
     }
 
     /* 

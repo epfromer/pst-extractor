@@ -38,12 +38,16 @@ import * as long from 'long';
 // DescriptorIndexNode is a leaf item from the Descriptor index b-tree
 // It is like a pointer to an element in the PST file, everything has one...
 export class DescriptorIndexNode {
-    private parentDescriptorIndexIdentifier: number;
     private itemType = 0;
 
     private _descriptorIdentifier: number;
     public get descriptorIdentifier(): number {
         return this._descriptorIdentifier;
+    }
+
+    private _parentDescriptorIndexIdentifier: number;
+    public get parentDescriptorIndexIdentifier(): number {
+        return this._parentDescriptorIndexIdentifier;
     }
 
     private _localDescriptorsOffsetIndexIdentifier: long;
@@ -67,12 +71,12 @@ export class DescriptorIndexNode {
             this._descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 0, 4).toNumber();
             this._dataOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 4, 8);
             this._localDescriptorsOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 8, 12);
-            this.parentDescriptorIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 12, 16).toNumber();
+            this._parentDescriptorIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 12, 16).toNumber();
         } else {
             this._descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 0, 4).toNumber();
             this._dataOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 8, 16);
             this._localDescriptorsOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 16, 24);
-            this.parentDescriptorIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 24, 28).toNumber();
+            this._parentDescriptorIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(buffer, 24, 28).toNumber();
             this.itemType = PSTUtil.convertLittleEndianBytesToLong(buffer, 28, 32).toNumber();
         }
     }
