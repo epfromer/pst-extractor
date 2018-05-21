@@ -3,3 +3,8 @@ src
 .vscode
 .nyc_output
 coverage
+.jshintrc
+mocha.opts
+contributing.md
+PST file format.pdf
+*.spec.ts
