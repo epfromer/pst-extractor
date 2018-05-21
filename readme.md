@@ -1,6 +1,6 @@
 # pst-extractor
 
-![npm](https://img.shields.io/npm/v/pst-extractor.svg) ![license](https://img.shields.io/npm/l/pst-extractor.svg) ![github-issues](https://img.shields.io/github/issues/epfromer/pst-extractor.svg)  ![Circle CI build status](https://circleci.com/gh/epfromer/pst-extractor.svg?style=svg)
+![npm](https://img.shields.io/npm/v/pst-extractor.svg) ![license](https://img.shields.io/npm/l/pst-extractor.svg) ![github-issues](https://img.shields.io/github/issues/epfromer/pst-extractor.svg)  (https://circleci.com/gh/epfromer/pst-extractor.svg?style=svg)
 
 Extract objects from MS Outlook/Exchange PST files
 
@@ -195,20 +195,15 @@ Personal folders
 
 Package | Version | Dev
 --- |:---:|:---:
-[fs-ext](https://www.npmjs.com/package/fs-ext) | ^1.0.0 | ✖
 [long](https://www.npmjs.com/package/long) | ^4.0.0 | ✖
-[math-float64-from-bits](https://www.npmjs.com/package/math-float64-from-bits) | ^1.0.0 | ✖
 [rimraf](https://www.npmjs.com/package/rimraf) | ^2.6.2 | ✖
 [uuid-parse](https://www.npmjs.com/package/uuid-parse) | ^1.0.0 | ✖
 [winston](https://www.npmjs.com/package/winston) | ^2.4.1 | ✖
-[winston-loggly](https://www.npmjs.com/package/winston-loggly) | ^1.3.1 | ✖
-[winston-loggly-bulk](https://www.npmjs.com/package/winston-loggly-bulk) | ^2.0.2 | ✖
 [@types/chai](https://www.npmjs.com/package/@types/chai) | ^4.1.2 | ✔
 [@types/debug](https://www.npmjs.com/package/@types/debug) | 0.0.30 | ✔
-[@types/fs-ext](https://www.npmjs.com/package/@types/fs-ext) | 0.0.29 | ✔
-[@types/long](https://www.npmjs.com/package/@types/long) | ^3.0.32 | ✔
+[@types/long](https://www.npmjs.com/package/@types/long) | ^4.0.0 | ✔
 [@types/mocha](https://www.npmjs.com/package/@types/mocha) | ^5.0.0 | ✔
-[@types/node](https://www.npmjs.com/package/@types/node) | ^9.6.2 | ✔
+[@types/node](https://www.npmjs.com/package/@types/node) | ^10.1.2 | ✔
 [@types/winston](https://www.npmjs.com/package/@types/winston) | ^2.3.9 | ✔
 [chai](https://www.npmjs.com/package/chai) | ^4.1.2 | ✔
 [chai-datetime](https://www.npmjs.com/package/chai-datetime) | ^1.5.0 | ✔
@@ -218,7 +213,7 @@ Package | Version | Dev
 [nyc](https://www.npmjs.com/package/nyc) | ^11.6.0 | ✔
 [source-map-support](https://www.npmjs.com/package/source-map-support) | ^0.5.4 | ✔
 [supports-color](https://www.npmjs.com/package/supports-color) | ^5.3.0 | ✔
-[ts-node](https://www.npmjs.com/package/ts-node) | ^5.0.1 | ✔
+[ts-node](https://www.npmjs.com/package/ts-node) | ^6.0.3 | ✔
 [typescript](https://www.npmjs.com/package/typescript) | ^2.8.1 | ✔
 
 
