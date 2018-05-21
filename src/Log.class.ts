@@ -1,5 +1,4 @@
 const winston = require('winston');
-// const loggly = require('winston-loggly-bulk');
 
 export class Log {
     static logLevels = {
@@ -26,12 +25,6 @@ export class Log {
                 filename: 'errors.log',
                 level: 'error'
             }),
-            // new winston.transports.Loggly({
-            //     subdomain: 'epfromer',
-            //     token: "5b6ea74c-ba58-4af5-95bc-7a4d2d6207be",
-            //     tags: ["Winston-NodeJS"],
-            //     json: true
-            // })
         ]
     });
 
@@ -49,9 +42,5 @@ export class Log {
 
     static debug2(s: string) {
         Log.logger.debug2(s);
-    }
-
-    static flushLogsAndExit() {
-        // loggly.flushLogsAndExit();
     }
 }
