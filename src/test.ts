@@ -84,8 +84,6 @@ directoryListing.forEach(filename => {
     console.log('processed in ' + (end - start) + ' ms');
 });
 
-Log.flushLogsAndExit();
-
 /**
  * Walk the folder tree recursively and process emails.
  * @param {PSTFolder} folder 

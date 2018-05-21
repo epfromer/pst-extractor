@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prebuild": "rimraf dist",
     "build": "tsc",
     "test": "nyc --reporter=html mocha --opts mocha.opts",
     "readme": "node ./node_modules/.bin/node-readme"
