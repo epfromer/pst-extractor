@@ -43,7 +43,6 @@ import { Log } from '../Log.class';
 import * as long from 'long';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 import { OutlookProperties } from '../OutlookProperties';
-var fromBits = require('math-float64-from-bits');
 
 export abstract class PSTObject {
     protected pstFile: PSTFile;
@@ -199,8 +198,8 @@ export abstract class PSTObject {
             if (item) {
                 let longVersion: long = PSTUtil.convertLittleEndianBytesToLong(item.data);
 
-                // convert double precision float to binary, then back to JS number
-                return fromBits('00' + longVersion.toString(2));
+                // interpret {low, high} signed 32 bit integers as double
+                return new Float64Array(new Int32Array([longVersion.low, longVersion.high]).buffer)[0];
             }
         }
         return defaultValue;
