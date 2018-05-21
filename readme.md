@@ -215,7 +215,6 @@ subject | string | Contains the full subject of a message. | https://technet.mic
 Package | Version | Dev
 --- |:---:|:---:
 [long](https://www.npmjs.com/package/long) | ^4.0.0 | ✖
-[rimraf](https://www.npmjs.com/package/rimraf) | ^2.6.2 | ✖
 [uuid-parse](https://www.npmjs.com/package/uuid-parse) | ^1.0.0 | ✖
 [winston](https://www.npmjs.com/package/winston) | ^2.4.1 | ✖
 [@types/chai](https://www.npmjs.com/package/@types/chai) | ^4.1.2 | ✔
@@ -230,6 +229,7 @@ Package | Version | Dev
 [mocha](https://www.npmjs.com/package/mocha) | ^5.0.5 | ✔
 [node-readme](https://www.npmjs.com/package/node-readme) | ^0.1.9 | ✔
 [nyc](https://www.npmjs.com/package/nyc) | ^11.6.0 | ✔
+[rimraf](https://www.npmjs.com/package/rimraf) | ^2.6.2 | ✔
 [source-map-support](https://www.npmjs.com/package/source-map-support) | ^0.5.4 | ✔
 [supports-color](https://www.npmjs.com/package/supports-color) | ^5.3.0 | ✔
 [ts-node](https://www.npmjs.com/package/ts-node) | ^6.0.3 | ✔
