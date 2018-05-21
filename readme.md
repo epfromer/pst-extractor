@@ -184,6 +184,25 @@ Personal folders
  |- Search Root
  |- SPAM Search Folder 2
 ```
+## Commonly Used Properties - PSTMessage
+
+Note that this is a subset, and all properties are outlined in the respective object .ts file.
+
+Property | Type | Description | Detailed Doco
+--- |:---:|---|---
+body | string | Plain text message body. | https://msdn.microsoft.com/en-us/library/office/cc765874.aspx
+clientSubmitTime | date | Contains the date and time the message sender submitted a message. | https://technet.microsoft.com/en-us/library/cc839781
+displayBCC | string | Contains an ASCII list of the display names of any blind carbon copy (BCC) message recipients, separated by semicolons (;). | https://msdn.microsoft.com/en-us/library/office/cc815730.aspx
+displayCC | string | Contains an ASCII list of the display names of any carbon copy (CC) message recipients, separated by semicolons (;). | https://msdn.microsoft.com/en-us/library/office/cc765528.aspx
+displayTo | string | Contains a list of the display names of the primary (To) message recipients, separated by semicolons (;). | https://msdn.microsoft.com/en-us/library/office/cc839687.aspx
+getAttachment | PSTAttachment | Get specific attachment from table using index. | 
+hasAttachments | boolean | The message has at least one attachment. | https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
+isRead | boolean | The message is marked as having been read. | https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
+messageClass | string | Contains a text string that identifies the sender-defined message class, such as IPM.Note. | https://msdn.microsoft.com/en-us/library/office/cc765765.aspx
+receivedByName | string | Contains the display name of the messaging user who receives the message. | https://msdn.microsoft.com/en-us/library/office/cc840015.aspx
+senderEmailAddress | string | Contains the message sender's e-mail address. | https://msdn.microsoft.com/en-us/library/office/cc839670.aspx
+senderName | string | Contains the message sender's display name. | https://msdn.microsoft.com/en-us/library/office/cc815457.aspx
+subject | string | Contains the full subject of a message. | https://technet.microsoft.com/en-us/library/cc815720
 
 ## Scripts
 

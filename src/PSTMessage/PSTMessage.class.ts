@@ -532,7 +532,7 @@ export class PSTMessage extends PSTObject {
     }
 
     /**
-     * Message class.
+     * Contains a text string that identifies the sender-defined message class, such as IPM.Note.
      * https://msdn.microsoft.com/en-us/library/office/cc765765.aspx
      * @readonly
      * @type {string}
@@ -543,7 +543,7 @@ export class PSTMessage extends PSTObject {
     }
 
     /**
-     * Subject
+     * Contains the full subject of a message.
      * https://technet.microsoft.com/en-us/library/cc815720
      * @readonly
      * @type {string}
