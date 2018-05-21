@@ -36,7 +36,6 @@ import { PSTFolder } from './PSTFolder/PSTFolder.class';
 import { Log } from './Log.class';
 import { PSTAttachment } from './PSTAttachment/PSTAttachment.class';
 import * as fs from 'fs';
-import * as fsext from 'fs-ext';
 import { PSTRecipient } from './PSTRecipient/PSTRecipient.class';
 
 const pstFolder = '/media/sf_Outlook/test/';
@@ -174,14 +173,14 @@ function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipi
         if (verbose) {
             console.log('saving msg to ' + filename);
         }
-        const fd = fsext.openSync(filename, 'w');
-        fsext.writeSync(fd, msg.clientSubmitTime + '\r\n');
-        fsext.writeSync(fd, 'Type: ' + msg.messageClass + '\r\n');
-        fsext.writeSync(fd, 'From: ' + sender + '\r\n');
-        fsext.writeSync(fd, 'To: ' + recipients + '\r\n');
-        fsext.writeSync(fd, 'Subject: ' + msg.subject);
-        fsext.writeSync(fd, msg.body);
-        fsext.closeSync(fd);
+        const fd = fs.openSync(filename, 'w');
+        fs.writeSync(fd, msg.clientSubmitTime + '\r\n');
+        fs.writeSync(fd, 'Type: ' + msg.messageClass + '\r\n');
+        fs.writeSync(fd, 'From: ' + sender + '\r\n');
+        fs.writeSync(fd, 'To: ' + recipients + '\r\n');
+        fs.writeSync(fd, 'Subject: ' + msg.subject);
+        fs.writeSync(fd, msg.body);
+        fs.closeSync(fd);
     } catch (err) {
         Log.error(err);
     }
@@ -196,7 +195,7 @@ function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipi
                 console.log('saving attachment to ' + filename);
             }
             try {
-                const fd = fsext.openSync(filename, 'w');
+                const fd = fs.openSync(filename, 'w');
                 const attachmentStream = attachment.fileInputStream;
                 if (attachmentStream) {
                     const bufferSize = 8176;
@@ -204,9 +203,9 @@ function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipi
                     let bytesRead;
                     do {
                         bytesRead = attachmentStream.read(buffer);
-                        fsext.writeSync(fd, buffer, 0, bytesRead);
+                        fs.writeSync(fd, buffer, 0, bytesRead);
                     } while (bytesRead == bufferSize);
-                    fsext.closeSync(fd);
+                    fs.closeSync(fd);
                 }
             } catch (err) {
                 Log.error(err);

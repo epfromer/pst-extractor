@@ -43,7 +43,6 @@ import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import { Log } from '../Log.class';
 import * as fs from 'fs';
-import * as fsext from 'fs-ext';
 import * as util from 'util';
 import * as long from 'long';
 const uuidparse = require('uuid-parse');
@@ -113,6 +112,9 @@ export class PSTFile {
     // file descriptor
     private pstFD: number;
 
+    // position in file
+    private position: number = 0;
+
     /**
      * Creates an instance of PSTFile.  File is opened in constructor.
      * @param {string} fileName 
@@ -123,7 +125,7 @@ export class PSTFile {
 
         // attempt to open file
         // confirm first 4 bytes are !BDN
-        this.pstFD = fsext.openSync(this._pstFilename, 'r');
+        this.pstFD = fs.openSync(this._pstFilename, 'r');
         let buffer = new Buffer(514);
         fs.readSync(this.pstFD, buffer, 0, 514, 0);
         let key = '!BDN';
@@ -159,7 +161,7 @@ export class PSTFile {
      * @memberof PSTFile
      */
     public close() {
-        fsext.closeSync(this.pstFD);
+        fs.closeSync(this.pstFD);
     }
 
     /**
@@ -795,23 +797,11 @@ export class PSTFile {
      * @memberof PSTFile
      */
     public read(position?: number): number {
-        let pos = null;
-        if (position) {
-            pos = position;
-        }
-
-        let buffer = new Buffer(1);
-        fs.readSync(this.pstFD, buffer, 0, buffer.length, pos);
+        const pos = position ? position : this.position;
+        const buffer = new Buffer(1);
+        const bytesRead = fs.readSync(this.pstFD, buffer, 0, buffer.length, pos);
+        this.position = position ? position + bytesRead : this.position + bytesRead;
         return buffer[0];
-    }
-
-    /**
-     * Seek to a specific position in PST file.
-     * @param {long} index 
-     * @memberof PSTFile
-     */
-    public seek(index: long) {
-        fsext.seekSync(this.pstFD, index.toNumber(), 0);
     }
 
     /**
@@ -822,16 +812,18 @@ export class PSTFile {
      * @memberof PSTFile
      */
     public readCompletely(buffer: Buffer, position?: number) {
-        let pos = null;
-        if (position) {
-            pos = position;
-        }
+        const pos = position ? position : this.position;
+        const bytesRead = fs.readSync(this.pstFD, buffer, 0, buffer.length, pos);
+        this.position = position ? position + bytesRead : this.position + bytesRead;
+    }
 
-        // attempt to fill the supplied buffer
-        let bytesRead = fs.readSync(this.pstFD, buffer, 0, buffer.length, pos);
-        if (bytesRead <= 0 || bytesRead === buffer.length) {
-            return;
-        }
+    /**
+     * Seek to a specific position in PST file.
+     * @param {long} index 
+     * @memberof PSTFile
+     */
+    public seek(index: long) {
+        this.position = index.toNumber();
     }
 
     /**
