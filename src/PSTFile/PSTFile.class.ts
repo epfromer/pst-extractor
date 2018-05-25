@@ -173,12 +173,9 @@ export class PSTFile {
         let nameToIdMapDescriptorNode = this.getDescriptorIndexNode(long.fromNumber(97));
 
         // get the descriptors if we have them
-        let localDescriptorItems;
-        if (nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier) {
+        let localDescriptorItems =  null;
+        if (nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier.toNumber() != 0) {
             localDescriptorItems = this.getPSTDescriptorItems(nameToIdMapDescriptorNode.localDescriptorsOffsetIndexIdentifier);
-        }
-        if (!localDescriptorItems) {
-            throw new Error('PSTFile::processNameToIDMap localDescriptorItems is null');
         }
 
         // process the map
@@ -275,7 +272,7 @@ export class PSTFile {
      * @returns {Buffer} 
      * @memberof PSTFile
      */
-    private getData(item: PSTTableItem, localDescriptorItems: Map<number, PSTDescriptorItem>): Buffer {
+    private getData(item: PSTTableItem, localDescriptorItems: Map<number, PSTDescriptorItem> | null): Buffer {
         if (item.data.length != 0) {
             return item.data;
         }
