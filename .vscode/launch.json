@@ -13,6 +13,17 @@
             "internalConsoleOptions": "openOnSessionStart"
         },
         {
+            "name": "test-in-mem.ts",
+            "type": "node",
+            "request": "launch",
+            "args": ["src/test-in-mem.ts"],
+            "runtimeArgs": ["-r", "ts-node/register"],
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
             "name": "test-min.ts",
             "type": "node",
             "request": "launch",

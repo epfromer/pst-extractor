@@ -98,7 +98,7 @@ export class PSTFile {
         return this._pstFileType;
     }
 
-    private _pstFilename: string;
+    private _pstFilename: string = '';
     public get pstFilename(): string {
         return this._pstFilename;
     }
@@ -112,6 +112,9 @@ export class PSTFile {
     // file descriptor
     private pstFD: number;
 
+    // in-memory file buffer (instead of filesystem)
+    private pstBuffer: Buffer = new Buffer(0);
+
     // position in file
     private position: number = 0;
 
@@ -120,14 +123,22 @@ export class PSTFile {
      * @param {string} fileName 
      * @memberof PSTFile
      */
-    public constructor(fileName: string) {
-        this._pstFilename = fileName;
+    public constructor(pstBuffer: Buffer);
+    public constructor(fileName: string);
+    public constructor(arg: any) {
+        if (arg instanceof Buffer) {
+            // use an in-memory buffer of PST
+            this.pstBuffer = arg;
+            this.pstFD = -1;
+        } else {
+            // use PST in filesystem 
+            this._pstFilename = arg;
+            this.pstFD = fs.openSync(this._pstFilename, 'r');
+        }
 
-        // attempt to open file
         // confirm first 4 bytes are !BDN
-        this.pstFD = fs.openSync(this._pstFilename, 'r');
         let buffer = new Buffer(514);
-        fs.readSync(this.pstFD, buffer, 0, 514, 0);
+        this.readSync(buffer, 514, 0);
         let key = '!BDN';
         if (buffer[0] != key.charCodeAt(0) || buffer[1] != key.charCodeAt(1) || buffer[2] != key.charCodeAt(2) || buffer[3] != key.charCodeAt(3)) {
             throw new Error('PSTFile::open Invalid file header (expected: "!BDN"): ' + buffer);
@@ -161,7 +172,9 @@ export class PSTFile {
      * @memberof PSTFile
      */
     public close() {
-        fs.closeSync(this.pstFD);
+        if (this.pstFD > 0) {
+            fs.closeSync(this.pstFD);
+        }
     }
 
     /**
@@ -796,7 +809,7 @@ export class PSTFile {
     public read(position?: number): number {
         const pos = position ? position : this.position;
         const buffer = new Buffer(1);
-        const bytesRead = fs.readSync(this.pstFD, buffer, 0, buffer.length, pos);
+        const bytesRead = this.readSync(buffer, buffer.length, pos);
         this.position = position ? position + bytesRead : this.position + bytesRead;
         return buffer[0];
     }
@@ -810,8 +823,27 @@ export class PSTFile {
      */
     public readCompletely(buffer: Buffer, position?: number) {
         const pos = position ? position : this.position;
-        const bytesRead = fs.readSync(this.pstFD, buffer, 0, buffer.length, pos);
+        const bytesRead = this.readSync(buffer, buffer.length, pos);
         this.position = position ? position + bytesRead : this.position + bytesRead;
+    }
+
+    /**
+     * Read from either file system, or in memory buffer.
+     * @param {Buffer} buffer 
+     * @param {number} length 
+     * @param {number} position 
+     * @returns {number} of bytes read
+     * @memberof PSTFile
+     */
+    private readSync(buffer: Buffer, length: number, position: number): number {
+        if (this.pstFD > 0) {
+            // read from file system
+            return fs.readSync(this.pstFD, buffer, 0, length, position);
+        } else {
+            // copy from in-memory buffer
+            this.pstBuffer.copy(buffer, 0, position, position + length);
+            return length;
+        }
     }
 
     /**
