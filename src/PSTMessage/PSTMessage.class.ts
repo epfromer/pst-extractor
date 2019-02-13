@@ -1220,17 +1220,17 @@ export class PSTMessage extends PSTObject {
                             let start = offsets[x];
                             let end = offsets[x + 1];
                             let length = end - start;
-                            let buf: Buffer = new Buffer(length);
+                            let buf: Buffer = Buffer.alloc(length);
                             PSTUtil.arraycopy(item.data, start, buf, 0, length);
-                            let name: string = new Buffer(buf).toString();
+                            let name: string = Buffer.from(buf).toString();
                             categories[x] = name;
                         }
                         let start = offsets[offsets.length - 1];
                         let end = item.data.length;
                         let length = end - start;
-                        let buf: Buffer = new Buffer(length);
+                        let buf: Buffer = Buffer.alloc(length);
                         PSTUtil.arraycopy(item.data, start, buf, 0, length);
-                        let name: string = new Buffer(buf).toString();
+                        let name: string = Buffer.from(buf).toString();
                         categories[categories.length - 1] = name;
                     }
                 }

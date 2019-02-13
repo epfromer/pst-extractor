@@ -6,10 +6,7 @@ Extract objects from MS Outlook/Exchange PST files
 
 ![nodei.co](https://nodei.co/npm/pst-extractor.png?downloads=true&downloadRank=true&stars=true)
 
-![travis-status](https://img.shields.io/travis/epfromer/pst-extractor.svg)
 ![stars](https://img.shields.io/github/stars/epfromer/pst-extractor.svg)
-![forks](https://img.shields.io/github/forks/epfromer/pst-extractor.svg)
-
 ![forks](https://img.shields.io/github/forks/epfromer/pst-extractor.svg)
 
 ![](https://david-dm.org/epfromer/pst-extractor/status.svg)

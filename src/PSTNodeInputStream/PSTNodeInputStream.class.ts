@@ -133,7 +133,7 @@ export class PSTNodeInputStream {
                     // TODO - try this with different types of attachments, includin PDF
                     //  may be issue with zlib and PDF files. also, mutiple attachments.
                     for (let i of this.indexItems) {
-                        let inData: Buffer = new Buffer(i.size);
+                        let inData: Buffer = Buffer.alloc(i.size);
                         this.pstFile.seek(i.fileOffset);
                         this.pstFile.readCompletely(inData);
                         outputStream = zlib.unzipSync(inData);
@@ -148,7 +148,7 @@ export class PSTNodeInputStream {
                             compressedLength += i.size;
                         }
                     }
-                    let inData: Buffer = new Buffer(compressedLength);
+                    let inData: Buffer = Buffer.alloc(compressedLength);
                     this.seek(long.ZERO);
                     this.readCompletely(inData);
                     outputStream = zlib.unzipSync(inData);
@@ -175,7 +175,7 @@ export class PSTNodeInputStream {
     private loadFromOffsetItem(offsetItem: OffsetIndexItem) {
         let bInternal = (offsetItem.indexIdentifier.toNumber() & 0x02) != 0;
 
-        let data = new Buffer(offsetItem.size);
+        let data = Buffer.alloc(offsetItem.size);
         this.pstFile.seek(offsetItem.fileOffset);
         this.pstFile.readCompletely(data);
 
@@ -228,7 +228,7 @@ export class PSTNodeInputStream {
                 bid = bid.and(0xfffffffe);
                 // get the details in this block and
                 let offsetItem = this.pstFile.getOffsetIndexNode(bid);
-                let blockData = new Buffer(offsetItem.size);
+                let blockData = Buffer.alloc(offsetItem.size);
                 this.pstFile.seek(offsetItem.fileOffset);
                 this.pstFile.readCompletely(blockData);
 
@@ -394,7 +394,7 @@ export class PSTNodeInputStream {
 
             if (nextSkipPoint.greaterThanOrEqual(this.currentLocation.add(bytesRemaining))) {
                 // we can fill the output with the rest of our current block!
-                let chunk = new Buffer(bytesRemaining);
+                let chunk = Buffer.alloc(bytesRemaining);
                 this.pstFile.readCompletely(chunk);
                 PSTUtil.arraycopy(chunk, 0, output, totalBytesFilled, bytesRemaining);
                 totalBytesFilled += bytesRemaining;
@@ -404,7 +404,7 @@ export class PSTNodeInputStream {
             } else {
                 // we need to read out a whole chunk and keep going
                 let bytesToRead = offset.size - currentPosInBlock;
-                let chunk = new Buffer(bytesToRead);
+                let chunk = Buffer.alloc(bytesToRead);
                 this.pstFile.readCompletely(chunk);
                 PSTUtil.arraycopy(chunk, 0, output, totalBytesFilled, bytesToRead);
                 totalBytesFilled += bytesToRead;
@@ -442,7 +442,7 @@ export class PSTNodeInputStream {
             length = output.length;
         }
 
-        let buf = new Buffer(length);
+        let buf = Buffer.alloc(length);
         let lengthRead = this.readBlock(buf);
 
         PSTUtil.arraycopy(buf, 0, output, offset, lengthRead);
@@ -531,7 +531,7 @@ export class PSTNodeInputStream {
      */
     public seekAndReadLong(location: long, bytes: number): long {
         this.seek(location);
-        let buffer = new Buffer(bytes);
+        let buffer = Buffer.alloc(bytes);
         this.readCompletely(buffer);
         return PSTUtil.convertLittleEndianBytesToLong(buffer);
     }

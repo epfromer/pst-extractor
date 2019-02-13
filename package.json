@@ -9,7 +9,7 @@
     "build": "tsc",
     "coverage": "nyc --reporter=html mocha --opts mocha.opts",
     "test": "ts-node ./src/test-min.ts",
-    "readme": "node ./node_modules/.bin/node-readme"
+    "longtest": "ts-node ./src/test.ts"
   },
   "nyc": {
     "extension": [

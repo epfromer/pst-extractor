@@ -59,7 +59,7 @@ export class PSTTableBC extends PSTTable {
             throw new Error('PSTTableBC::constructor keyTableInfoNodeInfo is null');
         }
 
-        let keyTableInfo: Buffer = new Buffer(keyTableInfoNodeInfo.length());
+        let keyTableInfo: Buffer = Buffer.alloc(keyTableInfoNodeInfo.length());
         keyTableInfoNodeInfo.pstNodeInputStream.seek(long.fromValue(keyTableInfoNodeInfo.startOffset));
         keyTableInfoNodeInfo.pstNodeInputStream.readCompletely(keyTableInfo);
         this.numberOfKeys = Math.trunc(keyTableInfo.length / (this.sizeOfItemKey + this.sizeOfItemValue));
@@ -99,7 +99,7 @@ export class PSTTableBC extends PSTTable {
                         // It's an external reference that we don't deal with here.
                     } else {
                         // Make a copy of the data
-                        let nodeInfo = new Buffer(nodeInfoNodeInfo.length());
+                        let nodeInfo = Buffer.alloc(nodeInfoNodeInfo.length());
                         nodeInfoNodeInfo.pstNodeInputStream.seek(long.fromValue(nodeInfoNodeInfo.startOffset));
                         nodeInfoNodeInfo.pstNodeInputStream.readCompletely(nodeInfo);
                         item.data = nodeInfo; // should be new array, so just use it

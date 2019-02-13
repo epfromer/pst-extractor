@@ -80,7 +80,7 @@ export class PSTTableItem {
         return this._entryValueType;
     }
 
-    private _data: Buffer = new Buffer(0);
+    private _data: Buffer = Buffer.alloc(0);
     public set data(val) {
         this._data = val;
     }

@@ -30,13 +30,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTMessage } from './PSTMessage/PSTMessage.class';
+import * as fs from 'fs';
+import { PSTAttachment } from './PSTAttachment/PSTAttachment.class';
 import { PSTFile } from './PSTFile/PSTFile.class';
 import { PSTFolder } from './PSTFolder/PSTFolder.class';
-import { Log } from './Log.class';
-import { PSTAttachment } from './PSTAttachment/PSTAttachment.class';
-import * as fs from 'fs';
-import { PSTRecipient } from './PSTRecipient/PSTRecipient.class';
+import { PSTMessage } from './PSTMessage/PSTMessage.class';
 
 const pstFolder = '/media/sf_Outlook/test/';
 const topOutputFolder = '/media/sf_Outlook/pst-extractor/';
@@ -55,7 +53,7 @@ try {
         fs.mkdirSync(topOutputFolder);
     }
 } catch (err) {
-    Log.error(err);
+    console.error(err);
 }
 
 let directoryListing = fs.readdirSync(pstFolder);
@@ -75,7 +73,7 @@ directoryListing.forEach(filename => {
             fs.mkdirSync(outputFolder);
         }
     } catch (err) {
-        Log.error(err);
+        console.error(err);
     }
 
     console.log(pstFile.getMessageStore().displayName);
@@ -148,7 +146,7 @@ function processFolder(folder: PSTFolder) {
                     try {
                         fs.mkdirSync(emailFolder);
                     } catch (err) {
-                        Log.error(err);
+                        console.error(err);
                     }
                 }
 
@@ -184,7 +182,7 @@ function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipi
         fs.writeSync(fd, msg.body);
         fs.closeSync(fd);
     } catch (err) {
-        Log.error(err);
+        console.error(err);
     }
 
     // walk list of attachments and save to fs
@@ -201,7 +199,7 @@ function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipi
                 const attachmentStream = attachment.fileInputStream;
                 if (attachmentStream) {
                     const bufferSize = 8176;
-                    const buffer = new Buffer(bufferSize);
+                    const buffer = Buffer.alloc(bufferSize);
                     let bytesRead;
                     do {
                         bytesRead = attachmentStream.read(buffer);
@@ -210,7 +208,7 @@ function doSaveToFS(msg: PSTMessage, emailFolder: string, sender: string, recipi
                     fs.closeSync(fd);
                 }
             } catch (err) {
-                Log.error(err);
+                console.error(err);
             }
         }
     }

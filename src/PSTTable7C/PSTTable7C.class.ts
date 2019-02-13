@@ -180,7 +180,7 @@ export class PSTTable7C extends PSTTable {
                     }
                 }
             }
-            let bitmap = new Buffer((this.numColumns + 7) / 8);
+            let bitmap = Buffer.alloc((this.numColumns + 7) / 8);
             this.rowNodeInfo.pstNodeInputStream.seek(long.fromNumber(this.rowNodeInfo.startOffset + currentValueArrayStart + this.TCI_1b));
             this.rowNodeInfo.pstNodeInputStream.readCompletely(bitmap);
             let id = this.rowNodeInfo.seekAndReadLong(long.fromNumber(currentValueArrayStart), 4);
@@ -233,7 +233,7 @@ export class PSTTable7C extends PSTTable {
                         break;
 
                     case 8: // 8 byte data
-                        item.data = new Buffer(8);
+                        item.data = Buffer.alloc(8);
                         this.rowNodeInfo.pstNodeInputStream.seek(
                             long.fromNumber(this.rowNodeInfo.startOffset + currentValueArrayStart + this.columnDescriptors[col].ibData)
                         );
@@ -263,12 +263,12 @@ export class PSTTable7C extends PSTTable {
                         }
 
                         if (item.entryValueReference == 0) {
-                            item.data = new Buffer(0);
+                            item.data = Buffer.alloc(0);
                             break;
                         } else {
                             let entryInfo = this.getNodeInfo(item.entryValueReference);
                             if (entryInfo) {
-                                item.data = new Buffer(entryInfo.length());
+                                item.data = Buffer.alloc(entryInfo.length());
                                 entryInfo.pstNodeInputStream.seek(long.fromNumber(entryInfo.startOffset));
                                 entryInfo.pstNodeInputStream.readCompletely(item.data);
                             }

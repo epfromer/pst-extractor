@@ -71,7 +71,7 @@ export abstract class PSTTable {
         // the next two bytes should be the table type (bSig)
         // 0xEC is HN (Heap-on-Node)
         pstNodeInputStream.seek(long.ZERO);
-        let headdata = new Buffer(4);
+        let headdata = Buffer.alloc(4);
         pstNodeInputStream.readCompletely(headdata);
         this.tableTypeByte = headdata[3];
         switch (this.tableTypeByte) { // bClientSig
@@ -99,7 +99,7 @@ export abstract class PSTTable {
             headerNodeInfo.pstNodeInputStream.seek(long.fromValue(headerNodeInfo.startOffset));
             headerByte = headerNodeInfo.pstNodeInputStream.read() & 0xff;
             headerNodeInfo.pstNodeInputStream.seek(long.fromValue(headerNodeInfo.startOffset));
-            let tmp = new Buffer(1024);
+            let tmp = Buffer.alloc(1024);
             headerNodeInfo.pstNodeInputStream.readCompletely(tmp);
             throw new Error("PSTTable::constructor Unable to parse table, can't find BTHHEADER header information: " + headerByte);
         }

@@ -51,9 +51,9 @@ export class LZFu {
 
         if (compressionSig == 0x75465a4c) {
             // we are compressed...
-            let output: Buffer = new Buffer(uncompressedSize);
+            let output: Buffer = Buffer.alloc(uncompressedSize);
             let outputPosition = 0;
-            let lzBuffer: Buffer = new Buffer(4096);
+            let lzBuffer: Buffer = Buffer.alloc(4096);
             // preload our buffer.
             try {
                 let bytes: Buffer = Buffer.from(LZFu.LZFU_HEADER); //getBytes("US-ASCII");
@@ -109,7 +109,7 @@ export class LZFu {
         } else if (compressionSig == 0x414c454d) {
             // we are not compressed!
             // just return the rest of the contents as a string
-            let output: Buffer = new Buffer(data.length - 16);
+            let output: Buffer = Buffer.alloc(data.length - 16);
             PSTUtil.arraycopy(data, 16, output, 0, data.length - 16);
             return new String(output).trim();
         }
