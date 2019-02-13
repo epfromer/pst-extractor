@@ -30,18 +30,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTUtil } from './../PSTUtil/PSTUtil.class';
-import { PSTObject } from '../PSTObject/PSTObject.class';
-import { PSTFile } from '../PSTFile/PSTFile.class';
-import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
-import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
+import * as long from 'long';
+import { OutlookProperties } from '../OutlookProperties';
 import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTFile } from '../PSTFile/PSTFile.class';
 import { PSTMessage } from '../PSTMessage/PSTMessage.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
-import * as long from 'long';
-import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
-import { Log } from '../Log.class';
-import { OutlookProperties } from '../OutlookProperties';
+import { PSTObject } from '../PSTObject/PSTObject.class';
+import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
+import { PSTUtil } from './../PSTUtil/PSTUtil.class';
 
 // Class containing attachment information.
 export class PSTAttachment extends PSTObject {
@@ -144,7 +141,7 @@ export class PSTAttachment extends PSTObject {
                     return PSTUtil.createAppropriatePSTMessageObject(this.pstFile, this.descriptorIndexNode, attachmentTable, this.localDescriptorItems);
                 }
             } catch (err) {
-                Log.error('PSTAttachment::embeddedPSTMessage createAppropriatePSTMessageObject failed\n' + err);
+                console.error('PSTAttachment::embeddedPSTMessage createAppropriatePSTMessageObject failed\n' + err);
                 throw err;
             }
         }

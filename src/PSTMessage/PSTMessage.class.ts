@@ -30,21 +30,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
+import * as long from 'long';
+import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
+import { OutlookProperties } from '../OutlookProperties';
+import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTFile } from '../PSTFile/PSTFile.class';
+import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
+import { PSTObject } from '../PSTObject/PSTObject.class';
+import { PSTTable7C } from '../PSTTable7C/PSTTable7C.class';
+import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import { LZFu } from './../LZFu/LZFu.class';
 import { PSTAttachment } from './../PSTAttachment/PSTAttachment.class';
 import { PSTRecipient } from './../PSTRecipient/PSTRecipient.class';
-import { PSTObject } from '../PSTObject/PSTObject.class';
-import { PSTFile } from '../PSTFile/PSTFile.class';
-import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
-import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
-import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
-import { PSTTable7C } from '../PSTTable7C/PSTTable7C.class';
-import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
-import { PSTUtil } from '../PSTUtil/PSTUtil.class';
-import * as long from 'long';
-import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
-import { Log } from '../Log.class';
-import { OutlookProperties } from '../OutlookProperties';
 
 enum PidTagMessageFlags {
     MSGFLAG_READ = 0x01,
@@ -205,7 +203,7 @@ export class PSTMessage extends PSTObject {
                 this.recipientTable = new PSTTable7C(new PSTNodeInputStream(this.pstFile, item), descriptorItems);
             }
         } catch (err) {
-            Log.error('PSTMessage::processRecipients\n' + err);
+            console.error('PSTMessage::processRecipients\n' + err);
             this.recipientTable = null;
         }
     }
@@ -450,7 +448,7 @@ export class PSTMessage extends PSTObject {
         try {
             this.processAttachments();
         } catch (err) {
-            Log.error('PSTMessage::numberOfAttachments\n' + err);
+            console.error('PSTMessage::numberOfAttachments\n' + err);
             return 0;
         }
         return this.attachmentTable ? this.attachmentTable.rowCount : 0;
@@ -1237,7 +1235,7 @@ export class PSTMessage extends PSTObject {
                     }
                 }
             } catch (err) {
-                Log.error('PSTMessage::colorCategories Unable to decode category data\n' + err);
+                console.error('PSTMessage::colorCategories Unable to decode category data\n' + err);
                 throw err;
             }
         }

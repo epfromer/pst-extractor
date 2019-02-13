@@ -30,14 +30,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { OffsetIndexItem } from './../OffsetIndexItem/OffsetIndexItem.class';
-import { PSTFile } from './../PSTFile/PSTFile.class';
-import { PSTObject } from '../PSTObject/PSTObject.class';
-import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
-import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
 import * as zlib from 'zlib';
-import { Log } from '../Log.class';
+import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
+import { OffsetIndexItem } from './../OffsetIndexItem/OffsetIndexItem.class';
+import { PSTFile } from './../PSTFile/PSTFile.class';
 
 export class PSTNodeInputStream {
     private skipPoints: long[] = [];
@@ -162,7 +160,7 @@ export class PSTNodeInputStream {
             }
             this.seek(long.ZERO);
         } catch (err) {
-            Log.error('PSTNodeInputStream::detectZlib Unable to decompress reportedly compressed block\n' + err);
+            console.error('PSTNodeInputStream::detectZlib Unable to decompress reportedly compressed block\n' + err);
             throw err;
         }
     }

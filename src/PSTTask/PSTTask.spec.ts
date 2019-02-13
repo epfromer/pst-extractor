@@ -1,9 +1,7 @@
 import * as chai from 'chai';
-import * as mocha from 'mocha';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { PSTFolder } from '../PSTFolder/PSTFolder.class';
 import { PSTTask } from './PSTTask.class';
-import { Log } from '../Log.class';
 const resolve = require('path').resolve
 const expect = chai.expect;
 let pstFile: PSTFile;

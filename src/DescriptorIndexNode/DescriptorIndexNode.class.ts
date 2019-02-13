@@ -30,10 +30,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTUtil } from '../PSTUtil/PSTUtil.class';
-import { PSTFile } from '../PSTFile/PSTFile.class';
-import { PSTObject } from '../PSTObject/PSTObject.class';
 import * as long from 'long';
+import { PSTFile } from '../PSTFile/PSTFile.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 
 // DescriptorIndexNode is a leaf item from the Descriptor index b-tree
 // It is like a pointer to an element in the PST file, everything has one...

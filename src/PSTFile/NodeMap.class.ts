@@ -30,7 +30,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { Log } from '../Log.class';
 import * as long from 'long';
 
 /**
@@ -55,11 +54,11 @@ export class NodeMap {
             let lkey = this.transformKey(key, idx);
             this.nameToId.set(lkey.toString(), propId);
             this.idToNumericName.set(propId, lkey);
-            Log.debug2('NodeMap::setId: propId = ' + propId + ', lkey = ' + lkey.toString());
+            // console.log('NodeMap::setId: propId = ' + propId + ', lkey = ' + lkey.toString());
         } else if (typeof key === 'string') {
             this.nameToId.set(key, propId);
             this.idToStringName.set(propId, key);
-            Log.debug2('NodeMap::setId: propId = ' + propId + ', key = ' + key);
+            // console.log('NodeMap::setId: propId = ' + propId + ', key = ' + key);
         } else {
             throw new Error('NodeMap::setId bad param type ' + typeof key);
         }
@@ -96,7 +95,7 @@ export class NodeMap {
     public getNumericName(propId: number): long | undefined {
         let lkey = this.idToNumericName.get(propId);
         if (!lkey) {
-            Log.debug2("NodeMap::getNumericName Name to Id mapping not found, propId = " + propId);
+            // console.log("NodeMap::getNumericName Name to Id mapping not found, propId = " + propId);
         }
         return lkey;
     }    

@@ -30,20 +30,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTActivity } from './../PSTActivity/PSTActivity.class';
-import { PSTFile } from '../PSTFile/PSTFile.class';
+import * as long from 'long';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
-import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
-import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
-import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
-import { PSTFolder } from '../PSTFolder/PSTFolder.class';
-import { PSTMessage } from '../PSTMessage/PSTMessage.class';
-import { Log } from '../Log.class';
 import { PSTAppointment } from '../PSTAppointment/PSTAppointment.class';
 import { PSTContact } from '../PSTContact/PSTContact.class';
+import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTFile } from '../PSTFile/PSTFile.class';
+import { PSTFolder } from '../PSTFolder/PSTFolder.class';
+import { PSTMessage } from '../PSTMessage/PSTMessage.class';
+import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
+import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTTask } from '../PSTTask/PSTTask.class';
-import * as long from 'long';
-import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
+import { PSTActivity } from './../PSTActivity/PSTActivity.class';
 
 /**
  * Utility functions for PST components
@@ -640,7 +638,7 @@ export class PSTUtil {
                 return data.toString('utf16le').replace(/\0/g, '');
             }
         } catch (err) {
-            Log.error('PSTUtil::createJavascriptString Unable to decode string\n' + err);
+            console.error('PSTUtil::createJavascriptString Unable to decode string\n' + err);
             throw err;
         }
         return '';
@@ -829,25 +827,25 @@ export class PSTUtil {
             case 'REPORT.IPM.Note.IPNRN':
                 // Read receipt
                 // debugger;
-                Log.debug1('PSTUtil::createAppropriatePSTMessageObject REPORT.IPM.Note.IPNRN');
+                // console.log('PSTUtil::createAppropriatePSTMessageObject REPORT.IPM.Note.IPNRN');
                 return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
             case 'REPORT.IPM.Note.IPNNRN':
                 // Not-read notification
                 // debugger;
-                Log.debug1('PSTUtil::createAppropriatePSTMessageObject REPORT.IPM.Note.IPNNRN');
+                // console.log('PSTUtil::createAppropriatePSTMessageObject REPORT.IPM.Note.IPNNRN');
                 return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
             case 'IPM.Schedule.Meeting.Request':
                 // Meeting request
                 // debugger;
-                Log.debug1('PSTUtil::createAppropriatePSTMessageObject IPM.Schedule.Meeting.Request');
+                // console.log('PSTUtil::createAppropriatePSTMessageObject IPM.Schedule.Meeting.Request');
                 return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
             case 'REPORT.IPM.Note.DR':
                 // Delivery receipt
                 // debugger;
-                Log.debug1('PSTUtil::createAppropriatePSTMessageObject REPORT.IPM.Note.DR');
+                // console.log('PSTUtil::createAppropriatePSTMessageObject REPORT.IPM.Note.DR');
                 return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
             default:
-                Log.error('PSTUtil::createAppropriatePSTMessageObject unknown message type: ' + messageClass);
+                console.error('PSTUtil::createAppropriatePSTMessageObject unknown message type: ' + messageClass);
         }
         return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems);
     }

@@ -30,12 +30,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTObject } from './../PSTObject/PSTObject.class';
-import { PSTFile } from './../PSTFile/PSTFile.class';
 import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
-import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
-import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
-import { OutlookProperties } from '../OutlookProperties';
+import { PSTFile } from './../PSTFile/PSTFile.class';
+import { PSTObject } from './../PSTObject/PSTObject.class';
 
 export class PSTMessageStore extends PSTObject {
     /**

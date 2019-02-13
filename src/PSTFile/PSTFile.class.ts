@@ -30,21 +30,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { NodeMap } from './NodeMap.class';
+import * as fs from 'fs';
+import * as long from 'long';
+import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
+import { OffsetIndexItem } from '../OffsetIndexItem/OffsetIndexItem.class';
+import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTFolder } from '../PSTFolder/PSTFolder.class';
 import { PSTMessageStore } from '../PSTMessageStore/PSTMessageStore.class';
-import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
-import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
 import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
-import { OffsetIndexItem } from '../OffsetIndexItem/OffsetIndexItem.class';
-import { PSTObject } from '../PSTObject/PSTObject.class';
 import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
 import { PSTUtil } from '../PSTUtil/PSTUtil.class';
-import { Log } from '../Log.class';
-import * as fs from 'fs';
-import * as util from 'util';
-import * as long from 'long';
+import { NodeMap } from './NodeMap.class';
 const uuidparse = require('uuid-parse');
 const assert = require('assert');
 
@@ -230,7 +227,7 @@ export class PSTFile {
             } else {
                 guidIndexes[i] = -1; // We don't know this guid
             }
-            Log.debug2('PSTFile:: processNameToIdMap idx: ' + i + ', ' + strUID + ', ' + guidIndexes[i]);
+            // console.log('PSTFile:: processNameToIdMap idx: ' + i + ', ' + strUID + ', ' + guidIndexes[i]);
             offset += 16;
         }
 
@@ -501,7 +498,7 @@ export class PSTFile {
             this.seek(btreeStartOffset);
             this.readCompletely(branchNodeItems);
 
-            Log.debug2('PSTFile::findBtreeItem btreeStartOffset = ' + btreeStartOffset);
+            // console.log('PSTFile::findBtreeItem btreeStartOffset = ' + btreeStartOffset);
 
             let numberOfItems = 0;
             if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
@@ -578,7 +575,7 @@ export class PSTFile {
                                 buffer = new Buffer(12);
                                 this.seek(btreeStartOffset.add(x * 12));
                                 this.readCompletely(buffer);
-                                Log.debug2('PSTFile::findBtreeItem ' + index.toString() + ' found!');
+                                // console.log('PSTFile::findBtreeItem ' + index.toString() + ' found!');
                                 return buffer;
                             }
                         }
@@ -593,7 +590,7 @@ export class PSTFile {
                                 buffer = new Buffer(32);
                                 this.seek(btreeStartOffset.add(x * 32));
                                 this.readCompletely(buffer);
-                                Log.debug2('PSTFile::findBtreeItem ' + index.toString() + ' found!');
+                                // console.log('PSTFile::findBtreeItem ' + index.toString() + ' found!');
                                 return buffer;
                             }
                         } else {
@@ -604,7 +601,7 @@ export class PSTFile {
                                 buffer = new Buffer(24);
                                 this.seek(btreeStartOffset.add(x * 24));
                                 this.readCompletely(buffer);
-                                Log.debug2('PSTFile::findBtreeItem ' + index.toString() + ' found!');
+                                // console.log('PSTFile::findBtreeItem ' + index.toString() + ' found!');
                                 return buffer;
                             }
                         }
@@ -623,7 +620,7 @@ export class PSTFile {
      * @memberof PSTFile
      */
     public getDescriptorIndexNode(id: long): DescriptorIndexNode {
-        Log.debug2('PSTFile::getDescriptorIndexNode ' + id.toString())
+        // console.log('PSTFile::getDescriptorIndexNode ' + id.toString())
         return new DescriptorIndexNode(this.findBtreeItem(id, true), this._pstFileType);
     }
 

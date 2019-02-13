@@ -30,12 +30,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTDescriptorItem } from './../PSTDescriptorItem/PSTDescriptorItem.class';
-import { PSTObject } from './../PSTObject/PSTObject.class';
-import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
-import { NodeInfo } from '../NodeInfo/NodeInfo.class';
-import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
+import { NodeInfo } from '../NodeInfo/NodeInfo.class';
+import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
+import { PSTDescriptorItem } from './../PSTDescriptorItem/PSTDescriptorItem.class';
 
 // The PST Table is the workhorse of the whole system.
 // It allows for an item to be read and broken down into the individual properties that it consists of.

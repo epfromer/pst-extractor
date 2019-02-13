@@ -30,8 +30,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 import * as long from 'long';
+import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
 
 export class NodeInfo {
     private _startOffset: number;

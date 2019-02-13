@@ -1,10 +1,7 @@
-import { PSTMessage } from './PSTMessage.class';
 import * as chai from 'chai';
-import * as long from 'long';
-import * as mocha from 'mocha';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { PSTFolder } from '../PSTFolder/PSTFolder.class';
-import { Log } from '../Log.class';
+import { PSTMessage } from './PSTMessage.class';
 const resolve = require('path').resolve;
 const expect = chai.expect;
 let pstFile: PSTFile;

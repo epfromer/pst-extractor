@@ -1,8 +1,6 @@
-import { PSTFolder } from './PSTFolder.class';
 import * as chai from 'chai';
-import * as mocha from 'mocha';
 import { PSTFile } from '../PSTFile/PSTFile.class';
-import { Log } from '../Log.class';
+import { PSTFolder } from './PSTFolder.class';
 const resolve = require('path').resolve
 const expect = chai.expect;
 let pstFile: PSTFile;

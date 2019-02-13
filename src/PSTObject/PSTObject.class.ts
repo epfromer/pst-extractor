@@ -30,19 +30,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTFile } from '../PSTFile/PSTFile.class';
-import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
-import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
-import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
-import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
-import { PSTUtil } from '../PSTUtil/PSTUtil.class';
-import { OffsetIndexItem } from '../OffsetIndexItem/OffsetIndexItem.class';
-import { PSTFolder } from '../PSTFolder/PSTFolder.class';
-import { PSTMessage } from '../PSTMessage/PSTMessage.class';
-import { Log } from '../Log.class';
 import * as long from 'long';
-import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
+import { DescriptorIndexNode } from '../DescriptorIndexNode/DescriptorIndexNode.class';
+import { OffsetIndexItem } from '../OffsetIndexItem/OffsetIndexItem.class';
 import { OutlookProperties } from '../OutlookProperties';
+import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTFile } from '../PSTFile/PSTFile.class';
+import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
+import { PSTTableBC } from '../PSTTableBC/PSTTableBC.class';
+import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 
 export abstract class PSTObject {
     protected pstFile: PSTFile;
@@ -228,7 +225,7 @@ export abstract class PSTObject {
                 if (item.data != null && item.data.length == 8) {
                     return PSTUtil.convertLittleEndianBytesToLong(item.data, 0, 8);
                 } else {
-                    Log.error('PSTObject::getLongItem Invalid data length for long id ' + identifier);
+                    console.error('PSTObject::getLongItem Invalid data length for long id ' + identifier);
                     // Return the default value for now...
                 }
             }
@@ -277,7 +274,7 @@ export abstract class PSTObject {
 
                     return PSTUtil.createJavascriptString(data, stringType, codepage);
                 } catch (err) {
-                    Log.error('PSTObject::getStringItem error decoding string\n' + err);
+                    console.error('PSTObject::getStringItem error decoding string\n' + err);
                     return '';
                 }
             }
@@ -344,7 +341,7 @@ export abstract class PSTObject {
                     try {
                         return descItem ? descItem.getData() : null;
                     } catch (err) {
-                        Log.error('PSTObject::Exception reading binary item\n' + err);
+                        console.error('PSTObject::Exception reading binary item\n' + err);
                         throw err;
                     }
                 }

@@ -1,12 +1,10 @@
 import * as chai from 'chai';
-import * as mocha from 'mocha';
+import { PSTContact } from '../PSTContact/PSTContact.class';
 import { PSTFile } from '../PSTFile/PSTFile.class';
 import { PSTFolder } from '../PSTFolder/PSTFolder.class';
-import { PSTContact } from '../PSTContact/PSTContact.class';
-import { PSTAttachment } from './PSTAttachment.class';
-import { PSTTask } from '../PSTTask/PSTTask.class';
 import { PSTMessage } from '../PSTMessage/PSTMessage.class';
-import { Log } from '../Log.class';
+import { PSTTask } from '../PSTTask/PSTTask.class';
+import { PSTAttachment } from './PSTAttachment.class';
 const resolve = require('path').resolve;
 const expect = chai.expect;
 let pstFile: PSTFile;

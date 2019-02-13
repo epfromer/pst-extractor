@@ -30,15 +30,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTObject } from './../PSTObject/PSTObject.class';
-import { PSTTable } from '../PSTTable/PSTTable.class';
-import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
-import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
-import { NodeInfo } from '../NodeInfo/NodeInfo.class';
-import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
-import { Log } from '../Log.class';
+import { PSTDescriptorItem } from '../PSTDescriptorItem/PSTDescriptorItem.class';
+import { PSTNodeInputStream } from '../PSTNodeInputStream/PSTNodeInputStream.class';
+import { PSTTable } from '../PSTTable/PSTTable.class';
 import { PSTTableItem } from '../PSTTableItem/PSTTableItem.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 
 export class PSTTableBC extends PSTTable {
     private items: Map<number, PSTTableItem> = new Map();

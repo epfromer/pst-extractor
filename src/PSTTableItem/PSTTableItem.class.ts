@@ -30,11 +30,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
  */
-import { PSTObject } from '../PSTObject/PSTObject.class';
-import { PSTFile } from '../PSTFile/PSTFile.class';
-import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 import * as long from 'long';
-import { Log } from '../Log.class';
+import { PSTUtil } from '../PSTUtil/PSTUtil.class';
 
 // Generic table item
 // Provides some basic string functions
@@ -128,7 +125,7 @@ export class PSTTableItem {
                 }
                 return this.data.toString('utf16le').replace(/\0/g, '');
             } catch (err) {
-                Log.error('Error decoding string: ' + this.data.toString('utf16le').replace(/\0/g, '') + '\n' + err);
+                console.error('Error decoding string: ' + this.data.toString('utf16le').replace(/\0/g, '') + '\n' + err);
                 return '';
             }
         }
