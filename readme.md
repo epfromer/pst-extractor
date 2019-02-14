@@ -16,7 +16,7 @@ Extract objects from MS Outlook/Exchange PST files
 
 Extract objects from MS Outlook/Exchange PST files.
 
-This is based off the code from https://github.com/rjohnsondev/java-libpst. Thanks to Richard Johnson and Orin Eman.
+This is based off code from https://github.com/rjohnsondev/java-libpst. Thanks to Richard Johnson and Orin Eman.
 
 A spec from Microsoft on the PST file format is at https://msdn.microsoft.com/en-us/library/ff385210(v=office.12).aspx.
 
@@ -200,38 +200,6 @@ receivedByName | string | Contains the display name of the messaging user who re
 senderEmailAddress | string | Contains the message sender's e-mail address. | https://msdn.microsoft.com/en-us/library/office/cc839670.aspx
 senderName | string | Contains the message sender's display name. | https://msdn.microsoft.com/en-us/library/office/cc815457.aspx
 subject | string | Contains the full subject of a message. | https://technet.microsoft.com/en-us/library/cc815720
-
-## Scripts
-
- - **npm run build** : `tsc`
- - **npm run test** : `nyc --reporter=html mocha --opts mocha.opts`
- - **npm run readme** : `node ./node_modules/.bin/node-readme`
-
-## Dependencies
-
-Package | Version | Dev
---- |:---:|:---:
-[long](https://www.npmjs.com/package/long) | ^4.0.0 | ✖
-[uuid-parse](https://www.npmjs.com/package/uuid-parse) | ^1.0.0 | ✖
-[winston](https://www.npmjs.com/package/winston) | ^2.4.1 | ✖
-[@types/chai](https://www.npmjs.com/package/@types/chai) | ^4.1.2 | ✔
-[@types/debug](https://www.npmjs.com/package/@types/debug) | 0.0.30 | ✔
-[@types/long](https://www.npmjs.com/package/@types/long) | ^4.0.0 | ✔
-[@types/mocha](https://www.npmjs.com/package/@types/mocha) | ^5.0.0 | ✔
-[@types/node](https://www.npmjs.com/package/@types/node) | ^10.1.2 | ✔
-[@types/winston](https://www.npmjs.com/package/@types/winston) | ^2.3.9 | ✔
-[chai](https://www.npmjs.com/package/chai) | ^4.1.2 | ✔
-[chai-datetime](https://www.npmjs.com/package/chai-datetime) | ^1.5.0 | ✔
-[debug](https://www.npmjs.com/package/debug) | ^3.1.0 | ✔
-[mocha](https://www.npmjs.com/package/mocha) | ^5.0.5 | ✔
-[node-readme](https://www.npmjs.com/package/node-readme) | ^0.1.9 | ✔
-[nyc](https://www.npmjs.com/package/nyc) | ^11.6.0 | ✔
-[rimraf](https://www.npmjs.com/package/rimraf) | ^2.6.2 | ✔
-[source-map-support](https://www.npmjs.com/package/source-map-support) | ^0.5.4 | ✔
-[supports-color](https://www.npmjs.com/package/supports-color) | ^5.3.0 | ✔
-[ts-node](https://www.npmjs.com/package/ts-node) | ^6.0.3 | ✔
-[typescript](https://www.npmjs.com/package/typescript) | ^2.8.1 | ✔
-
 
 ## Contributing
 
