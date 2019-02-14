@@ -1,6 +1,6 @@
 # pst-extractor
 
-![npm](https://img.shields.io/npm/v/pst-extractor.svg) ![license](https://img.shields.io/npm/l/pst-extractor.svg) ![github-issues](https://img.shields.io/github/issues/epfromer/pst-extractor.svg)
+![npm](https://img.shields.io/npm/v/pst-extractor.svg) ![license](https://img.shields.io/npm/l/pst-extractor.svg) ![github-issues](https://img.shields.io/github/issues/epfromer/pst-extractor.svg) [![Build Status](https://travis-ci.org/epfromer/pst-extractor.svg?branch=master)](https://travis-ci.org/epfromer/pst-extractor)
 
 Extract objects from MS Outlook/Exchange PST files
 
