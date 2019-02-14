@@ -7,7 +7,8 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
-    "test": "nyc --reporter=html mocha --opts mocha.opts",
+    "test": "mocha --opts mocha.opts",
+    "coverage": "nyc --reporter=html mocha --watch-extensions ts --watch --opts mocha.opts",
     "mintest": "ts-node ./src/test-min.ts",
     "longtest": "ts-node ./src/test.ts"
   },
