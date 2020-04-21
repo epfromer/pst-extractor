@@ -4,13 +4,14 @@
   "description": "Extract objects from MS Outlook/Exchange PST files",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=10"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
     "test": "mocha --opts mocha.opts",
-    "test:coverage": "nyc --reporter=html mocha --watch-extensions ts --watch --opts mocha.opts",
-    "mintest": "ts-node ./src/test-min.ts",
-    "longtest": "ts-node ./src/test.ts"
+    "test:coverage": "nyc --reporter=html mocha --watch-extensions ts --watch --opts mocha.opts"
   },
   "nyc": {
     "extension": [
@@ -28,23 +29,15 @@
     ],
     "all": true
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/epfromer/pst-extractor.git"
-  },
-  "keywords": [],
+  "repository": "epfromer/pst-extractor",
   "author": "Ed Pfromer (epfromer@gmail.com)",
-  "license": "(Apache-2.0 OR GPL-3.0)",
-  "bugs": {
-    "url": "https://github.com/epfromer/pst-extractor/issues"
-  },
-  "homepage": "https://github.com/epfromer/pst-extractor#readme",
+  "license": "MIT",
   "devDependencies": {
-    "@types/chai": "^4.1.7",
-    "@types/debug": "4.1.1",
-    "@types/long": "^4.0.0",
-    "@types/mocha": "^5.2.6",
-    "@types/node": "^11.9.3",
+    "@types/chai": "^4.2.11",
+    "@types/debug": "4.1.5",
+    "@types/long": "^4.0.1",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.13.1",
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "chai-datetime": "^1.5.0",
@@ -60,7 +53,7 @@
     "mocha": "^5.2.0",
     "nyc": "^13.3.0",
     "prettier": "^2.0.5",
-    "rimraf": "^2.6.3",
+    "rimraf": "^3.0.2",
     "source-map-support": "^0.5.18",
     "ts-node": "^8.9.0",
     "typescript": "^3.8.3"
