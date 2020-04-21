@@ -23,12 +23,25 @@ A spec from Microsoft on the PST file format is at https://msdn.microsoft.com/en
 ## Install
 
 `npm install --save pst-extractor`
+or
+`yarn add pst-extractor`
 
 ## Usage
 
-Start with test.ts for sample code to walk the PST and print out the folder structure to the console. Also, most of the major objects have Mocha test specs which show how the object attributes can be accessed.
+Start with the example app to walk the PST and print out the folder structure to the console. Also, most of the major objects have Mocha test specs which show how the object attributes can be accessed.
 
-A simple test-min.ts script like this.
+```
+cd example
+npm start
+```
+or
+```
+cd example
+yarn start
+```
+This runs on a sample Enron dataset that you can replace with your own PST file.
+
+A simple script looks like this:
 
 ```
 import { PSTMessage } from 'pst-extractor';
@@ -96,7 +109,7 @@ function getDepth(depth: number): string {
     return sdepth;
 }
 ```
-will generate the following output:
+and will generate the following output:
 ```
 Personal folders
  |- Top of Personal Folders
@@ -200,10 +213,6 @@ receivedByName | string | Contains the display name of the messaging user who re
 senderEmailAddress | string | Contains the message sender's e-mail address. | https://msdn.microsoft.com/en-us/library/office/cc839670.aspx
 senderName | string | Contains the message sender's display name. | https://msdn.microsoft.com/en-us/library/office/cc815457.aspx
 subject | string | Contains the full subject of a message. | https://technet.microsoft.com/en-us/library/cc815720
-
-## Contributing
-
-Contributions welcome; Please submit all pull requests the against master branch. If your pull request contains JavaScript patches or features, you should include relevant unit tests. Please check the [Contributing Guidelines](contributng.md) for more details. Thanks!
 
 ## Author
 
