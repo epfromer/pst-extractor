@@ -1,6 +1,6 @@
 # pst-extractor
 
-![npm](https://img.shields.io/npm/v/pst-extractor.svg) ![github-issues](https://img.shields.io/github/issues/epfromer/pst-extractor.svg) [![Build Status](https://travis-ci.org/epfromer/pst-extractor.svg?branch=master)](https://travis-ci.org/epfromer/pst-extractor) ![stars](https://img.shields.io/github/stars/epfromer/pst-extractor.svg) ![forks](https://img.shields.io/github/forks/epfromer/pst-extractor.svg) ![](https://david-dm.org/epfromer/pst-extractor/status.svg) ![](https://david-dm.org/epfromer/pst-extractor/dev-status.svg)
+![npm](https://img.shields.io/npm/v/pst-extractor.svg) ![github-issues](https://img.shields.io/github/issues/epfromer/pst-extractor.svg) [![Build Status](https://travis-ci.org/epfromer/pst-extractor.svg?branch=master)](https://travis-ci.org/epfromer/pst-extractor) ![stars](https://img.shields.io/github/stars/epfromer/pst-extractor.svg) ![forks](https://img.shields.io/github/forks/epfromer/pst-extractor.svg) ![](https://david-dm.org/epfromer/pst-extractor/status.svg) ![](https://david-dm.org/epfromer/pst-extractor/dev-status.svg) [![codecov](https://codecov.io/gh/epfromer/pst-extractor/branch/master/graph/badge.svg)](https://codecov.io/gh/epfromer/pst-extractor)
 
 Extract objects from MS Outlook/Exchange PST files
 
