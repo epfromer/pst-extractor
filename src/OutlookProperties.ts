@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 // See PSTMessage.class for details on these properties
-export const enum OutlookProperties {
+export enum OutlookProperties {
   PSETID_Common = 1,
   PSETID_Address = 2,
   PSETID_Appointment = 4,

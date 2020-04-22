@@ -17,7 +17,7 @@ describe('PSTFolder tests', () => {
   it('should have a root folder', () => {
     const folder: PSTFolder = pstFile.getRootFolder()
     expect(folder).to.not.be.null
-    expect(folder.subFolderCount).to.equal(3)
+    expect(folder.subFolderCount).toEqual(3)
     expect(folder.hasSubfolders).to.be.true
   })
 
@@ -36,32 +36,32 @@ describe('PSTFolder tests', () => {
 
   it('root folder should have sub folders', () => {
     let childFolders: PSTFolder[] = pstFile.getRootFolder().getSubFolders()
-    expect(childFolders.length).to.equal(3)
+    expect(childFolders.length).toEqual(3)
     let folder = childFolders[0]
-    expect(folder.subFolderCount).to.equal(2)
-    expect(folder.displayName).to.equal('Top of Personal Folders')
+    expect(folder.subFolderCount).toEqual(2)
+    expect(folder.displayName).toEqual('Top of Personal Folders')
     childFolders = folder.getSubFolders()
     folder = childFolders[0]
-    expect(folder.displayName).to.equal('Deleted Items')
+    expect(folder.displayName).toEqual('Deleted Items')
     folder = childFolders[1]
-    expect(folder.displayName).to.equal('lokay-m')
+    expect(folder.displayName).toEqual('lokay-m')
     // Log.debug1(JSON.stringify(folder, null, 2));
     childFolders = folder.getSubFolders()
     folder = childFolders[0]
-    expect(folder.displayName).to.equal('MLOKAY (Non-Privileged)')
+    expect(folder.displayName).toEqual('MLOKAY (Non-Privileged)')
     childFolders = folder.getSubFolders()
-    expect(childFolders[0].displayName).to.equal('TW-Commercial Group')
-    expect(childFolders[1].displayName).to.equal('Systems')
-    expect(childFolders[2].displayName).to.equal('Sent Items')
-    expect(childFolders[3].displayName).to.equal('Personal')
-    expect(folder.subFolderCount).to.equal(4)
-    expect(folder.emailCount).to.equal(1)
-    expect(folder.folderType).to.equal(0)
-    expect(folder.contentCount).to.equal(1)
-    expect(folder.unreadCount).to.equal(0)
-    expect(folder.containerFlags).to.equal(0)
-    expect(folder.containerClass).to.equal('IPF.Note')
-    expect(folder.hasSubfolders).to.equal(true)
+    expect(childFolders[0].displayName).toEqual('TW-Commercial Group')
+    expect(childFolders[1].displayName).toEqual('Systems')
+    expect(childFolders[2].displayName).toEqual('Sent Items')
+    expect(childFolders[3].displayName).toEqual('Personal')
+    expect(folder.subFolderCount).toEqual(4)
+    expect(folder.emailCount).toEqual(1)
+    expect(folder.folderType).toEqual(0)
+    expect(folder.contentCount).toEqual(1)
+    expect(folder.unreadCount).toEqual(0)
+    expect(folder.containerFlags).toEqual(0)
+    expect(folder.containerClass).toEqual('IPF.Note')
+    expect(folder.hasSubfolders).toEqual(true)
     // Log.debug1(JSON.stringify(folder, null, 2));
 
     folder.moveChildCursorTo(0)

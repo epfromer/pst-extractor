@@ -27,20 +27,20 @@ after(() => {
 
 describe('PSTTask tests', () => {
   it('should have a Tasks folder', () => {
-    expect(folder.displayName).to.equal('Tasks')
+    expect(folder.displayName).toEqual('Tasks')
   })
 
   it('should have two tasks', () => {
     // fully loaded task
     let task: PSTTask = folder.getNextChild()
     // Log.debug1(JSON.stringify(task, null, 2));
-    expect(task.messageClass).to.equal('IPM.Task')
-    expect(task.subject).to.equal('fully loaded task')
+    expect(task.messageClass).toEqual('IPM.Task')
+    expect(task.subject).toEqual('fully loaded task')
     expect(task.isTaskRecurring).to.be.true
     expect(task.isTaskComplete).to.be.false
-    expect(task.taskOwner).to.equal('Mountain Man')
-    expect(task.taskStatus).to.equal(1) // started
-    expect(task.percentComplete).to.equal(0.75)
+    expect(task.taskOwner).toEqual('Mountain Man')
+    expect(task.taskStatus).toEqual(1) // started
+    expect(task.percentComplete).toEqual(0.75)
     expect(task.bodyPrefix).to.contain(
       'Blue category, high priority, 75% complete'
     )
@@ -48,26 +48,26 @@ describe('PSTTask tests', () => {
     // basic task
     task = folder.getNextChild()
     // Log.debug1(JSON.stringify(task, null, 2));
-    expect(task.messageClass).to.equal('IPM.Task')
-    expect(task.subject).to.equal('basic task')
+    expect(task.messageClass).toEqual('IPM.Task')
+    expect(task.subject).toEqual('basic task')
     expect(task.isTaskRecurring).to.be.false
     expect(task.isTaskComplete).to.be.false
-    expect(task.taskOwner).to.equal('Mountain Man')
-    expect(task.taskStatus).to.equal(0) // not started
+    expect(task.taskOwner).toEqual('Mountain Man')
+    expect(task.taskStatus).toEqual(0) // not started
     expect(task.bodyPrefix).to.contain('Vanilla task, not started')
-    expect(task.importance).to.equal(1)
-    expect(task.percentComplete).to.equal(0)
-    expect(task.taskActualEffort).to.equal(0)
-    expect(task.taskEstimatedEffort).to.equal(0)
-    expect(task.taskVersion).to.equal(5)
-    expect(task.taskOrdinal).to.equal(4294963296)
-    expect(task.taskOwnership).to.equal(0)
-    expect(task.acceptanceState).to.equal(0)
-    expect(task.transportMessageHeaders).to.equal('')
-    expect(task.taskAssigner).to.equal('')
-    expect(task.taskLastUser).to.equal('')
+    expect(task.importance).toEqual(1)
+    expect(task.percentComplete).toEqual(0)
+    expect(task.taskActualEffort).toEqual(0)
+    expect(task.taskEstimatedEffort).toEqual(0)
+    expect(task.taskVersion).toEqual(5)
+    expect(task.taskOrdinal).toEqual(4294963296)
+    expect(task.taskOwnership).toEqual(0)
+    expect(task.acceptanceState).toEqual(0)
+    expect(task.transportMessageHeaders).toEqual('')
+    expect(task.taskAssigner).toEqual('')
+    expect(task.taskLastUser).toEqual('')
     expect(task.isTaskComplete).to.be.false
     expect(task.isTaskRecurring).to.be.false
-    expect(task.taskDateCompleted).to.equal(null)
+    expect(task.taskDateCompleted).toEqual(null)
   })
 })

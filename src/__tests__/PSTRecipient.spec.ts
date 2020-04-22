@@ -33,65 +33,65 @@ after(() => {
 describe('PSTRecipient tests', () => {
   it('should have email messages', () => {
     let childFolders: PSTFolder[] = pstFile.getRootFolder().getSubFolders()
-    expect(childFolders.length).to.equal(3)
+    expect(childFolders.length).toEqual(3)
     let folder = childFolders[0]
-    expect(folder.subFolderCount).to.equal(2)
-    expect(folder.displayName).to.equal('Top of Personal Folders')
+    expect(folder.subFolderCount).toEqual(2)
+    expect(folder.displayName).toEqual('Top of Personal Folders')
     childFolders = folder.getSubFolders()
     folder = childFolders[0]
-    expect(folder.displayName).to.equal('Deleted Items')
+    expect(folder.displayName).toEqual('Deleted Items')
     folder = childFolders[1]
-    expect(folder.displayName).to.equal('lokay-m')
+    expect(folder.displayName).toEqual('lokay-m')
     childFolders = folder.getSubFolders()
     folder = childFolders[0]
-    expect(folder.displayName).to.equal('MLOKAY (Non-Privileged)')
+    expect(folder.displayName).toEqual('MLOKAY (Non-Privileged)')
     childFolders = folder.getSubFolders()
-    expect(childFolders[0].displayName).to.equal('TW-Commercial Group')
+    expect(childFolders[0].displayName).toEqual('TW-Commercial Group')
     const comGroupFolder = childFolders[0]
 
     let msg: PSTMessage = comGroupFolder.getNextChild()
-    expect(msg.messageClass).to.equal('IPM.Note')
-    expect(msg.subject).to.equal("New OBA's")
-    expect(msg.senderName).to.equal('Lee  Dennis')
-    expect(msg.senderEmailAddress).to.equal('Dennis.Lee@ENRON.com')
-    expect(msg.displayTo).to.equal('Lindberg  Lorraine; Watson  Kimberly')
+    expect(msg.messageClass).toEqual('IPM.Note')
+    expect(msg.subject).toEqual("New OBA's")
+    expect(msg.senderName).toEqual('Lee  Dennis')
+    expect(msg.senderEmailAddress).toEqual('Dennis.Lee@ENRON.com')
+    expect(msg.displayTo).toEqual('Lindberg  Lorraine; Watson  Kimberly')
 
     let recipient = msg.getRecipient(0)
     expect(recipient).is.not.null
     if (recipient) {
       // Log.debug1(JSON.stringify(recipient, null, 2));
-      expect(recipient.displayName).to.equal('Lindberg  Lorraine')
-      expect(recipient.smtpAddress).to.equal('Lorraine.Lindberg@ENRON.com')
+      expect(recipient.displayName).toEqual('Lindberg  Lorraine')
+      expect(recipient.smtpAddress).toEqual('Lorraine.Lindberg@ENRON.com')
     }
 
     recipient = msg.getRecipient(1)
     expect(recipient).is.not.null
     if (recipient) {
-      expect(recipient.displayName).to.equal('Watson  Kimberly')
-      expect(recipient.smtpAddress).to.equal('Kimberly.Watson@ENRON.com')
+      expect(recipient.displayName).toEqual('Watson  Kimberly')
+      expect(recipient.smtpAddress).toEqual('Kimberly.Watson@ENRON.com')
     }
 
     recipient = msg.getRecipient(2)
     expect(recipient).is.not.null
     if (recipient) {
-      expect(recipient.displayName).to.equal('Lee  Dennis')
-      expect(recipient.smtpAddress).to.equal('Dennis.Lee@ENRON.com')
+      expect(recipient.displayName).toEqual('Lee  Dennis')
+      expect(recipient.smtpAddress).toEqual('Dennis.Lee@ENRON.com')
     }
 
     msg = comGroupFolder.getNextChild()
-    expect(msg.messageClass).to.equal('IPM.Note')
-    expect(msg.subject).to.equal(
+    expect(msg.messageClass).toEqual('IPM.Note')
+    expect(msg.subject).toEqual(
       'I/B Link Capacity for November and December 2001'
     )
-    expect(msg.sentRepresentingEmailAddress).to.equal('JReames@br-inc.com')
-    expect(msg.displayTo).to.equal('Michelle Lokay (E-mail)')
+    expect(msg.sentRepresentingEmailAddress).toEqual('JReames@br-inc.com')
+    expect(msg.displayTo).toEqual('Michelle Lokay (E-mail)')
 
     recipient = msg.getRecipient(0)
     expect(recipient).is.not.null
     if (recipient) {
       // Log.debug1(JSON.stringify(recipient, null, 2));
-      expect(recipient.displayName).to.equal('Michelle Lokay (E-mail)')
-      expect(recipient.smtpAddress).to.equal('michelle.lokay@enron.com')
+      expect(recipient.displayName).toEqual('Michelle Lokay (E-mail)')
+      expect(recipient.smtpAddress).toEqual('michelle.lokay@enron.com')
     }
   })
 })

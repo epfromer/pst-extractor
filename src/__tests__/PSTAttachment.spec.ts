@@ -32,21 +32,25 @@ describe('PSTAttachment tests', () => {
     const folder = childFolders[10] // Contacts
     const contact: PSTContact = folder.getNextChild()
     // Log.debug1(JSON.stringify(contact, null, 2));
-    expect(contact.messageClass).to.equal('IPM.Contact')
+    expect(contact.messageClass).toEqual('IPM.Contact')
     expect(contact.hasAttachments).to.be.true
 
     // first attachment is contact picture
     let attachment: PSTAttachment = contact.getAttachment(0)
-    expect(attachment.size).to.equal(14055)
-    expect(attachment.longFilename).to.equal('ContactPicture.jpg')
-    expect(attachment.creationTime).to.eql(new Date('2018-03-07T16:50:00.000Z'))
+    expect(attachment.size).toEqual(14055)
+    expect(attachment.longFilename).toEqual('ContactPicture.jpg')
+    expect(attachment.creationTime).toEqual(
+      new Date('2018-03-07T16:50:00.000Z')
+    )
 
     // second attachment is never gonna give you up
     attachment = contact.getAttachment(1)
     // Log.debug1(JSON.stringify(attachment, null, 2));
-    expect(attachment.size).to.equal(8447)
-    expect(attachment.longFilename).to.equal('rickroll.jpg')
-    expect(attachment.creationTime).to.eql(new Date('2018-03-07T16:49:32.964Z'))
+    expect(attachment.size).toEqual(8447)
+    expect(attachment.longFilename).toEqual('rickroll.jpg')
+    expect(attachment.creationTime).toEqual(
+      new Date('2018-03-07T16:49:32.964Z')
+    )
   })
 
   it('should have a task with an attachment', () => {
@@ -54,30 +58,32 @@ describe('PSTAttachment tests', () => {
     const folder = childFolders[17] // Tasks
     const task: PSTTask = folder.getNextChild()
     // Log.debug1(JSON.stringify(task, null, 2));
-    expect(task.messageClass).to.equal('IPM.Task')
+    expect(task.messageClass).toEqual('IPM.Task')
     expect(task.hasAttachments).to.be.true
     const attachment: PSTAttachment = task.getAttachment(0)
     // Log.debug1(JSON.stringify(attachment, null, 2));
-    expect(attachment.size).to.equal(8447)
-    expect(attachment.longFilename).to.equal('rickroll.jpg')
-    expect(attachment.creationTime).to.eql(new Date('2018-03-07T16:49:32.964Z'))
-    expect(attachment.modificationTime).to.eql(
+    expect(attachment.size).toEqual(8447)
+    expect(attachment.longFilename).toEqual('rickroll.jpg')
+    expect(attachment.creationTime).toEqual(
+      new Date('2018-03-07T16:49:32.964Z')
+    )
+    expect(attachment.modificationTime).toEqual(
       new Date('2018-03-07T16:49:32.959Z')
     )
-    expect(attachment.filename).to.equal('rickroll.jpg')
-    expect(attachment.attachMethod).to.equal(1)
-    expect(attachment.attachNum).to.equal(0)
-    expect(attachment.renderingPosition).to.equal(60)
-    expect(attachment.mimeSequence).to.equal(0)
-    expect(attachment.pathname).to.equal('')
-    expect(attachment.longPathname).to.equal('')
-    expect(attachment.mimeTag).to.equal('')
-    expect(attachment.contentId).to.equal('')
-    expect(attachment.isAttachmentInvisibleInHtml).to.equal(false)
-    expect(attachment.isAttachmentInvisibleInRTF).to.equal(false)
-    expect(attachment.filesize).to.equal(4796)
+    expect(attachment.filename).toEqual('rickroll.jpg')
+    expect(attachment.attachMethod).toEqual(1)
+    expect(attachment.attachNum).toEqual(0)
+    expect(attachment.renderingPosition).toEqual(60)
+    expect(attachment.mimeSequence).toEqual(0)
+    expect(attachment.pathname).toEqual('')
+    expect(attachment.longPathname).toEqual('')
+    expect(attachment.mimeTag).toEqual('')
+    expect(attachment.contentId).toEqual('')
+    expect(attachment.isAttachmentInvisibleInHtml).toEqual(false)
+    expect(attachment.isAttachmentInvisibleInRTF).toEqual(false)
+    expect(attachment.filesize).toEqual(4796)
     expect(attachment.fileInputStream).to.not.equal(null)
-    expect(attachment.embeddedPSTMessage).to.equal(null)
+    expect(attachment.embeddedPSTMessage).toEqual(null)
   })
 
   it('should have email with word attachment', () => {
@@ -91,9 +97,11 @@ describe('PSTAttachment tests', () => {
     expect(msg.hasAttachments).to.be.true
     const attachment: PSTAttachment = msg.getAttachment(0)
     // Log.debug1(JSON.stringify(attachment, null, 2));
-    expect(attachment.size).to.equal(54044)
-    expect(attachment.longFilename).to.equal('OBA_2760.doc')
-    expect(attachment.creationTime).to.eql(new Date('2018-03-07T16:26:20.724Z'))
+    expect(attachment.size).toEqual(54044)
+    expect(attachment.longFilename).toEqual('OBA_2760.doc')
+    expect(attachment.creationTime).toEqual(
+      new Date('2018-03-07T16:26:20.724Z')
+    )
   })
 
   it('should have email with excel attachment', () => {
@@ -108,9 +116,11 @@ describe('PSTAttachment tests', () => {
     expect(msg.hasAttachments).to.be.true
     const attachment: PSTAttachment = msg.getAttachment(0)
     // Log.debug1(JSON.stringify(attachment, null, 2));
-    expect(attachment.size).to.equal(31016)
-    expect(attachment.longFilename).to.equal('RedRockA.xls')
-    expect(attachment.creationTime).to.eql(new Date('2018-03-07T16:31:56.075Z'))
+    expect(attachment.size).toEqual(31016)
+    expect(attachment.longFilename).toEqual('RedRockA.xls')
+    expect(attachment.creationTime).toEqual(
+      new Date('2018-03-07T16:31:56.075Z')
+    )
   })
 
   it('should have email with jpg attachment', () => {
@@ -126,8 +136,10 @@ describe('PSTAttachment tests', () => {
     expect(msg.hasAttachments).to.be.true
     const attachment: PSTAttachment = msg.getAttachment(0)
     // Log.debug1(JSON.stringify(attachment, null, 2));
-    expect(attachment.size).to.equal(5020)
-    expect(attachment.longFilename).to.equal('rickroll.jpg')
-    expect(attachment.creationTime).to.eql(new Date('2018-03-07T16:43:36.995Z'))
+    expect(attachment.size).toEqual(5020)
+    expect(attachment.longFilename).toEqual('rickroll.jpg')
+    expect(attachment.creationTime).toEqual(
+      new Date('2018-03-07T16:43:36.995Z')
+    )
   })
 })

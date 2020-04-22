@@ -27,49 +27,49 @@ after(() => {
 
 describe('PSTAppointment tests', () => {
   it('should have a Journal folder', () => {
-    expect(folder.displayName).to.equal('Calendar')
+    expect(folder.displayName).toEqual('Calendar')
   })
 
   it('should have two calendar items', () => {
     let appt: PSTAppointment = folder.getNextChild()
     // console.log(JSON.stringify(appt, null, 2));
-    expect(appt.messageClass).to.equal('IPM.Appointment')
-    expect(appt.subject).to.equal('get lunch')
-    expect(appt.startTime).to.eql(new Date('2018-03-04T19:00:00.000Z'))
-    expect(appt.senderName).to.equal('Mountain Man')
-    expect(appt.duration).to.equal(60)
+    expect(appt.messageClass).toEqual('IPM.Appointment')
+    expect(appt.subject).toEqual('get lunch')
+    expect(appt.startTime).toEqual(new Date('2018-03-04T19:00:00.000Z'))
+    expect(appt.senderName).toEqual('Mountain Man')
+    expect(appt.duration).toEqual(60)
 
     appt = folder.getNextChild()
     // console.log(JSON.stringify(appt, null, 2));
-    expect(appt.messageClass).to.equal('IPM.Appointment')
-    expect(appt.subject).to.equal('workout')
-    expect(appt.creationTime).to.eql(new Date('2018-03-05T20:26:26.396Z'))
-    expect(appt.senderName).to.equal('Mountain Man')
-    expect(appt.duration).to.equal(60)
-    expect(appt.transportMessageHeaders).to.equal('')
-    expect(appt.location).to.equal('')
-    expect(appt.allAttendees).to.equal('')
-    expect(appt.toAttendees).to.equal('')
-    expect(appt.ccAttendees).to.equal('')
-    expect(appt.netMeetingServer).to.equal('')
-    expect(appt.netMeetingOrganizerAlias).to.equal('')
-    expect(appt.netMeetingDocumentPathName).to.equal('')
-    expect(appt.netShowURL).to.equal('')
-    expect(appt.requiredAttendees).to.equal('')
-    expect(appt.recurrencePattern).to.equal(
+    expect(appt.messageClass).toEqual('IPM.Appointment')
+    expect(appt.subject).toEqual('workout')
+    expect(appt.creationTime).toEqual(new Date('2018-03-05T20:26:26.396Z'))
+    expect(appt.senderName).toEqual('Mountain Man')
+    expect(appt.duration).toEqual(60)
+    expect(appt.transportMessageHeaders).toEqual('')
+    expect(appt.location).toEqual('')
+    expect(appt.allAttendees).toEqual('')
+    expect(appt.toAttendees).toEqual('')
+    expect(appt.ccAttendees).toEqual('')
+    expect(appt.netMeetingServer).toEqual('')
+    expect(appt.netMeetingOrganizerAlias).toEqual('')
+    expect(appt.netMeetingDocumentPathName).toEqual('')
+    expect(appt.netShowURL).toEqual('')
+    expect(appt.requiredAttendees).toEqual('')
+    expect(appt.recurrencePattern).toEqual(
       'every day from 10:00 AM to 11:00 AM'
     )
-    expect(appt.importance).to.equal(2)
-    expect(appt.busyStatus).to.equal(2)
-    expect(appt.color).to.equal(0)
-    expect(appt.meetingStatus).to.equal(0)
-    expect(appt.responseStatus).to.equal(0)
-    expect(appt.recurrenceType).to.equal(1)
-    expect(appt.appointmentSequence).to.equal(0)
-    expect(appt.netMeetingType).to.equal(0)
-    expect(appt.localeId).to.equal(1033)
-    expect(appt.startTime).to.eql(new Date('2018-03-05T17:00:00.000Z'))
-    expect(appt.endTime).to.eql(new Date('2018-03-05T18:00:00.000Z'))
+    expect(appt.importance).toEqual(2)
+    expect(appt.busyStatus).toEqual(2)
+    expect(appt.color).toEqual(0)
+    expect(appt.meetingStatus).toEqual(0)
+    expect(appt.responseStatus).toEqual(0)
+    expect(appt.recurrenceType).toEqual(1)
+    expect(appt.appointmentSequence).toEqual(0)
+    expect(appt.netMeetingType).toEqual(0)
+    expect(appt.localeId).toEqual(1033)
+    expect(appt.startTime).toEqual(new Date('2018-03-05T17:00:00.000Z'))
+    expect(appt.endTime).toEqual(new Date('2018-03-05T18:00:00.000Z'))
     expect(appt.showAsBusy).to.be.true
     expect(appt.isRecurring).to.be.true
     expect(appt.sendAsICAL).to.be.false
@@ -77,7 +77,7 @@ describe('PSTAppointment tests', () => {
     expect(appt.isOnlineMeeting).to.be.false
     expect(appt.appointmentCounterProposal).to.be.false
     expect(appt.isSilent).to.be.false
-    expect(appt.recurrenceBase).to.equal(null)
-    expect(appt.attendeeCriticalChange).to.equal(null)
+    expect(appt.recurrenceBase).toEqual(null)
+    expect(appt.attendeeCriticalChange).toEqual(null)
   })
 })

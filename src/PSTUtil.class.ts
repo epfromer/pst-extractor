@@ -699,8 +699,11 @@ export class PSTUtil {
   ): any
   public static detectAndLoadPSTObject(theFile: PSTFile, arg: any): any {
     let folderIndexNode = arg
-    if (arg instanceof long) {
+    // todo: if (arg instanceof long) {
+    if (typeof arg === 'object' && arg.hasOwnProperty('low')) {
       folderIndexNode = theFile.getDescriptorIndexNode(arg)
+    } else {
+      console.log('detectAndLoadPSTObject: not object')
     }
 
     const nidType = folderIndexNode.descriptorIdentifier & 0x1f

@@ -738,8 +738,11 @@ export class PSTFile {
   ): Map<number, PSTDescriptorItem>
   public getPSTDescriptorItems(arg: any): Map<number, PSTDescriptorItem> {
     let inputStream: PSTNodeInputStream = arg
-    if (arg instanceof long) {
+    // todo: if (arg instanceof long) {
+    if (typeof arg === 'object' && arg.hasOwnProperty('low')) {
       inputStream = this.readLeaf(arg)
+    } else {
+      console.log('getPSTDescriptorItems: not object')
     }
 
     // make sure the signature is correct

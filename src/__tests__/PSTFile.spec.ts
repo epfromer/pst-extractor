@@ -14,11 +14,10 @@ after(() => {
 
 describe('PSTfile tests', () => {
   it('should open the file', () => {
-    expect(pstFile.encryptionType).to.equal(1)
-    expect(pstFile.pstFileType).to.equal(23)
+    expect(pstFile.encryptionType).toEqual(1)
+    expect(pstFile.pstFileType).toEqual(23)
     expect(pstFile.pstFilename).to.contain('enron.pst')
-    expect(pstFile.getMessageStore().displayName).to.equal('Personal folders')
+    expect(pstFile.getMessageStore().displayName).toEqual('Personal folders')
     expect(pstFile.getRootFolder()).to.not.be.null
-    // Log.debug1(JSON.stringify(pstFile, null, 2));
   })
 })
