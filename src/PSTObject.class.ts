@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as long from 'long'
 import { DescriptorIndexNode } from './DescriptorIndexNode.class'
 import { OffsetIndexItem } from './OffsetIndexItem.class'
@@ -42,7 +43,7 @@ export abstract class PSTObject {
    * @param {DescriptorIndexNode} descriptorIndexNode
    * @memberof PSTObject
    */
-  private loadDescriptor(descriptorIndexNode: DescriptorIndexNode) {
+  private loadDescriptor(descriptorIndexNode: DescriptorIndexNode): void {
     this.descriptorIndexNode = descriptorIndexNode
 
     // get the table items for this descriptor
@@ -80,7 +81,7 @@ export abstract class PSTObject {
     folderIndexNode: DescriptorIndexNode | null,
     pstTableBC: PSTTableBC,
     localDescriptorItems?: Map<number, PSTDescriptorItem>
-  ) {
+  ): void {
     this.descriptorIndexNode = folderIndexNode
     this.pstTableItems = pstTableBC.getItems()
     this.pstTableBC = pstTableBC

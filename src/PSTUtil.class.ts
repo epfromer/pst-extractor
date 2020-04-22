@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as long from 'long'
 import { DescriptorIndexNode } from './DescriptorIndexNode.class'
 import { PSTAppointment } from './PSTAppointment.class'
@@ -611,6 +612,7 @@ export class PSTUtil {
   public static createJavascriptString(
     data: Buffer,
     stringType: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     codepage?: string
   ): string {
     // TODO - codepage is not used...
@@ -644,7 +646,7 @@ export class PSTUtil {
     dest: Buffer,
     destPos: number,
     length: number
-  ) {
+  ): void {
     // TODO FIX THIS - TOO SLOW?
     let s = srcPos
     let d = destPos
@@ -660,7 +662,7 @@ export class PSTUtil {
    * @static
    * @memberof PSTUtil
    */
-  public static isAlphaNumeric = (ch: string) => {
+  public static isAlphaNumeric = (ch: string): boolean => {
     return ch.match(/^[a-z0-9]+$/i) !== null
   }
 

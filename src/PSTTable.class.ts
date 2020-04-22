@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as long from 'long'
 import { NodeInfo } from './NodeInfo.class'
 import { PSTNodeInputStream } from './PSTNodeInputStream.class'
@@ -104,7 +105,7 @@ export abstract class PSTTable {
    * @protected
    * @memberof PSTTable
    */
-  protected releaseRawData() {
+  protected releaseRawData(): void {
     this.subNodeDescriptorItems.clear()
   }
 

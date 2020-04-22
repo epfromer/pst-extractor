@@ -3,12 +3,12 @@ import { PSTNodeInputStream } from './PSTNodeInputStream.class'
 
 export class NodeInfo {
   private _startOffset: number
-  get startOffset() {
+  get startOffset(): number {
     return this._startOffset
   }
 
   private _endOffset: number
-  get endOffset() {
+  get endOffset(): number {
     return this._endOffset
   }
 
@@ -17,7 +17,7 @@ export class NodeInfo {
   }
 
   private _pstNodeInputStream: PSTNodeInputStream
-  get pstNodeInputStream() {
+  get pstNodeInputStream(): PSTNodeInputStream {
     return this._pstNodeInputStream
   }
 
@@ -62,6 +62,7 @@ export class NodeInfo {
    * @returns {string}
    * @memberof NodeInfo
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJSON(): any {
     return this
   }

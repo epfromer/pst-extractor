@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as long from 'long'
 import { DescriptorIndexNode } from './DescriptorIndexNode.class'
 import { OutlookProperties } from './OutlookProperties'
@@ -89,7 +90,7 @@ export class PSTFolder extends PSTObject {
    * @returns
    * @memberof PSTFolder
    */
-  private initSubfoldersTable() {
+  private initSubfoldersTable(): void {
     if (this.subfoldersTable) {
       return
     }
@@ -134,7 +135,7 @@ export class PSTFolder extends PSTObject {
   }
 
   // get all of the children
-  private initEmailsTable() {
+  private initEmailsTable(): void {
     if (this.emailsTable || this.fallbackEmailsTable) {
       return
     }
@@ -253,7 +254,7 @@ export class PSTFolder extends PSTObject {
    * @returns
    * @memberof PSTFolder
    */
-  public moveChildCursorTo(newIndex: number) {
+  public moveChildCursorTo(newIndex: number): void {
     this.initEmailsTable()
 
     if (newIndex < 1) {

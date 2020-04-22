@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as long from 'long'
 
 /**
@@ -17,7 +18,7 @@ export class NodeMap {
    * @param {number} [idx]
    * @memberof NodeMap
    */
-  public setId(key: any, propId: number, idx?: number) {
+  public setId(key: any, propId: number, idx?: number): void {
     if (typeof key === 'number' && idx !== undefined) {
       const lkey = this.transformKey(key, idx)
       this.nameToId.set(lkey.toString(), propId)

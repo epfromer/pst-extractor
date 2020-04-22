@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PSTFile } from './PSTFile.class'
 import { DescriptorIndexNode } from './DescriptorIndexNode.class'
 import { PSTTableBC } from './PSTTableBC.class'

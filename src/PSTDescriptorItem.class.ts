@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as long from 'long'
 import { PSTNodeInputStream } from './PSTNodeInputStream.class'
 import { PSTUtil } from './PSTUtil.class'

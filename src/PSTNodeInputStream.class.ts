@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as long from 'long'
 import * as zlib from 'zlib'
 import { PSTDescriptorItem } from './PSTDescriptorItem.class'
@@ -21,17 +22,17 @@ export class PSTNodeInputStream {
   }
 
   private _pstFile: PSTFile
-  public get pstFile() {
+  public get pstFile(): PSTFile {
     return this._pstFile
   }
 
   private _length: long = long.ZERO
-  public get length() {
+  public get length(): long {
     return this._length
   }
 
   private _encrypted = false
-  public get encrypted() {
+  public get encrypted(): boolean {
     return this._encrypted
   }
 
@@ -87,7 +88,7 @@ export class PSTNodeInputStream {
    * @returns
    * @memberof PSTNodeInputStream
    */
-  private detectZlib() {
+  private detectZlib(): void {
     // not really sure how this is meant to work, kind of going by feel here.
     if (this.length.lt(4)) {
       return
@@ -159,7 +160,7 @@ export class PSTNodeInputStream {
    * @returns
    * @memberof PSTNodeInputStream
    */
-  private loadFromOffsetItem(offsetItem: OffsetIndexItem) {
+  private loadFromOffsetItem(offsetItem: OffsetIndexItem): void {
     let bInternal = (offsetItem.indexIdentifier.toNumber() & 0x02) != 0
 
     const data = Buffer.alloc(offsetItem.size)
@@ -198,7 +199,7 @@ export class PSTNodeInputStream {
    * @param {Buffer} data
    * @memberof PSTNodeInputStream
    */
-  private getBlockSkipPoints(data: Buffer) {
+  private getBlockSkipPoints(data: Buffer): void {
     if (data[0] != 0x1) {
       throw new Error(
         'PSTNodeInputStream::loadFromOffsetItem Unable to process XBlock, incorrect identifier'
@@ -261,7 +262,7 @@ export class PSTNodeInputStream {
    * @returns
    * @memberof PSTNodeInputStream
    */
-  public read(output?: Buffer) {
+  public read(output?: Buffer): number {
     if (!output) {
       return this.readSingleByte()
     } else {
@@ -326,7 +327,7 @@ export class PSTNodeInputStream {
    * @param {Buffer} target
    * @memberof PSTNodeInputStream
    */
-  public readCompletely(target: Buffer) {
+  public readCompletely(target: Buffer): void {
     let offset = 0
     let numRead = 0
     while (offset < target.length) {
@@ -485,7 +486,7 @@ export class PSTNodeInputStream {
    * Reset the file pointer (internally).
    * @memberof PSTNodeInputStream
    */
-  public reset() {
+  public reset(): void {
     this.currentBlock = 0
     this._currentLocation = long.ZERO
   }
@@ -515,7 +516,7 @@ export class PSTNodeInputStream {
    * @returns
    * @memberof PSTNodeInputStream
    */
-  public seek(location: long) {
+  public seek(location: long): void {
     // not past the end!
     if (location.greaterThan(this.length)) {
       throw new Error(

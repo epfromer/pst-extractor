@@ -15,8 +15,8 @@
   "scripts": {
     "start": "ts-node test-min.ts",
     "test-min": "ts-node test-min.ts",
-    "test-mem": "ts-node test-min.ts",
-    "test-min": "ts-node test-min.ts"
+    "test-mem": "ts-node test-mem.ts",
+    "test-max": "ts-node test-max.ts"
   },
   "eslintConfig": {
     "extends": [

@@ -1,12 +1,17 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "declaration": true,
         "module": "commonjs",
         "noImplicitAny": true,
-        "declaration": true,
         "outDir": "./dist",
-        "strict": true
+        "strict": true,
+        "target": "es6"
     },
-    "include": ["src/**/*"],example/test-max.ts
-    "exclude": ["node_modules", "src/__tests__/*"]
+    "exclude": [
+        "node_modules",
+        "src/__tests__/*"
+    ],
+    "include": [
+        "src/**/*"
+    ]
 }

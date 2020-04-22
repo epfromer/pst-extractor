@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as long from 'long'
 import { PSTFile } from './PSTFile.class'
 import { PSTUtil } from './PSTUtil.class'

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { OutlookProperties } from './OutlookProperties'
 import { PSTFile } from './PSTFile.class'
 import { PSTObject } from './PSTObject.class'

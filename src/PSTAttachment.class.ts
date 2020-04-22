@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as long from 'long'
 import { OutlookProperties } from './OutlookProperties'
 import { PSTDescriptorItem } from './PSTDescriptorItem.class'

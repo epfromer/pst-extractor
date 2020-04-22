@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as long from 'long'
 import { DescriptorIndexNode } from './DescriptorIndexNode.class'
 import { OutlookProperties } from './OutlookProperties'
@@ -191,7 +192,7 @@ export class PSTMessage extends PSTObject {
    * @private
    * @memberof PSTMessage
    */
-  private processRecipients() {
+  private processRecipients(): void {
     try {
       const recipientTableKey = 0x0692
       if (
@@ -459,7 +460,7 @@ export class PSTMessage extends PSTObject {
    * @private
    * @memberof PSTMessage
    */
-  private processAttachments() {
+  private processAttachments(): void {
     const attachmentTableKey = 0x0671
     if (
       this.attachmentTable == null &&

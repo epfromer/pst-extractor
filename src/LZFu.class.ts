@@ -28,6 +28,7 @@ export class LZFu {
       8,
       12
     ).toNumber()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const compressedCRC: number = PSTUtil.convertLittleEndianBytesToLong(
       data,
       12,
