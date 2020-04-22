@@ -1,8 +1,8 @@
 import * as fs from 'fs'
-import { PSTAttachment } from '../src/PSTAttachment/PSTAttachment.class'
-import { PSTFile } from '../src/PSTFile/PSTFile.class'
-import { PSTFolder } from '../src/PSTFolder/PSTFolder.class'
-import { PSTMessage } from '../src/PSTMessage/PSTMessage.class'
+import { PSTAttachment } from '../src/PSTAttachment.class'
+import { PSTFile } from '../src/PSTFile.class'
+import { PSTFolder } from '../src/PSTFolder.class'
+import { PSTMessage } from '../src/PSTMessage.class'
 
 const pstFolder = '/media/sf_Outlook/test/'
 const topOutputFolder = '/media/sf_Outlook/pst-extractor/'
