@@ -1,13 +1,11 @@
-import * as chai from 'chai'
 import { PSTFile } from '../PSTFile.class'
 import { PSTFolder } from '../PSTFolder.class'
 import { PSTTask } from '../PSTTask.class'
 const resolve = require('path').resolve
-const expect = chai.expect
 let pstFile: PSTFile
 let folder: PSTFolder
 
-before(() => {
+beforeAll(() => {
   pstFile = new PSTFile(
     resolve('./src/__tests__/testdata/mtnman1965@outlook.com.ost')
   )
@@ -21,7 +19,7 @@ before(() => {
   folder = childFolders[17] // Tasks
 })
 
-after(() => {
+afterAll(() => {
   pstFile.close()
 })
 
@@ -41,7 +39,7 @@ describe('PSTTask tests', () => {
     expect(task.taskOwner).toEqual('Mountain Man')
     expect(task.taskStatus).toEqual(1) // started
     expect(task.percentComplete).toEqual(0.75)
-    expect(task.bodyPrefix).to.contain(
+    expect(task.bodyPrefix).toContain(
       'Blue category, high priority, 75% complete'
     )
 
@@ -54,7 +52,7 @@ describe('PSTTask tests', () => {
     expect(task.isTaskComplete).toBeFalsy()
     expect(task.taskOwner).toEqual('Mountain Man')
     expect(task.taskStatus).toEqual(0) // not started
-    expect(task.bodyPrefix).to.contain('Vanilla task, not started')
+    expect(task.bodyPrefix).toContain('Vanilla task, not started')
     expect(task.importance).toEqual(1)
     expect(task.percentComplete).toEqual(0)
     expect(task.taskActualEffort).toEqual(0)

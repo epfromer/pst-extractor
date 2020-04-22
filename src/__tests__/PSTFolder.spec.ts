@@ -1,22 +1,20 @@
-import * as chai from 'chai'
 import { PSTFile } from '../PSTFile.class'
 import { PSTFolder } from '../PSTFolder.class'
 const resolve = require('path').resolve
-const expect = chai.expect
 let pstFile: PSTFile
 
-before(() => {
+beforeAll(() => {
   pstFile = new PSTFile(resolve('./src/__tests__/testdata/enron.pst'))
 })
 
-after(() => {
+afterAll(() => {
   pstFile.close()
 })
 
 describe('PSTFolder tests', () => {
   it('should have a root folder', () => {
     const folder: PSTFolder = pstFile.getRootFolder()
-    expect(folder).to.not.be.null
+    expect(folder).toBeTruthy()
     expect(folder.subFolderCount).toEqual(3)
     expect(folder.hasSubfolders).toBeTruthy()
   })

@@ -1,4 +1,3 @@
-import * as chai from 'chai'
 import { PSTContact } from '../PSTContact.class'
 import { PSTFile } from '../PSTFile.class'
 import { PSTFolder } from '../PSTFolder.class'
@@ -6,11 +5,10 @@ import { PSTMessage } from '../PSTMessage.class'
 import { PSTTask } from '../PSTTask.class'
 import { PSTAttachment } from '../PSTAttachment.class'
 const resolve = require('path').resolve
-const expect = chai.expect
 let pstFile: PSTFile
 let subtreeFolder: PSTFolder
 
-before(() => {
+beforeAll(() => {
   pstFile = new PSTFile(
     resolve('./src/__tests__/testdata/mtnman1965@outlook.com.ost')
   )
@@ -22,7 +20,7 @@ before(() => {
   subtreeFolder = childFolders[4] // IPM_SUBTREE
 })
 
-after(() => {
+afterAll(() => {
   pstFile.close()
 })
 
@@ -31,7 +29,6 @@ describe('PSTAttachment tests', () => {
     const childFolders = subtreeFolder.getSubFolders()
     const folder = childFolders[10] // Contacts
     const contact: PSTContact = folder.getNextChild()
-    // Log.debug1(JSON.stringify(contact, null, 2));
     expect(contact.messageClass).toEqual('IPM.Contact')
     expect(contact.hasAttachments).toBeTruthy()
 
@@ -45,7 +42,6 @@ describe('PSTAttachment tests', () => {
 
     // second attachment is never gonna give you up
     attachment = contact.getAttachment(1)
-    // Log.debug1(JSON.stringify(attachment, null, 2));
     expect(attachment.size).toEqual(8447)
     expect(attachment.longFilename).toEqual('rickroll.jpg')
     expect(attachment.creationTime).toEqual(
@@ -57,11 +53,9 @@ describe('PSTAttachment tests', () => {
     const childFolders = subtreeFolder.getSubFolders()
     const folder = childFolders[17] // Tasks
     const task: PSTTask = folder.getNextChild()
-    // Log.debug1(JSON.stringify(task, null, 2));
     expect(task.messageClass).toEqual('IPM.Task')
     expect(task.hasAttachments).toBeTruthy()
     const attachment: PSTAttachment = task.getAttachment(0)
-    // Log.debug1(JSON.stringify(attachment, null, 2));
     expect(attachment.size).toEqual(8447)
     expect(attachment.longFilename).toEqual('rickroll.jpg')
     expect(attachment.creationTime).toEqual(
@@ -82,7 +76,7 @@ describe('PSTAttachment tests', () => {
     expect(attachment.isAttachmentInvisibleInHtml).toEqual(false)
     expect(attachment.isAttachmentInvisibleInRTF).toEqual(false)
     expect(attachment.filesize).toEqual(4796)
-    expect(attachment.fileInputStream).to.not.equal(null)
+    expect(attachment.fileInputStream).not.toEqual(null)
     expect(attachment.embeddedPSTMessage).toEqual(null)
   })
 
@@ -96,7 +90,6 @@ describe('PSTAttachment tests', () => {
     // Email: 2110308 - word attachment
     expect(msg.hasAttachments).toBeTruthy()
     const attachment: PSTAttachment = msg.getAttachment(0)
-    // Log.debug1(JSON.stringify(attachment, null, 2));
     expect(attachment.size).toEqual(54044)
     expect(attachment.longFilename).toEqual('OBA_2760.doc')
     expect(attachment.creationTime).toEqual(
@@ -115,7 +108,6 @@ describe('PSTAttachment tests', () => {
     // Email: 2110724 - excel attachment
     expect(msg.hasAttachments).toBeTruthy()
     const attachment: PSTAttachment = msg.getAttachment(0)
-    // Log.debug1(JSON.stringify(attachment, null, 2));
     expect(attachment.size).toEqual(31016)
     expect(attachment.longFilename).toEqual('RedRockA.xls')
     expect(attachment.creationTime).toEqual(
@@ -135,7 +127,6 @@ describe('PSTAttachment tests', () => {
     // Email: 2111140 - never gonna give you up
     expect(msg.hasAttachments).toBeTruthy()
     const attachment: PSTAttachment = msg.getAttachment(0)
-    // Log.debug1(JSON.stringify(attachment, null, 2));
     expect(attachment.size).toEqual(5020)
     expect(attachment.longFilename).toEqual('rickroll.jpg')
     expect(attachment.creationTime).toEqual(

@@ -1,13 +1,11 @@
-import * as chai from 'chai'
 import { PSTFile } from '../PSTFile.class'
 import { PSTFolder } from '../PSTFolder.class'
 import { PSTContact } from '../PSTContact.class'
 const resolve = require('path').resolve
-const expect = chai.expect
 let pstFile: PSTFile
 let folder: PSTFolder
 
-before(() => {
+beforeAll(() => {
   pstFile = new PSTFile(
     resolve('./src/__tests__/testdata/mtnman1965@outlook.com.ost')
   )
@@ -21,7 +19,7 @@ before(() => {
   folder = childFolders[10] // Calendar
 })
 
-after(() => {
+afterAll(() => {
   pstFile.close()
 })
 
@@ -48,7 +46,7 @@ describe('PSTContact tests', () => {
     expect(contact.keyword).toEqual('')
     expect(contact.language).toEqual('')
     expect(contact.telexNumber).toEqual('')
-    expect(contact.note).to.contain('Never gonna let you down')
+    expect(contact.note).toContain('Never gonna let you down')
     expect(contact.companyMainPhoneNumber).toEqual('')
     expect(contact.location).toEqual('')
     expect(contact.mhsCommonName).toEqual('')
@@ -149,11 +147,11 @@ describe('PSTContact tests', () => {
     expect(contact.fax3EmailAddress).toEqual('')
     expect(contact.fax3OriginalDisplayName).toEqual('')
     expect(contact.freeBusyLocation).toEqual('')
-    expect(contact.birthday).is.null
-    expect(contact.anniversary).is.null
+    expect(contact.birthday).toBeFalsy()
+    expect(contact.anniversary).toBeFalsy()
     expect(contact.email1DisplayName).toEqual('Ed Pfromer (epfromer@gmail.com)')
     expect(contact.creationTime).toEqual(new Date('2018-03-05T20:27:06.017Z'))
     expect(contact.displayName).toEqual('Ed Pfromer')
-    expect(contact.bodyRTF).to.contain('ever gonna let you down')
+    expect(contact.bodyRTF).toContain('ever gonna let you down')
   })
 })

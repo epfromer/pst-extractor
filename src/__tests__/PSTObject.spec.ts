@@ -1,16 +1,14 @@
-import * as chai from 'chai'
 import { PSTFile } from '../PSTFile.class'
 import { PSTFolder } from '../PSTFolder.class'
 import { PSTMessage } from '../PSTMessage.class'
 const resolve = require('path').resolve
-const expect = chai.expect
 let pstFile: PSTFile
 
-before(() => {
+beforeAll(() => {
   pstFile = new PSTFile(resolve('./src/__tests__/testdata/enron.pst'))
 })
 
-after(() => {
+afterAll(() => {
   pstFile.close()
 })
 

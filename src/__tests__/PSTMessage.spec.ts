@@ -1,13 +1,11 @@
-import * as chai from 'chai'
 import { PSTFile } from '../PSTFile.class'
 import { PSTFolder } from '../PSTFolder.class'
 import { PSTMessage } from '../PSTMessage.class'
 const resolve = require('path').resolve
-const expect = chai.expect
 let pstFile: PSTFile
 let childFolders: PSTFolder[]
 
-before(() => {
+beforeAll(() => {
   pstFile = new PSTFile(resolve('./src/__tests__/testdata/enron.pst'))
 
   // get to this point in hierarchy
@@ -33,7 +31,7 @@ before(() => {
   childFolders = folder.getSubFolders()
 })
 
-after(() => {
+afterAll(() => {
   pstFile.close()
 })
 
@@ -59,7 +57,7 @@ describe('PSTMessage tests', () => {
     expect(msg.sentRepresentingEmailAddress).toEqual('Dennis.Lee@ENRON.com')
     expect(msg.displayTo).toEqual('Lindberg  Lorraine; Watson  Kimberly')
     let body = msg.body
-    expect(body).to.contain(
+    expect(body).toContain(
       'Mojave (Effective date 12/02/01) and Williams Field Services'
     )
     expect(body.length).toEqual(678)
@@ -68,7 +66,7 @@ describe('PSTMessage tests', () => {
     expect(msg.messageClass).toEqual('IPM.Note')
     expect(msg.displayTo).toEqual('Michelle Lokay (E-mail)')
     body = msg.body
-    expect(body).to.contain(
+    expect(body).toContain(
       'Per our earlier conversation, Burlington Resources agrees to purchase 20,000'
     )
     expect(body.length).toEqual(661)
@@ -78,7 +76,7 @@ describe('PSTMessage tests', () => {
     expect(msg.creationTime).toEqual(new Date('2009-05-11T19:17:11.999Z'))
     expect(msg.modificationTime).toEqual(new Date('2009-05-11T19:17:12.061Z'))
     expect(msg.importance).toEqual(0)
-    expect(msg.transportMessageHeaders).to.contain(
+    expect(msg.transportMessageHeaders).toContain(
       'date: Wed, 24 Oct 2001 10:07:37 -0700 (PDT) Wed, 24 Oct 2001 10:07:37 -0500\r\nM'
     )
     expect(msg.clientSubmitTime).toEqual(new Date('2001-10-24T17:07:37.000Z'))
@@ -164,9 +162,9 @@ describe('PSTMessage tests', () => {
     expect(msg.priority).toEqual(0)
     expect(msg.colorCategories).toEqual([])
     expect(msg.bodyHTML).toEqual('')
-    expect(msg.senderEntryId).to.not.be.null
+    expect(msg.senderEntryId).toBeTruthy()
     if (msg.senderEntryId) {
-      expect(msg.senderEntryId.toString()).to.contain('JReames@br-inc.com')
+      expect(msg.senderEntryId.toString()).toContain('JReames@br-inc.com')
     }
   })
 

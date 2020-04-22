@@ -1,16 +1,14 @@
-import * as chai from 'chai'
 import { PSTFile } from '../PSTFile.class'
 import { PSTFolder } from '../PSTFolder.class'
 import { PSTMessage } from '../PSTMessage.class'
 const resolve = require('path').resolve
-const expect = chai.expect
 let pstFile: PSTFile
 
-before(() => {
+beforeAll(() => {
   pstFile = new PSTFile(resolve('./src/__tests__/testdata/enron.pst'))
 })
 
-after(() => {
+afterAll(() => {
   pstFile.close()
 })
 
@@ -57,7 +55,7 @@ describe('PSTRecipient tests', () => {
     expect(msg.displayTo).toEqual('Lindberg  Lorraine; Watson  Kimberly')
 
     let recipient = msg.getRecipient(0)
-    expect(recipient).is.not.null
+    expect(recipient).toBeTruthy()
     if (recipient) {
       // Log.debug1(JSON.stringify(recipient, null, 2));
       expect(recipient.displayName).toEqual('Lindberg  Lorraine')
@@ -65,14 +63,14 @@ describe('PSTRecipient tests', () => {
     }
 
     recipient = msg.getRecipient(1)
-    expect(recipient).is.not.null
+    expect(recipient).toBeTruthy()
     if (recipient) {
       expect(recipient.displayName).toEqual('Watson  Kimberly')
       expect(recipient.smtpAddress).toEqual('Kimberly.Watson@ENRON.com')
     }
 
     recipient = msg.getRecipient(2)
-    expect(recipient).is.not.null
+    expect(recipient).toBeTruthy()
     if (recipient) {
       expect(recipient.displayName).toEqual('Lee  Dennis')
       expect(recipient.smtpAddress).toEqual('Dennis.Lee@ENRON.com')
@@ -87,7 +85,7 @@ describe('PSTRecipient tests', () => {
     expect(msg.displayTo).toEqual('Michelle Lokay (E-mail)')
 
     recipient = msg.getRecipient(0)
-    expect(recipient).is.not.null
+    expect(recipient).toBeTruthy()
     if (recipient) {
       // Log.debug1(JSON.stringify(recipient, null, 2));
       expect(recipient.displayName).toEqual('Michelle Lokay (E-mail)')
