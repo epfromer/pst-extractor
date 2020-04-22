@@ -14,22 +14,6 @@
     "test:coverage": "nyc --reporter=html mocha --watch-extensions ts --watch --opts mocha.opts",
     "test:jest": "jest"
   },
-  "nyc": {
-    "extension": [
-      ".ts",
-      ".tsx"
-    ],
-    "exclude": [
-      "**/*.d.ts",
-      "src/index.ts",
-      "coverage/prettify.js",
-      "coverage/sorter.js"
-    ],
-    "reporter": [
-      "html"
-    ],
-    "all": true
-  },
   "repository": "epfromer/pst-extractor",
   "author": "Ed Pfromer (epfromer@gmail.com)",
   "license": "MIT",

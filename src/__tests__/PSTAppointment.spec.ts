@@ -1,13 +1,11 @@
-import * as chai from 'chai'
 import { PSTFile } from '../PSTFile.class'
 import { PSTFolder } from '../PSTFolder.class'
 import { PSTAppointment } from '../PSTAppointment.class'
 const resolve = require('path').resolve
-const expect = chai.expect
 let pstFile: PSTFile
 let folder: PSTFolder
 
-before(() => {
+beforeAll(() => {
   pstFile = new PSTFile(
     resolve('./src/__tests__/testdata/mtnman1965@outlook.com.ost')
   )
@@ -21,7 +19,7 @@ before(() => {
   folder = childFolders[11] // Calendar
 })
 
-after(() => {
+afterAll(() => {
   pstFile.close()
 })
 
@@ -70,13 +68,13 @@ describe('PSTAppointment tests', () => {
     expect(appt.localeId).toEqual(1033)
     expect(appt.startTime).toEqual(new Date('2018-03-05T17:00:00.000Z'))
     expect(appt.endTime).toEqual(new Date('2018-03-05T18:00:00.000Z'))
-    expect(appt.showAsBusy).to.be.true
-    expect(appt.isRecurring).to.be.true
-    expect(appt.sendAsICAL).to.be.false
-    expect(appt.subType).to.be.false
-    expect(appt.isOnlineMeeting).to.be.false
-    expect(appt.appointmentCounterProposal).to.be.false
-    expect(appt.isSilent).to.be.false
+    expect(appt.showAsBusy).toBeTruthy()
+    expect(appt.isRecurring).toBeTruthy()
+    expect(appt.sendAsICAL).toBeFalsy()
+    expect(appt.subType).toBeFalsy()
+    expect(appt.isOnlineMeeting).toBeFalsy()
+    expect(appt.appointmentCounterProposal).toBeFalsy()
+    expect(appt.isSilent).toBeFalsy()
     expect(appt.recurrenceBase).toEqual(null)
     expect(appt.attendeeCriticalChange).toEqual(null)
   })

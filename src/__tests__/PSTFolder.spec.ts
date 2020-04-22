@@ -18,7 +18,7 @@ describe('PSTFolder tests', () => {
     const folder: PSTFolder = pstFile.getRootFolder()
     expect(folder).to.not.be.null
     expect(folder.subFolderCount).toEqual(3)
-    expect(folder.hasSubfolders).to.be.true
+    expect(folder.hasSubfolders).toBeTruthy()
   })
 
   // folder structure should look like:

@@ -33,7 +33,7 @@ describe('PSTAttachment tests', () => {
     const contact: PSTContact = folder.getNextChild()
     // Log.debug1(JSON.stringify(contact, null, 2));
     expect(contact.messageClass).toEqual('IPM.Contact')
-    expect(contact.hasAttachments).to.be.true
+    expect(contact.hasAttachments).toBeTruthy()
 
     // first attachment is contact picture
     let attachment: PSTAttachment = contact.getAttachment(0)
@@ -59,7 +59,7 @@ describe('PSTAttachment tests', () => {
     const task: PSTTask = folder.getNextChild()
     // Log.debug1(JSON.stringify(task, null, 2));
     expect(task.messageClass).toEqual('IPM.Task')
-    expect(task.hasAttachments).to.be.true
+    expect(task.hasAttachments).toBeTruthy()
     const attachment: PSTAttachment = task.getAttachment(0)
     // Log.debug1(JSON.stringify(attachment, null, 2));
     expect(attachment.size).toEqual(8447)
@@ -94,7 +94,7 @@ describe('PSTAttachment tests', () => {
     msg = folder.getNextChild()
 
     // Email: 2110308 - word attachment
-    expect(msg.hasAttachments).to.be.true
+    expect(msg.hasAttachments).toBeTruthy()
     const attachment: PSTAttachment = msg.getAttachment(0)
     // Log.debug1(JSON.stringify(attachment, null, 2));
     expect(attachment.size).toEqual(54044)
@@ -113,7 +113,7 @@ describe('PSTAttachment tests', () => {
     msg = folder.getNextChild()
 
     // Email: 2110724 - excel attachment
-    expect(msg.hasAttachments).to.be.true
+    expect(msg.hasAttachments).toBeTruthy()
     const attachment: PSTAttachment = msg.getAttachment(0)
     // Log.debug1(JSON.stringify(attachment, null, 2));
     expect(attachment.size).toEqual(31016)
@@ -133,7 +133,7 @@ describe('PSTAttachment tests', () => {
     msg = folder.getNextChild()
 
     // Email: 2111140 - never gonna give you up
-    expect(msg.hasAttachments).to.be.true
+    expect(msg.hasAttachments).toBeTruthy()
     const attachment: PSTAttachment = msg.getAttachment(0)
     // Log.debug1(JSON.stringify(attachment, null, 2));
     expect(attachment.size).toEqual(5020)

@@ -7,6 +7,6 @@
         "outDir": "./dist",
         "strict": true
     },
-    "include": ["src/**/*", "example/test.ts", "example/test-in-mem.ts", "example/test-min.ts"],
-    "exclude": ["node_modules"]
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "src/__tests__/*"]
 }

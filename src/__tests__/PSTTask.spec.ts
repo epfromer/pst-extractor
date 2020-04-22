@@ -36,8 +36,8 @@ describe('PSTTask tests', () => {
     // Log.debug1(JSON.stringify(task, null, 2));
     expect(task.messageClass).toEqual('IPM.Task')
     expect(task.subject).toEqual('fully loaded task')
-    expect(task.isTaskRecurring).to.be.true
-    expect(task.isTaskComplete).to.be.false
+    expect(task.isTaskRecurring).toBeTruthy()
+    expect(task.isTaskComplete).toBeFalsy()
     expect(task.taskOwner).toEqual('Mountain Man')
     expect(task.taskStatus).toEqual(1) // started
     expect(task.percentComplete).toEqual(0.75)
@@ -50,8 +50,8 @@ describe('PSTTask tests', () => {
     // Log.debug1(JSON.stringify(task, null, 2));
     expect(task.messageClass).toEqual('IPM.Task')
     expect(task.subject).toEqual('basic task')
-    expect(task.isTaskRecurring).to.be.false
-    expect(task.isTaskComplete).to.be.false
+    expect(task.isTaskRecurring).toBeFalsy()
+    expect(task.isTaskComplete).toBeFalsy()
     expect(task.taskOwner).toEqual('Mountain Man')
     expect(task.taskStatus).toEqual(0) // not started
     expect(task.bodyPrefix).to.contain('Vanilla task, not started')
@@ -66,8 +66,8 @@ describe('PSTTask tests', () => {
     expect(task.transportMessageHeaders).toEqual('')
     expect(task.taskAssigner).toEqual('')
     expect(task.taskLastUser).toEqual('')
-    expect(task.isTaskComplete).to.be.false
-    expect(task.isTaskRecurring).to.be.false
+    expect(task.isTaskComplete).toBeFalsy()
+    expect(task.isTaskRecurring).toBeFalsy()
     expect(task.taskDateCompleted).toEqual(null)
   })
 })
