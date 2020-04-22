@@ -7,6 +7,6 @@
         "outDir": "./dist",
         "strict": true
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*"],example/test-max.ts
     "exclude": ["node_modules", "src/__tests__/*"]
 }

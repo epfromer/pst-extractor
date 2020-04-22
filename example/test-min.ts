@@ -6,15 +6,29 @@ const resolve = require('path').resolve
 let depth = -1
 let col = 0
 
-const pstFile = new PSTFile(resolve('./testdata/enron.pst'))
-console.log(pstFile.getMessageStore().displayName)
-processFolder(pstFile.getRootFolder())
+/**
+ * Returns a string with visual indication of depth in tree.
+ * @param {number} depth
+ * @returns {string}
+ */
+function getDepth(depth: number): string {
+  let sdepth = ''
+  if (col > 0) {
+    col = 0
+    sdepth += '\n'
+  }
+  for (let x = 0; x < depth - 1; x++) {
+    sdepth += ' | '
+  }
+  sdepth += ' |- '
+  return sdepth
+}
 
 /**
  * Walk the folder tree recursively and process emails.
  * @param {PSTFolder} folder
  */
-function processFolder(folder: PSTFolder) {
+function processFolder(folder: PSTFolder): void {
   depth++
 
   // the root folder doesn't have a display name
@@ -24,8 +38,8 @@ function processFolder(folder: PSTFolder) {
 
   // go through the folders...
   if (folder.hasSubfolders) {
-    let childFolders: PSTFolder[] = folder.getSubFolders()
-    for (let childFolder of childFolders) {
+    const childFolders: PSTFolder[] = folder.getSubFolders()
+    for (const childFolder of childFolders) {
       processFolder(childFolder)
     }
   }
@@ -49,20 +63,6 @@ function processFolder(folder: PSTFolder) {
   depth--
 }
 
-/**
- * Returns a string with visual indication of depth in tree.
- * @param {number} depth
- * @returns {string}
- */
-function getDepth(depth: number): string {
-  let sdepth = ''
-  if (col > 0) {
-    col = 0
-    sdepth += '\n'
-  }
-  for (let x = 0; x < depth - 1; x++) {
-    sdepth += ' | '
-  }
-  sdepth += ' |- '
-  return sdepth
-}
+const pstFile = new PSTFile(resolve('./testdata/enron.pst'))
+console.log(pstFile.getMessageStore().displayName)
+processFolder(pstFile.getRootFolder())

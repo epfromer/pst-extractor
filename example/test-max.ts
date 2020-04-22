@@ -9,7 +9,6 @@ const topOutputFolder = '/media/sf_Outlook/pst-extractor/'
 let outputFolder = ''
 const saveToFS = false
 const displaySender = true
-const displayRecipients = true
 const displayBody = true
 const verbose = true
 let depth = -1
@@ -24,13 +23,13 @@ try {
   console.error(err)
 }
 
-let directoryListing = fs.readdirSync(pstFolder)
+const directoryListing = fs.readdirSync(pstFolder)
 directoryListing.forEach((filename) => {
   console.log(pstFolder + filename)
 
   // time for performance comparison to Java and improvement
   const start = Date.now()
-  let pstFile = new PSTFile(pstFolder + filename)
+  const pstFile = new PSTFile(pstFolder + filename)
 
   // make a sub folder for each PST
   try {
@@ -63,8 +62,8 @@ function processFolder(folder: PSTFolder) {
 
   // go through the folders...
   if (folder.hasSubfolders) {
-    let childFolders: PSTFolder[] = folder.getSubFolders()
-    for (let childFolder of childFolders) {
+    const childFolders: PSTFolder[] = folder.getSubFolders()
+    for (const childFolder of childFolders) {
       processFolder(childFolder)
     }
   }
@@ -87,10 +86,10 @@ function processFolder(folder: PSTFolder) {
       }
 
       // sender
-      let sender = getSender(email)
+      const sender = getSender(email)
 
       // recipients
-      let recipients = getRecipients(email)
+      const recipients = getRecipients(email)
 
       // display body?
       if (verbose && displayBody) {
