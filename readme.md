@@ -17,7 +17,9 @@ A spec from Microsoft on the PST file format is at https://msdn.microsoft.com/en
 ## Install
 
 ```npm install --save pst-extractor```
+
 or
+
 ```yarn add pst-extractor```
 
 ## Usage
