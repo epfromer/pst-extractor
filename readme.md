@@ -24,20 +24,23 @@ or
 
 Start with the example app to walk the PST and print out the folder structure to the console. Also, most of the major objects have Jest test specs which show how the object attributes can be accessed.
 
-```
+```bash
 cd example
 npm start
 ```
+
 or
-```
+
+```bash
 cd example
 yarn start
 ```
+
 This runs on a sample Enron dataset that you can replace with your own PST file.
 
 A simple script looks like this:
 
-```
+```javascript
 import { PSTMessage } from 'pst-extractor';
 import { PSTFile } from 'pst-extractor';
 import { PSTFolder } from 'pst-extractor';
@@ -103,8 +106,10 @@ function getDepth(depth: number): string {
     return sdepth;
 }
 ```
+
 and will generate the following output:
-```
+
+```text
 Personal folders
  |- Top of Personal Folders
  |  |- Deleted Items
