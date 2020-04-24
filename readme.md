@@ -4,7 +4,7 @@
 
 Extract objects from MS Outlook/Exchange PST files
 
-[![nodei.co](https://nodei.co/npm/pst-extractor.png?downloads=true&downloadRank=true&stars=true)](https://img.shields.io/npm/v/pst-extractor.svg)
+[![nodei.co](https://nodei.co/npm/pst-extractor.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/pst-extractor)
 
 ## Features
 
