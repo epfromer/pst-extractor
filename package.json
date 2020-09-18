@@ -1,6 +1,6 @@
 {
   "name": "pst-extractor",
-  "version": "1.6.1",
+  "version": "1.6.0",
   "description": "Extract objects from MS Outlook/Exchange PST files",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
