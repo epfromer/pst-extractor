@@ -32,16 +32,25 @@ export enum EndType {
   NeverEnd = 0x00002023,
 }
 
+export enum NthOccurrence {
+  First = 0x0001,
+  Second = 0x0002,
+  Third = 0x0003,
+  Fourth = 0x0004,
+  Last = 0x0005,
+}
+
 export class RecurrencePattern {
-  recurFrequency: RecurFrequency
-  patternType: PatternType
-  firstDateTime: Date
-  period: number
-  endType: EndType
-  occurrenceCount: number
-  firstDOW: number
-  startDate: Date
-  endDate: Date
+  public recurFrequency: RecurFrequency
+  public patternType: PatternType
+  public firstDateTime: Date
+  public period: number
+  public patternTypeSpecific
+  public endType: EndType
+  public occurrenceCount: number
+  public firstDOW: number
+  public startDate: Date
+  public endDate: Date
 
   constructor(private buffer: Buffer) {
     const bufferEnd = buffer.length
@@ -51,10 +60,12 @@ export class RecurrencePattern {
     this.patternType = this.readInt(OFFSETS.PatternType, 1)
     this.firstDateTime = winToJsDate(this.readInt(OFFSETS.FirstDateTime, 2))
     this.period = this.readInt(OFFSETS.Period, 2)
+    this.patternTypeSpecific = this.readPatternTypeSpecific(this.patternType)
 
     switch (this.patternType) {
       case PatternType.Week:
       case PatternType.Month:
+      case PatternType.MonthEnd:
         patternTypeOffset = 4
         break
       case PatternType.MonthNth:
@@ -78,6 +89,7 @@ export class RecurrencePattern {
       patternType: PatternType[this.patternType],
       firstDateTime: this.firstDateTime,
       period: this.period,
+      patternTypeSpecific: this.patternTypeSpecific,
       endType: EndType[this.endType],
       occurrenceCount: this.occurrenceCount,
       firstDOW: this.firstDOW,
@@ -94,8 +106,38 @@ export class RecurrencePattern {
         return this.buffer.readInt32LE(offset)
     }
   }
+
+  private readPatternTypeSpecific(type: PatternType) {
+    switch (type) {
+      case PatternType.Day:
+        return null
+      case PatternType.Week:
+        return readWeekByte(this.buffer.readInt8(OFFSETS.PatternTypeSpecific))
+      case PatternType.Month:
+      case PatternType.MonthEnd:
+        return this.readInt(OFFSETS.PatternTypeSpecific, 2)
+      case PatternType.MonthNth:
+        return {
+          days: readWeekByte(this.buffer.readInt8(OFFSETS.PatternTypeSpecific)),
+          nth: this.readInt(
+            OFFSETS.PatternTypeSpecific + 4,
+            2
+          ) as NthOccurrence,
+        }
+    }
+  }
 }
 
 function winToJsDate(dateInt: number): Date {
-  return new Date(dateInt * 60 * 1000 - 1.16444736e13)
+  return new Date(dateInt * 60 * 1000 - 1.16444736e13) // subtract milliseconds between 1601-01-01 and 1970-01-01
+}
+
+type WeekArray = boolean[] & { length: 7 }
+
+function readWeekByte(byte: number): WeekArray {
+  const weekArr = []
+  for (let i = 0; i < 7; ++i) {
+    weekArr.push(Boolean(byte & (1 << i)))
+  }
+  return weekArr as WeekArray
 }
