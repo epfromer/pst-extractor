@@ -40,6 +40,12 @@ export enum NthOccurrence {
   Last = 0x0005,
 }
 
+export type WeekSpecific = boolean[] & { length: 7 }
+export type MonthNthSpecific = {
+  weekdays: WeekSpecific
+  nth: NthOccurrence
+}
+
 export class RecurrencePattern {
   public recurFrequency: RecurFrequency
   public patternType: PatternType
@@ -107,7 +113,9 @@ export class RecurrencePattern {
     }
   }
 
-  private readPatternTypeSpecific(type: PatternType) {
+  private readPatternTypeSpecific(
+    type: PatternType
+  ): null | number | WeekSpecific | MonthNthSpecific {
     switch (type) {
       case PatternType.Day:
         return null
@@ -118,11 +126,10 @@ export class RecurrencePattern {
         return this.readInt(OFFSETS.PatternTypeSpecific, 2)
       case PatternType.MonthNth:
         return {
-          days: readWeekByte(this.buffer.readInt8(OFFSETS.PatternTypeSpecific)),
-          nth: this.readInt(
-            OFFSETS.PatternTypeSpecific + 4,
-            2
-          ) as NthOccurrence,
+          weekdays: readWeekByte(
+            this.buffer.readInt8(OFFSETS.PatternTypeSpecific)
+          ),
+          nth: this.readInt(OFFSETS.PatternTypeSpecific + 4, 2),
         }
     }
   }
@@ -132,12 +139,10 @@ function winToJsDate(dateInt: number): Date {
   return new Date(dateInt * 60 * 1000 - 1.16444736e13) // subtract milliseconds between 1601-01-01 and 1970-01-01
 }
 
-type WeekArray = boolean[] & { length: 7 }
-
-function readWeekByte(byte: number): WeekArray {
+function readWeekByte(byte: number): WeekSpecific {
   const weekArr = []
   for (let i = 0; i < 7; ++i) {
     weekArr.push(Boolean(byte & (1 << i)))
   }
-  return weekArr as WeekArray
+  return weekArr as WeekSpecific
 }
