@@ -5,6 +5,7 @@ import { PSTDescriptorItem } from './PSTDescriptorItem.class'
 import { PSTMessage } from './PSTMessage.class'
 import { PSTTableBC } from './PSTTableBC.class'
 import { PSTFile } from './PSTFile.class'
+import { RecurrencePattern } from './RecurrencePattern.class'
 
 export class PSTTask extends PSTMessage {
   /**
@@ -210,6 +211,35 @@ export class PSTTask extends PSTMessage {
     return this.getBooleanItem(
       this.pstFile.getNameToIdMapItem(
         OutlookProperties.PidLidTaskFRecurring,
+        PSTFile.PSETID_Task
+      )
+    )
+  }
+
+  /**
+   * https://docs.microsoft.com/en-us/office/client-developer/outlook/mapi/pidlidtaskrecurrence-canonical-property
+   * @type {RecurrencePattern}
+   * @memberof PSTTask
+   */
+  public get taskRecurrencePattern(): RecurrencePattern | null {
+    const recurrenceBLOB = this.getBinaryItem(
+      this.pstFile.getNameToIdMapItem(
+        OutlookProperties.PidLidTaskRecurrence,
+        PSTFile.PSETID_Task
+      )
+    )
+    return recurrenceBLOB && new RecurrencePattern(recurrenceBLOB)
+  }
+
+  /**
+   * https://docs.microsoft.com/en-us/office/client-developer/outlook/mapi/pidlidtaskdeadoccurrence-canonical-property
+   * @type {boolean}
+   * @memberof PSTTask
+   */
+  public get taskDeadOccurrence(): boolean {
+    return this.getBooleanItem(
+      this.pstFile.getNameToIdMapItem(
+        OutlookProperties.PidLidTaskDeadOccurrence,
         PSTFile.PSETID_Task
       )
     )
