@@ -8,3 +8,4 @@ mocha.opts
 contributing.md
 PST file format.pdf
 *.spec.ts
+*.log

@@ -4,8 +4,8 @@ import { PSTFile } from '../src/PSTFile.class'
 import { PSTFolder } from '../src/PSTFolder.class'
 import { PSTMessage } from '../src/PSTMessage.class'
 
-const pstFolder = '/home/ed/shared-drives/C:/outlook/'
-const topOutputFolder = '/media/sf_Outlook/pst-extractor/'
+const pstFolder = 'C:/github/outlook/'
+const topOutputFolder = 'D:/pst-extractor'
 let outputFolder = ''
 const saveToFS = false
 const displaySender = true
