@@ -16,7 +16,7 @@ beforeAll(() => {
   childFolders = folder.getSubFolders()
   folder = childFolders[4] // IPM_SUBTREE
   childFolders = folder.getSubFolders()
-  folder = childFolders[10] // Calendar
+  folder = childFolders[10] // Contacts
 })
 
 afterAll(() => {
