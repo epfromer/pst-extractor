@@ -9,7 +9,9 @@ const topOutputFolder = 'D:/pst-extractor'
 let outputFolder = ''
 const saveToFS = false
 const displaySender = true
-const displayBody = true
+const displayBody = false
+const displayBodyRTF = false
+const displayBodyHTML = true
 const verbose = true
 let depth = -1
 let col = 0
@@ -76,10 +78,10 @@ function processFolder(folder: PSTFolder) {
       if (verbose) {
         console.log(
           getDepth(depth) +
-            'Email: ' +
-            email.descriptorNodeId +
-            ' - ' +
-            email.subject
+          'Email: ' +
+          email.descriptorNodeId +
+          ' - ' +
+          email.subject
         )
       } else {
         printDot()
@@ -92,10 +94,9 @@ function processFolder(folder: PSTFolder) {
       const recipients = getRecipients(email)
 
       // display body?
-      if (verbose && displayBody) {
-        console.log(email.body)
-        console.log(email.bodyRTF)
-      }
+      if (displayBody) console.log(email.body)
+      if (displayBodyRTF) console.log(email.bodyRTF)
+      if (displayBodyHTML) console.log(email.bodyHTML.length)
 
       // save content to fs?
       if (saveToFS) {
