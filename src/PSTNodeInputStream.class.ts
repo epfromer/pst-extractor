@@ -106,20 +106,24 @@ export class PSTNodeInputStream {
         // and replace our contents with that. firstly, if we have blocks, use that as the length
         let outputStream: Buffer | null = null
         if (multiStreams) {
-          debugger
+          // debugger
 
-          // Log.debug1('list of all index items')
+          // console.log('list of all index items')
           // for (let i of this.indexItems) {
-          //     Log.debug1(i.toJSON());
+          //   console.log(i.toJSON());
           // }
-          // Log.debug1('----------------------')
-          // TODO - try this with different types of attachments, includin PDF
-          //  may be issue with zlib and PDF files. also, mutiple attachments.
+          // console.log('----------------------')
+
           for (const i of this.indexItems) {
             const inData: Buffer = Buffer.alloc(i.size)
             this.pstFile.seek(i.fileOffset)
             this.pstFile.readCompletely(inData)
-            outputStream = zlib.unzipSync(inData)
+            const buf = zlib.unzipSync(inData)
+            if (outputStream) {
+              outputStream = Buffer.concat([outputStream, buf])
+            } else {
+              outputStream = buf
+            }
           }
           this.indexItems = []
           this.skipPoints = []
@@ -147,7 +151,7 @@ export class PSTNodeInputStream {
     } catch (err) {
       console.error(
         'PSTNodeInputStream::detectZlib Unable to decompress reportedly compressed block\n' +
-          err
+        err
       )
       throw err
     }
@@ -521,9 +525,9 @@ export class PSTNodeInputStream {
     if (location.greaterThan(this.length)) {
       throw new Error(
         'PSTNodeInputStream::seek Attempt to seek past end of item! size = ' +
-          this.length +
-          ', seeking to:' +
-          location
+        this.length +
+        ', seeking to:' +
+        location
       )
     }
 

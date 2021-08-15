@@ -4,15 +4,18 @@ import { PSTFile } from '../src/PSTFile.class'
 import { PSTFolder } from '../src/PSTFolder.class'
 import { PSTMessage } from '../src/PSTMessage.class'
 
-const pstFolder = 'C:/github/outlook/'
-const topOutputFolder = 'D:/pst-extractor'
-let outputFolder = ''
-const saveToFS = false
+// TODO - location of pst files
+const pstFolder = 'C:/github/testdata/'
+// TODO - if saveToFS true, location to store extracted files
+const saveToFS = true
+const topOutputFolder = 'C:/github/testdataoutput/'
+
+const verbose = true
 const displaySender = true
 const displayBody = false
 const displayBodyRTF = false
 const displayBodyHTML = true
-const verbose = true
+let outputFolder = ''
 let depth = -1
 let col = 0
 

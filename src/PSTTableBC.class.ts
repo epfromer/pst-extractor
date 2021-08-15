@@ -39,7 +39,7 @@ export class PSTTableBC extends PSTTable {
       keyTableInfo.length / (this.sizeOfItemKey + this.sizeOfItemValue)
     )
     if (this.numberOfKeys == 0) {
-      debugger
+      // debugger
     }
 
     // Read the key table

@@ -63,6 +63,12 @@ function processFolder(folder: PSTFolder): void {
   depth--
 }
 
-const pstFile = new PSTFile(resolve('./testdata/enron.pst'))
-console.log(pstFile.getMessageStore().displayName)
-processFolder(pstFile.getRootFolder())
+console.log('======================= Enron =======================')
+const pstFile1 = new PSTFile(resolve('./testdata/enron.pst'))
+console.log(pstFile1.getMessageStore().displayName)
+processFolder(pstFile1.getRootFolder())
+
+console.log('======================= Repeating events, attachments =======================')
+const pstFile2 = new PSTFile(resolve('./testdata/pstextractortest@outlook.com.ost'))
+console.log(pstFile2.getMessageStore().displayName)
+processFolder(pstFile2.getRootFolder())
