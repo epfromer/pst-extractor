@@ -24,7 +24,7 @@ afterAll(() => {
 })
 
 describe('PSTAppointment tests', () => {
-  it('should have a Journal folder', () => {
+  it('should have a Calendar folder', () => {
     expect(folder.displayName).toEqual('Calendar')
   })
 

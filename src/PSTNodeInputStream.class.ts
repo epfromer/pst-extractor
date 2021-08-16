@@ -119,11 +119,7 @@ export class PSTNodeInputStream {
             this.pstFile.seek(i.fileOffset)
             this.pstFile.readCompletely(inData)
             const buf = zlib.unzipSync(inData)
-            if (outputStream) {
-              outputStream = Buffer.concat([outputStream, buf])
-            } else {
-              outputStream = buf
-            }
+            outputStream = outputStream ? Buffer.concat([outputStream, buf]) : buf
           }
           this.indexItems = []
           this.skipPoints = []
