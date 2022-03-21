@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 import { NodeInfo } from './NodeInfo.class'
 import { PSTNodeInputStream } from './PSTNodeInputStream.class'
 import { PSTDescriptorItem } from './PSTDescriptorItem.class'
@@ -11,7 +11,7 @@ export abstract class PSTTable {
   protected tableType: string
   protected tableTypeByte: number
   protected hidUserRoot: number
-  protected arrayBlocks: long[]
+  protected arrayBlocks: Long[]
 
   // info from the b5 header
   protected sizeOfItemKey: number
@@ -42,7 +42,7 @@ export abstract class PSTTable {
 
     // the next two bytes should be the table type (bSig)
     // 0xEC is HN (Heap-on-Node)
-    pstNodeInputStream.seek(long.ZERO)
+    pstNodeInputStream.seek(Long.ZERO)
     const headdata = Buffer.alloc(4)
     pstNodeInputStream.readCompletely(headdata)
     this.tableTypeByte = headdata[3]
@@ -63,7 +63,7 @@ export abstract class PSTTable {
     }
 
     this.hidUserRoot = pstNodeInputStream
-      .seekAndReadLong(long.fromValue(4), 4)
+      .seekAndReadLong(Long.fromValue(4), 4)
       .toNumber() // hidUserRoot
 
     // all tables should have a BTHHEADER at hnid == 0x20
@@ -73,16 +73,16 @@ export abstract class PSTTable {
     }
 
     headerNodeInfo.pstNodeInputStream.seek(
-      long.fromValue(headerNodeInfo.startOffset)
+      Long.fromValue(headerNodeInfo.startOffset)
     )
     let headerByte = headerNodeInfo.pstNodeInputStream.read() & 0xff
     if (headerByte != 0xb5) {
       headerNodeInfo.pstNodeInputStream.seek(
-        long.fromValue(headerNodeInfo.startOffset)
+        Long.fromValue(headerNodeInfo.startOffset)
       )
       headerByte = headerNodeInfo.pstNodeInputStream.read() & 0xff
       headerNodeInfo.pstNodeInputStream.seek(
-        long.fromValue(headerNodeInfo.startOffset)
+        Long.fromValue(headerNodeInfo.startOffset)
       )
       const tmp = Buffer.alloc(1024)
       headerNodeInfo.pstNodeInputStream.readCompletely(tmp)
@@ -96,7 +96,7 @@ export abstract class PSTTable {
     this.sizeOfItemValue = headerNodeInfo.pstNodeInputStream.read() & 0xff // Size of value in key table
     this.numberOfIndexLevels = headerNodeInfo.pstNodeInputStream.read() & 0xff
     this.hidRoot = headerNodeInfo
-      .seekAndReadLong(long.fromValue(4), 4)
+      .seekAndReadLong(Long.fromValue(4), 4)
       .toNumber()
   }
 
@@ -178,10 +178,10 @@ export abstract class PSTTable {
     // Get offset of HN page map
     let iHeapNodePageMap =
       this.pstNodeInputStream
-        .seekAndReadLong(long.fromValue(blockOffset), 2)
+        .seekAndReadLong(Long.fromValue(blockOffset), 2)
         .toNumber() + blockOffset
     const cAlloc = this.pstNodeInputStream
-      .seekAndReadLong(long.fromValue(iHeapNodePageMap), 2)
+      .seekAndReadLong(Long.fromValue(iHeapNodePageMap), 2)
       .toNumber()
     if (index >= cAlloc + 1) {
       throw new Error(
@@ -191,11 +191,11 @@ export abstract class PSTTable {
     iHeapNodePageMap += 2 * index + 2
     const start =
       this.pstNodeInputStream
-        .seekAndReadLong(long.fromValue(iHeapNodePageMap), 2)
+        .seekAndReadLong(Long.fromValue(iHeapNodePageMap), 2)
         .toNumber() + blockOffset
     const end =
       this.pstNodeInputStream
-        .seekAndReadLong(long.fromValue(iHeapNodePageMap + 2), 2)
+        .seekAndReadLong(Long.fromValue(iHeapNodePageMap + 2), 2)
         .toNumber() + blockOffset
 
     return new NodeInfo(start, end, this.pstNodeInputStream)

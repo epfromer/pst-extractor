@@ -1,4 +1,4 @@
-import * as long from 'long'
+import Long from 'long'
 import { PSTFile } from './PSTFile.class'
 import { PSTUtil } from './PSTUtil.class'
 
@@ -16,13 +16,13 @@ export class DescriptorIndexNode {
     return this._parentDescriptorIndexIdentifier
   }
 
-  private _localDescriptorsOffsetIndexIdentifier: long
-  public get localDescriptorsOffsetIndexIdentifier(): long {
+  private _localDescriptorsOffsetIndexIdentifier: Long
+  public get localDescriptorsOffsetIndexIdentifier(): Long {
     return this._localDescriptorsOffsetIndexIdentifier
   }
 
-  private _dataOffsetIndexIdentifier: long
-  public get dataOffsetIndexIdentifier(): long {
+  private _dataOffsetIndexIdentifier: Long
+  public get dataOffsetIndexIdentifier(): Long {
     return this._dataOffsetIndexIdentifier
   }
 

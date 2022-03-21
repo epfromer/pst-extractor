@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 import { OutlookProperties } from './OutlookProperties'
 import { PSTDescriptorItem } from './PSTDescriptorItem.class'
 import { PSTFile } from './PSTFile.class'
@@ -108,7 +108,7 @@ export class PSTAttachment extends PSTObject {
             descriptorItemNested.subNodeOffsetIndexIdentifier > 0
           ) {
             this.localDescriptorItems = this.pstFile.getPSTDescriptorItems(
-              long.fromNumber(descriptorItemNested.subNodeOffsetIndexIdentifier)
+              Long.fromNumber(descriptorItemNested.subNodeOffsetIndexIdentifier)
             )
           }
         }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 import { PSTDescriptorItem } from './PSTDescriptorItem.class'
 import { PSTNodeInputStream } from './PSTNodeInputStream.class'
 import { PSTTable } from './PSTTable.class'
@@ -32,7 +32,7 @@ export class PSTTableBC extends PSTTable {
 
     const keyTableInfo: Buffer = Buffer.alloc(keyTableInfoNodeInfo.length())
     keyTableInfoNodeInfo.pstNodeInputStream.seek(
-      long.fromValue(keyTableInfoNodeInfo.startOffset)
+      Long.fromValue(keyTableInfoNodeInfo.startOffset)
     )
     keyTableInfoNodeInfo.pstNodeInputStream.readCompletely(keyTableInfo)
     this.numberOfKeys = Math.trunc(
@@ -90,7 +90,7 @@ export class PSTTableBC extends PSTTable {
             // Make a copy of the data
             const nodeInfo = Buffer.alloc(nodeInfoNodeInfo.length())
             nodeInfoNodeInfo.pstNodeInputStream.seek(
-              long.fromValue(nodeInfoNodeInfo.startOffset)
+              Long.fromValue(nodeInfoNodeInfo.startOffset)
             )
             nodeInfoNodeInfo.pstNodeInputStream.readCompletely(nodeInfo)
             item.data = nodeInfo // should be new array, so just use it

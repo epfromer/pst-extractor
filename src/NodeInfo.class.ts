@@ -1,4 +1,4 @@
-import * as long from 'long'
+import Long from 'long'
 import { PSTNodeInputStream } from './PSTNodeInputStream.class'
 
 export class NodeInfo {
@@ -50,7 +50,7 @@ export class NodeInfo {
    * @returns {long}
    * @memberof NodeInfo
    */
-  public seekAndReadLong(offset: long, length: number): long {
+  public seekAndReadLong(offset: Long, length: number): Long {
     return this.pstNodeInputStream.seekAndReadLong(
       offset.add(this.startOffset),
       length

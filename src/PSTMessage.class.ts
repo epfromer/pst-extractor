@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 import { DescriptorIndexNode } from './DescriptorIndexNode.class'
 import { OutlookProperties } from './OutlookProperties'
 import { PSTDescriptorItem } from './PSTDescriptorItem.class'
@@ -206,7 +206,7 @@ export class PSTMessage extends PSTObject {
         let descriptorItems: Map<number, PSTDescriptorItem> | null = new Map()
         if (item && item.subNodeOffsetIndexIdentifier > 0) {
           descriptorItems = this.pstFile.getPSTDescriptorItems(
-            long.fromNumber(item.subNodeOffsetIndexIdentifier)
+            Long.fromNumber(item.subNodeOffsetIndexIdentifier)
           )
         }
         this.recipientTable = new PSTTable7C(
@@ -471,7 +471,7 @@ export class PSTMessage extends PSTObject {
       let descriptorItems: Map<number, PSTDescriptorItem> = new Map()
       if (item && item.subNodeOffsetIndexIdentifier > 0) {
         descriptorItems = this.pstFile.getPSTDescriptorItems(
-          long.fromValue(item.subNodeOffsetIndexIdentifier)
+          Long.fromValue(item.subNodeOffsetIndexIdentifier)
         )
       }
       this.attachmentTable = new PSTTable7C(
@@ -554,7 +554,7 @@ export class PSTMessage extends PSTObject {
       let attachmentDescriptorItems: Map<number, PSTDescriptorItem> = new Map()
       if (descriptorItem.subNodeOffsetIndexIdentifier > 0) {
         attachmentDescriptorItems = this.pstFile.getPSTDescriptorItems(
-          long.fromNumber(descriptorItem.subNodeOffsetIndexIdentifier)
+          Long.fromNumber(descriptorItem.subNodeOffsetIndexIdentifier)
         )
       }
       return new PSTAttachment(
@@ -1008,7 +1008,7 @@ export class PSTMessage extends PSTObject {
    * @type {long}
    * @memberof PSTMessage
    */
-  public get messageSize(): long {
+  public get messageSize(): Long {
     return this.getLongItem(OutlookProperties.PR_MESSAGE_SIZE)
   }
 

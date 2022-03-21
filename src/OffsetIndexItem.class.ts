@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 import { PSTFile } from './PSTFile.class'
 import { PSTUtil } from './PSTUtil.class'
 
 export class OffsetIndexItem {
-  private _indexIdentifier: long
-  public get indexIdentifier(): long {
+  private _indexIdentifier: Long
+  public get indexIdentifier(): Long {
     return this._indexIdentifier
   }
 
-  private _fileOffset: long
-  public get fileOffset(): long {
+  private _fileOffset: Long
+  public get fileOffset(): Long {
     return this._fileOffset
   }
 
@@ -19,7 +19,7 @@ export class OffsetIndexItem {
     return this._size
   }
 
-  private cRef: long
+  private cRef: Long
 
   /**
    * Creates an instance of OffsetIndexItem, part of the node table.

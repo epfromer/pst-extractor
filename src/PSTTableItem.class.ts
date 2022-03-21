@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 import { PSTUtil } from './PSTUtil.class'
 
 // Generic table item
@@ -17,11 +17,11 @@ export class PSTTableItem {
     return this._itemIndex
   }
 
-  private _entryType: long = long.ZERO
+  private _entryType: Long = Long.ZERO
   public set entryType(val) {
     this._entryType = val
   }
-  public get entryType(): long {
+  public get entryType(): Long {
     return this._entryType
   }
 

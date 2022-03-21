@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 import { PSTNodeInputStream } from './PSTNodeInputStream.class'
 import { PSTUtil } from './PSTUtil.class'
 import { PSTFile } from './PSTFile.class'
@@ -84,7 +84,7 @@ export class PSTDescriptorItem {
     }
 
     const pstNodeInputStream: PSTNodeInputStream = this._pstFile.readLeaf(
-      long.fromValue(this.offsetIndexIdentifier)
+      Long.fromValue(this.offsetIndexIdentifier)
     )
     const out = Buffer.alloc(pstNodeInputStream.length.toNumber())
     pstNodeInputStream.readCompletely(out)
@@ -103,8 +103,8 @@ export class PSTDescriptorItem {
     if (this.dataBlockOffsets != null) {
       return this.dataBlockOffsets
     }
-    const offsets: long[] = this._pstFile
-      .readLeaf(long.fromNumber(this.offsetIndexIdentifier))
+    const offsets: Long[] = this._pstFile
+      .readLeaf(Long.fromNumber(this.offsetIndexIdentifier))
       .getBlockOffsets()
     const offsetsOut: number[] = []
     for (let x = 0; x < offsets.length; x++) {
@@ -121,7 +121,7 @@ export class PSTDescriptorItem {
    */
   public get dataSize(): number {
     return this._pstFile.getLeafSize(
-      long.fromNumber(this.offsetIndexIdentifier)
+      Long.fromNumber(this.offsetIndexIdentifier)
     )
   }
 

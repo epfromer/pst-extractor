@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 import { DescriptorIndexNode } from './DescriptorIndexNode.class'
 import { OutlookProperties } from './OutlookProperties'
 import { PSTDescriptorItem } from './PSTDescriptorItem.class'
@@ -66,7 +66,7 @@ export class PSTFolder extends PSTObject {
             output.push(
               PSTUtil.detectAndLoadPSTObject(
                 this.pstFile,
-                long.fromNumber(item.entryValueReference)
+                Long.fromNumber(item.entryValueReference)
               )
             )
           }
@@ -100,7 +100,7 @@ export class PSTFolder extends PSTObject {
       )
     }
 
-    const folderDescriptorIndex: long = long.fromValue(
+    const folderDescriptorIndex: Long = Long.fromValue(
       this.descriptorIndexNode.descriptorIdentifier + 11
     )
     try {
@@ -152,7 +152,7 @@ export class PSTFolder extends PSTObject {
       const folderDescriptorIndex =
         this.descriptorIndexNode.descriptorIdentifier + 12
       const folderDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(
-        long.fromNumber(folderDescriptorIndex)
+        Long.fromNumber(folderDescriptorIndex)
       )
       let tmp = undefined
       if (
@@ -220,7 +220,7 @@ export class PSTFolder extends PSTObject {
       }
 
       const childDescriptor = this.pstFile.getDescriptorIndexNode(
-        long.fromNumber(emailRow.entryValueReference)
+        Long.fromNumber(emailRow.entryValueReference)
       )
       const child = PSTUtil.detectAndLoadPSTObject(
         this.pstFile,

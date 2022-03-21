@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import * as long from 'long'
+import Long from 'long'
 import { NodeInfo } from './NodeInfo.class'
 import { PSTDescriptorItem } from './PSTDescriptorItem.class'
 import { PSTFile } from './PSTFile.class'
@@ -51,25 +51,25 @@ export class PSTTable7C extends PSTTable {
     // get the TCINFO header information
     let offset = 0
     this.numColumns = tcHeaderNode
-      .seekAndReadLong(long.fromNumber(offset + 1), 1)
+      .seekAndReadLong(Long.fromNumber(offset + 1), 1)
       .toNumber()
     const TCI_4b: number = tcHeaderNode
-      .seekAndReadLong(long.fromNumber(offset + 2), 2)
+      .seekAndReadLong(Long.fromNumber(offset + 2), 2)
       .toNumber()
     const TCI_2b: number = tcHeaderNode
-      .seekAndReadLong(long.fromNumber(offset + 4), 2)
+      .seekAndReadLong(Long.fromNumber(offset + 4), 2)
       .toNumber()
     this.TCI_1b = tcHeaderNode
-      .seekAndReadLong(long.fromNumber(offset + 6), 2)
+      .seekAndReadLong(Long.fromNumber(offset + 6), 2)
       .toNumber()
     this.TCI_bm = tcHeaderNode
-      .seekAndReadLong(long.fromNumber(offset + 8), 2)
+      .seekAndReadLong(Long.fromNumber(offset + 8), 2)
       .toNumber()
     const hidRowIndex: number = tcHeaderNode
-      .seekAndReadLong(long.fromNumber(offset + 10), 4)
+      .seekAndReadLong(Long.fromNumber(offset + 10), 4)
       .toNumber()
     const hnidRows: number = tcHeaderNode
-      .seekAndReadLong(long.fromNumber(offset + 14), 4)
+      .seekAndReadLong(Long.fromNumber(offset + 14), 4)
       .toNumber()
 
     // 22... column descriptors
@@ -101,11 +101,11 @@ export class PSTTable7C extends PSTTable {
     offset = 0
     for (let x = 0; x < this.numberOfKeys; x++) {
       const context = keyTableInfo
-        .seekAndReadLong(long.fromNumber(offset), this.sizeOfItemKey)
+        .seekAndReadLong(Long.fromNumber(offset), this.sizeOfItemKey)
         .toNumber()
       offset += this.sizeOfItemKey
       const rowIndex = keyTableInfo
-        .seekAndReadLong(long.fromNumber(offset), this.sizeOfItemValue)
+        .seekAndReadLong(Long.fromNumber(offset), this.sizeOfItemValue)
         .toNumber()
       offset += this.sizeOfItemValue
       this.keyMap.set(context, rowIndex)
@@ -213,13 +213,13 @@ export class PSTTable7C extends PSTTable {
       }
       const bitmap = Buffer.alloc((this.numColumns + 7) / 8)
       this.rowNodeInfo.pstNodeInputStream.seek(
-        long.fromNumber(
+        Long.fromNumber(
           this.rowNodeInfo.startOffset + currentValueArrayStart + this.TCI_1b
         )
       )
       this.rowNodeInfo.pstNodeInputStream.readCompletely(bitmap)
       const id = this.rowNodeInfo.seekAndReadLong(
-        long.fromNumber(currentValueArrayStart),
+        Long.fromNumber(currentValueArrayStart),
         4
       )
 
@@ -227,7 +227,7 @@ export class PSTTable7C extends PSTTable {
       let item: PSTTableItem = new PSTTableItem()
       item.itemIndex = -1
       item.entryValueType = 3
-      item.entryType = long.fromNumber(0x67f2)
+      item.entryType = Long.fromNumber(0x67f2)
       item.entryValueReference = id.toNumber()
       item.isExternalValueReference = true
       currentItem.set(item.entryType.toNumber(), item)
@@ -250,7 +250,7 @@ export class PSTTable7C extends PSTTable {
         item = new PSTTableItem()
         item.itemIndex = col
         item.entryValueType = this.columnDescriptors[col].type
-        item.entryType = long.fromNumber(this.columnDescriptors[col].id)
+        item.entryType = Long.fromNumber(this.columnDescriptors[col].id)
         item.entryValueReference = 0
 
         switch (this.columnDescriptors[col].cbData) {
@@ -258,7 +258,7 @@ export class PSTTable7C extends PSTTable {
             item.entryValueReference =
               this.rowNodeInfo
                 .seekAndReadLong(
-                  long.fromNumber(
+                  Long.fromNumber(
                     currentValueArrayStart + this.columnDescriptors[col].ibData
                   ),
                   1
@@ -271,7 +271,7 @@ export class PSTTable7C extends PSTTable {
             item.entryValueReference =
               this.rowNodeInfo
                 .seekAndReadLong(
-                  long.fromNumber(
+                  Long.fromNumber(
                     currentValueArrayStart + this.columnDescriptors[col].ibData
                   ),
                   2
@@ -283,7 +283,7 @@ export class PSTTable7C extends PSTTable {
           case 8: // 8 byte data
             item.data = Buffer.alloc(8)
             this.rowNodeInfo.pstNodeInputStream.seek(
-              long.fromNumber(
+              Long.fromNumber(
                 this.rowNodeInfo.startOffset +
                   currentValueArrayStart +
                   this.columnDescriptors[col].ibData
@@ -296,7 +296,7 @@ export class PSTTable7C extends PSTTable {
             // Four byte data
             item.entryValueReference = this.rowNodeInfo
               .seekAndReadLong(
-                long.fromNumber(
+                Long.fromNumber(
                   currentValueArrayStart + this.columnDescriptors[col].ibData
                 ),
                 4
@@ -327,7 +327,7 @@ export class PSTTable7C extends PSTTable {
               if (entryInfo) {
                 item.data = Buffer.alloc(entryInfo.length())
                 entryInfo.pstNodeInputStream.seek(
-                  long.fromNumber(entryInfo.startOffset)
+                  Long.fromNumber(entryInfo.startOffset)
                 )
                 entryInfo.pstNodeInputStream.readCompletely(item.data)
               }

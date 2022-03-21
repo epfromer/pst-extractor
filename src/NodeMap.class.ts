@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 
 /**
  * Stores node names (both alpha and numeric) in node maps for quick lookup.
@@ -8,7 +8,7 @@ import * as long from 'long'
  */
 export class NodeMap {
   private nameToId: Map<string, number> = new Map()
-  private idToNumericName: Map<number, long> = new Map()
+  private idToNumericName: Map<number, Long> = new Map()
   private idToStringName: Map<number, string> = new Map()
 
   /**
@@ -61,7 +61,7 @@ export class NodeMap {
    * @returns {long}
    * @memberof NodeMap
    */
-  public getNumericName(propId: number): long | undefined {
+  public getNumericName(propId: number): Long | undefined {
     const lkey = this.idToNumericName.get(propId)
     if (!lkey) {
       // console.log("NodeMap::getNumericName Name to Id mapping not found, propId = " + propId);
@@ -69,8 +69,8 @@ export class NodeMap {
     return lkey
   }
 
-  private transformKey(key: number, idx: number): long {
-    let lidx = long.fromNumber(idx)
+  private transformKey(key: number, idx: number): Long {
+    let lidx = Long.fromNumber(idx)
     lidx = lidx.shiftLeft(32)
     lidx = lidx.or(key)
     return lidx

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 import * as zlib from 'zlib'
 import { PSTDescriptorItem } from './PSTDescriptorItem.class'
 import { PSTUtil } from './PSTUtil.class'
@@ -7,17 +7,17 @@ import { OffsetIndexItem } from './OffsetIndexItem.class'
 import { PSTFile } from './PSTFile.class'
 
 export class PSTNodeInputStream {
-  private skipPoints: long[] = []
+  private skipPoints: Long[] = []
   private indexItems: OffsetIndexItem[] = []
   private currentBlock = 0
   private allData: Buffer | null = null
   private isZlib = false
 
-  private _currentLocation: long = long.ZERO
-  private get currentLocation(): long {
+  private _currentLocation: Long = Long.ZERO
+  private get currentLocation(): Long {
     return this._currentLocation
   }
-  private set currentLocation(loc: long) {
+  private set currentLocation(loc: Long) {
     this._currentLocation = loc
   }
 
@@ -26,8 +26,8 @@ export class PSTNodeInputStream {
     return this._pstFile
   }
 
-  private _length: long = long.ZERO
-  public get length(): long {
+  private _length: Long = Long.ZERO
+  public get length(): Long {
     return this._length
   }
 
@@ -65,11 +65,11 @@ export class PSTNodeInputStream {
         pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE
       // we want to get the first block of data and see what we are dealing with
       this.loadFromOffsetItem(
-        pstFile.getOffsetIndexNode(long.fromNumber(arg.offsetIndexIdentifier))
+        pstFile.getOffsetIndexNode(Long.fromNumber(arg.offsetIndexIdentifier))
       )
     } else if (arg instanceof Buffer) {
       this.allData = arg
-      this._length = long.fromNumber(this.allData.length)
+      this._length = Long.fromNumber(this.allData.length)
       if (encrypted != undefined) {
         this._encrypted = encrypted
       } else {
@@ -78,7 +78,7 @@ export class PSTNodeInputStream {
       }
     }
     this.currentBlock = 0
-    this.currentLocation = long.ZERO
+    this.currentLocation = Long.ZERO
     this.detectZlib()
   }
 
@@ -132,18 +132,18 @@ export class PSTNodeInputStream {
             }
           }
           const inData: Buffer = Buffer.alloc(compressedLength)
-          this.seek(long.ZERO)
+          this.seek(Long.ZERO)
           this.readCompletely(inData)
           outputStream = zlib.unzipSync(inData)
         }
         this.allData = outputStream
-        this.currentLocation = long.ZERO
+        this.currentLocation = Long.ZERO
         this.currentBlock = 0
         this._length = this.allData
-          ? long.fromNumber(this.allData.length)
-          : long.ZERO
+          ? Long.fromNumber(this.allData.length)
+          : Long.ZERO
       }
-      this.seek(long.ZERO)
+      this.seek(Long.ZERO)
     } catch (err) {
       console.error(
         'PSTNodeInputStream::detectZlib Unable to decompress reportedly compressed block\n' +
@@ -190,7 +190,7 @@ export class PSTNodeInputStream {
       this._encrypted = false
     }
     this.allData = data
-    this._length = long.fromValue(this.allData.length)
+    this._length = Long.fromValue(this.allData.length)
   }
 
   /**
@@ -249,7 +249,7 @@ export class PSTNodeInputStream {
         // get the details in this block and add it to the list
         const offsetItem = this.pstFile.getOffsetIndexNode(bid)
         this.indexItems.push(offsetItem)
-        this.skipPoints.push(long.fromValue(this.currentLocation))
+        this.skipPoints.push(Long.fromValue(this.currentLocation))
         this.currentLocation = this.currentLocation.add(offsetItem.size)
         offset += arraySize
       }
@@ -488,7 +488,7 @@ export class PSTNodeInputStream {
    */
   public reset(): void {
     this.currentBlock = 0
-    this._currentLocation = long.ZERO
+    this._currentLocation = Long.ZERO
   }
 
   /**
@@ -496,14 +496,14 @@ export class PSTNodeInputStream {
    * @returns {long[]}
    * @memberof PSTNodeInputStream
    */
-  public getBlockOffsets(): long[] {
-    const output: long[] = []
+  public getBlockOffsets(): Long[] {
+    const output: Long[] = []
     if (this.skipPoints.length === 0) {
-      const len = long.fromValue(this.length)
+      const len = Long.fromValue(this.length)
       output.push(len)
     } else {
       for (let x = 0; x < this.skipPoints.length; x++) {
-        const size = long.fromValue(this.indexItems[x].size)
+        const size = Long.fromValue(this.indexItems[x].size)
         output.push(this.skipPoints[x].add(size))
       }
     }
@@ -516,7 +516,7 @@ export class PSTNodeInputStream {
    * @returns
    * @memberof PSTNodeInputStream
    */
-  public seek(location: long): void {
+  public seek(location: Long): void {
     // not past the end!
     if (location.greaterThan(this.length)) {
       throw new Error(
@@ -533,7 +533,7 @@ export class PSTNodeInputStream {
     }
 
     // get us to the right block
-    let skipPoint: long = long.ZERO
+    let skipPoint: Long = Long.ZERO
     this.currentBlock = 0
     if (this.allData == null) {
       skipPoint = this.skipPoints[this.currentBlock + 1]
@@ -554,7 +554,7 @@ export class PSTNodeInputStream {
 
     if (this.allData == null) {
       const blockStart = this.indexItems[this.currentBlock].fileOffset
-      const newFilePos: long = blockStart.add(location).subtract(skipPoint)
+      const newFilePos: Long = blockStart.add(location).subtract(skipPoint)
       this.pstFile.seek(newFilePos)
     }
   }
@@ -566,7 +566,7 @@ export class PSTNodeInputStream {
    * @returns {long}
    * @memberof PSTNodeInputStream
    */
-  public seekAndReadLong(location: long, bytes: number): long {
+  public seekAndReadLong(location: Long, bytes: number): Long {
     this.seek(location)
     const buffer = Buffer.alloc(bytes)
     this.readCompletely(buffer)

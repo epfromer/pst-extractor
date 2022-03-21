@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 import { NodeInfo } from './NodeInfo.class'
 
 export class ColumnDescriptor {
@@ -35,12 +35,12 @@ export class ColumnDescriptor {
    * @memberof ColumnDescriptor
    */
   constructor(nodeInfo: NodeInfo, offset: number) {
-    this._type = nodeInfo.seekAndReadLong(long.fromValue(offset), 2).toNumber() // & 0xFFFF;
+    this._type = nodeInfo.seekAndReadLong(Long.fromValue(offset), 2).toNumber() // & 0xFFFF;
     this._id = nodeInfo
-      .seekAndReadLong(long.fromValue(offset + 2), 2)
+      .seekAndReadLong(Long.fromValue(offset + 2), 2)
       .toNumber() // & 0xFFFF;
     this._ibData = nodeInfo
-      .seekAndReadLong(long.fromValue(offset + 4), 2)
+      .seekAndReadLong(Long.fromValue(offset + 4), 2)
       .toNumber() // & 0xFFFF;
     this._cbData = nodeInfo.pstNodeInputStream.read() // & 0xFFFF;
     this._iBit = nodeInfo.pstNodeInputStream.read() // & 0xFFFF;

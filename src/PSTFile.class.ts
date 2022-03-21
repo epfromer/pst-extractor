@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import * as long from 'long'
+import Long from 'long'
 import { DescriptorIndexNode } from './DescriptorIndexNode.class'
 import { OffsetIndexItem } from './OffsetIndexItem.class'
 import { PSTDescriptorItem } from './PSTDescriptorItem.class'
@@ -165,7 +165,7 @@ export class PSTFile {
    */
   private processNameToIDMap() {
     const nameToIdMapDescriptorNode = this.getDescriptorIndexNode(
-      long.fromNumber(97)
+      Long.fromNumber(97)
     )
 
     // get the descriptors if we have them
@@ -198,25 +198,25 @@ export class PSTFile {
     const guidIndexes: number[] = []
     let offset = 0
     for (let i = 0; i < nGuids; ++i) {
-      let leftQuad: long = PSTUtil.convertLittleEndianBytesToLong(
+      let leftQuad: Long = PSTUtil.convertLittleEndianBytesToLong(
         guids,
         offset,
         offset + 4
       )
       leftQuad = leftQuad.shiftLeft(32)
-      let midQuad: long = PSTUtil.convertLittleEndianBytesToLong(
+      let midQuad: Long = PSTUtil.convertLittleEndianBytesToLong(
         guids,
         offset + 4,
         offset + 6
       )
       midQuad = midQuad.shiftLeft(16)
-      const rightQuad: long = PSTUtil.convertLittleEndianBytesToLong(
+      const rightQuad: Long = PSTUtil.convertLittleEndianBytesToLong(
         guids,
         offset + 6,
         offset + 8
       )
-      const mostSigBits: long = leftQuad.or(midQuad).or(rightQuad)
-      const leastSigBits: long = PSTUtil.convertBigEndianBytesToLong(
+      const mostSigBits: Long = leftQuad.or(midQuad).or(rightQuad)
+      const leastSigBits: Long = PSTUtil.convertBigEndianBytesToLong(
         guids,
         offset + 8,
         offset + 16
@@ -392,7 +392,7 @@ export class PSTFile {
    * @returns {long}
    * @memberof PSTFile
    */
-  public static getNameToIdMapKey(propId: number): long | undefined {
+  public static getNameToIdMapKey(propId: number): Long | undefined {
     return PSTFile.nodeMap.getNumericName(propId)
   }
 
@@ -404,7 +404,7 @@ export class PSTFile {
    */
   public getMessageStore(): PSTMessageStore {
     const messageStoreDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(
-      long.fromNumber(PSTFile.MESSAGE_STORE_DESCRIPTOR_IDENTIFIER)
+      Long.fromNumber(PSTFile.MESSAGE_STORE_DESCRIPTOR_IDENTIFIER)
     )
     return new PSTMessageStore(this, messageStoreDescriptor)
   }
@@ -416,7 +416,7 @@ export class PSTFile {
    */
   public getRootFolder(): PSTFolder {
     const rootFolderDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(
-      long.fromValue(PSTFile.ROOT_FOLDER_DESCRIPTOR_IDENTIFIER)
+      Long.fromValue(PSTFile.ROOT_FOLDER_DESCRIPTOR_IDENTIFIER)
     )
     const output: PSTFolder = new PSTFolder(this, rootFolderDescriptor)
     return output
@@ -428,7 +428,7 @@ export class PSTFile {
    * @returns {PSTNodeInputStream}
    * @memberof PSTFile
    */
-  public readLeaf(bid: long): PSTNodeInputStream {
+  public readLeaf(bid: Long): PSTNodeInputStream {
     // get the index node for the descriptor index
     const offsetItem = this.getOffsetIndexNode(bid)
     return new PSTNodeInputStream(this, offsetItem)
@@ -440,7 +440,7 @@ export class PSTFile {
    * @returns {number}
    * @memberof PSTFile
    */
-  public getLeafSize(bid: long): number {
+  public getLeafSize(bid: Long): number {
     const offsetItem: OffsetIndexItem = this.getOffsetIndexNode(bid)
 
     // Internal block?
@@ -465,8 +465,8 @@ export class PSTFile {
    * @returns {long}
    * @memberof PSTFile
    */
-  private extractLEFileOffset(startOffset: long): long {
-    let offset: long = long.ZERO
+  private extractLEFileOffset(startOffset: Long): Long {
+    let offset: Long = Long.ZERO
     if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
       this.seek(startOffset)
       const buffer = Buffer.alloc(4)
@@ -501,20 +501,20 @@ export class PSTFile {
    * @returns {Buffer}
    * @memberof PSTFile
    */
-  private findBtreeItem(index: long, descTree: boolean): Buffer {
-    let btreeStartOffset: long
+  private findBtreeItem(index: Long, descTree: boolean): Buffer {
+    let btreeStartOffset: Long
     let fileTypeAdjustment: number
 
     // first find the starting point for the offset index
     if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
-      btreeStartOffset = this.extractLEFileOffset(long.fromValue(196))
+      btreeStartOffset = this.extractLEFileOffset(Long.fromValue(196))
       if (descTree) {
-        btreeStartOffset = this.extractLEFileOffset(long.fromValue(188))
+        btreeStartOffset = this.extractLEFileOffset(Long.fromValue(188))
       }
     } else {
-      btreeStartOffset = this.extractLEFileOffset(long.fromValue(240))
+      btreeStartOffset = this.extractLEFileOffset(Long.fromValue(240))
       if (descTree) {
-        btreeStartOffset = this.extractLEFileOffset(long.fromValue(224))
+        btreeStartOffset = this.extractLEFileOffset(Long.fromValue(224))
       }
     }
 
@@ -706,7 +706,7 @@ export class PSTFile {
    * @returns {DescriptorIndexNode}
    * @memberof PSTFile
    */
-  public getDescriptorIndexNode(id: long): DescriptorIndexNode {
+  public getDescriptorIndexNode(id: Long): DescriptorIndexNode {
     // console.log('PSTFile::getDescriptorIndexNode ' + id.toString())
     return new DescriptorIndexNode(
       this.findBtreeItem(id, true),
@@ -720,7 +720,7 @@ export class PSTFile {
    * @returns {OffsetIndexItem}
    * @memberof PSTFile
    */
-  public getOffsetIndexNode(id: long): OffsetIndexItem {
+  public getOffsetIndexNode(id: Long): OffsetIndexItem {
     return new OffsetIndexItem(this.findBtreeItem(id, false), this._pstFileType)
   }
 
@@ -731,7 +731,7 @@ export class PSTFile {
    * @memberof PSTFile
    */
   public getPSTDescriptorItems(
-    localDescriptorsOffsetIndexIdentifier: long
+    localDescriptorsOffsetIndexIdentifier: Long
   ): Map<number, PSTDescriptorItem>
   public getPSTDescriptorItems(
     inputStream: PSTNodeInputStream
@@ -743,7 +743,7 @@ export class PSTFile {
     }
 
     // make sure the signature is correct
-    inputStream.seek(long.ZERO)
+    inputStream.seek(Long.ZERO)
     const sig = inputStream.read()
     if (sig != 0x2) {
       throw new Error(
@@ -753,7 +753,7 @@ export class PSTFile {
     }
 
     const output = new Map()
-    const numberOfItems = inputStream.seekAndReadLong(long.fromValue(2), 2)
+    const numberOfItems = inputStream.seekAndReadLong(Long.fromValue(2), 2)
     let offset
     if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
       offset = 4
@@ -762,7 +762,7 @@ export class PSTFile {
     }
 
     const data = Buffer.alloc(inputStream.length.toNumber())
-    inputStream.seek(long.ZERO)
+    inputStream.seek(Long.ZERO)
     inputStream.readCompletely(data)
 
     for (let x = 0; x < numberOfItems.toNumber(); x++) {
@@ -786,11 +786,11 @@ export class PSTFile {
    */
   public getChildDescriptorTree() {
     if (!this.childrenDescriptorTree) {
-      let btreeStartOffset = long.ZERO
+      let btreeStartOffset = Long.ZERO
       if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
-        btreeStartOffset = this.extractLEFileOffset(long.fromValue(188))
+        btreeStartOffset = this.extractLEFileOffset(Long.fromValue(188))
       } else {
-        btreeStartOffset = this.extractLEFileOffset(long.fromValue(224))
+        btreeStartOffset = this.extractLEFileOffset(Long.fromValue(224))
       }
       this.childrenDescriptorTree = new Map()
       this.processDescriptorBTree(btreeStartOffset)
@@ -804,7 +804,7 @@ export class PSTFile {
    * @param {long} btreeStartOffset
    * @memberof PSTFile
    */
-  private processDescriptorBTree(btreeStartOffset: long) {
+  private processDescriptorBTree(btreeStartOffset: Long) {
     let fileTypeAdjustment: number
 
     let temp = Buffer.alloc(2)
@@ -968,7 +968,7 @@ export class PSTFile {
    * @param {long} index
    * @memberof PSTFile
    */
-  public seek(index: long) {
+  public seek(index: Long) {
     this.position = index.toNumber()
   }
 

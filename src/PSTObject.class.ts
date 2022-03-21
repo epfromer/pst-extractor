@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 import { DescriptorIndexNode } from './DescriptorIndexNode.class'
 import { OffsetIndexItem } from './OffsetIndexItem.class'
 import { OutlookProperties } from './OutlookProperties'
@@ -59,7 +59,7 @@ export abstract class PSTObject {
 
     if (
       descriptorIndexNode.localDescriptorsOffsetIndexIdentifier.notEquals(
-        long.ZERO
+        Long.ZERO
       )
     ) {
       this.localDescriptorItems = this.pstFile.getPSTDescriptorItems(
@@ -97,12 +97,12 @@ export abstract class PSTObject {
    * @type {long}
    * @memberof PSTObject
    */
-  public get descriptorNodeId(): long {
+  public get descriptorNodeId(): Long {
     // Prevent null pointer exceptions for embedded messages
     if (this.descriptorIndexNode != null) {
-      return long.fromNumber(this.descriptorIndexNode.descriptorIdentifier)
+      return Long.fromNumber(this.descriptorIndexNode.descriptorIdentifier)
     } else {
-      return long.ZERO
+      return Long.ZERO
     }
   }
 
@@ -182,7 +182,7 @@ export abstract class PSTObject {
     if (this.pstTableItems && this.pstTableItems.has(identifier)) {
       const item = this.pstTableItems.get(identifier)
       if (item) {
-        const longVersion: long = PSTUtil.convertLittleEndianBytesToLong(
+        const longVersion: Long = PSTUtil.convertLittleEndianBytesToLong(
           item.data
         )
 
@@ -203,15 +203,15 @@ export abstract class PSTObject {
    * @returns {long}
    * @memberof PSTObject
    */
-  protected getLongItem(identifier: number, defaultValue?: long): long {
+  protected getLongItem(identifier: number, defaultValue?: Long): Long {
     if (defaultValue === undefined) {
-      defaultValue = long.ZERO
+      defaultValue = Long.ZERO
     }
     if (this.pstTableItems && this.pstTableItems.has(identifier)) {
       const item = this.pstTableItems.get(identifier)
       if (item && item.entryValueType == 0x0003) {
         // we are really just an int
-        return long.fromNumber(item.entryValueReference)
+        return Long.fromNumber(item.entryValueReference)
       } else if (item && item.entryValueType == 0x0014) {
         // we are a long
         if (item.data != null && item.data.length == 8) {

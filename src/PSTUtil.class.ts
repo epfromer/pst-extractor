@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as long from 'long'
+import Long from 'long'
 import { DescriptorIndexNode } from './DescriptorIndexNode.class'
 import { PSTAppointment } from './PSTAppointment.class'
 import { PSTContact } from './PSTContact.class'
@@ -537,7 +537,7 @@ export class PSTUtil {
     data: Buffer,
     start?: number,
     end?: number
-  ): long {
+  ): Long {
     if (!start) {
       start = 0
     }
@@ -545,11 +545,11 @@ export class PSTUtil {
       end = data.length
     }
 
-    let offset: long = long.fromNumber(data[end - 1] & 0xff)
-    let tmpLongValue: long
+    let offset: Long = Long.fromNumber(data[end - 1] & 0xff)
+    let tmpLongValue: Long
     for (let x = end - 2; x >= start; x--) {
       offset = offset.shiftLeft(8)
-      tmpLongValue = long.fromNumber(data[x] & 0xff)
+      tmpLongValue = Long.fromNumber(data[x] & 0xff)
       offset = offset.xor(tmpLongValue)
     }
 
@@ -569,7 +569,7 @@ export class PSTUtil {
     data: Buffer,
     start?: number,
     end?: number
-  ): long {
+  ): Long {
     if (!start) {
       start = 0
     }
@@ -577,10 +577,10 @@ export class PSTUtil {
       end = data.length
     }
 
-    let offset: long = long.ZERO
+    let offset: Long = Long.ZERO
     for (let x = start; x < end; ++x) {
       offset = offset.shiftLeft(8)
-      const tmpLongValue = long.fromNumber(data[x] & 0xff)
+      const tmpLongValue = Long.fromNumber(data[x] & 0xff)
       offset = offset.xor(tmpLongValue)
     }
 
@@ -693,7 +693,7 @@ export class PSTUtil {
    */
   public static detectAndLoadPSTObject(
     theFile: PSTFile,
-    descriptorIndex: long
+    descriptorIndex: Long
   ): any
   public static detectAndLoadPSTObject(
     theFile: PSTFile,
@@ -955,13 +955,13 @@ export class PSTUtil {
    * @returns {Date}
    * @memberof PSTUtil
    */
-  public static filetimeToDate(hi: long, low: long): Date {
-    const h: long = hi.shiftLeft(32)
-    const l: long = low.and(0xffffffff)
+  public static filetimeToDate(hi: Long, low: Long): Date {
+    const h: Long = hi.shiftLeft(32)
+    const l: Long = low.and(0xffffffff)
     const filetime = h.or(l)
-    const msSince16010101: long = filetime.divide(1000 * 10)
-    const epochDiff: long = long.fromValue('11644473600000')
-    const msSince19700101: long = msSince16010101.subtract(epochDiff)
+    const msSince16010101: Long = filetime.divide(1000 * 10)
+    const epochDiff: Long = Long.fromValue('11644473600000')
+    const msSince19700101: Long = msSince16010101.subtract(epochDiff)
     return new Date(msSince19700101.toNumber())
   }
 }
