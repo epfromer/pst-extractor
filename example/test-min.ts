@@ -1,8 +1,11 @@
+import * as fs from 'fs'
 import { PSTMessage } from '../src/PSTMessage.class'
 import { PSTFile } from '../src/PSTFile.class'
 import { PSTFolder } from '../src/PSTFolder.class'
 const resolve = require('path').resolve
 
+const pstFolder = './testdata/'
+const topOutputFolder = './testdataoutput/'
 let depth = -1
 let col = 0
 
@@ -51,10 +54,10 @@ function processFolder(folder: PSTFolder): void {
     while (email != null) {
       console.log(
         getDepth(depth) +
-          'Sender: ' +
-          email.senderName +
-          ', Subject: ' +
-          email.subject
+        'Sender: ' +
+        email.senderName +
+        ', Subject: ' +
+        email.subject
       )
       email = folder.getNextChild()
     }
@@ -63,12 +66,21 @@ function processFolder(folder: PSTFolder): void {
   depth--
 }
 
-console.log('======================= Enron =======================')
-const pstFile1 = new PSTFile(resolve('./testdata/enron.pst'))
-console.log(pstFile1.getMessageStore().displayName)
-processFolder(pstFile1.getRootFolder())
+const directoryListing = fs.readdirSync(pstFolder)
+directoryListing.forEach((filename) => {
+  if (filename.endsWith('.pst') || filename.endsWith('.ost')) {
+    console.log(pstFolder + filename)
 
-console.log('======================= Repeating events, attachments =======================')
-const pstFile2 = new PSTFile(resolve('./testdata/pstextractortest@outlook.com.ost'))
-console.log(pstFile2.getMessageStore().displayName)
-processFolder(pstFile2.getRootFolder())
+    // time for performance comparison to Java and improvement
+    const start = Date.now()
+
+    // load file into memory buffer, then open as PSTFile
+    const pstFile = new PSTFile(fs.readFileSync(pstFolder + filename))
+
+    console.log(pstFile.getMessageStore().displayName)
+    processFolder(pstFile.getRootFolder())
+
+    const end = Date.now()
+    console.log(pstFolder + filename + ' processed in ' + (end - start) + ' ms')
+  }
+})

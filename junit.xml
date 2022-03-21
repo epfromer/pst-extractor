@@ -1,69 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="22" failures="0" errors="0" time="11.684">
-  <testsuite name="PSTTask tests" errors="0" failures="0" skipped="0" timestamp="2021-08-16T18:58:21" time="5.618" tests="2">
-    <testcase classname="PSTTask tests should have a Tasks folder" name="PSTTask tests should have a Tasks folder" time="0.004">
+<testsuites name="jest tests" tests="22" failures="0" errors="0" time="8.122">
+  <testsuite name="PSTFolder tests" errors="0" failures="0" skipped="0" timestamp="2022-03-20T16:05:33" time="3.825" tests="2">
+    <testcase classname="PSTFolder tests should have a root folder" name="PSTFolder tests should have a root folder" time="0.009">
     </testcase>
-    <testcase classname="PSTTask tests should have two tasks" name="PSTTask tests should have two tasks" time="0.028">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTContact tests" errors="0" failures="0" skipped="0" timestamp="2021-08-16T18:58:21" time="5.654" tests="2">
-    <testcase classname="PSTContact tests should have a Contact folder" name="PSTContact tests should have a Contact folder" time="0.003">
-    </testcase>
-    <testcase classname="PSTContact tests should have a contact with several fields" name="PSTContact tests should have a contact with several fields" time="0.058">
+    <testcase classname="PSTFolder tests root folder should have sub folders" name="PSTFolder tests root folder should have sub folders" time="0.074">
     </testcase>
   </testsuite>
-  <testsuite name="RecurrencePattern tests" errors="0" failures="0" skipped="0" timestamp="2021-08-16T18:58:21" time="5.666" tests="2">
-    <testcase classname="RecurrencePattern tests should have a Calendar folder" name="RecurrencePattern tests should have a Calendar folder" time="0.003">
-    </testcase>
-    <testcase classname="RecurrencePattern tests should have repeating events" name="RecurrencePattern tests should have repeating events" time="0.04">
+  <testsuite name="PSTfile tests" errors="0" failures="0" skipped="0" timestamp="2022-03-20T16:05:33" time="3.845" tests="1">
+    <testcase classname="PSTfile tests should open the file" name="PSTfile tests should open the file" time="0.011">
     </testcase>
   </testsuite>
-  <testsuite name="PSTAppointment tests" errors="0" failures="0" skipped="0" timestamp="2021-08-16T18:58:21" time="5.721" tests="2">
-    <testcase classname="PSTAppointment tests should have a Calendar folder" name="PSTAppointment tests should have a Calendar folder" time="0.003">
-    </testcase>
-    <testcase classname="PSTAppointment tests should have two calendar items" name="PSTAppointment tests should have two calendar items" time="0.034">
+  <testsuite name="PSTRecipient tests" errors="0" failures="0" skipped="0" timestamp="2022-03-20T16:05:33" time="3.962" tests="1">
+    <testcase classname="PSTRecipient tests should have email messages" name="PSTRecipient tests should have email messages" time="0.123">
     </testcase>
   </testsuite>
-  <testsuite name="PSTMessage tests" errors="0" failures="0" skipped="0" timestamp="2021-08-16T18:58:22" time="5.242" tests="2">
-    <testcase classname="PSTMessage tests should have email messages" name="PSTMessage tests should have email messages" time="0.045">
+  <testsuite name="PSTObject tests" errors="0" failures="0" skipped="0" timestamp="2022-03-20T16:05:33" time="3.961" tests="1">
+    <testcase classname="PSTObject tests should have basic attributes" name="PSTObject tests should have basic attributes" time="0.096">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTMessage tests" errors="0" failures="0" skipped="0" timestamp="2022-03-20T16:05:33" time="4.023" tests="2">
+    <testcase classname="PSTMessage tests should have email messages" name="PSTMessage tests should have email messages" time="0.057">
     </testcase>
     <testcase classname="PSTMessage tests should have email message which uses block skip points" name="PSTMessage tests should have email message which uses block skip points" time="0.019">
     </testcase>
   </testsuite>
-  <testsuite name="PSTObject tests" errors="0" failures="0" skipped="0" timestamp="2021-08-16T18:58:22" time="5.268" tests="1">
-    <testcase classname="PSTObject tests should have basic attributes" name="PSTObject tests should have basic attributes" time="0.078">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTfile tests" errors="0" failures="0" skipped="0" timestamp="2021-08-16T18:58:22" time="5.045" tests="1">
-    <testcase classname="PSTfile tests should open the file" name="PSTfile tests should open the file" time="0.008">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTFolder tests" errors="0" failures="0" skipped="0" timestamp="2021-08-16T18:58:22" time="5.149" tests="2">
-    <testcase classname="PSTFolder tests should have a root folder" name="PSTFolder tests should have a root folder" time="0.009">
-    </testcase>
-    <testcase classname="PSTFolder tests root folder should have sub folders" name="PSTFolder tests root folder should have sub folders" time="0.063">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTRecipient tests" errors="0" failures="0" skipped="0" timestamp="2021-08-16T18:58:22" time="5.326" tests="1">
-    <testcase classname="PSTRecipient tests should have email messages" name="PSTRecipient tests should have email messages" time="0.096">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTActivity tests" errors="0" failures="0" skipped="0" timestamp="2021-08-16T18:58:22" time="5.467" tests="2">
+  <testsuite name="PSTActivity tests" errors="0" failures="0" skipped="0" timestamp="2022-03-20T16:05:33" time="4.154" tests="2">
     <testcase classname="PSTActivity tests should have a Journal folder" name="PSTActivity tests should have a Journal folder" time="0.003">
     </testcase>
-    <testcase classname="PSTActivity tests root folder should have a journal entry" name="PSTActivity tests root folder should have a journal entry" time="0.015">
+    <testcase classname="PSTActivity tests root folder should have a journal entry" name="PSTActivity tests root folder should have a journal entry" time="0.013">
     </testcase>
   </testsuite>
-  <testsuite name="PSTAttachment tests" errors="0" failures="0" skipped="0" timestamp="2021-08-16T18:58:21" time="6.267" tests="5">
-    <testcase classname="PSTAttachment tests should have a contact with an attachment" name="PSTAttachment tests should have a contact with an attachment" time="0.233">
+  <testsuite name="PSTAppointment tests" errors="0" failures="0" skipped="0" timestamp="2022-03-20T16:05:33" time="4.17" tests="2">
+    <testcase classname="PSTAppointment tests should have a Calendar folder" name="PSTAppointment tests should have a Calendar folder" time="0.003">
     </testcase>
-    <testcase classname="PSTAttachment tests should have a task with an attachment" name="PSTAttachment tests should have a task with an attachment" time="0.136">
+    <testcase classname="PSTAppointment tests should have two calendar items" name="PSTAppointment tests should have two calendar items" time="0.023">
     </testcase>
-    <testcase classname="PSTAttachment tests should have email with word attachment" name="PSTAttachment tests should have email with word attachment" time="0.144">
+  </testsuite>
+  <testsuite name="RecurrencePattern tests" errors="0" failures="0" skipped="0" timestamp="2022-03-20T16:05:33" time="4.198" tests="2">
+    <testcase classname="RecurrencePattern tests should have a Calendar folder" name="RecurrencePattern tests should have a Calendar folder" time="0.002">
     </testcase>
-    <testcase classname="PSTAttachment tests should have email with excel attachment" name="PSTAttachment tests should have email with excel attachment" time="0.145">
+    <testcase classname="RecurrencePattern tests should have repeating events" name="RecurrencePattern tests should have repeating events" time="0.037">
     </testcase>
-    <testcase classname="PSTAttachment tests should have email with jpg attachment" name="PSTAttachment tests should have email with jpg attachment" time="0.142">
+  </testsuite>
+  <testsuite name="PSTContact tests" errors="0" failures="0" skipped="0" timestamp="2022-03-20T16:05:33" time="4.214" tests="2">
+    <testcase classname="PSTContact tests should have a Contact folder" name="PSTContact tests should have a Contact folder" time="0.003">
+    </testcase>
+    <testcase classname="PSTContact tests should have a contact with several fields" name="PSTContact tests should have a contact with several fields" time="0.051">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTTask tests" errors="0" failures="0" skipped="0" timestamp="2022-03-20T16:05:33" time="4.203" tests="2">
+    <testcase classname="PSTTask tests should have a Tasks folder" name="PSTTask tests should have a Tasks folder" time="0.003">
+    </testcase>
+    <testcase classname="PSTTask tests should have two tasks" name="PSTTask tests should have two tasks" time="0.019">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTAttachment tests" errors="0" failures="0" skipped="0" timestamp="2022-03-20T16:05:33" time="4.681" tests="5">
+    <testcase classname="PSTAttachment tests should have a contact with an attachment" name="PSTAttachment tests should have a contact with an attachment" time="0.219">
+    </testcase>
+    <testcase classname="PSTAttachment tests should have a task with an attachment" name="PSTAttachment tests should have a task with an attachment" time="0.121">
+    </testcase>
+    <testcase classname="PSTAttachment tests should have email with word attachment" name="PSTAttachment tests should have email with word attachment" time="0.118">
+    </testcase>
+    <testcase classname="PSTAttachment tests should have email with excel attachment" name="PSTAttachment tests should have email with excel attachment" time="0.118">
+    </testcase>
+    <testcase classname="PSTAttachment tests should have email with jpg attachment" name="PSTAttachment tests should have email with jpg attachment" time="0.129">
     </testcase>
   </testsuite>
 </testsuites>

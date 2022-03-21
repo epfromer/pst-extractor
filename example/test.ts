@@ -4,11 +4,9 @@ import { PSTFile } from '../src/PSTFile.class'
 import { PSTFolder } from '../src/PSTFolder.class'
 import { PSTMessage } from '../src/PSTMessage.class'
 
-// TODO - location of pst files
-const pstFolder = 'C:/github/testdata/'
-// TODO - if saveToFS true, location to store extracted files
+const pstFolder = './testdata/'
 const saveToFS = true
-const topOutputFolder = 'C:/github/testdataoutput/'
+const topOutputFolder = './testdataoutput/'
 
 const verbose = true
 const displaySender = true
@@ -161,10 +159,10 @@ function processFolder(folder: PSTFolder): void {
       if (verbose) {
         console.log(
           getDepth(depth) +
-            'Email: ' +
-            email.descriptorNodeId +
-            ' - ' +
-            email.subject
+          'Email: ' +
+          email.descriptorNodeId +
+          ' - ' +
+          email.subject
         )
       } else {
         printDot()
@@ -226,27 +224,29 @@ try {
 
 const directoryListing = fs.readdirSync(pstFolder)
 directoryListing.forEach((filename) => {
-  console.log(pstFolder + filename)
+  if (filename.endsWith('.pst') || filename.endsWith('.ost')) {
+    console.log(pstFolder + filename)
 
-  // time for performance comparison to Java and improvement
-  const start = Date.now()
+    // time for performance comparison to Java and improvement
+    const start = Date.now()
 
-  // load file into memory buffer, then open as PSTFile
-  const pstFile = new PSTFile(fs.readFileSync(pstFolder + filename))
+    // load file into memory buffer, then open as PSTFile
+    const pstFile = new PSTFile(fs.readFileSync(pstFolder + filename))
 
-  // make a sub folder for each PST
-  try {
-    if (saveToFS) {
-      outputFolder = topOutputFolder + filename + '/'
-      fs.mkdirSync(outputFolder)
+    // make a sub folder for each PST
+    try {
+      if (saveToFS) {
+        outputFolder = topOutputFolder + filename + '/'
+        fs.mkdirSync(outputFolder)
+      }
+    } catch (err) {
+      console.error(err)
     }
-  } catch (err) {
-    console.error(err)
+
+    console.log(pstFile.getMessageStore().displayName)
+    processFolder(pstFile.getRootFolder())
+
+    const end = Date.now()
+    console.log(pstFolder + filename + ' processed in ' + (end - start) + ' ms')
   }
-
-  console.log(pstFile.getMessageStore().displayName)
-  processFolder(pstFile.getRootFolder())
-
-  const end = Date.now()
-  console.log('processed in ' + (end - start) + ' ms')
 })

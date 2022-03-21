@@ -6,6 +6,7 @@
     "pst-extractor": "link:.."
   },
   "devDependencies": {
+    "@types/node": "^17.0.21",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "prettier": "^2.3.2",
@@ -15,8 +16,7 @@
   "scripts": {
     "start": "ts-node test-min.ts",
     "test-min": "ts-node test-min.ts",
-    "test-mem": "ts-node test-mem.ts",
-    "test-max": "ts-node test-max.ts"
+    "test": "ts-node test.ts"
   },
   "eslintConfig": {
     "extends": [
