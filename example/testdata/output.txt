@@ -1,0 +1,616 @@
+// test.ts output (for comparison purposes)
+
+$ ts-node test.ts
+./testdata/enron.pst
+Personal folders
+ |- Top of Personal Folders
+ |  |- Deleted Items
+ |  |- lokay-m
+ |  |  |- MLOKAY (Non-Privileged)
+ |  |  |  |- TW-Commercial Group
+ |  |  |  |  |- Email: 2097188 - New OBA's
+ |  |  |  |  |-  sender: Lee  Dennis (Dennis.Lee@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-10-22/2097188.txt
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_27602_Citizens.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_AmocoProd_27729.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_Burlington_27732.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_CIG_27741.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_Dynegy_27725.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_Dynegy_27726.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_LoneStar_27730.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_NWPL_27733.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_Oasis_27727.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_Panhandle_27731.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_RedCedar_27728.doc
+ |  |  |  |  |- Email: 2097220 - I/B Link Capacity for November and December 2001
+ |  |  |  |  |-  sender: Reames Julie (JReames@br-inc.com)
+saving msg to ./testdataoutput/enron.pst/2001-10-24/2097220.txt
+ |  |  |  |  |- Email: 2097252 - West Texas Capacity
+ |  |  |  |  |-  sender: dlsmith@pplweb.com
+saving msg to ./testdataoutput/enron.pst/2001-10-24/2097252.txt
+ |  |  |  |  |- Email: 2097284 - EOL Confirmation -Transwestern Pipeline Company
+ |  |  |  |  |-  sender: Buehler  Craig (Craig.Buehler@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-10-25/2097284.txt
+ |  |  |  |  |- Email: 2097316 - EOL Confirmation -Transwestern Pipeline Company
+ |  |  |  |  |-  sender: Buehler  Craig (Craig.Buehler@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-10-25/2097316.txt
+ |  |  |  |  |- Email: 2097348 - New PNR points for Transwestern
+ |  |  |  |  |-  sender: Brostad  Karen (Karen.Brostad@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-10-25/2097348.txt
+ |  |  |  |  |- Email: 2097380 - RR expansion contracts.
+ |  |  |  |  |-  sender: Frazier  Perry (Perry.Frazier@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-10-26/2097380.txt
+saving attachment to ./testdataoutput/enron.pst/2001-10-26/2097380-RedRockAllocSumm.xls
+ |  |  |  |  |- Email: 2097412 - TW EOLs
+ |  |  |  |  |-  sender: Buehler  Craig (Craig.Buehler@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-10-25/2097412.txt
+saving attachment to ./testdataoutput/enron.pst/2001-10-25/2097412-EOLTWdeals.xls
+ |  |  |  |  |- Email: 2097444 - Bullets 10/26/01
+ |  |  |  |  |-  sender: Lokay
+saving msg to ./testdataoutput/enron.pst/2001-10-26/2097444.txt
+ |  |  |  |  |- Email: 2097476 - Verify RR expansion cr's for ROFR.
+ |  |  |  |  |-  sender: Frazier  Perry (Perry.Frazier@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-10-26/2097476.txt
+saving attachment to ./testdataoutput/enron.pst/2001-10-26/2097476-RedRockAllocSumm.xls
+ |  |  |  |  |- Email: 2097508 - Red Rock Adm. cr # 27698 revisions.
+ |  |  |  |  |-  sender: Frazier  Perry (Perry.Frazier@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-10-29/2097508.txt
+ |  |  |  |  |- Email: 2097540 - TW Weekly Report for October 26, 2001
+ |  |  |  |  |-  sender: Moore
+saving msg to ./testdataoutput/enron.pst/2001-10-26/2097540.txt
+saving attachment to ./testdataoutput/enron.pst/2001-10-26/2097540-sharris1001wk4.xls
+ |  |  |  |  |- Email: 2097572 - FW: New PNR points for Transwestern
+ |  |  |  |  |-  sender: Cabrera  Reyna (Reyna.Cabrera@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-10-29/2097572.txt
+saving attachment to ./testdataoutput/enron.pst/2001-10-29/2097572-TW_PNR_Oct26_01.doc
+ |  |  |  |  |- Email: 2097604 - TW administrative contract # 27698
+ |  |  |  |  |-  sender: Lee  Dennis (Dennis.Lee@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-10-29/2097604.txt
+ |  |  |  |- Systems
+ |  |  |  |  |- Email: 2097636 - How to prepare your expense report
+ |  |  |  |  |-  sender: ETS General Announcement/ET&S/Enron@ENRON (IMCEANOTES-ETS+20General+20Announcement_ET+26S_Enron+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-08-30/2097636.txt
+ |  |  |  |  |- Email: 2097668 - eRequest
+ |  |  |  |  |-  sender: Carl Carter (Carl Carter/NA/Enron@Enron)
+saving msg to ./testdataoutput/enron.pst/2001-01-30/2097668.txt
+saving attachment to ./testdataoutput/enron.pst/2001-01-30/2097668-Navigating eRequest.doc
+ |  |  |  |  |- Email: 2097700 - EnronOnline -Stack Manager Changes
+ |  |  |  |  |-  sender: Puthigai  Savita (Savita.Puthigai@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-09-24/2097700.txt
+ |  |  |  |  |- Email: 2097732 - LIM Software Upgrade Notice
+ |  |  |  |  |-  sender: Enron Announcements/Corp/Enron@ENRON (IMCEANOTES-Enron+20Announcements_Corp_Enron+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-09-27/2097732.txt
+ |  |  |  |  |- Email: 2097764 - Sending customer information from ENVISION
+ |  |  |  |  |-  sender: Lee  Dennis (Dennis.Lee@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-09-06/2097764.txt
+saving attachment to ./testdataoutput/enron.pst/2001-09-06/2097764-envision_printing.doc
+ |  |  |  |  |- Email: 2097796 - Email Retention Policy
+ |  |  |  |  |-  sender: Enron Global Technology@ENRON
+saving msg to ./testdataoutput/enron.pst/2001-10-05/2097796.txt
+ |  |  |  |  |- Email: 2097828 - Supported Internet Email Addresses
+ |  |  |  |  |-  sender: Enron Messaging Administration (/O=ENRON/OU=NA/CN=RECIPIENTS/CN=NOTESADDR/CN=ENRON)
+saving msg to ./testdataoutput/enron.pst/2001-10-16/2097828.txt
+ |  |  |  |- Sent Items
+ |  |  |  |  |- Email: 2097860 - Cirque du Soleil - Dralion
+ |  |  |  |  |-  sender: Lokay
+saving msg to ./testdataoutput/enron.pst/2001-10-29/2097860.txt
+ |  |  |  |  |- Email: 2097892 - Accepted: Updated: Finalize Transwestern Presentations
+ |  |  |  |  |-  sender: Lokay
+saving msg to ./testdataoutput/enron.pst/2001-10-29/2097892.txt
+ |  |  |  |- Personal
+ |  |  |  |  |- Email: 2097924 - Fwd: Enjoy fall in an Alamo midsize car -- just $169 a week!
+ |  |  |  |  |-  sender: Jim Lokay jimbomania@hotmail.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3Cjimbomania+40hotmail+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2000-10-06/2097924.txt
+ |  |  |  |  |- Email: 2097956 - TRIP INFO
+ |  |  |  |  |-  sender: cbulf (cbulf@oneok.com)
+saving msg to ./testdataoutput/enron.pst/2001-02-06/2097956.txt
+saving attachment to ./testdataoutput/enron.pst/2001-02-06/2097956-TAHOE INFORMATOIN.doc
+saving attachment to ./testdataoutput/enron.pst/2001-02-06/2097956-tahoe.xls
+ |  |  |  |  |- Email: 2097988 - Check out page 7!
+ |  |  |  |  |-  sender: Michelle Lokay
+saving msg to ./testdataoutput/enron.pst/2001-02-01/2097988.txt
+saving attachment to ./testdataoutput/enron.pst/2001-02-01/2097988-TWEOL.pdf
+ |  |  |  |  |- Email: 2098020 - ClickAtHome is Coming Soon!
+ |  |  |  |  |-  sender: ClickAtHome (ClickAtHome@Enron)
+saving msg to ./testdataoutput/enron.pst/2001-02-16/2098020.txt
+ |  |  |  |  |- Email: 2098052 - contact
+ |  |  |  |  |-  sender: Lisa Norwood (ljnorwood@calpine.com)
+saving msg to ./testdataoutput/enron.pst/2001-02-16/2098052.txt
+ |  |  |  |  |- Email: 2098084 - [Fwd: New email address - again!]
+ |  |  |  |  |-  sender: Jim Lokay jimboman@bigfoot.com@ENRON (IMCEANOTES-Jim+20Lokay+20+3Cjimboman+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-02-26/2098084.txt
+ |  |  |  |  |- Email: 2098116 - file
+ |  |  |  |  |-  sender: Jim Lokay jimboman@bigfoot.com@ENRON (IMCEANOTES-Jim+20Lokay+20+3Cjimboman+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-02-27/2098116.txt
+ |  |  |  |  |- Email: 2098148 - An Opportunity to Change Your Electricity Provider
+ |  |  |  |  |-  sender: Enron Announcements/Corp/Enron@ENRON (IMCEANOTES-Enron+20Announcements_Corp_Enron+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-03-07/2098148.txt
+ |  |  |  |  |- Email: 2098180 - Fwd: RE: Party Request-the Galleria - Sat 8/11/2001 4:00 PM
+ |  |  |  |  |-  sender: James Lokay jlokay@yahoo.com@ENRON (IMCEANOTES-James+20Lokay+20+3Cjlokay+40yahoo+2Ecom+3E+40ENRON@ENRON.com)  
+saving msg to ./testdataoutput/enron.pst/2001-03-12/2098180.txt
+ |  |  |  |  |- Email: 2098212 - links
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-Jim+20Lokay+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)    
+saving msg to ./testdataoutput/enron.pst/2001-03-13/2098212.txt
+ |  |  |  |  |- Email: 2098244 - Re: Time Warner Cable question
+ |  |  |  |  |-  sender: Clickathome, (Clickathome@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-03-20/2098244.txt
+ |  |  |  |  |- Email: 2098276 - RE: Good Web
+ |  |  |  |  |-  sender: Ramirez  Pilar (Pilar.Ramirez@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-03-21/2098276.txt
+ |  |  |  |  |- Email: 2098308 - Wedding
+ |  |  |  |  |-  sender: Schoolcraft  Darrell (Darrell.Schoolcraft@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-03-26/2098308.txt
+ |  |  |  |  |- Email: 2098340 - Dilbert Strip from Jim is waiting for you!
+ |  |  |  |  |-  sender: PostOffice@DILBERT.COM@ENRON (IMCEANOTES-PostOffice+40DILBERT+2ECOM+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-03-27/2098340.txt
+ |  |  |  |  |- Email: 2098372 - eBay item 576466888 (Ends Apr-10-01 104814 PDT) - !!!!Green Is In!!!!! Erin Bud
+ |  |  |  |  |-  sender: Lokay
+saving msg to ./testdataoutput/enron.pst/2001-04-09/2098372.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-09/2098372-eBay item 576466888 (Ends Apr-10-01 104814 PDT) - !!!!Green Is In!!!!! Erin Buddy and 2 Beanie.url
+ |  |  |  |  |- Email: 2098404 - eBay item 576853567 (Ends Apr-09-01 134449 PDT) - TY Beanie Buddies ERIN Buddy!
+ |  |  |  |  |-  sender: Lokay
+saving msg to ./testdataoutput/enron.pst/2001-04-09/2098404.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-09/2098404-eBay item 576853567 (Ends Apr-09-01 134449 PDT) - TY Beanie Buddies ERIN Buddy! NO RESERVE!.url
+ |  |  |  |  |- Email: 2098436 - eBay item 577532611 (Ends Apr-09-01 175133 PDT) - VALENTINA BUDDY beanie buddie
+ |  |  |  |  |-  sender: Lokay
+saving msg to ./testdataoutput/enron.pst/2001-04-09/2098436.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-09/2098436-eBay item 577532611 (Ends Apr-09-01 175133 PDT) - VALENTINA BUDDY beanie buddies RETIRED.url
+ |  |  |  |  |- Email: 2098468 - eBay item 577242315 (Ends Apr-12-01 175442 PDT) - Ty Beanie Buddy & Baby - Vale
+ |  |  |  |  |-  sender: Lokay
+saving msg to ./testdataoutput/enron.pst/2001-04-09/2098468.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-09/2098468-eBay item 577242315 (Ends Apr-12-01 175442 PDT) - Ty Beanie Buddy & Baby - Valentina Bears.url
+ |  |  |  |  |- Email: 2098500 - scans
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-04-10/2098500.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-10/2098500-Color 72dpi.jpg
+saving attachment to ./testdataoutput/enron.pst/2001-04-10/2098500-B&W 72dpi.jpg
+saving attachment to ./testdataoutput/enron.pst/2001-04-10/2098500-Color 300dpi.jpg
+saving attachment to ./testdataoutput/enron.pst/2001-04-10/2098500-B&W 300dpi.jpg
+ |  |  |  |  |- Email: 2098532 - Re: VALENTINA BUDDY beanie buddies RETIRED  Item #577532611
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-04-10/2098532.txt
+ |  |  |  |  |- Email: 2098564 - Job Opportunity?
+ |  |  |  |  |-  sender: Lokay
+saving msg to ./testdataoutput/enron.pst/2001-04-11/2098564.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-11/2098564-#1.dat
+ |  |  |  |  |- Email: 2098596 - Quickie
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-04-17/2098596.txt
+ |  |  |  |  |- Email: 2098628 - In case you needed to know...
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-04-19/2098628.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-19/2098628-child's menu.gif
+ |  |  |  |  |- Email: 2098660 - graphic
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-04-22/2098660.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-22/2098660-phone.gif
+ |  |  |  |  |- Email: 2098692 - RE:FIESTA
+ |  |  |  |  |-  sender: Hitschel  Bonnie V. BHitschel@tesoropetroleum.com@ENRON (IMCEANOTES-+22Hitschel+2C+20Bonnie+20V+2E+22+20+3CBHitschel+40tesoropetroleum+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-04-23/2098692.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-23/2098692-~~DLNK0.URL
+ |  |  |  |  |- Email: 2098724 - Houston
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-04-25/2098724.txt
+ |  |  |  |  |- Email: 2098756 - California Sing-along
+ |  |  |  |  |-  sender: Fawcett  Jeffery (Jeffery.Fawcett@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-04-30/2098756.txt
+ |  |  |  |  |- Email: 2098788 - FW: ONEOK ski trip
+ |  |  |  |  |-  sender: Loe  David DLoe@UtiliCorp.com@ENRON (IMCEANOTES-+22Loe+2C+20David+22+20+3CDLoe+40UtiliCorp+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-03-16/2098788.txt
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-017_14A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-018_15A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-019_16A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-020_17A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-022_19A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-024_21A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-025_22A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-026_23A.JPG
+ |  |  |  |  |- Email: 2098820 - FW: ONEOK ski trip
+ |  |  |  |  |-  sender: Loe  David DLoe@UtiliCorp.com@ENRON (IMCEANOTES-+22Loe+2C+20David+22+20+3CDLoe+40UtiliCorp+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-03-16/2098820.txt
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-002_00.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-004_1A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-005_2A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-011_8A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-012_9A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-013_10A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-015_12A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-016_13A.JPG
+ |  |  |  |  |- Email: 2098852 - unit for sale
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-04-30/2098852.txt
+ |  |  |  |  |- Email: 2098884 - FW: Even For You
+ |  |  |  |  |-  sender: Hitschel  Bonnie V. BHitschel@tesoropetroleum.com@ENRON (IMCEANOTES-+22Hitschel+2C+20Bonnie+20V+2E+22+20+3CBHitschel+40tesoropetroleum+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-05-01/2098884.txt
+saving attachment to ./testdataoutput/enron.pst/2001-05-01/2098884-~~DLNK0.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-01/2098884-~~DLNK1.URL
+ |  |  |  |  |- Email: 2098916 - Learn Technical Analysis, Early Bird Special for Houston Class
+ |  |  |  |  |-  sender: Jennifer Smith @ENRON (jennifersmith@kaseco.comIMCEANOTES-jennifersmith+40kaseco+2Ecom+20+28Jennifer+20Smith+29+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-05-05/2098916.txt
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK0.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK1.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK2.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK3.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK4.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK5.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK6.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK7.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK8.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK9.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK10.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK11.URL
+ |  |  |  |  |- Email: 2098948 - Lindy's B-day
+ |  |  |  |  |-  sender: Watson  Kimberly (Kimberly.Watson@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-05-07/2098948.txt
+ |  |  |  |  |- Email: 2098980 - FW: Breast Cancer
+ |  |  |  |  |-  sender: Ramirez  Pilar (Pilar.Ramirez@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-05-07/2098980.txt
+ |  |  |  |  |- Email: 2099012 - unverified news report
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-05-08/2099012.txt
+ |  |  |  |  |- Email: 2099044 - Accomplishments for Year 2001, as of 05/10
+ |  |  |  |  |-  sender: Lokay
+saving msg to ./testdataoutput/enron.pst/2001-05-10/2099044.txt
+ |  |  |  |  |- Email: 2099076 - Rose Rec
+ |  |  |  |  |-  sender: Lokay
+saving msg to ./testdataoutput/enron.pst/2001-06-01/2099076.txt
+saving attachment to ./testdataoutput/enron.pst/2001-06-01/2099076-Rose referral.doc
+ |  |  |  |  |- Email: 2099108 - Voluntary Spyware
+ |  |  |  |  |-  sender: Hitschel  Bonnie V. BHitschel@tesoropetroleum.com@ENRON (IMCEANOTES-+22Hitschel+2C+20Bonnie+20V+2E+22+20+3CBHitschel+40tesoropetroleum+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-06-01/2099108.txt
+ |  |  |  |  |- Email: 2099140 - Possible Spreadsheet
+ |  |  |  |  |-  sender: Yee  Danny danny.yee@sap.com@ENRON (IMCEANOTES-+22Yee+2C+20Danny+22+20+3Cdanny+2Eyee+40sap+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-06-03/2099140.txt
+saving attachment to ./testdataoutput/enron.pst/2001-06-03/2099140-Michelle.xls
+ |  |  |  |  |- Email: 2099172 - <<Concur Expense Document>> - Expense060501
+ |  |  |  |  |-  sender: eserver@enron.com@ENRON (IMCEANOTES-eserver+40enron+2Ecom+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-06-06/2099172.txt
+ |  |  |  |  |- Email: 2099204 - Just for fun
+ |  |  |  |  |-  sender: Hitschel  Bonnie V. BHitschel@tesoropetroleum.com@ENRON (IMCEANOTES-+22Hitschel+2C+20Bonnie+20V+2E+22+20+3CBHitschel+40tesoropetroleum+2Ecom+3E+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-06-08/2099204.txt
+saving attachment to ./testdataoutput/enron.pst/2001-06-08/2099204-ATT00136.gif
+ |  |  |  |  |- Email: 2099236 - RE: Enron Efforts to the Flood victims
+ |  |  |  |  |-  sender: Stevens  Missy (Missy.Stevens@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-06-12/2099236.txt
+ |  |  |  |  |- Email: 2099268 - RE: OPEN ENROLLMENT FOR ENRON KIDS' CENTER IS UNDERWAY!!!
+ |  |  |  |  |-  sender: Stuart  Charla (Charla.Stuart@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-06-12/2099268.txt
+ |  |  |  |  |- Email: 2099300 -
+ |  |  |  |  |-  sender: Goradia
+saving msg to ./testdataoutput/enron.pst/2001-06-13/2099300.txt
+ |  |  |  |  |- Email: 2099332 - Invitation to Golf Outing
+ |  |  |  |  |-  sender: jacammarano@pplweb.com@ENRON (IMCEANOTES-jacammarano+40pplweb+2Ecom+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-06-19/2099332.txt
+saving attachment to ./testdataoutput/enron.pst/2001-06-19/2099332-invite2001.doc
+ |  |  |  |  |- Email: 2099364 - GOOD JOB!
+ |  |  |  |  |-  sender: Horton  Stanley (Stanley.Horton@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-06-20/2099364.txt
+ |  |  |  |  |- Email: 2099396 - PPL EnergyPlus Golf Outing
+ |  |  |  |  |-  sender: tsschuler@pplweb.com@ENRON (IMCEANOTES-tsschuler+40pplweb+2Ecom+40ENRON@ENRON.com)
+saving msg to ./testdataoutput/enron.pst/2001-06-22/2099396.txt
+saving attachment to ./testdataoutput/enron.pst/2001-06-22/2099396-AreaHotels.doc
+saving attachment to ./testdataoutput/enron.pst/2001-06-22/2099396-brooksidedirections.doc
+ |  |  |  |- Email: 2099428 - Power Mart '01 - Register online for your FREE exhibition pass!
+ |  |  |  |-  sender: Mailbox - Ftenergy1 (ftenergy1@FTENERGY.COM)
+saving msg to ./testdataoutput/enron.pst/2001-08-23/2099428.txt
+saving attachment to ./testdataoutput/enron.pst/2001-08-23/2099428-image001.gif
+ |- Search Root
+ |- SPAM Search Folder 2
+./testdata/enron.pst processed in 488 ms
+./testdata/pstextractortest@outlook.com.ost
+
+ |- Root - Public
+ |  |- IPM_SUBTREE
+ |  |- NON_IPM_SUBTREE
+ |  |  |- EFORMS REGISTRY
+ |  |  |  |- Organization Forms
+ |- Root - Mailbox
+ |  |- Common Views
+ |  |- Finder
+ |  |  |- Reminders
+ |  |  |- Contact Search
+ |  |  |- To-Do Search
+ |  |  |- Tracked Mail Processing
+ |  |- Shortcuts
+ |  |- Views
+ |  |- IPM_SUBTREE
+ |  |  |- Deleted Items
+ |  |  |  |- Email: 2105764 - Invitation: meeting from Ed @ Fri Aug 13, 2021 4pm - 4:30pm (MDT) (pstextractortest@outlook.com)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2105764.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2105764-invite.ics
+ |  |  |- Inbox
+ |  |  |  |- Email: 2097380 - Get started with OneDrive
+ |  |  |  |-  sender: Microsoft OneDrive (email@mail.onedrive.com)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097380.txt
+ |  |  |  |- Email: 2097412 - Welcome to your new Outlook.com account
+ |  |  |  |-  sender: Outlook Team (no-reply@microsoft.com)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-colors.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-colors-top.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-devices.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-feature-attachments.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-feature-calendars.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-feature-integrations.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-feature-office.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-landing-appstore.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-landing-playstore.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-landing-winstore.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-microsoft-logo.png
+ |  |  |  |- Email: 2103460 - test, no attachment
+ |  |  |  |-  sender: Ed (epfromer@gmail.com)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2103460.txt
+ |  |  |  |- Email: 2104068 - text file attachment
+ |  |  |  |-  sender: Ed (epfromer@gmail.com)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104068.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104068-text.txt
+ |  |  |  |- Email: 2104228 - jpg attachment
+ |  |  |  |-  sender: Ed (epfromer@gmail.com)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104228.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104228-primoz-roglic-of-slovenia-and-team-jumbo-visma-red-leader-news-photo-1628610563.jpg
+ |  |  |  |- Email: 2104324 - pdf attachment
+ |  |  |  |-  sender: Ed (epfromer@gmail.com)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104324.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104324-Clinometer Usage.pdf
+ |  |  |  |- Email: 2104516 - text, jpg, pdf attachments
+ |  |  |  |-  sender: Ed (epfromer@gmail.com)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104516.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104516-Clinometer Usage.pdf
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104516-primoz-roglic-of-slovenia-and-team-jumbo-visma-red-leader-news-photo-1628610563.jpg
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104516-text.txt
+ |  |  |  |- Email: 2106180 - Invitation: unanswered meeting @ Sat Aug 14, 2021 (pstextractortest@outlook.com)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106180.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106180-invite.ics
+ |  |  |  |- Email: 2106948 - Invitation: meeting with attachments @ Tue Aug 17, 2021 (pstextractortest@outlook.com)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106948.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106948-view.url
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106948-view.url
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106948-invite.ics
+ |  |  |  |- Email: 2108196 - Accepted: meeting with attachments (jpg, pdf, text) @ Tue Aug 24, 2021 11am - 12pm (MDT) (Pst Extractor) 
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2108196.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2108196-invite.ics
+ |  |  |- Outbox
+ |  |  |- Sent Items
+ |  |  |  |- Email: 2105796 - Accepted: meeting from Ed
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2105796.txt
+ |  |  |  |- Email: 2107588 - meeting with attachments (jpg, pdf, text)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107588.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107588-primoz-roglic-of-slovenia-and-team-jumbo-visma-red-leader-news-photo-162....jpg
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107588-Clinometer Usage.pdf
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107588-text.txt
+ |  |  |- Archive
+ |  |  |- Yammer Root
+ |  |  |  |- Inbound
+ |  |  |  |- Outbound
+ |  |  |  |- Feeds
+ |  |  |- Conversation History
+ |  |  |  |- Team Chat
+ |  |  |- Files
+ |  |  |- Conversation Action Settings
+ |  |  |- Junk Email
+ |  |  |- ExternalContacts
+ |  |  |- Journal
+ |  |  |- Tasks
+ |  |  |- Drafts
+ |  |  |- Contacts
+ |  |  |  |- Companies
+ |  |  |  |- Organizational Contacts
+ |  |  |  |- PeopleCentricConversation Buddies
+ |  |  |  |- GAL Contacts
+ |  |  |  |- {06967759-274D-40B2-A3EB-D7F9E73727D7}
+ |  |  |  |- Recipient Cache
+ |  |  |  |- {A9E2BC46-B3A0-4243-B315-60D991004455}
+ |  |  |- Calendar
+ |  |  |  |- United States holidays
+ |  |  |  |  |- Email: 2097572 - Day After Thanksgiving Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097572.txt
+ |  |  |  |  |- Email: 2097604 - Thanksgiving Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097604.txt
+ |  |  |  |  |- Email: 2097636 - Election Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097636.txt
+ |  |  |  |  |- Email: 2097668 - Columbus Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097668.txt
+ |  |  |  |  |- Email: 2097700 - Labor Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097700.txt
+ |  |  |  |  |- Email: 2097732 - Independence Day (Observed)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097732.txt
+ |  |  |  |  |- Email: 2097764 - Father's Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097764.txt
+ |  |  |  |  |- Email: 2097796 - Memorial Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097796.txt
+ |  |  |  |  |- Email: 2097828 - Mother's Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097828.txt
+ |  |  |  |  |- Email: 2097860 - Administrative Professionals Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097860.txt
+ |  |  |  |  |- Email: 2097892 - Tax Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097892.txt
+ |  |  |  |  |- Email: 2097924 - Easter Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097924.txt
+ |  |  |  |  |- Email: 2097956 - Presidents' Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097956.txt
+ |  |  |  |  |- Email: 2097988 - Martin Luther King Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097988.txt
+ |  |  |  |  |- Email: 2098020 - Day After Thanksgiving Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098020.txt
+ |  |  |  |  |- Email: 2098052 - Thanksgiving Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098052.txt
+ |  |  |  |  |- Email: 2098084 - Election Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098084.txt
+ |  |  |  |  |- Email: 2098116 - Columbus Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098116.txt
+ |  |  |  |  |- Email: 2098148 - Labor Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098148.txt
+ |  |  |  |  |- Email: 2098180 - Father's Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098180.txt
+ |  |  |  |  |- Email: 2098212 - Memorial Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098212.txt
+ |  |  |  |  |- Email: 2098244 - Mother's Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098244.txt
+ |  |  |  |  |- Email: 2098276 - Administrative Professionals Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098276.txt
+ |  |  |  |  |- Email: 2098308 - Easter Day
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098308.txt
+ |  |  |  |- Birthdays
+ |  |  |  |- Email: 2104548 - repeats every monday for 10 weeks
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104548.txt
+ |  |  |  |- Email: 2104644 - repeats for 3 days
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104644.txt
+ |  |  |  |- Email: 2104804 - just a regular meeting
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104804.txt
+ |  |  |  |- Email: 2104900 - Occurs every August 13 effective 8/13/2021 from 10:00 AM to 10:30 AM
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104900.txt
+ |  |  |  |- Email: 2105412 - meeting from Ed
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2105412.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2105412-invite.ics
+ |  |  |  |- Email: 2106148 - unanswered meeting
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106148.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106148-invite.ics
+ |  |  |  |- Email: 2106244 - all day event for 3 days
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106244.txt
+ |  |  |  |- Email: 2106916 - meeting with attachments
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106916.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106916-view.url
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106916-view.url
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106916-invite.ics
+ |  |  |  |- Email: 2107492 - meeting with attachments (jpg, pdf, text)
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107492.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107492-primoz-roglic-of-slovenia-and-team-jumbo-visma-red-leader-news-photo-162....jpg
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107492-Clinometer Usage.pdf
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107492-text.txt
+ |  |  |- Notes
+ |  |  |- Sync Issues
+ |  |  |  |- Conflicts
+ |  |  |  |- Local Failures
+ |  |  |  |- Server Failures
+ |  |  |  |- Email: 2108228 - Synchronization Log:
+ |  |  |  |-  sender: Pst Extractor ()
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2108228.txt
+ |  |  |- RSS Feeds
+ |  |  |- Quick Step Settings
+ |  |- ~MAPISP(Internal)
+ |  |- Drizzle
+ |  |- Shared Data
+ |  |- SPAM Search Folder 2
+ |  |- ItemProcSearch
+./testdata/pstextractortest@outlook.com.ost processed in 266 ms
+./testdata/pstextractortestpdf@outlook.com.ost
+
+ |- Root - Public
+ |  |- IPM_SUBTREE
+ |  |- NON_IPM_SUBTREE
+ |  |  |- EFORMS REGISTRY
+ |  |  |  |- Organization Forms
+ |- Root - Mailbox
+ |  |- Common Views
+ |  |- Finder
+ |  |  |- To-Do Search
+ |  |- Shortcuts
+ |  |- Views
+ |  |- IPM_SUBTREE
+ |  |  |- Deleted Items
+ |  |  |- Inbox
+ |  |  |  |- Email: 2097380 - single PDF
+ |  |  |  |-  sender: Ed (epfromer@gmail.com)
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097380.txt
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097380-Clinometer Usage.pdf
+ |  |  |  |- Email: 2097412 - Welcome to your new Outlook.com account
+ |  |  |  |-  sender: Outlook Team (no-reply@microsoft.com)
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412.txt
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-colors.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-colors-top.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-devices.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-feature-attachments.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-feature-calendars.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-feature-integrations.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-feature-office.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-landing-appstore.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-landing-playstore.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-landing-winstore.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-microsoft-logo.png
+ |  |  |- Outbox
+ |  |  |- Sent Items
+ |  |  |- Archive
+ |  |  |- Yammer Root
+ |  |  |  |- Inbound
+ |  |  |  |- Outbound
+ |  |  |  |- Feeds
+ |  |  |- Conversation History
+ |  |  |  |- Team Chat
+ |  |  |- Files
+ |  |  |- Conversation Action Settings
+ |  |  |- Junk Email
+ |  |  |- ExternalContacts
+ |  |  |- Journal
+ |  |  |- Notes
+ |  |  |- Calendar
+ |  |  |  |- Birthdays
+ |  |  |  |- United States holidays
+ |  |  |  |  |- Email: 2097956 - Day After Thanksgiving Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097956.txt
+ |  |  |  |  |- Email: 2097988 - Thanksgiving Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097988.txt
+ |  |  |  |  |- Email: 2098020 - Election Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098020.txt
+ |  |  |  |  |- Email: 2098052 - Columbus Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098052.txt
+ |  |  |  |  |- Email: 2098084 - Labor Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098084.txt
+ |  |  |  |  |- Email: 2098116 - Independence Day (Observed)
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098116.txt
+ |  |  |  |  |- Email: 2098148 - Father's Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098148.txt
+ |  |  |  |  |- Email: 2098180 - Memorial Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098180.txt
+ |  |  |  |  |- Email: 2098212 - Mother's Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098212.txt
+ |  |  |  |  |- Email: 2098244 - Administrative Professionals Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098244.txt
+ |  |  |  |  |- Email: 2098276 - Tax Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098276.txt
+ |  |  |  |  |- Email: 2098308 - Easter Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098308.txt
+ |  |  |  |  |- Email: 2098340 - Presidents' Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098340.txt
+ |  |  |  |  |- Email: 2098372 - Martin Luther King Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098372.txt
+ |  |  |  |  |- Email: 2098404 - Day After Thanksgiving Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098404.txt
+ |  |  |  |  |- Email: 2098436 - Thanksgiving Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098436.txt
+ |  |  |  |  |- Email: 2098468 - Election Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098468.txt
+ |  |  |  |  |- Email: 2098500 - Columbus Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098500.txt
+ |  |  |  |  |- Email: 2098532 - Labor Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098532.txt
+ |  |  |  |  |- Email: 2098564 - Father's Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098564.txt
+ |  |  |  |  |- Email: 2098596 - Memorial Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098596.txt
+ |  |  |  |  |- Email: 2098628 - Mother's Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098628.txt
+ |  |  |  |  |- Email: 2098660 - Administrative Professionals Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098660.txt
+ |  |  |  |  |- Email: 2098692 - Easter Day
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098692.txt
+ |  |  |- Contacts
+ |  |  |  |- GAL Contacts
+ |  |  |  |- {06967759-274D-40B2-A3EB-D7F9E73727D7}
+ |  |  |  |- Recipient Cache
+ |  |  |  |- PeopleCentricConversation Buddies
+ |  |  |  |- Organizational Contacts
+ |  |  |  |- Companies
+ |  |  |  |- {A9E2BC46-B3A0-4243-B315-60D991004455}
+ |  |  |- Drafts
+ |  |  |- Tasks
+ |  |  |- Sync Issues
+ |  |  |  |- Conflicts
+ |  |  |  |- Local Failures
+ |  |  |  |- Server Failures
+ |  |  |- Quick Step Settings
+ |  |- ~MAPISP(Internal)
+ |  |- Drizzle
+ |  |- Shared Data
+ |  |- SPAM Search Folder 2
+ |  |- ItemProcSearch
+./testdata/pstextractortestpdf@outlook.com.ost processed in 125 ms
+Done in 4.02s.
