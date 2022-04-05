@@ -10,10 +10,17 @@ const topOutputFolder = './testdataoutput/'
 
 const verbose = true
 const displaySender = true
-const displayBody = false
+const displayBody = true
 let outputFolder = ''
 let depth = -1
 let col = 0
+
+// console log highlight with https://en.wikipedia.org/wiki/ANSI_escape_code
+const ANSI_RED = 31
+const ANSI_YELLOW = 93
+const ANSI_GREEN = 32
+const ANSI_BLUE = 34
+const highlight = (str: string, code: number = ANSI_RED) => '\u001b[' + code + 'm' + str + '\u001b[0m'
 
 /**
  * Returns a string with visual indication of depth in tree.
@@ -50,7 +57,7 @@ function doSaveToFS(
     // save the msg as a txt file
     const filename = emailFolder + msg.descriptorNodeId + '.txt'
     if (verbose) {
-      console.log('saving msg to ' + filename)
+      console.log(highlight('saving msg to ' + filename))
     }
     const fd = fs.openSync(filename, 'w')
     fs.writeSync(fd, msg.clientSubmitTime + '\r\n')
@@ -72,7 +79,7 @@ function doSaveToFS(
       const filename =
         emailFolder + msg.descriptorNodeId + '-' + attachment.longFilename
       if (verbose) {
-        console.log('saving attachment to ' + filename)
+        console.log(highlight('saving attachment to ' + filename, ANSI_BLUE))
       }
       try {
         const fd = fs.openSync(filename, 'w')
@@ -176,8 +183,9 @@ function processFolder(folder: PSTFolder): void {
 
       // display body?
       if (verbose && displayBody) {
-        console.log(email.body)
-        console.log(email.bodyRTF)
+        console.log(highlight('email.body', ANSI_YELLOW), email.body)
+        console.log(highlight('email.bodyRTF', ANSI_YELLOW), email.bodyRTF)
+        console.log(highlight('email.bodyHTML', ANSI_YELLOW), email.bodyHTML)
       }
 
       // save content to fs?
@@ -225,7 +233,7 @@ try {
 const directoryListing = fs.readdirSync(pstFolder)
 directoryListing.forEach((filename) => {
   if (filename.endsWith('.pst') || filename.endsWith('.ost')) {
-    console.log(pstFolder + filename)
+    console.log(highlight(pstFolder + filename, ANSI_GREEN))
 
     // time for performance comparison to Java and improvement
     const start = Date.now()
@@ -247,6 +255,6 @@ directoryListing.forEach((filename) => {
     processFolder(pstFile.getRootFolder())
 
     const end = Date.now()
-    console.log(pstFolder + filename + ' processed in ' + (end - start) + ' ms')
+    console.log(highlight(pstFolder + filename + ' processed in ' + (end - start) + ' ms', ANSI_GREEN))
   }
 })

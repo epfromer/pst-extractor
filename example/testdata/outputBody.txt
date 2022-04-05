@@ -1,0 +1,3404 @@
+> Executing task: yarn run test <
+
+yarn run v1.22.15
+$ ts-node test.ts
+./testdata/enron.pst
+Personal folders
+ |- Top of Personal Folders
+ |  |- Deleted Items
+ |  |- lokay-m
+ |  |  |- MLOKAY (Non-Privileged)
+ |  |  |  |- TW-Commercial Group
+ |  |  |  |  |- Email: 2097188 - New OBA's
+ |  |  |  |  |-  sender: Lee  Dennis (Dennis.Lee@ENRON.com)
+email.body The attached OBA's have been submitted to the customers for their signature.  The only two remaining are Mojave (Effective date 12/02/01) and Williams Field Services (Effective Date 11/3/01).  I will send them out tomorrow (10/23).
+
+
+
+
+
+Dennis P. Lee
+ETS
+Gas Logistics
+(713) 853-1715
+dennis.lee@enron.com
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML 
+saving msg to ./testdataoutput/enron.pst/2001-10-22/2097188.txt
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_27602_Citizens.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_AmocoProd_27729.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_Burlington_27732.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_CIG_27741.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_Dynegy_27725.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_Dynegy_27726.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_LoneStar_27730.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_NWPL_27733.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_Oasis_27727.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_Panhandle_27731.doc
+saving attachment to ./testdataoutput/enron.pst/2001-10-22/2097188-OBA_RedCedar_27728.doc
+ |  |  |  |  |- Email: 2097220 - I/B Link Capacity for November and December 2001
+ |  |  |  |  |-  sender: Reames Julie (JReames@br-inc.com)
+email.body 
+Michelle,
+
+Per our earlier conversation, Burlington Resources agrees to purchase 20,000 of Ignacio/Blanco space for the month of November at $.05.  We
+also agree to purchase 10,000 of Ignacio/Blanco capacity for December at $.05.  We will purchase this capacity using EOL. Thank you.
+
+
+Julie Reames
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML 
+saving msg to ./testdataoutput/enron.pst/2001-10-24/2097220.txt
+ |  |  |  |  |- Email: 2097252 - West Texas Capacity
+ |  |  |  |  |-  sender: dlsmith@pplweb.com
+email.body Michelle,
+
+PPL EnergyPlus requests 10,000 dth of available West Texas receipts to 
+supplement the 4265 dth already allocated as part of its contract 27641 for a 
+total of 14265.  Please forward any documentation for our execution.  Thanks for 
+you assistance in this matter.
+
+Best Regards
+
+David Smith
+610-774-6283
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-24/2097252.txt
+ |  |  |  |  |- Email: 2097284 - EOL Confirmation -Transwestern Pipeline Company
+ |  |  |  |  |-  sender: Buehler  Craig (Craig.Buehler@ENRON.com)
+email.body
+This message is to confirm your EOL transaction with Transwestern Pipeline Company.
+You have successfully acquired the package(s) listed below.  If you have questions or
+concerns regarding the transaction(s), please call Craig Buehler at (713)853-6964
+prior to placing your nominations for these volumes.
+
+US Pipeline Capacity TW(Firm)
+
+Transaction No:  60989
+Product Name:    LaMaquina-I/B Link
+Time Stamp:      Oct 24 2001  11:24 am
+TW Request#:     27745
+
+Shipper Name:    Burlington Resources Trading, Inc.
+TW Contract#:    27747
+
+Volume:          20,000 Dth/d
+
+Rate:            $0.0500/d 1-part(Combined Reservation & Commodity) 100% Load Factor
+                 + applicable fuel and unaccounted for
+
+Term:            11/01/2001 through 11/30/01
+
+Primary Points:         RP
+                 500539 WFS LA MAQUINA PLANT I/C
+
+                        DP
+                 500545 I/B LINK
+
+
+Alternate Points:           RP
+                 500535 WFS IGNACIO
+
+                         DP
+                 500540 EPNG/BLANCO
+
+
+Contact:         Craig Buehler Phone  (713)853-6964
+                               Fax    (713)646-8085
+                               Email  craig.buehler@enron.com
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-25/2097284.txt
+ |  |  |  |  |- Email: 2097316 - EOL Confirmation -Transwestern Pipeline Company
+ |  |  |  |  |-  sender: Buehler  Craig (Craig.Buehler@ENRON.com)
+email.body
+This message is to confirm your EOL transaction with Transwestern Pipeline Company.
+You have successfully acquired the package(s) listed below.  If you have questions or
+concerns regarding the transaction(s), please call Craig Buehler at (713)853-6964
+prior to placing your nominations for these volumes.
+
+US Pipeline Capacity TW(Firm)
+
+Transaction No:  60989
+Product Name:    LaMaquina-I/B Link
+Time Stamp:      Oct 25 2001  10:25 am
+TW Request#:     27747
+
+Shipper Name:    Burlington Resources Trading, Inc.
+TW Contract#:    27748
+
+Volume:          10,000 Dth/d
+
+Rate:            $0.0500/d 1-part(Combined Reservation & Commodity) 100% Load Factor
+                 + applicable fuel and unaccounted for
+
+Term:            12/01/2001 through 12/31/01
+
+Primary Points:         RP
+                 500539 WFS LA MAQUINA PLANT I/C
+
+                        DP
+                 500545 I/B LINK
+
+
+Alternate Points:           RP
+                 500535 WFS IGNACIO
+
+                         DP
+                 500540 EPNG/BLANCO
+
+
+Contact:         Craig Buehler Phone   (713)853-6964
+                               Fax     (713)646-8085
+                               Email   craig.buehler@enron.com
+
+                        OR
+
+                    Esther Dasilva Phone  (713)853-5789
+                                     Fax    (713)646-8085
+                                 Email  esther.dasilva@enron.com
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-25/2097316.txt
+ |  |  |  |  |- Email: 2097348 - New PNR points for Transwestern
+ |  |  |  |  |-  sender: Brostad  Karen (Karen.Brostad@ENRON.com)
+email.body The following two new PNR points have been established for Transwestern per marketing's request.
+
+DRN numbers have been requested.
+
+Dennis, please add these to the PNR templates.
+
+POI             78293
+POI Name        PNR NNG/TW Gray
+Loc             I&GN Survey, Blk 33, sec 148, Gray Co, TX
+
+
+POI             78294
+POI Name        PNR NNG/TW Halley
+Loc             G&MMB&A Survey, Blk F, RR SEc 31, Winkler Co, TX
+
+
+Karen
+
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-25/2097348.txt
+ |  |  |  |  |- Email: 2097380 - RR expansion contracts.
+ |  |  |  |  |-  sender: Frazier  Perry (Perry.Frazier@ENRON.com)
+email.body Help!
+
+
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-26/2097380.txt
+saving attachment to ./testdataoutput/enron.pst/2001-10-26/2097380-RedRockAllocSumm.xls
+ |  |  |  |  |- Email: 2097412 - TW EOLs
+ |  |  |  |  |-  sender: Buehler  Craig (Craig.Buehler@ENRON.com)
+email.body Here's the latest...
+
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-25/2097412.txt
+saving attachment to ./testdataoutput/enron.pst/2001-10-25/2097412-EOLTWdeals.xls
+ |  |  |  |  |- Email: 2097444 - Bullets 10/26/01
+ |  |  |  |  |-  sender: Lokay
+email.body Western executed 10,000 MMBtu/d of Blanco to Thoreau capacity effective June 2002, as an additional source of supply for their Red Rock expansion contract.  The capacity is for 15 years at the maximum rate, generating $5.6 million in demand charges.
+Sold two packages of stranded firm transportation to Burlington Resources from LaMaquina to Blanco for November and December at $0.05 plus fuel, which gives TW an incremental revenues of $45,500 not already in plan.  These transactions were executed through EnronOnLine.
+
+Michelle Lokay
+Account Director
+Transwestern Commercial Group
+713-345-7932
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-26/2097444.txt
+ |  |  |  |  |- Email: 2097476 - Verify RR expansion cr's for ROFR.
+ |  |  |  |  |-  sender: Frazier  Perry (Perry.Frazier@ENRON.com)
+email.body
+
+Please, check this spreadsheet accuracy for the Year and Point data.  Then send back to Dennis and myself, he will then fix the CBS.
+
+
+
+
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-26/2097476.txt
+saving attachment to ./testdataoutput/enron.pst/2001-10-26/2097476-RedRockAllocSumm.xls
+ |  |  |  |  |- Email: 2097508 - Red Rock Adm. cr # 27698 revisions.
+ |  |  |  |  |-  sender: Frazier  Perry (Perry.Frazier@ENRON.com)
+email.body
+Dennis, these are the changes to the Red Rock administrative contract # 27698. These changes incorporate the POI split out revisions from the past 2 weeks.  Let me know if you have any questions and call me with the timing of you updates.
+
+PT 3-0667
+
+
+
+
+10/29/2001                      POI's   58646   58647   58649   78093
+        Adm cr# 27698                   WTX     PH      Agave   EPFS/Eddy
+        6/1/2002        6/30/2002               36699   89035   15000   9266    150000
+        7/1/2002        5/31/2003               70228   49035   15000   15737   150000
+        6/1/2003        3/31/2004               71523   47740   15000   15737   150000
+        4/1/2003        5/31/2017               66523   52740   15000   15737   150000
+        6/1/2017        6/30/2017               63823   55440   15000   15737   150000
+        7/1/2017        12/31/2999              30294   95440   15000   9266    150000
+
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-29/2097508.txt
+ |  |  |  |  |- Email: 2097540 - TW Weekly Report for October 26, 2001
+ |  |  |  |  |-  sender: Moore
+email.body Attached is the TW weekly report for October 26, 2001.  If you have any questions, please let me know.
+
+
+
+
+
+Jan Moore
+713-345-3858
+
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-26/2097540.txt
+saving attachment to ./testdataoutput/enron.pst/2001-10-26/2097540-sharris1001wk4.xls
+ |  |  |  |  |- Email: 2097572 - FW: New PNR points for Transwestern
+ |  |  |  |  |-  sender: Cabrera  Reyna (Reyna.Cabrera@ENRON.com)
+email.body
+
+ -----Original Message-----
+From:   Cabrera, Reyna
+Sent:   Friday, October 26, 2001 10:42 AM
+To:     Black, Legale ; Blair, Lynn; Bodnar, Michael; Giambrone, Laura; Hanagriff, Richard; Hernandez, Bert; Kowalke, Terry; Kuehl, Toby; Lohman, TK; McEvoy, Christine; Miller, Beverly; Miller, Chris; Minter, Tracy; Mulligan, Amy; Neville, Sue; Schoolcraft, Darrell; Threet, Kay; Ward, Linda
+Subject:        FW: New PNR points for Transwestern
+
+Toby/Legale,
+Would you please post the attached Park & Ride rates which include the new points?  Thank you for your help in this matter.
+
+
+Reyna
+X33072
+
+ -----Original Message-----
+From:   Lohman, TK
+Sent:   Thursday, October 25, 2001 3:18 PM
+To:     Cabrera, Reyna
+Subject:        FW: New PNR points for Transwestern
+
+Hey, Queen!  Could you add these points to our PNR Posting.
+
+Thanks,
+
+TK
+
+ -----Original Message-----
+From:   Brostad, Karen
+Sent:   Thursday, October 25, 2001 3:16 PM
+To:     Lohman, TK; Brown, Elizabeth; Buchanan, John; Draemer, Mary ; Frazier, Perry; Hernandez, Bert; Hyatt, Kevin; Kowalke, Terry; Lee, Dennis; Lindberg, Lorraine; Lokay, Michelle; McEvoy, Christine; Miller, Beverly; Minter, Tracy; Mulligan, Amy; Ramsaran, Gale; Schoolcraft, Darrell; Trevino, Linda; Ward, Linda; Steele, Patricia
+Subject:        New PNR points for Transwestern
+
+The following two new PNR points have been established for Transwestern per marketing's request.
+
+DRN numbers have been requested.
+
+Dennis, please add these to the PNR templates.
+
+POI             78293
+POI Name        PNR NNG/TW Gray
+Loc             I&GN Survey, Blk 33, sec 148, Gray Co, TX
+
+
+POI             78294
+POI Name        PNR NNG/TW Halley
+Loc             G&MMB&A Survey, Blk F, RR SEc 31, Winkler Co, TX
+
+
+Karen
+
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-29/2097572.txt
+saving attachment to ./testdataoutput/enron.pst/2001-10-29/2097572-TW_PNR_Oct26_01.doc
+ |  |  |  |  |- Email: 2097604 - TW administrative contract # 27698
+ |  |  |  |  |-  sender: Lee  Dennis (Dennis.Lee@ENRON.com)
+email.body We have established a new FT in CBS (CR 27698) to track capacity availability due to the Red Rockl Expansion.  We would like to execute the agreement in CBS so the volumes can be sent to CAS.
+
+Please note this contract is for administrative purposes only and should not be invoiced and should not be included in any reporting.  If there are no concerns, I will activate this contract tomorrow morning (10/30/01).
+
+
+Dennis P. Lee
+ETS
+Gas Logistics
+(713) 853-1715
+dennis.lee@enron.com
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-29/2097604.txt
+ |  |  |  |- Systems
+ |  |  |  |  |- Email: 2097636 - How to prepare your expense report
+ |  |  |  |  |-  sender: ETS General Announcement/ET&S/Enron@ENRON (IMCEANOTES-ETS+20General+20Announcement_ET+26S_Enron+40ENRON@ENRON.com)
+email.body
+Important Instructions for Sending in Expense Reports:
+
+·       Prepare your expense report.
+
+·       Once completed, click on the print button at the top.
+
+·       A box requesting you to select the appropriate type of report will be displayed.  Select either Receipt Report or Detail Report based on the following specifications:
+
+1.      Receipt Report - This report must be printed and sent to accounting. This report has a bar code on it that is needed for the accounting department to scan in your report. It also tells you which receipts must be sent in with the receipt report.
+
+2.      Detail Report - Do not send this report to accounting (it has no bar code).  This report is more appropriate for the traveler or the person that prepares the report in case they would like to keep a paper copy.
+
+
+·       Once you have printed the receipt report and attached the receipts, you must send all expense reports in the white A/P envelope with the open slot at the right hand corner (the bar code must be seen through this slot).
+
+
+**If you follow these instructions when sending in your expense reports, the receipts will be scanned much more quickly.  If you do not use the correct envelope or do not send the correct report, it will significantly slow down the process.
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-08-30/2097636.txt
+ |  |  |  |  |- Email: 2097668 - eRequest
+ |  |  |  |  |-  sender: Carl Carter (Carl Carter/NA/Enron@Enron)
+email.body For some reason, the eRequests that you filled out never made it to EnronOnline. Please re-submit your request following the instructions on the attached document. Remember that you need to specify what applications you need user ids and passwords to access (example: external website-EnronOnline, Citrix Terminal Server Client, reports access).
+Call me at x-53854 if you have any questions.
+Carl
+
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-01-30/2097668.txt
+saving attachment to ./testdataoutput/enron.pst/2001-01-30/2097668-Navigating eRequest.doc
+ |  |  |  |  |- Email: 2097700 - EnronOnline -Stack Manager Changes
+ |  |  |  |  |-  sender: Puthigai  Savita (Savita.Puthigai@ENRON.com)
+email.body We have made the  following modifications to the EnronOnline applications.
+
+Stack Manager Changes
+
+Fill Order Enhancements - (Effective Tuesday September 25)
+·       To fill a Top of Stack order in Stack Manager, Right click on the pink shaded order in the depth window of Stack Manager and select fill.        
+·       The trader now has the ability to fill limit orders that appear at the top of the trader's stack on both sides.
+·       The order will now be filled at the full order volume regardless of the trader's stack volume.
+·       Filling an order will not move the trader's price or cause a hedge to occur.
+
+Resize floated stack windows- (Effective Tuesday September 25)
+
+You will now have the ability to resize the stack window to the desired extent.
+
+Website Changes ( Effective Monday September 24)
+
+Limit Order Restrictions on Physical Transactions -
+·       Customers will not be allowed to transact with themselves on physical transactions. If a top of stack limit order has been placed on a physical product the counterparty or desk that placed the order will not be allowed to transact on it.
+·       If a customer or desk has top of stack limit orders at different prices on both the bid and offer and subsequently moves the price of one so that they are at the same price, both orders will be cancelled. The customer would have effectively transacted with himself.
+
+Please call me if you have any questions. Thanks.
+
+Savita ( X 31787)
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-09-24/2097700.txt
+ |  |  |  |  |- Email: 2097732 - LIM Software Upgrade Notice
+ |  |  |  |  |-  sender: Enron Announcements/Corp/Enron@ENRON (IMCEANOTES-Enron+20Announcements_Corp_Enron+40ENRON@ENRON.com)
+email.body         All LIM MIMIC & Excel Add-in Users within Enron,
+
+
+            This past week LIM software was upgraded to reflect LIM latest versions.  If you are experiencing problems with MIMIC or the XMIM Excel Addin, please restart your machine for the latest changes to take effect, then follow the instructions for your specific application.
+
+
+        MIMIC:
+
+                   Under Start > Programs > Business Applications > LIM, Use the latest MIMIC version which is MIMIC 1.2.7
+
+
+        Excel Addin:
+
+                    Please reinstall your add-in, running the XMIM Excel User (installation) under Start > Programs > Business Applications > LIM        
+
+
+If problems persist, please contact the Enron - LIM Helpdesk at extension 33923 or 713-853-3923.
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-09-27/2097732.txt
+ |  |  |  |  |- Email: 2097764 - Sending customer information from ENVISION
+ |  |  |  |  |-  sender: Lee  Dennis (Dennis.Lee@ENRON.com)
+email.body During our Envision training session the question came up as to whether or not we can send documents to our customers from Envision via Email.
+
+After working with Sylvia Thomas, the answer is yes and no.  Yes, we can get documents form Envision to the customer easily.  No we can't do it through Email.
+Sylvia and her team, however, are going to look into the possibility of being able to send information from Envision securely through Email.
+
+In the meantime, you can fax information directly from Envision to your customer.  Directions are attached.  If you have any questions or problems, feel free to call.
+
+
+
+Dennis P. Lee
+ETS
+Gas Logistics
+(713) 853-1715
+dennis.lee@enron.com
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-09-06/2097764.txt
+saving attachment to ./testdataoutput/enron.pst/2001-09-06/2097764-envision_printing.doc
+ |  |  |  |  |- Email: 2097796 - Email Retention Policy
+ |  |  |  |  |-  sender: Enron Global Technology@ENRON
+email.body This is a reminder of Enron's Email retention policy.  The Email retention policy provides as follows:
+
+Message Location - Maximum Retention
+Inbox - 30 days
+Sent Mail Folder - 30 days
+Trash/Deleted Items - Rollover from Inbox for one day
+Folders - All Email messages placed in folders will be destroyed after one calendar year. This includes public folders in Outlook.
+
+
+Furthermore, it is against policy to store Email outside of your Outlook Mailbox and/or your Public Folders.  Please do not copy Email onto floppy disks, zip disks, CDs or the network.  Such actions are prohibited and will not be supported by the IT Department.
+
+There will be no exceptions to this policy.
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-05/2097796.txt
+ |  |  |  |  |- Email: 2097828 - Supported Internet Email Addresses
+ |  |  |  |  |-  sender: Enron Messaging Administration (/O=ENRON/OU=NA/CN=RECIPIENTS/CN=NOTESADDR/CN=ENRON)
+email.body Enron Global Technology is in the process of decommissioning the support for all non-standard Internet Email address formats. The only Internet Email address format that will be supported, once this effort is completed, is firstname.lastname@enron.com. We will no longer support Internet Email address formats such as name@enron.com, name@ect.enron.com, name@ei.enron.com  (where "name" is an abbreviation, acronym or alternative to an employees firstname and/or lastname). Every Enron employee has an Internet Email address of firstname.lastname@enron.com and must begin making the necessary arrangements to start using this Internet address format if they are not using it already.
+Any new/existing application systems or business cards that reference a non-supported Internet Email address will need to be changed to reference the only supported firstname.lastname@enron.com Internet address format. It is important to remember to also notify any external contacts who are currently sending Internet email to any non-supported Internet Email addresses.
+To determine what your supported Internet Email address is, take your name as it appears in Outlook or Lotus Notes and replace any "spaces" that appear in your name with periods and append @enron.com. For example in Outlook, Alan Smith, Robert (firstname = Robert, Lastname = Alan Smith) will have a supported Internet Email address of robert.alan.smith@enron.com.
+IMPORTANT : If you need to update your business card(s) to reflect your supported Internet Email address, please ensure you test & confirm the delivery of Internet email to your supported email address prior to updating your business cards. If you experience any issues with delivery of Internet email to your supported Internet email address, please contact the Resolution Center.
+We will communicate further details, including the cut-off date, in the coming weeks. Meanwhile, it is imperative that you begin making the necessary arrangements to change over to using the firstname.lastname@enron.com Internet Email address format. If you have questions regarding this email, send an Email to enron.messaging.administration@enron.com.
+Thank you for participation, cooperation and support.
+Enron Messaging Administration
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-16/2097828.txt
+ |  |  |  |- Sent Items
+ |  |  |  |  |- Email: 2097860 - Cirque du Soleil - Dralion
+ |  |  |  |  |-  sender: Lokay
+email.body Mark your calendars!  The Transwestern Commercial group is confirmed for the afternoon show at 5:00 pm on Thursday, January 24.  We have 25 tickets for us and our customers.  Let's do the show and then dinner.  Customer list and suggestions for dinner?...
+
+http://www.cirquedusoleil.com/en/piste/dralion.html
+
+
+Michelle Lokay
+Account Director
+Transwestern Commercial Group
+713-345-7932
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-29/2097860.txt
+ |  |  |  |  |- Email: 2097892 - Accepted: Updated: Finalize Transwestern Presentations
+ |  |  |  |  |-  sender: Lokay
+email.body
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-10-29/2097892.txt
+ |  |  |  |- Personal
+ |  |  |  |  |- Email: 2097924 - Fwd: Enjoy fall in an Alamo midsize car -- just $169 a week!
+ |  |  |  |  |-  sender: Jim Lokay jimbomania@hotmail.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3Cjimbomania+40hotmail+2Ecom+3E+40ENRON@ENRON.com)      
+email.body
+
+
+>From: "FareTracker"
+><FareTracker_009440@faretracker.expedia.customer-email.com>
+>To: <jimboman@bigfoot.com>
+>Subject: Enjoy fall in an Alamo midsize car -- just $169 a week!
+>Date: Sun, 1 Oct 2000 12:48:11 -0700
+>
+>
+>Dear James Lokay,
+>
+>The crisp, clear days of fall are here, and it's the perfect time to get
+>away. Whether
+>you choose to indulge in a bit of leaf-peeping, a romantic drive along
+>the coast, or a
+>family gathering at Grandma's house, Alamo and Expedia.com have the car
+>you want
+>at a price you'll love. Right now, book a midsize car for just $169 a
+>week. Want
+>something a little more rugged? Make tracks in an SUV for only $189 a
+>week.
+>http://www.expedia.com/promos/alamo/default.asp
+><http://216.32.31.189/tracker/default.asp?r=00000640d005ef831>
+>
+>Travel now and pocket some savings for your next trip. Purchase a United
+>ticket on
+>Expedia.com through October 31, 2000 and you'll receive an award good
+>for 30% off
+>a future United purchase on Expedia.com.
+>http://www.expedia.com/promos/United/default.asp
+><http://216.32.31.189/tracker/default.asp?r=00000640e005ef831>
+>
+>**********************************************************************
+>TRAVEL NEWS
+>***********************************************************************
+>
+>Every week, we bring you the travel updates and fare sales so you can
+>make exactly the
+>right travel choices.
+>
+>
+>Double up on miles -- fly US Airways from NYC
+>US Airways' Dividend Miles program delivers double the frequent flyer
+>miles through
+>November. Just fly from LaGuardia to one of several destinations, and
+>watch those
+>miles add up!
+>http://www.expedia.com/daily/travnews/September2000/september06-00Busine
+>ssUSAirwaysMiles.asp
+><http://216.32.31.189/tracker/default.asp?r=00000640f005ef831>
+>
+>Golden leaves, fiery bogs: A hike to remember near Boston
+>Escape the city during Trek 2000 and amble along sections of the
+>200-mile Bay Circuit
+>Trail, where you'll see fall's finest foliage, including crimson
+>cranberry bogs. If you like,
+>combine your leaf-looking with a trip to Concord, site of the
+>Revolutionary War's "shot
+>heard round the world."
+>http://www.expedia.com/daily/travnews/September2000/September27-00Family
+>BostonTrail.asp
+><http://216.32.31.189/tracker/default.asp?r=000006840005ef831>
+>
+>Learn the science of magic in L.A.
+>Is your little one mesmerized by magicians? Kids will love "Magic: The
+>Science of
+>Illusion" at L.A.'s California Science Center. They'll learn how science
+>makes possible
+>illusions like detachable heads and mind reading. Also, check out an
+>IMAX film on that
+>dynamic duo, Siegfried and Roy.
+>http://www.expedia.com/daily/travnews/September2000/September27-00Family
+>CaliforniaMagic.asp
+><http://216.32.31.189/tracker/default.asp?r=000006884005ef831>
+>
+>
+>See what's new in other places:  http://www.expedia.com/daily/travnews/
+><http://216.32.31.189/tracker/default.asp?r=000006812005ef831>
+>
+>
+>
+>YOUR FARETRACKER LOW FARES
+>*************************************************
+>We've designed Fare Tracker to help you find great fares by listing
+>the lowest round trip fares found by your fellow travelers on the routes
+>you
+>selected.
+>
+>You can change your Fare Tracker subscription at:
+>http://expedia.com/pub/userinfo.dll?qscr=subs&zz=
+><http://216.32.31.189/tracker/default.asp?r=000006408005ef831&qscr=subs&
+>zz=>
+>
+>From:     Houston, TX, United States (IAH-Bush Intercontinental)
+>To:       Rome, Italy (FCO-Leonardo Da Vinci (Fiumicino))
+>463.93 US dollars
+><http://216.32.31.189/tracker/default.asp?r=000006406005ef831&qscr=cmpf&
+>airp=IAH&dair=FCO&subm=1&tpid>
+>
+>From:     Houston, TX, United States (IAH-Bush Intercontinental)
+>To:       Las Vegas, NV, United States (LAS-McCarran Intl.)
+>256.00 US dollars
+><http://216.32.31.189/tracker/default.asp?r=000006406005ef831&qscr=cmpf&
+>airp=IAH&dair=LAS&subm=1&tpid>
+>
+>From:     Houston, TX, United States (IAH-Bush Intercontinental)
+>To:       Albuquerque, NM, United States (ABQ-Albuquerque Intl.)
+>206.00 US dollars
+><http://216.32.31.189/tracker/default.asp?r=000006406005ef831&qscr=cmpf&
+>airp=IAH&dair=ABQ&subm=1&tpid>
+>
+>
+>Check out all your route and fare options with our Flight Wizard:
+>http://www.expedia.com/pubspec/scripts/eap.asp?GOTO=FlightWiz&rfrr=-604
+><http://216.32.31.189/tracker/default.asp?r=000006409005ef831&GOTO=Fligh
+>tWiz&rfrr=-604>
+>
+>***********************************************************************
+>SPECIAL DEALS
+>***********************************************************************
+>
+>We handpick the best offers and promotions to bring you excellent value
+>on unforgettable
+>experiences.
+>
+>
+>Cruise Outlet: Los Angeles to Baja, Mexico from $289
+>Enjoy the sun and shop while you dock at San Diego, Catalina Island, and
+>Ensenada.
+>http://www.expedia.com/daily/deals/default.asp
+><http://216.32.31.189/tracker/default.asp?r=000006823005ef831>
+>
+>Expedia Special Rate: Wyndham's Orlando Resort from $75
+>Close to all the excitement, this hotel is packed with amenities.
+>http://www.expedia.com/daily/deals/default.asp
+><http://216.32.31.189/tracker/default.asp?r=000006823005ef831>
+>
+>Travelscape.com: Las Vegas package from $360
+>Hit the jackpot with this offer. Package includes air and two nights at
+>the Aladdin.
+>http://www.expedia.com/daily/deals/default.asp
+><http://216.32.31.189/tracker/default.asp?r=000006823005ef831>
+>
+>
+>Looking for more great deals on Expedia.com? See our
+>Special Deals at:
+>http://www.expedia.com/pub/etn.dll?qscr=spdl
+><http://216.32.31.189/tracker/default.asp?r=000006848005ef831&qscr=spdl>
+>
+>
+>
+>
+>**********************************************************************
+>FROM OUR SPONSORS
+>***********************************************************************
+>
+>Get a free vacation day with Hyatt.
+>
+>Thinking about a getaway? How about extending it a little longer? With
+>Hyatt Resorts' Sunshine on Sale
+ you'll get a FREE NIGHT'S STAY, which
+>means you'll have an extra day to play. Click below for details.
+>
+>http://ads.msn.com/ads/expftr/hyatt2.asp
+><http://216.32.31.189/tracker/default.asp?r=00000640c005ef831>
+>******************************************************************
+>
+>
+>Thank you again for traveling with Expedia.com.
+>
+>Expedia.com Travel Team
+>Don't just travel. Travel Right.
+>http://expedia.com/
+><http://216.32.31.189/tracker/default.asp?r=000006405005ef831>
+>
+>You are receiving this e-mail because you are a registered
+>member of Expedia.com. Your Expedia membership is free and
+>your privacy and credit card security  are guaranteed. Questions?
+>Visit the Expedia.com Service Center at:
+>http://www.expedia.com/daily/service/
+><http://216.32.31.189/tracker/default.asp?r=00000640a005ef831>
+>
+>If you do not wish to receive any further e-mails from us,
+>please reply to this mail with "unsubscribe" in the subject line.
+>
+>Apologies but we cannot reply to responses to Fare Tracker.
+>If you have questions or want to give feedback, click here:
+>
+>http://www.expedia.com/pub/feedback.dll?qscr=comt&Calr=
+><http://216.32.31.189/tracker/default.asp?r=00000640b005ef831&qscr=comt&
+>Calr= >
+>
+>(c) 1998, 1999, 2000 Expedia, Inc. All rights reserved.
+>
+>This email was sent to: jimboman@bigfoot.com
+
+_________________________________________________________________________
+Get Your Private, Free E-mail from MSN Hotmail at http://www.hotmail.com.
+
+Share information about yourself, create your own public profile at
+http://profiles.msn.com.
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2000-10-06/2097924.txt
+ |  |  |  |  |- Email: 2097956 - TRIP INFO
+ |  |  |  |  |-  sender: cbulf (cbulf@oneok.com)
+email.body
+
+Here's some long awaited trip information...(See attached file: TAHOE
+INFORMATOIN.doc)(See attached file: tahoe.xls)
+
+ - TAHOE INFORMATOIN.doc
+ - tahoe.xls
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-02-06/2097956.txt
+saving attachment to ./testdataoutput/enron.pst/2001-02-06/2097956-TAHOE INFORMATOIN.doc
+saving attachment to ./testdataoutput/enron.pst/2001-02-06/2097956-tahoe.xls
+ |  |  |  |  |- Email: 2097988 - Check out page 7!
+ |  |  |  |  |-  sender: Michelle Lokay
+email.body
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-02-01/2097988.txt
+saving attachment to ./testdataoutput/enron.pst/2001-02-01/2097988-TWEOL.pdf
+ |  |  |  |  |- Email: 2098020 - ClickAtHome is Coming Soon!
+ |  |  |  |  |-  sender: ClickAtHome (ClickAtHome@Enron)
+email.body Want a NEW high speed computer?
+
+866 MHz Pentium III Processor FAST enough?
+
+Want High Speed internet?
+Broadband,
+Cable Modem,
+DSL,
+Satellite.
+
+Then Get READY...
+All Eligible U.S. Employees get innovative at HOME beginning March, 2001.
+
+Go to http://clickathome.enron.com to LEARN more about the offerings.
+
+Non-U.S. Eligible Employees get innovative at home beginning late 2001 and 2002.
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-02-16/2098020.txt
+ |  |  |  |  |- Email: 2098052 - contact
+ |  |  |  |  |-  sender: Lisa Norwood (ljnorwood@calpine.com)
+email.body Michelle,
+Our True-Quote rep is Kelly Stroud at 713-350-1008.  If Jim wants to call
+her to find out some info, he can tell her he got the number from Calpine.
+I have only met Kelly Stroud a couple of times and she will remember me
+because I was taking motorcycle classes when I met her and she used to ride
+bikes.
+Good Luck
+Lisa
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-02-16/2098052.txt
+ |  |  |  |  |- Email: 2098084 - [Fwd: New email address - again!]
+ |  |  |  |  |-  sender: Jim Lokay jimboman@bigfoot.com@ENRON (IMCEANOTES-Jim+20Lokay+20+3Cjimboman+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+email.body
+
+-------- Original Message --------
+Subject: New email address - again!
+Date: Mon, 26 Feb 2001 13:08:33 -0600
+From: "Ott, Shana" <Shana.Ott@elpaso.com>
+
+My email address is changing again due to the merger.  It is now:
+
+Shana.Ott@ElPaso.com
+
+Shana
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-02-26/2098084.txt
+ |  |  |  |  |- Email: 2098116 - file
+ |  |  |  |  |-  sender: Jim Lokay jimboman@bigfoot.com@ENRON (IMCEANOTES-Jim+20Lokay+20+3Cjimboman+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+email.body I hope this goes faster this time.
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-02-27/2098116.txt
+ |  |  |  |  |- Email: 2098148 - An Opportunity to Change Your Electricity Provider
+ |  |  |  |  |-  sender: Enron Announcements/Corp/Enron@ENRON (IMCEANOTES-Enron+20Announcements_Corp_Enron+40ENRON@ENRON.com)
+email.body Electricity Deregulation is coming to Texas!
+What a great way to start off the New Year - to be able to choose your electricity provider, which could mean potential savings for you and your family on your electric bill.  As you know, Enron has been a leader in lobbying for deregulation and a consumer's right to choose energy providers.
+
+For the first time in our state's history, 5 percent of Texas households will have this golden opportunity.  The NewPower Company (NewPower), which is approximately 45 percent owned by Enron, was recently formed to provide energy and energy-related services to residential customers in deregulating energy markets across America, including Texas.  For a limited time, Houston-based employees will be eligible to participate in NewPower's pilot program offering their deregulated electric service.
+
+Be Among the First to Participate:
+Enrollment with NewPower begins March 12.  Also, watch for a special Enron Employees Exclusive offer on your desk March 12.  If you would like more information about NewPower, visit the company's web site at www.newpower.com
+
+Disclaimers:
+Any contract for goods or services that is entered into by an Enron employee with respect to the NewPower program shall be solely between NewPower and such employee.  Enron assumes no obligation on behalf of NewPower and makes no representations, warranties, or guaranties with respect to NewPower, or any goods or services offered or provided by NewPower.
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-03-07/2098148.txt
+ |  |  |  |  |- Email: 2098180 - Fwd: RE: Party Request-the Galleria - Sat 8/11/2001 4:00 PM
+ |  |  |  |  |-  sender: James Lokay jlokay@yahoo.com@ENRON (IMCEANOTES-James+20Lokay+20+3Cjlokay+40yahoo+2Ecom+3E+40ENRON@ENRON.com)
+email.body
+Note: forwarded message attached.
+
+
+__________________________________________________
+Do You Yahoo!?
+Yahoo! Auctions - Buy the things you want at great prices.
+http://auctions.yahoo.com/
+Content-Transfer-Encoding: quoted-printable
+X-Apparently-To: jlokay@yahoo.com via web1304
+X-Track: 1: 40
+Received: from 208.1.36.68  (HELO babybear.buildabear.com) (208.1.36.68)  by mta435.mail.yahoo.com with SMTP; 12 Mar 2001 11:57:52 -0800 (PST)
+Received: from 10.0.0.10 by babybear.buildabear.com (InterScan E-Mail VirusWall NT); Mon, 12 Mar 2001 13:53:19 -0600 (Central Standard Time)
+Received: by PAPA_BEAR with Internet Mail Service (5.5.2650.21) id <GZ6R9QZ2>; Mon, 12 Mar 2001 13:53:11 -0600
+Message-ID: <E0659A36E50FD311A0330008C709FB2701B03C9C@PAPA_BEAR>
+From: Danielle Pierce <Danielle@buildabear.com>
+To: 'James Lokay' <jlokay@yahoo.com>
+Subject: RE: Party Request-the Galleria - Sat 8/11/2001 4:00 PM
+Date: Mon, 12 Mar 2001 13:53:09 -0600
+MIME-Version: 1.0
+X-Mailer: Internet Mail Service (5.5.2650.21)
+Content-Type: text/plain;       charset="iso-8859-1"
+Content-Length: 3206
+
+Dear Michelle,
+
+Thanks beary much for scheduling your group's celebration at Build-A-Bear
+Workshop! A party with approximately 12 guests will last around 1-1½ hours.
+August 11, 2001 is available at 4:00pm! A receipt and confirmation letter
+will be mailed to you beary soon. Your $50.00 deposit will be deducted from
+your total on the day of your visit, and you will pay the remaining balance
+on that day.You may cancel your party 24 hours prior for a full refund, or
+for your deposit to be applied to another date.
+On the day of your visit our party coordinator will meet with you at the
+front of the store. Please let him/her know your price limit before the
+party begins. You can determine the cost of your party by whatever you
+choose to have your guests make. Our bears range in price from $10 - $25 and
+additional options, such as sound or clothing, are available at reasonable
+prices. For a full listing of our animals and clothing, please visit our
+website <http://www2.buildabear.com/Buildabear/1ChooseMe/index.cfm>. To
+receive a brochure, please email me at your convenience.
+We will provide an associate to be with your group. We do not have a party
+room/accommodations for cake, presents or refreshments, so our associate
+will meet your group at the front of the store where we will have stickers
+for everyone in the group. We usually involve the guests in songs, and
+cheers. At the end of the party, the Guest of Honor will receive a
+complimentary Build-A-Bear Workshop gift to commemorate his/her beary
+special day! If you would like to create and print invitations online,
+please visit <http://www2.buildabear.com/FunGames/invites.cfm>.
+If I can further assist you with your party planning, please do not hesitate
+to contact me. Thanks again, and we look forward to seeing you beary soon!
+Beary Truly Yours,
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Danielle Pierce
+E-Bear
+Build-A-Bear Workshop World Bearquarters
+1954 Innerbelt Business Center Drive
+Saint Louis, MO 63114-5760
+Mail to: parties@buildabear.com
+Fax: 314-423-8188
+Visit our website <http://www2.buildabear.com/Party/index.cfm>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+-----Original Message-----
+From: James Lokay [mailto:jlokay@yahoo.com]
+Sent: Sunday, March 11, 2001 3:50 PM
+
+Is the 4 o'clock on August 11th available?  If not, is
+there availability on the evening of Friday the 10th?
+As a last choice, I would be interested in the 10AM
+spot on the 18th.  Please let me know.
+
+Thanks for your help.
+Michelle Lokay
+
+> > > -----Original Message-----
+> > > From: jimboman@bigfoot.com
+> > > [mailto:jimboman@bigfoot.com]
+> > > Sent: Monday, March 05, 2001 8:42 PM
+
+> > > Location: 05-the Galleria
+> > >
+> > > Date 1: Aug 11 2001 11AM
+> > > Date 2: Aug 11 2001 1PM
+> > > Date 3: Aug 11 2001 2PM
+> > >
+> > > Name: Michelle Lokay
+1114 Augusta Drive
+No. 25
+Houston, Texas 77057
+> > >
+> > > Email: jimboman@bigfoot.com
+> > > Daytime Phone: 713-345-7932         Evening
+> Phone:
+> > > 713-781-2948
+> > >
+> > >
+> > > Occasion: Birthday
+> > > Guest of Honor Name: Meghan
+> > > Guest of Honor Age: 3
+> > >
+> > >
+> > > Number of Guests: 12
+> > > Average Age: 4
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-03-12/2098180.txt
+ |  |  |  |  |- Email: 2098212 - links
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-Jim+20Lokay+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+email.body This is the place I was talking about
+http://www.ivacation.com/p6615.htm
+
+
+Some other links worth checking out
+http://www.texasvacation.com/
+http://www.turtlecreeklodge.com/
+http://www.roddytree.com/
+http://www.texashillco.com/
+http://www.reaganwells.com/
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-03-13/2098212.txt
+ |  |  |  |  |- Email: 2098244 - Re: Time Warner Cable question
+ |  |  |  |  |-  sender: Clickathome, (Clickathome@ENRON.com)
+email.body
+You would need to go to clickathome.enron.com, sign in, then go to internet options.  Click on the order button next to Time Warner and then select yes for the question asking if you are a current TW subscriber.  Let us know if you need additoinal assistance.
+
+
+From:   Michelle Lokay/ENRON@enronXgate on 03/20/2001 04:10 PM
+To:     Clickathome/NA/Enron@Enron
+cc:     jimboman@bigfoot.com@SMTP@enronXgate
+
+Subject:        Time Warner Cable question
+
+I already have Road Runner cable internet service at home.  How can I be under the "discounted Enron plan?"  Do I need to cancel and start over or can my bills automatically be reflected?  Thanks.
+
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-03-20/2098244.txt
+ |  |  |  |  |- Email: 2098276 - RE: Good Web
+ |  |  |  |  |-  sender: Ramirez  Pilar (Pilar.Ramirez@ENRON.com)
+email.body
+Sorry, I guess you want the web site.  Just click on it  !!
+
+  www.lowermybills.com
+ -----Original Message-----
+From:   Ramirez, Pilar
+Sent:   Wednesday, March 21, 2001 9:32 AM
+To:     Jones, Dana; Bolks, Sean; Buehler, Craig; Mercaldo, Vernon; Mason, Robert; Threet, Kay; Cabrera, Reyna; McCarran, Penny; Burleson, Bob; Halstead, Lia; Lokay, Michelle; Collins, Joan; Walsh, Patti
+Subject:        Good Web
+
+
+FYI,
+
+I heard this web can help you find the best price for your utilities and other stuff!!
+
+M. Pilar Ramirez
+Enron Transportation Services
+pilar.ramirez@enron.com
+713-853-4706
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-03-21/2098276.txt
+ |  |  |  |  |- Email: 2098308 - Wedding
+ |  |  |  |  |-  sender: Schoolcraft  Darrell (Darrell.Schoolcraft@ENRON.com)
+email.body 
+
+
+
+Lynda Laferla
+03/26/2001 12:29 PM
+To:     Shahnaz Lakho/NA/Enron@Enron
+cc:     Mary Phillips/FGT/Enron@ENRON
+Subject:        Wedding
+
+If I were you I would take Hwy 290 to Sam Houston Tollway, take beltway to I-45, then
+
+take I-45 North and exit Kuykendahl - turn left under freeway and when you get to
+
+light (not  feeder light) but approx one block later there will be the light @Kuykendahl - turn
+
+right and stay on Kuykendahl all the way - you will pass the intersection at FM1960 and
+
+then I think at the next light  or one after that is "WOERNER RD"  TURN RIGHT AND APPROX
+
+1/2 BLOCK down you'll see sign on left "Shirley Acres" - its in the trees.....thats the place
+
+
+
+See the red star above that is "Woerner Rd" and see where you exit off I-45 on Rankin/Kuykendalh exit,
+
+go left under freeway and then turn right onKuykendahl....  You can come all the way down 1960 from Hwy 249
+
+but thats a long slow trip with a lot of lights and traffic.....
+
+Pray for sunshine and warm weather....
+
+Caio bene'
+
+
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-03-26/2098308.txt
+ |  |  |  |  |- Email: 2098340 - Dilbert Strip from Jim is waiting for you!
+ |  |  |  |  |-  sender: PostOffice@DILBERT.COM@ENRON (IMCEANOTES-PostOffice+40DILBERT+2ECOM+40ENRON@ENRON.com)
+email.body Hi Mell,
+
+Jim stopped by Dilbert.com,
+and thought you'd like to read today's Dilbert comic strip!
+To pick up your comic, simply point your browser to the page listed below.
+
+http://umweb3.unitedmedia.com/comics/dilbert/color_strips/postoffice/mar27-0674166.html
+
+Your comic will remain on the server for about two weeks, so
+please print it out or save it as soon as you can.
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-03-27/2098340.txt
+ |  |  |  |  |- Email: 2098372 - eBay item 576466888 (Ends Apr-10-01 104814 PDT) - !!!!Green Is In!!!!! Erin Bud
+ |  |  |  |  |-  sender: Lokay
+email.body
+
+ http://cgi.ebay.com/aw-cgi/eBayISAPI.dll?ViewItem&item=576466888
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-09/2098372.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-09/2098372-eBay item 576466888 (Ends Apr-10-01 104814 PDT) - !!!!Green Is In!!!!! Erin Buddy and 2 Beanie.url
+ |  |  |  |  |- Email: 2098404 - eBay item 576853567 (Ends Apr-09-01 134449 PDT) - TY Beanie Buddies ERIN Buddy!
+ |  |  |  |  |-  sender: Lokay
+email.body
+
+ http://cgi.ebay.com/aw-cgi/eBayISAPI.dll?ViewItem&item=576853567
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-09/2098404.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-09/2098404-eBay item 576853567 (Ends Apr-09-01 134449 PDT) - TY Beanie Buddies ERIN Buddy! NO RESERVE!.url
+ |  |  |  |  |- Email: 2098436 - eBay item 577532611 (Ends Apr-09-01 175133 PDT) - VALENTINA BUDDY beanie buddie
+ |  |  |  |  |-  sender: Lokay
+email.body
+
+ http://cgi.ebay.com/aw-cgi/eBayISAPI.dll?ViewItem&item=577532611
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-09/2098436.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-09/2098436-eBay item 577532611 (Ends Apr-09-01 175133 PDT) - VALENTINA BUDDY beanie buddies RETIRED.url
+ |  |  |  |  |- Email: 2098468 - eBay item 577242315 (Ends Apr-12-01 175442 PDT) - Ty Beanie Buddy & Baby - Vale
+ |  |  |  |  |-  sender: Lokay
+email.body
+
+ http://cgi.ebay.com/aw-cgi/eBayISAPI.dll?ViewItem&item=577242315
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-09/2098468.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-09/2098468-eBay item 577242315 (Ends Apr-12-01 175442 PDT) - Ty Beanie Buddy & Baby - Valentina Bears.url
+ |  |  |  |  |- Email: 2098500 - scans
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+email.body I have included four files.  They are labeled as to what they are.  The
+color files reflect the original's sepia tone, the B&W ones should be
+obvious.  The 72dpi would be the ones to email for people to look at on the
+computer (should show up as full sized on most screens) and the 300dpi would
+be ok for printing.  If you want to use the picture for desktop wallpaper,
+let me know your screen resolution (i.e. 1024x768); I will make a file
+special for that.
+
+Jim
+
+ - Color 72dpi.jpg
+ - B&W 72dpi.jpg
+ - Color 300dpi.jpg
+ - B&W 300dpi.jpg
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-10/2098500.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-10/2098500-Color 72dpi.jpg
+saving attachment to ./testdataoutput/enron.pst/2001-04-10/2098500-B&W 72dpi.jpg
+saving attachment to ./testdataoutput/enron.pst/2001-04-10/2098500-Color 300dpi.jpg
+saving attachment to ./testdataoutput/enron.pst/2001-04-10/2098500-B&W 300dpi.jpg
+ |  |  |  |  |- Email: 2098532 - Re: VALENTINA BUDDY beanie buddies RETIRED  Item #577532611
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+email.body Thank you for the quick follow up.
+
+I will endeavor to have a cashier's check in the mail no later than
+tomorrow.  Please ship to:
+
+Michelle Lokay
+1114 Augusta Dr., No. 25
+Houston, TX 77057-2227
+
+713-781-2948
+
+-Jim Lokay
+
+
+----- Original Message -----
+From: <Arabtrader@aol.com>
+To: <jimboman@bigfoot.com>
+Sent: Tuesday, April 10, 2001 7:06 AM
+Subject: VALENTINA BUDDY beanie buddies RETIRED Item #577532611
+
+
+> VALENTINA BUDDY beanie buddies RETIRED
+> Item #577532611
+> Hello & Congratulations,
+>
+> You're the high bidder on the above item for $9.01 +$5  **s/h Priority
+Mail
+> with Delivery Confirmation.
+>
+> Please send a Check--Money Order--or PayPal payment within 10 days for
+$14.01
+> to
+> Annette Alhmouz
+> 3605 Red Mountain Road
+> Rougemont  NC  27572
+> 919  471-0606
+> PLEASE EMAIL ME TO CONFIRM YOUR BID with your Name and Shipping Address(so
+> I'll know where to send it!)
+>   **postal insurance is $1.10 if desired...please let me know if you would
+> like it and add $1.10 to the total.
+>
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-10/2098532.txt
+ |  |  |  |  |- Email: 2098564 - Job Opportunity?
+ |  |  |  |  |-  sender: Lokay
+email.body E-Trade to put ATMs, brokerage shops in Target stores
+04/11 07:51  <javascript:openNewsWebSite()>  <javascript:openNewsWebSite()>
+NEW YORK, April 11 (Reuters) - E-Trade Group Inc. (ET), the No. 2 U.S. Internet brokerage, on Wednesday said it had agreed to put 20 E-Trade shops and more than 1,000 bank machines into Target Corp. (TGT) stores nationwide.
+E-Trade will be the exclusive automated teller machine network for all Target and Target Greatland stores in the United States. E-Trade currently has ATMs in 110 Target stores.
+The E-Trade shops -- "E-Trade Zones" -- are 400-square-foot facilities within SuperTarget stores staffed with sales and service representatives where customers can open a brokerage account. E-Trade and Target launched a pilot program for the stores in September with an E-Trade Zone in Roswell, Ga.        
+
+
+<Embedded Picture (Metafile)>
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-11/2098564.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-11/2098564-#1.dat
+ |  |  |  |  |- Email: 2098596 - Quickie
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+email.body One morning Dick Cheney and George W. Bush were having brunch at a
+restaurant.
+
+The attractive waitress asks Cheney what he would like and he replies, "I'll
+have a bowl of oatmeal and some fruit."
+
+"And what can I get for you, sir?" she asks George W.
+
+He replies, "How about a quickie?"
+
+"Why, Mr. President," the waitress says, "How rude . . . you're starting to
+act like Mr. Clinton and you haven't even been in office for a month yet!"
+
+As the waitress storms away, Cheney leans over to Bush and whispers, "It's
+pronounced "quiche."
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-17/2098596.txt
+ |  |  |  |  |- Email: 2098628 - In case you needed to know...
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+email.body
+
+ - child's menu.gif
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-19/2098628.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-19/2098628-child's menu.gif
+ |  |  |  |  |- Email: 2098660 - graphic
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+email.body
+
+ - phone.gif
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-22/2098660.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-22/2098660-phone.gif
+ |  |  |  |  |- Email: 2098692 - RE:FIESTA
+ |  |  |  |  |-  sender: Hitschel  Bonnie V. BHitschel@tesoropetroleum.com@ENRON (IMCEANOTES-+22Hitschel+2C+20Bonnie+20V+2E+22+20+3CBHitschel+40tesoropetroleum+2Ecom+3E+40ENRON@ENRON.com)
+email.body
+Here is the website.  Fiesta Flambeau parade is Saturday night; Battle of the Flowers parade is Friday at 12:45.  Aggie Band is in Friday's parade, Texas band in Saturday's.  The zoo is also having a deal on Saturday, and I will look for discount tickets for Fiesta Texas.http://www.fiesta-sa.org/ci/index.html
+Bring bathing suits too - our pool opens Saturday.
+Bonnie Hitschel
+210-283-2456
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-23/2098692.txt
+saving attachment to ./testdataoutput/enron.pst/2001-04-23/2098692-~~DLNK0.URL
+ |  |  |  |  |- Email: 2098724 - Houston
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+email.body  YOU KNOW YOU'RE FROM HOUSTON IF:
+The "farm-to-market" roads have seven lanes.
+
+You have to turn on the air conditioning in January, two days after a low of
+29 degrees.
+
+Everybody has a story of the Flying Roach the size of the Taco Bell
+Chihuahua.
+
+When you see your neighbor dancing around the front yard, you don't think
+he's won the Publisher's Clearing House Sweepstakes; you know that he just
+stepped in a fire ant bed.
+
+You're on your way to work one FEBRUARY morning and suddenly you're trapped
+in a traffic jam caused by a chuck wagon and fifty horses - with riders -
+and you look around to see that everybody in the trucks around you is
+wearing a cowboy hat.
+
+The name "Bud Adams" makes people snarl, and "Bum Phillips" doesn't mean bad
+screwdriver.
+
+"Luv ya Blue" still makes you smile, even if you did run the Oilers out of
+town.
+
+You know that the Astrodome will always be the Eighth Wonder of the World.
+
+You come to work in short sleeves and walk out at noon to find that a "blue
+norther" has blown through and the temperature has dropped 40 degrees.
+
+Your neighbor's Christmas yard decorations are a re-creation of the gunfight
+at the OK Corral, complete with a ten-foot tree decorated with boots and
+cowboy hats, and a Santa Claus who looks a lot like Wyatt Earp.
+
+You wander into a section of town where you can't read the street signs
+because they're written in Asian characters instead of English, but you
+don't care because you can get great prices on fake designer merchandise.
+
+You go to an art festival and you're almost run down by handholding cross
+dressers on roller blades.
+
+You hear everything but English spoken when you go to the Galleria to window
+shop. (You can't afford to buy because the prices are jacked up for all the
+foreign tourists.)
+
+You know that "Dad gummit" has nothing to do with your father's failure to
+practice good dental hygiene.
+
+You think "Y'all" is perfectly good usage if you're referring to more than
+one person.
+
+For a Chili Cook off, you'll use anything from armadillo to frog's legs, but
+you know that the only GOOD chili is made with chopped - not ground beef,
+and it has NO beans and NO tomatoes.
+
+Spring is not the season, Katy is not the lady, and 1960 is not the year.
+
+Society matrons of "a certain age" still sport big hair and faces that have
+gone east, west, and north rather than south.
+
+You can leave your house, head out of town, and an hour later you still
+haven't left the city limits. (During rush hour, you haven't left your
+NEIGHBORHOOD.)
+
+You've never seen I-45 and I-10 in any condition other than under
+construction - and you've lived here for more than 30 years.
+
+You know that "Clutch City" has nothing to do with automobile transmissions.
+
+"The Dream" is not a fantasy.
+
+The only REAL Mexican food is Tex-Mex.
+
+A 747 with the Space Shuttle riding piggyback has actually flown low right
+overhead, and nobody paid any attention to it.
+
+You know that while saving you money, "Mattress Mac" has amassed more than
+the U.S. treasury.
+
+You're happy to have beaten Los Angeles out of a football team, but you'd
+rather they keep the title of "Smog Capital."
+
+You see nothing unusual about an eighty-something former sheriff's deputy
+who wears a white pompadour toupee and blue sunglasses, mispronounces names,
+allows televising of his frequent plastic surgeries, seems unnaturally
+obsessed with slime in the ice machine, and screams, "MAR-VIN ZIND-ler,
+iiiii-witness news" into a television camera every night.  But some folks
+are still upset with him for shutting down the Chicken Ranch.
+
+If the humidity is below 90 percent, it's a GOOD hair day.
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-25/2098724.txt
+ |  |  |  |  |- Email: 2098756 - California Sing-along
+ |  |  |  |  |-  sender: Fawcett  Jeffery (Jeffery.Fawcett@ENRON.com)
+email.body And to start off the week.....
+
+
+
+California's new State Song! The Rolling Blackout Theme Song
+(To the theme music from the TV western "Rawhide")
+Rollin', rollin', rollin',
+Though the state is golden,
+Keep them blackouts rollin', statewide.
+A little colder weather,
+And we all freeze together,
+Wishin' more plants were on the line.
+All the things I'm missin',
+Like lights and television,
+Are waiting 'til we can pay the price.
+(Chorus)
+Turn 'em on, turn 'em off,
+Shut 'em down, block 'em out,
+Turn 'em on, turn 'em off, statewide!
+Brown 'em out, black 'em out,
+Charge 'em more, give 'em less,
+Let the pols fix the mess, statewide!
+Keep movin', movin', movin',
+Though they're disapprovin',
+Keep them rates a-movin', statewide.
+Don't try to understand 'em,
+Just raise, charge, and collect 'em.
+Soon we'll be livin' high and wide.
+My heart's calculatin',
+Nuclear plants will be waitin',
+Be waitin' at the end of my ride.
+(Chorus)
+Turn 'em on, turn 'em off,
+Shut 'em down, block 'em out,
+Turn 'em on, turn 'em off, statewide!
+Brown 'em out, black 'em out,
+Charge 'em more, give 'em less,
+Let the pols fix the mess, statewide!
+STATEWIDE! Hyaah!
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-30/2098756.txt
+ |  |  |  |  |- Email: 2098788 - FW: ONEOK ski trip
+ |  |  |  |  |-  sender: Loe  David DLoe@UtiliCorp.com@ENRON (IMCEANOTES-+22Loe+2C+20David+22+20+3CDLoe+40UtiliCorp+2Ecom+3E+40ENRON@ENRON.com)
+email.body the rest of them
+
+-----Original Message-----
+From: Loe, David
+Sent: Thursday, March 15, 2001 10:49 AM
+To: 'michelle.lokay@enron.com'
+Subject: FW: ONEOK ski trip
+
+
+
+
+Michelle,
+pictures from the ski trip
+
+David Loe
+Aquila
+
+
+ - 017_14A.JPG
+ - 018_15A.JPG
+ - 019_16A.JPG
+ - 020_17A.JPG
+ - 022_19A.JPG
+ - 024_21A.JPG
+ - 025_22A.JPG
+ - 026_23A.JPG
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-03-16/2098788.txt
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-017_14A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-018_15A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-019_16A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-020_17A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-022_19A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-024_21A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-025_22A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098788-026_23A.JPG
+ |  |  |  |  |- Email: 2098820 - FW: ONEOK ski trip
+ |  |  |  |  |-  sender: Loe  David DLoe@UtiliCorp.com@ENRON (IMCEANOTES-+22Loe+2C+20David+22+20+3CDLoe+40UtiliCorp+2Ecom+3E+40ENRON@ENRON.com)
+email.body Michelle,
+Tried to send them yesterday, but file exceeded size that enron allows.
+Lets try part of them this time.
+David
+
+-----Original Message-----
+From: Loe, David
+Sent: Thursday, March 15, 2001 10:49 AM
+To: 'michelle.lokay@enron.com'
+Subject: FW: ONEOK ski trip
+
+
+
+
+Michelle,
+pictures from the ski trip
+
+David Loe
+Aquila
+
+
+ - 002_00.JPG
+ - 004_1A.JPG
+ - 005_2A.JPG
+ - 011_8A.JPG
+ - 012_9A.JPG
+ - 013_10A.JPG
+ - 015_12A.JPG
+ - 016_13A.JPG
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-03-16/2098820.txt
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-002_00.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-004_1A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-005_2A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-011_8A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-012_9A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-013_10A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-015_12A.JPG
+saving attachment to ./testdataoutput/enron.pst/2001-03-16/2098820-016_13A.JPG
+ |  |  |  |  |- Email: 2098852 - unit for sale
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+email.body Unit #11 is listed for $159,900.  It is the opposite end unit from us.  The
+one with the 3rd floor deck.
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-04-30/2098852.txt
+ |  |  |  |  |- Email: 2098884 - FW: Even For You
+ |  |  |  |  |-  sender: Hitschel  Bonnie V. BHitschel@tesoropetroleum.com@ENRON (IMCEANOTES-+22Hitschel+2C+20Bonnie+20V+2E+22+20+3CBHitschel+40tesoropetroleum+2Ecom+3E+40ENRON@ENRON.com)
+email.body
+Hope you are all doing well.
+-----Original Message-----
+From: Schulle, Barbara [mailto:BSchulle@UtiliCorp.com ]
+Sent: Tuesday, May 01, 2001 12:43 PM
+To: Amiee Hemenway (E-mail); Barbara Pickard (E-mail); Bonnie V.
+Hitschel (E-mail); Carol Taylor (E-mail); Juanita Agietos (E-mail); Kim
+P. Tran (E-mail); Lisa Garcia (E-mail); Nawanda Fuller (E-mail); Shirley
+Isbell (E-mail)
+Subject: FW: Even For You
+Because in some ways, you have these traits and must
+do these things as well.
+Mother's Day
+If you send this to just one person, it should make it
+all the way around
+by Mother's Day.
+This is for all the mothers who have sat up all night
+with sick toddlers
+in their arms, wiping up barf laced with Oscar Mayer
+wieners and cherry
+Kool-Aid saying, "It's OK honey, Mommy's here."
+Who walk around the house all night with their babies
+when they keep
+crying and won't stop.
+This is for all the mothers who show up at work with
+spit-up in their
+hair and milk stains on their blouses and diapers in
+their purse.
+For all the mothers who run carpools and make cookies
+and sew Halloween
+costumes. And all the mothers who DON'T.
+This is for the mothers who gave birth to babies
+they'll never see. And
+the mothers who took those babies and gave them homes.
+This is for all the mothers who froze their buns off
+on metal bleachers
+at football or soccer games Friday night instead of
+watching from cars, so
+that when their kids asked, "Did you see me?" they
+could say, "Of course, I
+wouldn't have missed it for the world," and mean it.
+This is for all the mothers who yell at their kids in
+the grocery store
+and swat them in despair when they stomp their feet
+like a tired 2-year old
+who wants ice cream before dinner.
+This is for all the mothers who sat down with their
+children and
+explained all about making babies. And for all the
+mothers who wanted to but just couldn't.
+For all the mothers who read "Goodnight, Moon" twice a
+night for a year.
+And then read it again.  "Just one more time."
+This is for all the mothers who taught their children
+to tie their
+shoelaces before they started school. And for all the
+mothers who opted for Velcro instead.
+This is for all the mothers who teach their sons to
+cook and their
+daughters to sink a jump shot.
+This is for all mothers whose heads turn automatically
+when a little
+voice calls "Mom?" in a crowd, even though they know
+their own off spring are at home.
+This is for all the mothers who sent their kids to
+school with stomach
+aches, assuring them they'd be just FINE once they got
+there, only to get
+calls from the school nurse an hour later asking them
+to please pick them
+up.  Right away.
+This is for mothers whose children have gone astray,
+who can't find the
+words to reach them.
+For all the mothers who bite their lips sometimes
+until they bleed when
+their 14 year olds dye their hair green.
+What makes a good Mother anyway?
+Is it patience?
+Compassion?
+Broad hips?
+The ability to nurse a baby, cook dinner, and sew a
+button on a shirt,
+all at the same time?
+Or is it heart? Is it the ache you feel when you watch
+your son or
+daughter disappear down the street, walking to school
+alone for the very first
+time?
+The jolt that takes you from sleep to dread, from bed
+to crib at 2 A.M.
+to put your hand on the back of a sleeping baby?
+The need to flee from wherever you are and hug your
+child when you hear
+news of a fire, a car accident, a child dying?
+For all the mothers of the victims of all these school
+shootings, and the
+mothers of those who did the shooting. For the mothers
+of the survivors,
+and the mothers who sat in front of their TVs in
+horror, hugging their child
+who just came home from school, safely.
+This is for mothers who put pinwheels and teddy bears
+on their children's
+graves.
+This is for young mothers stumbling through diaper
+changes and sleep
+deprivation.
+And mature mothers learning to let go.
+For working mothers and stay-at-home mothers.
+Single mothers and married mothers.
+Mothers with money, mothers without.
+This is for you all.
+So hang in there.
+Please pass along to all the Mom's in your life.
+"Home is what catches you when you fall - and we all
+fall."
+Please pass this to all the wonderful mothers you
+know.
+(I just did)
+__________________________________________________
+Do You Yahoo!?
+Yahoo! Auctions - buy the things you want at great prices http://auctions.yahoo.com/
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-05-01/2098884.txt
+saving attachment to ./testdataoutput/enron.pst/2001-05-01/2098884-~~DLNK0.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-01/2098884-~~DLNK1.URL
+ |  |  |  |  |- Email: 2098916 - Learn Technical Analysis, Early Bird Special for Houston Class
+ |  |  |  |  |-  sender: Jennifer Smith @ENRON (jennifersmith@kaseco.comIMCEANOTES-jennifersmith+40kaseco+2Ecom+20+28Jennifer+20Smith+29+40ENRON@ENRON.com)
+email.body
+If you no longer would like to receive email from Kase, please reply with UNSUBSCRIBE in the subject line
+
+
+      Kase Logo
+
+Learn Technical Analysis
+Two Full Days
+ July 17-18, 2001
+Early Bird Discount until June 14, 2001
+Houston, Texaswww.kaseco.com
+
+Energy Traders, Marketers and Buyers.
+This two full day class serves as both an introduction to those new to technical analysis and a refresher for experienced traders.  Technicals are taught in a logical, systematic manner        oriented to equip both physical and paper traders to buy low, sell high and manage risk in the real world in a logical, methodical manner.
+In this class you will:
+
+· Ascertain when and how to take profit and cut losses.
+· Find out how to set up a strategy by identifying probable market direction and turns as well as likely targets using chart patterns.
+· Learn to use both traditional indicators like moving averages and stochastics, as well the state-of-the-art methods which won Cynthia Kase the coveted Market        Technicians Association's "Best of the Best" award.
+
+
+
+
+Content
+
+· Charting Basics, Types of Charts, Support and Resistance
+· When to Buy or Sell (Entry Techniques)
+· When to Exit Based on Signals (Momentum and Divergence)
+· How to Exit Based on Stops (Managing Trade Risk)
+· Chart Patterns and Forecasting Basics (Candlesticks, Elliott  Wave, Flags, etc.)
+· Statistical Hedging
+
+
+Registration Fees Include a Copy of Cynthia Kase's acclaimed book "Trading with the Odds"      Fees Location and Hotel About the Presenters Who Should Attend Detailed Agenda and Schedule Custom Classes
+Chart
+*** Register Now! ***
+For more information log on to www.kaseco.com  or contact me directly at the Email or phone numbers shown below.
+Jennifer Smith
+Kase and Company, Inc.jennifersmith@kaseco.com
+505-237-1600 voice
+505-237-1659 fax
+
+
+
+    Early Bird For
+July 17-18 is June 14, 2001
+[IMAGE]
+Early Bird Special:  $845.00
+        Two or More Early Bird:  $795.00
+Regular: $995.00
+Two or More: $895.00
+    REGISTER NOW!!!
+
+
+Marriott West Loop
+1750 West Loop South Houston, TX 77027
+1-800-613-3982 Reservations by Phone
+1-713-624-1517 Reservations by Fax
+Room Rate: $139.00 per night
+Please Mention that you are attending the Kase and Company Seminar.
+     Back to Links
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-05-05/2098916.txt
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK0.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK1.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK2.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK3.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK4.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK5.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK6.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK7.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK8.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK9.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK10.URL
+saving attachment to ./testdataoutput/enron.pst/2001-05-05/2098916-~~DLNK11.URL
+ |  |  |  |  |- Email: 2098948 - Lindy's B-day
+ |  |  |  |  |-  sender: Watson  Kimberly (Kimberly.Watson@ENRON.com)
+email.body Hi guys!  Lindy's B-day lunch came to $40.30 each.  Thanks, Kim.
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-05-07/2098948.txt
+ |  |  |  |  |- Email: 2098980 - FW: Breast Cancer
+ |  |  |  |  |-  sender: Ramirez  Pilar (Pilar.Ramirez@ENRON.com)
+email.body I thought this was very interesting.
+
+ -----
+
+
+Something you may find interesting....
+>
+> > Breast Cancer
+> > =============
+> > I'm forwarding this to everyone I know because it makes so much
+> > sense. Please forward it to everyone you care about and even those you
+> > don't.
+> > Ladies, be aware! Gentlemen, pass this on to the ladies in your
+> > life!
+> > Sometime ago, I attended a Breast-Cancer-Awareness seminar organized by
+> > Terry Birk with support from Dan Sullivan. During the Q&A period,I asked
+> why
+> > the most common area for breast cancer was near the arm pit. My question
+> > could not be answered at that time. This e-mail was just sent to me, and
+I
+> > find it very interesting that my question has been answered. I challenge
+> you
+> > all to re-think your daily use of a product that could ultimately lead
+to
+> a
+> > terminal illness. As of today, I will change my use. A friend forwarded
+> this
+> > to me. I showed it to a friend going through chemotherapy and she said
+she
+> > learned this fact in a support group recently. I wish I had known it 14
+> > years
+> > ago. I just got information from a health seminar that I would like to
+> > share. The leading cause of breast cancer is the use of anti-perspirant.
+> > What? A Concentration of toxins leads to cell mutations, a.k.a. CANCER.
+> Yes,
+> > ANTI-PERSPIRANT. Most of the products out there are an
+> > anti-perspirant/deodorant combination, so go home and check. Deodorant
+is
+> > fine, anti-perspirant is not.
+> > Here's why. The human body has a few areas that it uses to purge
+> > toxins from the body -- behind the knees, behind the ears, the groin
+area,
+> > and armpits. The toxins are purged in the form of perspiration.
+> > Anti-perspirant, as the name clearly indicates, prevents you from
+> > perspiring, thereby inhibiting the body from purging toxins from below
+the
+> > armpits. These toxins do not just magically disappear. Instead, the body
+> > deposits them in the lymph nodes below the arms since it cannot sweat
+them
+> > out. Nearly all breast cancer tumors occur in the upper outside quadrant
+> of
+> > the breast area. This is precisely where the lymph
+> > nodes are located. Additionally, men are less likely (but not completely
+> > exempt) to develop breast cancer prompted by anti-perspirant usage
+because
+> > most of the anti-perspirant product is caught in their hair and is not
+> > directly applied to the skin. Women who apply anti-perspirant right
+after
+> > shaving increase
+> > the risk further because shaving causes almost imperceptible nicks in
+the
+> > skin which give the chemicals entrance into the body from the armpit
+area.
+> > PLEASE pass this along to anyone you care about. Breast cancer is
+becoming
+> > frighteningly common. This awareness may save lives. If you are
+skeptical
+> > about these findings, I urge you to do some research for yourself. You
+> might
+> > just arrive at the same conclusions. Thank you.
+> > Katrina Scott
+> > Asst. Director of Sports Marketing
+> > University of Maryland
+> > P.O. Box 295
+> > Cole Field House/Campus Drive
+> > College Park, MD 20741-0295
+> >
+> >
+> >
+> >
+> >  To: GALE_TANKERSLEY@msn.com, pschwarz@wacoisd.org (Pat Schwarz),
+> >          HuntersGal25@aol.com, jsapaugh@wacoisd.org (Julie Sapaugh),
+> >          mwillis@wacoisd.org, pmaxwell@wacoisd.org (Pamela Maxwell),
+> >          jpackard@wacoisd.org
+> >  MIME-Version: 1.0
+> >  Content-Type:  multipart/mixed;
+> > boundary="part1_a6.131a5c13.2817744a_boundary"
+> >  X-Mailer: AOL 6.0 for Windows US sub 10523
+> >
+> >
+> > Please note my new e-mail address and make the change in your address
+> > books and mailing lists.
+> >
+> > dshaddock@wacoisd.org
+> >
+> > Dayl Lynn Shaddock
+> > Kindergarten Teacher
+> > Waco ISD
+> >
+> >
+> >
+>
+>
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-05-07/2098980.txt
+ |  |  |  |  |- Email: 2099012 - unverified news report
+ |  |  |  |  |-  sender: Jim Lokay Lokay@bigfoot.com@ENRON (IMCEANOTES-+22Jim+20Lokay+22+20+3CLokay+40bigfoot+2Ecom+3E+40ENRON@ENRON.com)
+email.body
+China Blames U. S. for Second Mid-Air Collision
+
+BEIJING (Reuters) - Chinese officials have stated that they are holding the
+United States, "fully responsible" for today's mid-air collision, involving
+several Chinese aircraft and one American craft. This comes just weeks after
+a similar incident involving a U. S. spy plane.
+
+Officials have stated that at approximately 8:25 a.m., GMT, a squadron of
+Chinese F-8 fighters collided with the American Goodyear Blimp. The crash
+left over a dozen Chinese planes downed and the blimp's electronic billboard
+damaged. Sources say the billboard's scrolling marquee had been advertising
+7-UP soft drink, leaving the line "Up yours" in view.
+
+A Chinese pilot who witnessed the collision between his squadron, nicknamed,
+"Panda Rash" told China's Xinhua news agency that he saw the American blimp
+dive out of the clouds and into wingman Sum Yung Phucker's F-8 jet.
+
+"I told Yung Phucker his tail was all broken. Keep it straight. Keep it
+straight'," said the pilot. "He just couldn't shake the American
+foreign-devil. The blimp then reportedly veered hard left and then
+right,taking out the rest of the squadron.
+
+Pilot Chawp Suey Wussy told Xinhua the American blimp was "fully responsible
+
+for the incident," repeating the language Beijing has used in the earlier
+incident. China blames this new accident on the Goodyear blimp, saying it
+rammed the supersonic fighters, and has demanded an apology.  Officials from
+the Goodyear Company have said it is unlikely that the slow propeller-driven
+blimp could turn inside and ram a dozen nimble fighters, unless the Chinese
+were testing chimp pilots.
+
+"The direct cause of the collision was that the American blimp made a sudden
+big move toward the Chinese planes, making it impossible for the Chinese
+planes to get out of the way," Suey Wussy was quoted as saying.  "The savage
+act of American blimps colliding with Chinese planes while conducting spying
+activities at sporting events makes us indignant," he was quoted as saying.
+
+Chinese officials are calling for an apology from the United States and
+enough Goodyear tires to replace the Firestone's that experienced
+spontaneous combustion last year. U. S. officials expressed regret, but
+would not allow an apology until the matter could be investigated further.
+
+In a related story Goodyear has not commented on whether it has stopped
+shipments of condoms to China as a retaliatory measure.
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-05-08/2099012.txt
+ |  |  |  |  |- Email: 2099044 - Accomplishments for Year 2001, as of 05/10
+ |  |  |  |  |-  sender: Lokay
+email.body Revenue Generating:
+Launched Transwestern capacity trading on EnronOnLine, with unlimited future revenue opportunities.  Executed daily firm transactions with ePrime, a new shipper, adding incremental $1000 in demand charges.
+Executed firm transport contract with Conoco at maximum tariff rate for 5 years,  generating $14 million in revenue.
+Assisted in Red Rock expansion project.  Awarded capacity to Western, another new shipper, for 15 years; will generate $8 million in NPV revenue.  Capacity was also awarded to Oneok, for 2 years; generating $2 million in NPV revenue.
+Contracted with North Star Steel for incremental firm service from their facilities to California border, adding $125,000 in demand charges plus additional 4.5% fuel collection.
+
+Non-Revenue:
+Completed new facility interconnect with Pogo for additional supply on east end of system.  Well was unfortunately dry and will not generate incremental revenue.
+Liaison with Facility Planning to coordinate capacity, ROFR, expiration, and systems testing.
+Coordinating with Operations and Market Services to monitor imbalances on OBAs to maximize financial impact.
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-05-10/2099044.txt
+ |  |  |  |  |- Email: 2099076 - Rose Rec
+ |  |  |  |  |-  sender: Lokay
+email.body
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-06-01/2099076.txt
+saving attachment to ./testdataoutput/enron.pst/2001-06-01/2099076-Rose referral.doc
+ |  |  |  |  |- Email: 2099108 - Voluntary Spyware
+ |  |  |  |  |-  sender: Hitschel  Bonnie V. BHitschel@tesoropetroleum.com@ENRON (IMCEANOTES-+22Hitschel+2C+20Bonnie+20V+2E+22+20+3CBHitschel+40tesoropetroleum+2Ecom+3E+40ENRON@ENRON.com)
+email.body
+Copy (do not forward) this entire e-mail and paste it onto a new e-mail that
+you will send.  Change all of the answers so that they apply to you.  Then
+send this to a whole bunch of people you know INCLUDING the person who sent
+it to you.  The theory is that you will learn a lot of little known facts
+about your friends.  Remember to send yours back to the person who sent it
+to you.
+Here goes . . . .
+1.      What time is it? 3:22 pm(Central)
+3.      Nickname: Bonnie
+4.      Parents names: Jim & Lois
+5.      Number of candles that appeared on your last birthday cake: 30 something
+6.      Date that you regularly blow them out? 7-23
+7.      Pets: Buster and Heather (dogs), Willie (fish)
+8.      Eye color: blue
+9.      Hair color: brown
+10.     Piercing: ears
+11.     Tattoos: none
+12.     How much do you love your job? love is a strong word!
+14.     Hometown: Silver Spring, MD
+15.     Current Residence: San Antonio, TX
+16.     Been in love? yes
+17.     Been to Africa: no
+18.     Been toilet papering? yes
+19.     Loved somebody so much it made you cry? Yes
+20.     Been in a car accident? no
+21.     Croutons or bacon bits? croutons
+22.     Sprite or 7-UP? no preference
+23.     Favorite Movie: Sleepless in Seattle
+24.     Favorite Holiday: Christmas
+25.     Favorite day of the week: Saturday
+26.     Favorite word or phrase: serenity
+27.     Favorite Toothpaste: Crest
+28.     Favorite Restaurant(s): America's in Houston
+29.     Favorite Flower: stargazer lilies
+30.     Favorite Drinks: Mountain Dew, margaritas
+31.     Favorite Sport to watch: football
+32.     Preferred type of ice cream: Ben and Jerry's Cherry Garcia
+33.     Favorite Sesame Street Character: Elmo
+34.     Disney or Warner Bros.? Disney
+35.     Favorite Fast Food Restaurant: Taco Bell
+36.     When was your last hospital visit?  Dec 1998
+37.     What color is your bedroom carpet? Tan
+38.     How many times did you fail your permit or drivers test? None.
+39.   Who is the last person you got mail from before this? corporate communications
+40.     Have you ever been convicted of a crime? NO
+41.     Which single store would you choose to max out your credit card? Talbots
+42.     What do you do most often when you are bored? take a nap
+43.     Name the person that you are friends with that lives the farthest:Allen and Dawn- San Francisco
+44.     Most annoying thing? clutter
+45.     Bedtime? 11:00pm
+46.     Who will respond the quickest? who knows!
+47.     Who is the person you sent this to that is least likely to respond? guess
+48.     Favorite all time TV show? Dallas (the early ones)
+49.     Last person you went out to dinner with: Jim and Michelle
+50.   Last Movie you saw:   Bridget Jones Diary
+51:   Time when you finished: 3:37pm
+Bonnie Hitschel
+210-283-2456
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-06-01/2099108.txt
+ |  |  |  |  |- Email: 2099140 - Possible Spreadsheet
+ |  |  |  |  |-  sender: Yee  Danny danny.yee@sap.com@ENRON (IMCEANOTES-+22Yee+2C+20Danny+22+20+3Cdanny+2Eyee+40sap+2Ecom+3E+40ENRON@ENRON.com)
+email.body
+I'm not sure if this  spreadsheet will work for you.  I don't remember the exact data you wanted,  so I did things from memory.  The dates may not be correct, because I  (multiplied the number of months * 30 days) then added this number to the start  date to project the ending period.  You know our our SAP software  automatically does things like this :)
+Daniel Yee
+SAP  Americas I.T.Development
+Tel: 251-5275
+SkyTel 2-way Pager:  (800) 718-1679
+
+
+
+
+ - Michelle.xls
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-06-03/2099140.txt
+saving attachment to ./testdataoutput/enron.pst/2001-06-03/2099140-Michelle.xls
+ |  |  |  |  |- Email: 2099172 - <<Concur Expense Document>> - Expense060501
+ |  |  |  |  |-  sender: eserver@enron.com@ENRON (IMCEANOTES-eserver+40enron+2Ecom+40ENRON@ENRON.com)
+email.body The Approval status has changed on the following report:
+
+Status last changed by: Kimberly S. Watson
+Expense Report Name: Expense060501
+Report Total: $3,603.05
+Amount Due Employee: $3,603.05
+Amount Approved: $3,603.05
+Amount Paid: $0.00
+Approval Status: Accounting Review
+Payment Status: Pending
+
+
+To review this expense report, click on the following link for Concur Expense.
+http://xms.enron.com
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-06-06/2099172.txt
+ |  |  |  |  |- Email: 2099204 - Just for fun
+ |  |  |  |  |-  sender: Hitschel  Bonnie V. BHitschel@tesoropetroleum.com@ENRON (IMCEANOTES-+22Hitschel+2C+20Bonnie+20V+2E+22+20+3CBHitschel+40tesoropetroleum+2Ecom+3E+40ENRON@ENRON.com)
+email.body
+
+ - ATT00136.gif
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-06-08/2099204.txt
+saving attachment to ./testdataoutput/enron.pst/2001-06-08/2099204-ATT00136.gif
+ |  |  |  |  |- Email: 2099236 - RE: Enron Efforts to the Flood victims
+ |  |  |  |  |-  sender: Stevens  Missy (Missy.Stevens@ENRON.com)
+email.body Thank you for e-mailing me. Please call x. 3-7181 and leave a message. You will be contacted as soon as possible with more information about Enron's employee assistance program.
+
+I am sorry to hear that you suffered flood damage and wish you a speedy recovery.
+
+Missy
+
+
+ -----Original Message-----
+From:   Lokay, Michelle
+Sent:   Tuesday, June 12, 2001 1:48 PM
+To:     Stevens, Missy; Milligan, Jennifer
+Subject:        RE: Enron Efforts to the Flood victims
+
+Julie suggested I send you guys an email.  Please add my name on the list of Enron employees that were affected by the recent flood.  Thanks.
+
+ -----Original Message-----
+From:   Armstrong, Julie
+Sent:   Monday, June 11, 2001 10:09 AM
+To:     Harris, Steven; Gadd, Eric; Hayes, Robert; Kilmer III, Robert; Miller, Mary; Neubauer, Dave; Stage, Michael G.; McCarty, Danny; Burleson, Bob; McCarran, Penny; Weller, Steve; Powell, Don; Millar, John; Hyatt, Kevin; Fawcett, Jeffery; Lokay, Michelle; Lohman, TK; Lindberg, Lorraine; Watson, Kimberly
+Cc:     Robertson, Audrey; Wadle, Susan; Salinas, Marian; Paschal, Zelda; Solon, Sharon; Cappiello, Deborah; Hook, Connie; Wehring, Linda; Jennifer Milligan/HOU/ECT@ENRON
+Subject:        Enron Efforts to the Flood victims
+
+I hope this email finds all of you high and dry.  However, many people were not as fortunate.
+
+Community Affairs is taking a count of Enron employees that were displaced or affected by the flood.  Please email me or call me at x33597 if you were affected.
+
+If you want to make a monetary donation to the Red Cross or any other agency, I am pleased to report that the Enron matching gift program has been expanded to match your donation.
+
+Enron is looking into other avenues to assist the victims but, we need to hear from you first.  Please email me or call me if you or a fellow employee has been affected.
+
+Enron will be making determinations based on this information and how to proceed and assist the victims.
+
+I can be reached at x33597 if you have any questions.
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-06-12/2099236.txt
+ |  |  |  |  |- Email: 2099268 - RE: OPEN ENROLLMENT FOR ENRON KIDS' CENTER IS UNDERWAY!!!
+ |  |  |  |  |-  sender: Stuart  Charla (Charla.Stuart@ENRON.com)
+email.body Michelle,
+
+Thank you for your interest in our child care center! We do still have openings in our pre-school class at this time. If you are interested in obtaining an application, you can either pick one up from me at EB1633d or let me send one to you via intercompany mail. Let me know either way.
+
+Regards,
+
+Charla
+
+ -----Original Message-----
+From:   Lokay, Michelle
+Sent:   Tuesday, June 12, 2001 2:09 PM
+To:     Stuart, Charla
+Subject:        RE: OPEN ENROLLMENT FOR ENRON KIDS' CENTER IS UNDERWAY!!!
+
+I wanted to get additional information.  My daughter will be 3 this August.  Is there an opening for that class?  If not, how long is the waiting list?  Thanks.
+
+ -----Original Message-----
+From:   Enron Announcements/Corp/Enron@ENRON [mailto:IMCEANOTES-Enron+20Announcements_Corp_Enron+40ENRON@ENRON.com]  On Behalf Of Charla Stuart- (Director of Community Relations)@ENRON
+Sent:   Sunday, June 10, 2001 5:36 PM
+To:     All Enron Houston@ENRON
+Subject:        OPEN ENROLLMENT FOR ENRON KIDS' CENTER IS UNDERWAY!!!
+
+TO:             All Eligible Enron Employees in Houston
+
+FROM:   Charla Stuart
+
+DATE:           Monday, June 11, 2001
+
+RE:             OPEN ENROLLMENT FOR ENRON KIDS' CENTER IS UNDERWAY!!!
+
+
+OPEN ENROLLMENT FOR ENRON KIDS' CENTER IS UNDERWAY!!!
+
+Want to be closer to your child during the workday?  Want to read to them at lunchtime or just give them a hug?  Then consider enrolling your child in the Enron Kids' Center.
+
+Enron Kids' Center child care facility is currently under construction and will be located on Louisiana Street, across from our corporate headquarters in Houston. Enron is partnering with Knowledge Beginnings, one of the leaders in the child care industry, to provide high quality, conveniently located, customer service-oriented childcare for Enron employees in Houston.
+
+
+Anticipated opening date:       September 2001
+
+Hours of operation:             The center will be open Monday through Friday from 7:00 AM - 6:30 PM. The center will be closed on all Enron holidays. In addition, special "parents' night out" care will be offered for occasions such as holiday shopping and night out at the movies for an additional fee.   
+
+Complete meal service:  Your child's breakfast, lunch and two snacks are included in tuition. Infants will need to bring their own food until they are ready for "table food".
+
+Eligibility:                    Regular full-time or part-time Enron employees who are the parents or legal guardians of the child or children named on the application are eligible to enroll their children in the center.  Temporary employees, contract workers and non-custodial parents are not eligible to enroll their children in the child development center.
+
+Contact Information:            Visit http://enronkids.enron.com to learn more about Enron Kids' Center or contact Knowledge
+                                Beginnings at 1-877-CHILDHOOD (between 8:00 am -5:00 p.m. PST).
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-06-12/2099268.txt
+ |  |  |  |  |- Email: 2099300 -
+ |  |  |  |  |-  sender: Goradia
+email.body http://www.travelocity.com
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-06-13/2099300.txt
+ |  |  |  |  |- Email: 2099332 - Invitation to Golf Outing
+ |  |  |  |  |-  sender: jacammarano@pplweb.com@ENRON (IMCEANOTES-jacammarano+40pplweb+2Ecom+40ENRON@ENRON.com)
+email.body Michelle,
+
+Attached is the invitation to our annual golf outing.  We look forward to your
+attendance. - Joe
+ - invite2001.doc
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-06-19/2099332.txt
+saving attachment to ./testdataoutput/enron.pst/2001-06-19/2099332-invite2001.doc
+ |  |  |  |  |- Email: 2099364 - GOOD JOB!
+ |  |  |  |  |-  sender: Horton  Stanley (Stanley.Horton@ENRON.com)
+email.body
+Thanks to the teamwork and dedication of the Transwestern Commercial team, we're well positioned to meet or exceed our 2001 goals.  While all of our employees have contributed to the success of TW's first six months of 2001, several individuals have made significant commercial contributions:
+
+Lorraine, Michelle, and Jeff have successfully negotiated the Red Rock Expansion contracts within a record one month's time.  The value of these transactions is expected to have a positive impact on our revenue starting next year and into the future.
+
+TK has negotiated creative interruptible transport deals at the California border, sold significant Park N' Ride volumes and negotiated several short-term index deals with a sharing mechanism that have had a strong impact on our bottom line.
+
+Jeff  has also structured several long-term index-to-index deals and developed a hedging strategy to lock-in market rates.
+
+Thank you for your hard work and innovation.  It demonstrates your commitment to excellence and to our Company.
+
+
+Stan
+
+
+
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-06-20/2099364.txt
+ |  |  |  |  |- Email: 2099396 - PPL EnergyPlus Golf Outing
+ |  |  |  |  |-  sender: tsschuler@pplweb.com@ENRON (IMCEANOTES-tsschuler+40pplweb+2Ecom+40ENRON@ENRON.com)
+email.body Michelle,
+
+Thank you for your response.
+
+I have attached the directions to the Brookside Country Club.  The dress
+code for the club is as follows:
+Golf shoes - soft spikes are required; collared shirts; shorts (must be
+18" from the cuff or right above the knee).
+
+Also attached is a listing of the area hotels.
+
+If you have any questions, please do not hesitate to give me a call.
+Thank you.
+
+
+Tracy Schuler
+PPL EnergyPlus, LLC
+774-4157
+
+
+ - AreaHotels.doc
+ - brooksidedirections.doc
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-06-22/2099396.txt
+saving attachment to ./testdataoutput/enron.pst/2001-06-22/2099396-AreaHotels.doc
+saving attachment to ./testdataoutput/enron.pst/2001-06-22/2099396-brooksidedirections.doc
+ |  |  |  |- Email: 2099428 - Power Mart '01 - Register online for your FREE exhibition pass!
+ |  |  |  |-  sender: Mailbox - Ftenergy1 (ftenergy1@FTENERGY.COM)
+email.body
+  <http://public.resdata.com/htmlmail/email%201%20top.gif>
+  <http://public.resdata.com/htmlmail/email%201%20round%20top%202.gif>
+
+
+POWER MART '01
+October 15-18, 2001 Houston, TX
+George R. Brown Convention Center
+
+
+
+
+
+This year, Power Mart ignites the energy market. Don't miss this opportunity to learn about the latest energy issues as well as network with industry peers to give you the market edge.
+Featuring
+ARTHUR LEVITT
+Former Chairman, Securities and Exchange Commission
+  <http://public.resdata.com/htmlmail/bullet.gif>In-Depth Workshops
+  <http://public.resdata.com/htmlmail/bullet.gif>Power Cup Golf Tournament
+  <http://public.resdata.com/htmlmail/bullet.gif>Vegas Night
+  <http://public.resdata.com/htmlmail/bullet.gif>Win a Harley-Davidson? at Trader's Happy Hour--
+  <http://public.resdata.com/htmlmail/25px%20spacer.gif>Sponsored by TXU
+  <http://public.resdata.com/htmlmail/bullet.gif>New in '01! Natural Gas Workshop Track Included
+The Power Mart Conference has been divided into a series of
+in-depth workshops to focus on key issues in electric power, natural gas, and emerging markets. You'll be able to customize your program to fit your own agenda by picking from workshops such as:
+  <http://public.resdata.com/htmlmail/bullet.gif>
+The Outlook for the U.S. Electric Transmission Business: Three Scenarios
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+Understanding and Maximizing Auctions
+
+
+
+
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+Bull or Bear? How to Identify Market Turns Using Technical Analysis
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+Regional Roundup: Four-Market Analysis
+
+
+
+
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+Weather, Prices, and the Market
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+New Gas Pipeline Services: Will the Market Embrace These New Ideas?
+
+
+
+
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+Risk Management in a Volatile Gas Market
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+The Bandwidth Revolution: Where Are We Today?
+
+
+
+
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+Online Commodities Trading: Public Versus Private Exchanges
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+First Market Trends and Strategies: Risk Management
+
+
+
+
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+Where, When, and What Generation Capacity to Build
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+How to Make the Most of the Expanding Pipeline Grid
+
+
+
+
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+Traditional Reservoir Storage Versus High-Deliverability Storage Options
+
+  <http://public.resdata.com/htmlmail/bullet.gif>
+Valuing Generation Assets Under Air Regulations
+
+Register Today
+Three easy ways to register:
+1. Visit <http://www.powermart.com/customize.asp>
+2. Call 800-424-2908 (toll-free within the U.S.)
+or 720-548-5700 (direct)
+3. E-mail conferences@ftenergy.com <mailto:conferences@ftenergy.com>
+Visit www.powermart.com for more information
+
+If you wish to cancel future Power Mart promotions, click here <mailto:ikristufek@ftenergy.com> and type CANCEL in the subject line, then send.
+If you wish to unsubscribe from this and ALL other FT Energy promotions, click here <mailto:ikristufek@ftenergy.com> and type UNSUBSCRIBE in the subject line, then send.
+
+
+
+
+
+
+  <http://public.resdata.com/htmlmail/email%201%20round%20bot%202.gif>
+
+
+
+
+
+
+***********
+EDRM Enron Email Data Set has been produced in EML, PST and NSF format by ZL Technologies, Inc. This Data Set is licensed under a Creative Commons Attribution 3.0 United States License <http://creativecommons.org/licenses/by/3.0/us/> . To provide attribution, please cite to "ZL Technologies, Inc. (http://www.zlti.com)."
+***********
+
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/enron.pst/2001-08-23/2099428.txt
+saving attachment to ./testdataoutput/enron.pst/2001-08-23/2099428-image001.gif
+ |- Search Root
+ |- SPAM Search Folder 2
+./testdata/enron.pst processed in 823 ms
+./testdata/pstextractortest@outlook.com.ost
+
+ |- Root - Public
+ |  |- IPM_SUBTREE
+ |  |- NON_IPM_SUBTREE
+ |  |  |- EFORMS REGISTRY
+ |  |  |  |- Organization Forms
+ |- Root - Mailbox
+ |  |- Common Views
+ |  |- Finder
+ |  |  |- Reminders
+ |  |  |- Contact Search
+ |  |  |- To-Do Search
+ |  |  |- Tracked Mail Processing
+ |  |- Shortcuts
+ |  |- Views
+ |  |- IPM_SUBTREE
+ |  |  |- Deleted Items
+ |  |  |  |- Email: 2105764 - Invitation: meeting from Ed @ Fri Aug 13, 2021 4pm - 4:30pm (MDT) (pstextractortest@outlook.com)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2105764.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2105764-invite.ics
+ |  |  |- Inbox
+ |  |  |  |- Email: 2097380 - Get started with OneDrive
+ |  |  |  |-  sender: Microsoft OneDrive (email@mail.onedrive.com)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097380.txt
+ |  |  |  |- Email: 2097412 - Welcome to your new Outlook.com account
+ |  |  |  |-  sender: Outlook Team (no-reply@microsoft.com)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-colors.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-colors-top.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-devices.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-feature-attachments.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-feature-calendars.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-feature-integrations.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-feature-office.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-landing-appstore.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-landing-playstore.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-landing-winstore.png
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097412-microsoft-logo.png
+ |  |  |  |- Email: 2103460 - test, no attachment
+ |  |  |  |-  sender: Ed (epfromer@gmail.com)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2103460.txt
+ |  |  |  |- Email: 2104068 - text file attachment
+ |  |  |  |-  sender: Ed (epfromer@gmail.com)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104068.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104068-text.txt
+ |  |  |  |- Email: 2104228 - jpg attachment
+ |  |  |  |-  sender: Ed (epfromer@gmail.com)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104228.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104228-primoz-roglic-of-slovenia-and-team-jumbo-visma-red-leader-news-photo-1628610563.jpg
+ |  |  |  |- Email: 2104324 - pdf attachment
+ |  |  |  |-  sender: Ed (epfromer@gmail.com)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104324.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104324-Clinometer Usage.pdf
+ |  |  |  |- Email: 2104516 - text, jpg, pdf attachments
+ |  |  |  |-  sender: Ed (epfromer@gmail.com)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104516.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104516-Clinometer Usage.pdf
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104516-primoz-roglic-of-slovenia-and-team-jumbo-visma-red-leader-news-photo-1628610563.jpg
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104516-text.txt
+ |  |  |  |- Email: 2106180 - Invitation: unanswered meeting @ Sat Aug 14, 2021 (pstextractortest@outlook.com)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106180.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106180-invite.ics
+ |  |  |  |- Email: 2106948 - Invitation: meeting with attachments @ Tue Aug 17, 2021 (pstextractortest@outlook.com)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106948.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106948-view.url
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106948-view.url
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106948-invite.ics
+ |  |  |  |- Email: 2108196 - Accepted: meeting with attachments (jpg, pdf, text) @ Tue Aug 24, 2021 11am - 12pm (MDT) (Pst Extractor)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2108196.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2108196-invite.ics
+ |  |  |- Outbox
+ |  |  |- Sent Items
+ |  |  |  |- Email: 2105796 - Accepted: meeting from Ed
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2105796.txt
+ |  |  |  |- Email: 2107588 - meeting with attachments (jpg, pdf, text)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107588.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107588-primoz-roglic-of-slovenia-and-team-jumbo-visma-red-leader-news-photo-162....jpg
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107588-Clinometer Usage.pdf
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107588-text.txt
+ |  |  |- Archive
+ |  |  |- Yammer Root
+ |  |  |  |- Inbound
+ |  |  |  |- Outbound
+ |  |  |  |- Feeds
+ |  |  |- Conversation History
+ |  |  |  |- Team Chat
+ |  |  |- Files
+ |  |  |- Conversation Action Settings
+ |  |  |- Junk Email
+ |  |  |- ExternalContacts
+ |  |  |- Journal
+ |  |  |- Tasks
+ |  |  |- Drafts
+ |  |  |- Contacts
+ |  |  |  |- Companies
+ |  |  |  |- Organizational Contacts
+ |  |  |  |- PeopleCentricConversation Buddies
+ |  |  |  |- GAL Contacts
+ |  |  |  |- {06967759-274D-40B2-A3EB-D7F9E73727D7}
+ |  |  |  |- Recipient Cache
+ |  |  |  |- {A9E2BC46-B3A0-4243-B315-60D991004455}
+ |  |  |- Calendar
+ |  |  |  |- United States holidays
+ |  |  |  |  |- Email: 2097572 - Day After Thanksgiving Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097572.txt
+ |  |  |  |  |- Email: 2097604 - Thanksgiving Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097604.txt
+ |  |  |  |  |- Email: 2097636 - Election Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097636.txt
+ |  |  |  |  |- Email: 2097668 - Columbus Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097668.txt
+ |  |  |  |  |- Email: 2097700 - Labor Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097700.txt
+ |  |  |  |  |- Email: 2097732 - Independence Day (Observed)
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097732.txt
+ |  |  |  |  |- Email: 2097764 - Father's Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097764.txt
+ |  |  |  |  |- Email: 2097796 - Memorial Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097796.txt
+ |  |  |  |  |- Email: 2097828 - Mother's Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097828.txt
+ |  |  |  |  |- Email: 2097860 - Administrative Professionals Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097860.txt
+ |  |  |  |  |- Email: 2097892 - Tax Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097892.txt
+ |  |  |  |  |- Email: 2097924 - Easter Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097924.txt
+ |  |  |  |  |- Email: 2097956 - Presidents' Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097956.txt
+ |  |  |  |  |- Email: 2097988 - Martin Luther King Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2097988.txt
+ |  |  |  |  |- Email: 2098020 - Day After Thanksgiving Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098020.txt
+ |  |  |  |  |- Email: 2098052 - Thanksgiving Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098052.txt
+ |  |  |  |  |- Email: 2098084 - Election Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098084.txt
+ |  |  |  |  |- Email: 2098116 - Columbus Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098116.txt
+ |  |  |  |  |- Email: 2098148 - Labor Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098148.txt
+ |  |  |  |  |- Email: 2098180 - Father's Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098180.txt
+ |  |  |  |  |- Email: 2098212 - Memorial Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098212.txt
+ |  |  |  |  |- Email: 2098244 - Mother's Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098244.txt
+ |  |  |  |  |- Email: 2098276 - Administrative Professionals Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098276.txt
+ |  |  |  |  |- Email: 2098308 - Easter Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2098308.txt
+ |  |  |  |- Birthdays
+ |  |  |  |- Email: 2104548 - repeats every monday for 10 weeks
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104548.txt
+ |  |  |  |- Email: 2104644 - repeats for 3 days
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104644.txt
+ |  |  |  |- Email: 2104804 - just a regular meeting
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104804.txt
+ |  |  |  |- Email: 2104900 - Occurs every August 13 effective 8/13/2021 from 10:00 AM to 10:30 AM
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2104900.txt
+ |  |  |  |- Email: 2105412 - meeting from Ed
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2105412.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2105412-invite.ics
+ |  |  |  |- Email: 2106148 - unanswered meeting
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106148.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106148-invite.ics
+ |  |  |  |- Email: 2106244 - all day event for 3 days
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106244.txt
+ |  |  |  |- Email: 2106916 - meeting with attachments
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106916.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106916-view.url
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106916-view.url
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2106916-invite.ics
+ |  |  |  |- Email: 2107492 - meeting with attachments (jpg, pdf, text)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107492.txt
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107492-primoz-roglic-of-slovenia-and-team-jumbo-visma-red-leader-news-photo-162....jpg
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107492-Clinometer Usage.pdf
+saving attachment to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2107492-text.txt
+ |  |  |- Notes
+ |  |  |- Sync Issues
+ |  |  |  |- Conflicts
+ |  |  |  |- Local Failures
+ |  |  |  |- Server Failures
+ |  |  |  |- Email: 2108228 - Synchronization Log: 
+ |  |  |  |-  sender: Pst Extractor ()
+email.body
+email.bodyRTF {\rtf1\ansi\deff0{\fonttbl{\f0\froman\fcharset0\fprq2 Arial;}{\f1\fswiss\fprq2\fcharset0 Arial;}}{\colortbl\red0\green0\blue0;\red128\green\uc1 13:41:51 Synchronizer Version 16.0.4266\par
+13:41:51 Synchronizing Mailbox '\f1 Pst Extractor\f0 '\par
+13:41:51 Synchronizing server changes in folder '\f1 Calendar\f0 '\par
+13:41:51 Downloading from server 'https://outlook.office365.com/mapi/emsmdb/?MailboxId=00030000-40'\par
+13:41:51 \tab
+   1 item(s) updated in offline folder\par
+13:41:51 \tab
+   1 view(s)/form(s) added to offline folder\par
+\cf2 13:41:51 \tab
+\tab
+ Could not connect to public folder server.\plain\fs18 \par
+\cf2 13:41:51 \tab
+\tab
+ [0-0]\plain\fs18 \par
+13:41:51 Done\par
+}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortest@outlook.com.ost/2021-08-12/2108228.txt
+ |  |  |- RSS Feeds
+ |  |  |- Quick Step Settings
+ |  |- ~MAPISP(Internal)
+ |  |- Drizzle
+ |  |- Shared Data
+ |  |- SPAM Search Folder 2
+ |  |- ItemProcSearch
+./testdata/pstextractortest@outlook.com.ost processed in 346 ms
+./testdata/pstextractortestpdf@outlook.com.ost
+
+ |- Root - Public
+ |  |- IPM_SUBTREE
+ |  |- NON_IPM_SUBTREE
+ |  |  |- EFORMS REGISTRY
+ |  |  |  |- Organization Forms
+ |- Root - Mailbox
+ |  |- Common Views
+ |  |- Finder
+ |  |  |- To-Do Search
+ |  |- Shortcuts
+ |  |- Views
+ |  |- IPM_SUBTREE
+ |  |  |- Deleted Items
+ |  |  |- Inbox
+ |  |  |  |- Email: 2097380 - single PDF
+ |  |  |  |-  sender: Ed (epfromer@gmail.com)
+email.body
+email.bodyRTF 
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097380.txt
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097380-Clinometer Usage.pdf
+ |  |  |  |- Email: 2097412 - Welcome to your new Outlook.com account
+ |  |  |  |-  sender: Outlook Team (no-reply@microsoft.com)
+email.body
+email.bodyRTF
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412.txt
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-colors.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-colors-top.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-devices.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-feature-attachments.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-feature-calendars.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-feature-integrations.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-feature-office.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-landing-appstore.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-landing-playstore.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-landing-winstore.png
+saving attachment to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097412-microsoft-logo.png
+ |  |  |- Outbox
+ |  |  |- Sent Items
+ |  |  |- Archive
+ |  |  |- Yammer Root
+ |  |  |  |- Inbound
+ |  |  |  |- Outbound
+ |  |  |  |- Feeds
+ |  |  |- Conversation History
+ |  |  |  |- Team Chat
+ |  |  |- Files
+ |  |  |- Conversation Action Settings
+ |  |  |- Junk Email
+ |  |  |- ExternalContacts
+ |  |  |- Journal
+ |  |  |- Notes
+ |  |  |- Calendar
+ |  |  |  |- Birthdays
+ |  |  |  |- United States holidays
+ |  |  |  |  |- Email: 2097956 - Day After Thanksgiving Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097956.txt
+ |  |  |  |  |- Email: 2097988 - Thanksgiving Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2097988.txt
+ |  |  |  |  |- Email: 2098020 - Election Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098020.txt
+ |  |  |  |  |- Email: 2098052 - Columbus Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098052.txt
+ |  |  |  |  |- Email: 2098084 - Labor Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098084.txt
+ |  |  |  |  |- Email: 2098116 - Independence Day (Observed)
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098116.txt
+ |  |  |  |  |- Email: 2098148 - Father's Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098148.txt
+ |  |  |  |  |- Email: 2098180 - Memorial Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098180.txt
+ |  |  |  |  |- Email: 2098212 - Mother's Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML 
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098212.txt
+ |  |  |  |  |- Email: 2098244 - Administrative Professionals Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098244.txt
+ |  |  |  |  |- Email: 2098276 - Tax Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098276.txt
+ |  |  |  |  |- Email: 2098308 - Easter Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098308.txt
+ |  |  |  |  |- Email: 2098340 - Presidents' Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML 
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098340.txt
+ |  |  |  |  |- Email: 2098372 - Martin Luther King Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098372.txt
+ |  |  |  |  |- Email: 2098404 - Day After Thanksgiving Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098404.txt
+ |  |  |  |  |- Email: 2098436 - Thanksgiving Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098436.txt
+ |  |  |  |  |- Email: 2098468 - Election Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098468.txt
+ |  |  |  |  |- Email: 2098500 - Columbus Day
+email.body 
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098500.txt
+ |  |  |  |  |- Email: 2098532 - Labor Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098532.txt
+ |  |  |  |  |- Email: 2098564 - Father's Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098564.txt
+ |  |  |  |  |- Email: 2098596 - Memorial Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098596.txt
+ |  |  |  |  |- Email: 2098628 - Mother's Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098628.txt
+ |  |  |  |  |- Email: 2098660 - Administrative Professionals Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098660.txt
+ |  |  |  |  |- Email: 2098692 - Easter Day
+email.body
+email.bodyRTF {\rtf1\ansi\fbidis\ansicpg1252\deff0\deftab720\fromtext{\fonttbl{\f0\fswiss\fcharset0 Times New Roman;}{\f1\fswiss\fcharset2
+Symbol;}}
+{\colortbl;\red192\green192\blue192;}
+{\*\generator Microsoft Exchange Server;}
+{\*\formatConverter converted from text;}
+\viewkind5\viewscale100
+{\*\bkmkstart BM_BEGIN}\pard\plain\f0}
+email.bodyHTML
+saving msg to ./testdataoutput/pstextractortestpdf@outlook.com.ost/2021-08-14/2098692.txt
+ |  |  |- Contacts
+ |  |  |  |- GAL Contacts
+ |  |  |  |- {06967759-274D-40B2-A3EB-D7F9E73727D7}
+ |  |  |  |- Recipient Cache
+ |  |  |  |- PeopleCentricConversation Buddies
+ |  |  |  |- Organizational Contacts
+ |  |  |  |- Companies
+ |  |  |  |- {A9E2BC46-B3A0-4243-B315-60D991004455}
+ |  |  |- Drafts
+ |  |  |- Tasks
+ |  |  |- Sync Issues
+ |  |  |  |- Conflicts
+ |  |  |  |- Local Failures
+ |  |  |  |- Server Failures
+ |  |  |- Quick Step Settings
+ |  |- ~MAPISP(Internal)
+ |  |- Drizzle
+ |  |- Shared Data
+ |  |- SPAM Search Folder 2
+ |  |- ItemProcSearch
+./testdata/pstextractortestpdf@outlook.com.ost processed in 167 ms
+Done in 4.62s.
+
+Terminal will be reused by tasks, press any key to close it.
