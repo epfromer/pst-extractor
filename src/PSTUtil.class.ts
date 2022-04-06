@@ -11,6 +11,7 @@ import { PSTNodeInputStream } from './PSTNodeInputStream.class'
 import { PSTTableBC } from './PSTTableBC.class'
 import { PSTTask } from './PSTTask.class'
 import { PSTActivity } from './PSTActivity.class'
+import iconv from 'iconv-lite'
 
 /**
  * Utility functions for PST components
@@ -612,14 +613,15 @@ export class PSTUtil {
   public static createJavascriptString(
     data: Buffer,
     stringType: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    codepage?: string
+    codepage: string = 'utf8'
   ): string {
     // TODO - codepage is not used...
     try {
       if (stringType == 0x1f) {
         // convert and trim any nulls
         return data.toString('utf16le').replace(/\0/g, '')
+      } else {
+        return iconv.decode(data, codepage).toString()
       }
     } catch (err) {
       console.error(
@@ -741,7 +743,7 @@ export class PSTUtil {
     } else {
       throw new Error(
         'PSTUtil::detectAndLoadPSTObject Unknown child type with offset id: ' +
-          folderIndexNode.localDescriptorsOffsetIndexIdentifier
+        folderIndexNode.localDescriptorsOffsetIndexIdentifier
       )
     }
   }
@@ -938,7 +940,7 @@ export class PSTUtil {
       default:
         console.error(
           'PSTUtil::createAppropriatePSTMessageObject unknown message type: ' +
-            messageClass
+          messageClass
         )
     }
     return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems)
