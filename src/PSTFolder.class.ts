@@ -104,9 +104,8 @@ export class PSTFolder extends PSTObject {
       this.descriptorIndexNode.descriptorIdentifier + 11
     )
     try {
-      const folderDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(
-        folderDescriptorIndex
-      )
+      const folderDescriptor: DescriptorIndexNode =
+        this.pstFile.getDescriptorIndexNode(folderDescriptorIndex)
       let tmp = undefined
       if (
         folderDescriptor.localDescriptorsOffsetIndexIdentifier.greaterThan(0)
@@ -151,9 +150,10 @@ export class PSTFolder extends PSTObject {
     try {
       const folderDescriptorIndex =
         this.descriptorIndexNode.descriptorIdentifier + 12
-      const folderDescriptor: DescriptorIndexNode = this.pstFile.getDescriptorIndexNode(
-        Long.fromNumber(folderDescriptorIndex)
-      )
+      const folderDescriptor: DescriptorIndexNode =
+        this.pstFile.getDescriptorIndexNode(
+          Long.fromNumber(folderDescriptorIndex)
+        )
       let tmp = undefined
       if (
         folderDescriptor.localDescriptorsOffsetIndexIdentifier.greaterThan(0)
@@ -222,10 +222,16 @@ export class PSTFolder extends PSTObject {
       const childDescriptor = this.pstFile.getDescriptorIndexNode(
         Long.fromNumber(emailRow.entryValueReference)
       )
-      const child = PSTUtil.detectAndLoadPSTObject(
-        this.pstFile,
-        childDescriptor
-      )
+
+      let child
+      try {
+        child = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor)
+      } catch (err) {
+        console.log('Exception Error in No: ', this.currentEmailIndex)
+        this.currentEmailIndex++
+        return this.getNextChild()
+      }
+
       this.currentEmailIndex++
       return child
     } else if (this.fallbackEmailsTable) {
