@@ -200,59 +200,48 @@ export class PSTFolder extends PSTObject {
    * @memberof PSTFolder
    */
   public getNextChild(): any {
-    this.initEmailsTable()
-
+    this.initEmailsTable();
     if (this.emailsTable) {
-      if (this.currentEmailIndex == this.contentCount) {
-        // no more!
-        return null
-      }
-
-      // get the emails from the rows in the main email table
-      const rows: Map<number, PSTTableItem>[] = this.emailsTable.getItems(
-        this.currentEmailIndex,
-        1
-      )
-      const emailRow = rows[0].get(0x67f2)
-      if ((emailRow && emailRow.itemIndex == -1) || !emailRow) {
-        // no more!
-        return null
-      }
-
-      const childDescriptor = this.pstFile.getDescriptorIndexNode(
-        Long.fromNumber(emailRow.entryValueReference)
-      )
-
-      let child
-      try {
-        child = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor)
-      } catch (err) {
-        console.log('Exception Error in No: ', this.currentEmailIndex)
-        this.currentEmailIndex++
-        return this.getNextChild()
-      }
-
-      this.currentEmailIndex++
-      return child
+        if (this.currentEmailIndex >= this.contentCount) {
+            return null;
+        }
+        
+        // get the emails from the rows in the main email table
+        const rows = this.emailsTable.getItems(this.currentEmailIndex, 1);
+        
+        if (rows.length === 0) {
+            this.currentEmailIndex++;
+            return this.getNextChild();
+        }
+        
+        const emailRow = rows[0].get(0x67f2);
+        if (!emailRow || emailRow.itemIndex === -1) {
+            this.currentEmailIndex++;
+            return this.getNextChild();
+        }
+        
+        try {
+            const childDescriptor = this.pstFile.getDescriptorIndexNode(long_1.default.fromNumber(emailRow.entryValueReference));
+            const child = PSTUtil_class_1.PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor);
+            this.currentEmailIndex++;
+            return child;
+        } catch (err) {
+            this.currentEmailIndex++;
+            return this.getNextChild();
+        }
     } else if (this.fallbackEmailsTable) {
-      if (
-        this.currentEmailIndex >= this.contentCount ||
-        this.currentEmailIndex >= this.fallbackEmailsTable.length
-      ) {
-        // no more!
-        return null
-      }
-
-      const childDescriptor = this.fallbackEmailsTable[this.currentEmailIndex]
-      const child = PSTUtil.detectAndLoadPSTObject(
-        this.pstFile,
-        childDescriptor
-      )
-      this.currentEmailIndex++
-      return child
+        if (this.currentEmailIndex >= this.contentCount ||
+            this.currentEmailIndex >= this.fallbackEmailsTable.length) {
+            // no more!
+            return null;
+        }
+        const childDescriptor = this.fallbackEmailsTable[this.currentEmailIndex];
+        const child = PSTUtil_class_1.PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor);
+        this.currentEmailIndex++;
+        return child;
     }
-    return null
-  }
+    return null;
+}
 
   /**
    *  Move the internal folder cursor to the desired position position 0 is before the first record.
