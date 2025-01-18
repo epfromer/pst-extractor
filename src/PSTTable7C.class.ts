@@ -242,7 +242,7 @@ export class PSTTable7C extends PSTTable {
         // Does this column exist for this row?
         const bitIndex = Math.trunc(this.columnDescriptors[col].iBit / 8)
         const bit = this.columnDescriptors[col].iBit % 8
-        if (bitIndex >= bitmap.length || (bitmap[bitIndex] & (1 << bit)) == 0) {
+        if (bitIndex >= bitmap.length || (bitmap[bitIndex] & (1 << (7-bit))) == 0) {
           // Column doesn't exist
           continue
         }
