@@ -294,19 +294,21 @@ export class PSTFile {
           key,
           key + 4
         ).toNumber()
-        const keyByteValue = Buffer.alloc(len)
-        PSTUtil.arraycopy(
-          stringNameToIdByte,
-          key + 4,
-          keyByteValue,
-          0,
-          keyByteValue.length
-        )
-        propId += 0x8000
-        PSTFile.nodeMap.setId(
-          keyByteValue.toString('utf16le').replace(/\0/g, ''),
-          propId
-        )
+        if (len > 0 && len <= stringNameToIdByte.length) {
+          const keyByteValue = Buffer.alloc(len)
+          PSTUtil.arraycopy(
+            stringNameToIdByte,
+            key + 4,
+            keyByteValue,
+            0,
+            keyByteValue.length
+          )
+          propId += 0x8000
+          PSTFile.nodeMap.setId(
+            keyByteValue.toString('utf16le').replace(/\0/g, ''),
+            propId
+          )
+        }
       }
     }
   }

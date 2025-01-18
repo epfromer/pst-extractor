@@ -12,6 +12,8 @@ This is based off code from https://github.com/rjohnsondev/java-libpst. Thanks t
 
 A spec from Microsoft on the PST file format is at https://msdn.microsoft.com/en-us/library/ff385210(v=office.12).aspx.
 
+Note that this tool does NOT work with corrupt PST files.
+
 ## Install
 
 ```npm install --save pst-extractor```
