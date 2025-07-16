@@ -232,7 +232,7 @@ export class PSTTable7C extends PSTTable {
       item.isExternalValueReference = true
       currentItem.set(item.entryType.toNumber(), item)
 
-      let col = 0
+      let col = -1
       if (this.overrideCol > -1) {
         col = this.overrideCol - 1
       }
