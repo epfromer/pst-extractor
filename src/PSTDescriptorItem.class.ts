@@ -31,7 +31,12 @@ export class PSTDescriptorItem {
    * @param {PSTFile} pstFile
    * @memberof PSTDescriptorItem
    */
-  constructor(data: Buffer, offset: number, pstFile: PSTFile) {
+  constructor(
+    data: Buffer,
+    offset: number,
+    pstFile: PSTFile,
+    entryType: number,
+  ) {
     this._pstFile = pstFile
 
     if (pstFile.pstFileType == PSTFile.PST_TYPE_ANSI) {
@@ -46,12 +51,17 @@ export class PSTDescriptorItem {
           offset + 4,
           offset + 8
         ).toNumber() & 0xfffffffe
-      this._subNodeOffsetIndexIdentifier =
-        PSTUtil.convertLittleEndianBytesToLong(
-          data,
-          offset + 8,
-          offset + 12
-        ).toNumber() & 0xfffffffe
+
+      if (entryType == PSTFile.SLBLOCK_ENTRY) {
+        this._subNodeOffsetIndexIdentifier =
+          PSTUtil.convertLittleEndianBytesToLong(
+            data,
+            offset + 8,
+            offset + 12
+          ).toNumber() & 0xfffffffe
+      } else {
+        this._subNodeOffsetIndexIdentifier = 0
+      }
     } else {
       this._descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(
         data,
@@ -64,12 +74,16 @@ export class PSTDescriptorItem {
           offset + 8,
           offset + 16
         ).toNumber() & 0xfffffffe
-      this._subNodeOffsetIndexIdentifier =
-        PSTUtil.convertLittleEndianBytesToLong(
-          data,
-          offset + 16,
-          offset + 24
-        ).toNumber() & 0xfffffffe
+      if (entryType == PSTFile.SLBLOCK_ENTRY) {
+        this._subNodeOffsetIndexIdentifier =
+          PSTUtil.convertLittleEndianBytesToLong(
+            data,
+            offset + 16,
+            offset + 24
+          ).toNumber() & 0xfffffffe
+      } else {
+        this._subNodeOffsetIndexIdentifier = 0
+      }
     }
   }
 
