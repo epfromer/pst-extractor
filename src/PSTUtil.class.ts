@@ -624,12 +624,8 @@ export class PSTUtil {
         return iconv.decode(data, codepage).toString()
       }
     } catch (err) {
-      console.error(
-        'PSTUtil::createJavascriptString Unable to decode string\n' + err
-      )
-      throw err
+      return iconv.decode(data, 'utf8').toString()
     }
-    return ''
   }
 
   /**
