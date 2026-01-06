@@ -62,6 +62,7 @@
   "prettier": {
     "semi": false,
     "singleQuote": true,
+    "trailingComma": "none",
     "endOfLine": "auto"
   },
   "babel": {

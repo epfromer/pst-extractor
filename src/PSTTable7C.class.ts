@@ -232,7 +232,7 @@ export class PSTTable7C extends PSTTable {
       item.isExternalValueReference = true
       currentItem.set(item.entryType.toNumber(), item)
 
-      let col = -1
+      let col = 0
       if (this.overrideCol > -1) {
         col = this.overrideCol
       }
@@ -241,7 +241,10 @@ export class PSTTable7C extends PSTTable {
         const bitIndex = Math.trunc(this.columnDescriptors[col].iBit / 8)
         const bit = this.columnDescriptors[col].iBit % 8
         // https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-pst/c48fa6b4-bfd4-49d7-80f8-8718bc4bcddc
-        if (bitIndex >= bitmap.length || (bitmap[bitIndex] & (1 << (7-bit))) == 0) {
+        if (
+          bitIndex >= bitmap.length ||
+          (bitmap[bitIndex] & (1 << (7 - bit))) == 0
+        ) {
           // Column doesn't exist
           col++
           continue
