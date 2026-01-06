@@ -234,17 +234,16 @@ export class PSTTable7C extends PSTTable {
 
       let col = -1
       if (this.overrideCol > -1) {
-        col = this.overrideCol - 1
+        col = this.overrideCol
       }
-      while (col < this.numColumns - 1) {
-        col++
-
+      while (col < this.numColumns) {
         // Does this column exist for this row?
         const bitIndex = Math.trunc(this.columnDescriptors[col].iBit / 8)
         const bit = this.columnDescriptors[col].iBit % 8
         // https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-pst/c48fa6b4-bfd4-49d7-80f8-8718bc4bcddc
         if (bitIndex >= bitmap.length || (bitmap[bitIndex] & (1 << (7-bit))) == 0) {
           // Column doesn't exist
+          col++
           continue
         }
 
@@ -335,6 +334,7 @@ export class PSTTable7C extends PSTTable {
             }
             break
         }
+        col++
         currentItem.set(item.entryType.toNumber(), item)
       }
       itemList[dataSetNumber] = currentItem
