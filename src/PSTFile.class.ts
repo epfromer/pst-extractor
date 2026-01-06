@@ -32,6 +32,8 @@ export class PSTFile {
   public static PS_MAPI = 12
   public static PSETID_AirSync = 13
   public static PSETID_Sharing = 14
+  public static SLBLOCK_ENTRY = 0;
+  public static SIBLOCK_ENTRY = 1;
 
   private guidMap: Map<string, number> = new Map([
     ['00020329-0000-0000-C000-000000000046', 0],
@@ -753,7 +755,13 @@ export class PSTFile {
           sig
       )
     }
-
+    
+    // NID nodes defines in subnode can be either SLBLOCK (0) or SIBLOCK_ENTRY (1)
+    const blockType = inputStream.read()
+    if ((blockType !== PSTFile.SLBLOCK_ENTRY) && (blockType !== PSTFile.SIBLOCK_ENTRY)) {
+      throw new Error("Unable to process descriptor node, unknown BLOCK type: " + blockType)
+    }
+    
     const output = new Map()
     const numberOfItems = inputStream.seekAndReadLong(Long.fromValue(2), 2)
     let offset
@@ -768,12 +776,28 @@ export class PSTFile {
     inputStream.readCompletely(data)
 
     for (let x = 0; x < numberOfItems.toNumber(); x++) {
-      const item: PSTDescriptorItem = new PSTDescriptorItem(data, offset, this)
-      output.set(item.descriptorIdentifier, item)
-      if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
-        offset += 12
+      const item: PSTDescriptorItem = new PSTDescriptorItem(data, offset, this, blockType)
+      if (blockType == PSTFile.SLBLOCK_ENTRY) {
+        output.set(item.descriptorIdentifier, item)
       } else {
-        offset += 24
+        const subItems = this.getPSTDescriptorItems(Long.fromNumber(item.offsetIndexIdentifier))
+        subItems.forEach((value, key) => {
+          output.set(key, value)
+        })
+      }
+
+      if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+        if (blockType === PSTFile.SLBLOCK_ENTRY) {
+          offset += 12
+        } else {
+          offset += 8
+        }
+      } else {
+        if (blockType === PSTFile.SLBLOCK_ENTRY) {
+          offset += 24
+        } else {
+          offset += 16
+        }
       }
     }
 
