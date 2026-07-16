@@ -237,7 +237,8 @@ async function runWorker(options) {
   return {
     variant: options.worker,
     samples,
-    peakRssMiB: process.resourceUsage().maxRSS / 1024
+    peakRssMiB: process.resourceUsage().maxRSS / 1024,
+    diagnostics: globalThis[Symbol.for('pst-extractor.performance-diagnostics')]
   }
 }
 
@@ -294,7 +295,10 @@ async function runCoordinator(options) {
         '--worker',
         variant
       ],
-      { maxBuffer: 10 * 1024 * 1024 }
+      {
+        maxBuffer: 10 * 1024 * 1024,
+        env: { ...process.env, PST_EXTRACTOR_BENCHMARK: '1' }
+      }
     )
     const resultLine = stdout
       .split('\n')

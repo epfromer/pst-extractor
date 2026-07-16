@@ -66,7 +66,7 @@ describe('AsyncRandomAccessReader', () => {
       },
       async close() {}
     }
-    const cache = new AsyncBlockCache(reader, 8, 4)
+    const cache = new AsyncBlockCache(reader, 8, 4, Number.POSITIVE_INFINITY, 4)
     await cache.ensure(0, 1)
     await Promise.all([cache.ensure(4, 1), cache.ensure(4, 1)])
     expect(reads).toBe(2)
@@ -75,5 +75,31 @@ describe('AsyncRandomAccessReader', () => {
     expect(cache.bytes).toBeLessThanOrEqual(8)
     expect(() => cache.readSync(4, 1)).toThrow('cache miss')
     expect(cache.readSync(0, 1)).toEqual(Buffer.from('a'))
+  })
+
+  it('coalesces adjacent pages while deduplicating concurrent reads', async () => {
+    const data = Buffer.from('abcdefghijkl')
+    const ranges: Array<[number, number]> = []
+    const reader: AsyncRandomAccessReader = {
+      size: data.length,
+      async read(position, length) {
+        ranges.push([position, length])
+        await Promise.resolve()
+        return data.subarray(position, position + length)
+      },
+      async close() {}
+    }
+    const cache = new AsyncBlockCache(
+      reader,
+      Number.POSITIVE_INFINITY,
+      4,
+      Number.POSITIVE_INFINITY,
+      8
+    )
+
+    await Promise.all([cache.ensure(0, 1), cache.ensure(4, 1)])
+
+    expect(ranges).toEqual([[0, 8]])
+    expect(cache.readSync(0, 8)).toEqual(Buffer.from('abcdefgh'))
   })
 })

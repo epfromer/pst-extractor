@@ -82,7 +82,7 @@ async function command(file, args, cwd = root) {
   return execFileAsync(file, args, {
     cwd,
     maxBuffer: 20 * 1024 * 1024,
-    env: { ...process.env, CI: '1' }
+    env: { ...process.env, CI: '1', PST_EXTRACTOR_BENCHMARK: '1' }
   })
 }
 
@@ -110,7 +110,11 @@ async function sample(packageRoot, variant, scenario) {
     .find((entry) => entry.startsWith('PST_BENCHMARK_RESULT='))
   if (!line) throw new Error('Benchmark worker returned no result')
   const result = JSON.parse(line.slice('PST_BENCHMARK_RESULT='.length))
-  return { ...result.samples[0], peakRssMiB: result.peakRssMiB }
+  return {
+    ...result.samples[0],
+    peakRssMiB: result.peakRssMiB,
+    diagnostics: result.diagnostics
+  }
 }
 
 try {

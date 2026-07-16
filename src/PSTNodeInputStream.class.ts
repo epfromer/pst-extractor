@@ -11,6 +11,7 @@ export class PSTNodeInputStream {
   private currentBlock = 0
   private allData: Buffer | null = null
   private isZlib = false
+  private readonly scalarScratch = Buffer.allocUnsafe(8)
 
   private _currentLocation: Long = Long.ZERO
   private get currentLocation(): Long {
@@ -571,10 +572,20 @@ export class PSTNodeInputStream {
    * @memberof PSTNodeInputStream
    */
   public seekAndReadLong(location: Long, bytes: number): Long {
+    if (bytes < 1 || bytes > this.scalarScratch.length) {
+      throw new RangeError('Scalar reads must contain between 1 and 8 bytes')
+    }
     this.seek(location)
-    const buffer = Buffer.alloc(bytes)
-    this.readCompletely(buffer)
-    return PSTUtil.convertLittleEndianBytesToLong(buffer)
+    const target = this.scalarScratch.subarray(0, bytes)
+    if (this.allData !== null) {
+      const position = this.currentLocation.toNumber()
+      this.allData.copy(target, 0, position, position + bytes)
+      if (this.encrypted) PSTUtil.decode(target)
+      this.currentLocation = this.currentLocation.add(bytes)
+    } else {
+      this.readCompletely(target)
+    }
+    return PSTUtil.convertLittleEndianBytesToLong(this.scalarScratch, 0, bytes)
   }
 
   /**

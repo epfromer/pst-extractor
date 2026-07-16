@@ -304,22 +304,21 @@ export class PSTUtil {
     start?: number,
     end?: number
   ): Long {
-    if (!start) {
-      start = 0
+    const from = start ?? 0
+    const to = end ?? data.length
+    const length = to - from
+    if (length < 0 || length > 8 || from < 0 || to > data.length) {
+      throw new RangeError('Long byte range must contain between 0 and 8 bytes')
     }
-    if (!end) {
-      end = data.length
-    }
+    if (length === 0) return Long.ZERO
 
-    let offset: Long = Long.fromNumber(data[end - 1] & 0xff)
-    let tmpLongValue: Long
-    for (let x = end - 2; x >= start; x--) {
-      offset = offset.shiftLeft(8)
-      tmpLongValue = Long.fromNumber(data[x] & 0xff)
-      offset = offset.xor(tmpLongValue)
-    }
-
-    return offset
+    // Constructing a Long from its native 32-bit halves avoids one Long
+    // allocation and two bit operations for every input byte in parser hot
+    // paths.  The public return type and signed bit pattern remain unchanged.
+    const lowLength = Math.min(length, 4)
+    const low = data.readUIntLE(from, lowLength)
+    const high = length > 4 ? data.readUIntLE(from + 4, length - 4) : 0
+    return Long.fromBits(low, high)
   }
 
   /**
@@ -336,21 +335,19 @@ export class PSTUtil {
     start?: number,
     end?: number
   ): Long {
-    if (!start) {
-      start = 0
+    const from = start ?? 0
+    const to = end ?? data.length
+    const length = to - from
+    if (length < 0 || length > 8 || from < 0 || to > data.length) {
+      throw new RangeError('Long byte range must contain between 0 and 8 bytes')
     }
-    if (!end) {
-      end = data.length
-    }
+    if (length === 0) return Long.ZERO
 
-    let offset: Long = Long.ZERO
-    for (let x = start; x < end; ++x) {
-      offset = offset.shiftLeft(8)
-      const tmpLongValue = Long.fromNumber(data[x] & 0xff)
-      offset = offset.xor(tmpLongValue)
-    }
-
-    return offset
+    const highLength = Math.max(0, length - 4)
+    const high = highLength === 0 ? 0 : data.readUIntBE(from, highLength)
+    const lowLength = Math.min(length, 4)
+    const low = data.readUIntBE(to - lowLength, lowLength)
+    return Long.fromBits(low, high)
   }
 
   /**

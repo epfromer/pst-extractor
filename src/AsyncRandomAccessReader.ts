@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto'
 import { unzip } from 'node:zlib'
 import { promisify } from 'node:util'
 import { PSTEOFError, PSTError, throwIfAborted } from './PSTError.js'
+import { recordDiagnostic } from './PerformanceDiagnostics.js'
 
 export interface AsyncReadOptions {
   signal?: AbortSignal
@@ -41,21 +42,34 @@ export class AsyncDecompressionMissError extends Error {
   }
 }
 
+interface CachePage {
+  readonly start: number
+  readonly data: Buffer
+  newer?: CachePage
+  older?: CachePage
+  hits: number
+}
+
 /**
  * File-local LRU cache which bridges I/O-free parser reads to an asynchronous
  * random-access reader. Returned parser buffers never alias cached pages.
  */
 export class AsyncBlockCache {
-  private readonly pages = new Map<number, Buffer>()
+  private readonly pages = new Map<number, CachePage>()
   private readonly pending = new Map<number, Promise<void>>()
   private cachedBytes = 0
   private readonly decompressed = new Map<string, Buffer>()
+  private newest?: CachePage
+  private oldest?: CachePage
+  private diagnosticCacheHits = 0
+  private diagnosticCopies = 0
 
   public constructor(
     private readonly reader: AsyncRandomAccessReader,
     private readonly maxBytes = 64 * 1024 * 1024,
     private readonly pageSize = 64 * 1024,
-    private readonly maxDecompressedBytes = Number.POSITIVE_INFINITY
+    private readonly maxDecompressedBytes = Number.POSITIVE_INFINITY,
+    private readonly readSize = 256 * 1024
   ) {
     if (!(
       maxBytes === Number.POSITIVE_INFINITY ||
@@ -67,6 +81,13 @@ export class AsyncBlockCache {
     }
     if (!Number.isSafeInteger(pageSize) || pageSize <= 0) {
       throw new RangeError('pageSize must be a positive safe integer')
+    }
+    if (
+      !Number.isSafeInteger(readSize) ||
+      readSize < pageSize ||
+      readSize % pageSize !== 0
+    ) {
+      throw new RangeError('readSize must be a positive multiple of pageSize')
     }
   }
 
@@ -98,13 +119,18 @@ export class AsyncBlockCache {
       const absolute = position + copied
       const pageStart = Math.floor(absolute / this.pageSize) * this.pageSize
       const page = this.pages.get(pageStart)
-      if (!page) throw new AsyncCacheMissError(position, length)
-      this.touch(pageStart, page)
+      if (!page) {
+        recordDiagnostic('cacheMisses')
+        throw new AsyncCacheMissError(position, length)
+      }
+      this.diagnosticCacheHits++
+      this.touch(page)
       const pageOffset = absolute - pageStart
-      const available = Math.min(page.length - pageOffset, length - copied)
+      const available = Math.min(page.data.length - pageOffset, length - copied)
       if (available <= 0)
         throw new PSTEOFError(position, length, output.subarray(0, copied))
-      page.copy(output, copied, pageOffset, pageOffset + available)
+      page.data.copy(output, copied, pageOffset, pageOffset + available)
+      this.diagnosticCopies += available
       copied += available
     }
     return copied
@@ -119,24 +145,30 @@ export class AsyncBlockCache {
     const last =
       Math.floor((position + Math.max(0, length - 1)) / this.pageSize) *
       this.pageSize
-    const loads: Promise<void>[] = []
+    const loads = new Set<Promise<void>>()
     for (let pageStart = first; pageStart <= last; pageStart += this.pageSize) {
-      if (!this.pages.has(pageStart)) loads.push(this.load(pageStart, options))
+      if (!this.pages.has(pageStart)) loads.add(this.load(pageStart, options))
     }
     await Promise.all(loads)
   }
 
   public clear(): void {
+    recordDiagnostic('cacheHits', this.diagnosticCacheHits)
+    recordDiagnostic('copies', this.diagnosticCopies)
+    this.diagnosticCacheHits = 0
+    this.diagnosticCopies = 0
     this.pages.clear()
     this.decompressed.clear()
     this.cachedBytes = 0
+    this.newest = undefined
+    this.oldest = undefined
   }
 
   public decompressSync(data: Buffer): Buffer {
     const key = createHash('sha256').update(data).digest('base64url')
     const result = this.decompressed.get(key)
-    if (!result) throw new AsyncDecompressionMissError(key, Buffer.from(data))
-    return Buffer.from(result)
+    if (!result) throw new AsyncDecompressionMissError(key, data)
+    return result
   }
 
   public async ensureDecompressed(
@@ -146,6 +178,7 @@ export class AsyncBlockCache {
     throwIfAborted(signal)
     if (this.decompressed.has(miss.key)) return
     const result = await unzipAsync(miss.data)
+    recordDiagnostic('decompressions')
     throwIfAborted(signal)
     if (result.length > this.maxDecompressedBytes) {
       throw new PSTError(
@@ -153,7 +186,7 @@ export class AsyncBlockCache {
         `Decompressed PST value size ${result.length} exceeds configured limit ${this.maxDecompressedBytes}`
       )
     }
-    this.decompressed.set(miss.key, Buffer.from(result))
+    this.decompressed.set(miss.key, result)
   }
 
   public releaseDecompressed(): void {
@@ -163,42 +196,96 @@ export class AsyncBlockCache {
   private load(pageStart: number, options: AsyncReadOptions): Promise<void> {
     const existing = this.pending.get(pageStart)
     if (existing) return existing
+
+    const readStart = Math.floor(pageStart / this.readSize) * this.readSize
     const available =
       this.reader.size === undefined
-        ? this.pageSize
-        : Math.min(this.pageSize, Math.max(0, this.reader.size - pageStart))
+        ? this.readSize
+        : Math.min(this.readSize, Math.max(0, this.reader.size - readStart))
     const pending = (async () => {
-      let page: Buffer
+      let data: Buffer
       try {
-        page = await this.reader.read(pageStart, available, options)
+        recordDiagnostic('readCalls')
+        data = await this.reader.read(readStart, available, options)
+        recordDiagnostic('bytesRead', data.length)
       } catch (error) {
         if (!(error instanceof PSTEOFError) || error.partial.length === 0)
           throw error
-        page = Buffer.from(error.partial)
+        data = error.partial
       }
-      this.insert(pageStart, page)
-    })().finally(() => this.pending.delete(pageStart))
-    this.pending.set(pageStart, pending)
+      for (let offset = 0; offset < data.length; offset += this.pageSize) {
+        const start = readStart + offset
+        this.insert(start, data.subarray(offset, offset + this.pageSize))
+      }
+    })().finally(() => {
+      for (
+        let start = readStart;
+        start < readStart + available;
+        start += this.pageSize
+      ) {
+        if (this.pending.get(start) === pending) this.pending.delete(start)
+      }
+    })
+    for (
+      let start = readStart;
+      start < readStart + available;
+      start += this.pageSize
+    ) {
+      if (!this.pages.has(start) && !this.pending.has(start)) {
+        this.pending.set(start, pending)
+      }
+    }
     return pending
   }
 
   private insert(pageStart: number, page: Buffer): void {
     if (this.pages.has(pageStart)) return
-    const stored = page
-    this.pages.set(pageStart, stored)
-    this.cachedBytes += stored.length
-    while (this.cachedBytes > this.maxBytes && this.pages.size > 1) {
-      const oldest = this.pages.entries().next().value as
-        [number, Buffer] | undefined
-      if (!oldest) break
-      this.pages.delete(oldest[0])
-      this.cachedBytes -= oldest[1].length
+    const entry: CachePage = { start: pageStart, data: page, hits: 0 }
+    this.pages.set(pageStart, entry)
+    this.cachedBytes += page.length
+    this.append(entry)
+    while (
+      this.cachedBytes > this.maxBytes &&
+      this.oldest &&
+      this.pages.size > 1
+    ) {
+      this.remove(this.oldest)
     }
   }
 
-  private touch(pageStart: number, page: Buffer): void {
-    this.pages.delete(pageStart)
-    this.pages.set(pageStart, page)
+  private touch(page: CachePage): void {
+    page.hits++
+    // Updating list pointers for every scalar parser read dominates hot
+    // metadata pages. The first hit preserves exact recency semantics for
+    // short-lived pages; periodic refreshes keep long-lived hot pages young.
+    if (page.hits !== 1 && page.hits % 64 !== 0) return
+    if (page === this.newest) return
+    this.unlink(page)
+    this.append(page)
+  }
+
+  private append(page: CachePage): void {
+    page.newer = undefined
+    page.older = this.newest
+    if (this.newest) this.newest.newer = page
+    else this.oldest = page
+    this.newest = page
+  }
+
+  private unlink(page: CachePage): void {
+    if (page.older) page.older.newer = page.newer
+    else this.oldest = page.newer
+    if (page.newer) page.newer.older = page.older
+    else this.newest = page.older
+    page.older = undefined
+    page.newer = undefined
+  }
+
+  private remove(page: CachePage): void {
+    this.unlink(page)
+    this.pages.delete(page.start)
+    this.cachedBytes -= page.data.length
+    recordDiagnostic('evictions')
   }
 }
 

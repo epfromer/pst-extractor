@@ -52,7 +52,10 @@ export class PSTMessage extends PSTObject {
     pstTableBC?: PSTTableBC,
     localDescriptorItems?: Map<number, PSTDescriptorItem>
   ) {
-    super(pstFile, descriptorIndexNode)
+    // detectAndLoadPSTObject already parsed the property table. Avoid loading
+    // the same descriptor, table and compressed blocks a second time before
+    // replacing them in prePopulate().
+    super(pstFile, pstTableBC ? undefined : descriptorIndexNode)
     if (pstTableBC) {
       // pre-populate folder object with values
       this.prePopulate(descriptorIndexNode, pstTableBC, localDescriptorItems)

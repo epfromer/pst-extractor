@@ -21,6 +21,7 @@ export abstract class PSTTable {
   protected numberOfIndexLevels = 0
   private pstNodeInputStream: PSTNodeInputStream
   private subNodeDescriptorItems: Map<number, PSTDescriptorItem> = new Map()
+  private readonly heapPageOffsets = new Map<number, number[]>()
 
   /**
    * Creates an instance of PSTTable.  The PST Table is the workhorse of the whole system.
@@ -176,30 +177,34 @@ export abstract class PSTTable {
     if (whichBlock > 0) {
       blockOffset = this.arrayBlocks[whichBlock - 1].toNumber()
     }
-    // Get offset of HN page map
-    let iHeapNodePageMap =
-      this.pstNodeInputStream
-        .seekAndReadLong(Long.fromValue(blockOffset), 2)
-        .toNumber() + blockOffset
-    const cAlloc = this.pstNodeInputStream
-      .seekAndReadLong(Long.fromValue(iHeapNodePageMap), 2)
-      .toNumber()
-    if (index >= cAlloc + 1) {
+    let offsets = this.heapPageOffsets.get(whichBlock)
+    if (!offsets) {
+      const pageMap =
+        this.pstNodeInputStream
+          .seekAndReadLong(Long.fromValue(blockOffset), 2)
+          .toNumber() + blockOffset
+      const allocationCount = this.pstNodeInputStream
+        .seekAndReadLong(Long.fromValue(pageMap), 2)
+        .toNumber()
+      offsets = new Array<number>(allocationCount + 2)
+      for (let entry = 0; entry < offsets.length; entry++) {
+        offsets[entry] =
+          this.pstNodeInputStream
+            .seekAndReadLong(Long.fromValue(pageMap + 2 * entry + 2), 2)
+            .toNumber() + blockOffset
+      }
+      this.heapPageOffsets.set(whichBlock, offsets)
+    }
+    if (index + 1 >= offsets.length) {
       throw new Error(
         "PSTTable::getNodeInfo: node index doesn't exist! nid = " + hnid
       )
     }
-    iHeapNodePageMap += 2 * index + 2
-    const start =
+    return new NodeInfo(
+      offsets[index],
+      offsets[index + 1],
       this.pstNodeInputStream
-        .seekAndReadLong(Long.fromValue(iHeapNodePageMap), 2)
-        .toNumber() + blockOffset
-    const end =
-      this.pstNodeInputStream
-        .seekAndReadLong(Long.fromValue(iHeapNodePageMap + 2), 2)
-        .toNumber() + blockOffset
-
-    return new NodeInfo(start, end, this.pstNodeInputStream)
+    )
   }
 
   /**

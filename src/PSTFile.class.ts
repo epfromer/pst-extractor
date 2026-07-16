@@ -99,6 +99,7 @@ export class PSTFile {
 
   // position in file
   private position = 0
+  private readonly scalarScratch = Buffer.allocUnsafe(8)
 
   /**
    * Creates an instance of PSTFile.  File is opened in constructor.
@@ -521,31 +522,11 @@ export class PSTFile {
    * @memberof PSTFile
    */
   private extractLEFileOffset(startOffset: Long): Long {
-    let offset: Long = Long.ZERO
-    if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-      this.seek(startOffset)
-      const buffer = Buffer.alloc(4)
-      this.readCompletely(buffer)
-      offset = offset.or(buffer[3] & 0xff)
-      offset = offset.shiftLeft(8)
-      offset = offset.or(buffer[2] & 0xff)
-      offset = offset.shiftLeft(8)
-      offset = offset.or(buffer[1] & 0xff)
-      offset = offset.shiftLeft(8)
-      offset = offset.or(buffer[0] & 0xff)
-    } else {
-      this.seek(startOffset)
-      const buffer = Buffer.alloc(8)
-      this.readCompletely(buffer)
-      offset = offset.or(buffer[7] & 0xff)
-      let tmpLongValue: number
-      for (let x = 6; x >= 0; x--) {
-        offset = offset.shiftLeft(8)
-        tmpLongValue = buffer[x] & 0xff
-        offset = offset.or(tmpLongValue)
-      }
-    }
-    return offset
+    const length = this._pstFileType == PSTFile.PST_TYPE_ANSI ? 4 : 8
+    const position = startOffset.toNumber()
+    this.readSync(this.scalarScratch, length, position)
+    this.position = position + length
+    return PSTUtil.convertLittleEndianBytesToLong(this.scalarScratch, 0, length)
   }
 
   /**
@@ -1011,11 +992,10 @@ export class PSTFile {
    */
   public read(position?: number): number {
     const pos = position !== undefined ? position : this.position
-    const buffer = Buffer.alloc(1)
-    const bytesRead = this.readSync(buffer, buffer.length, pos)
+    const bytesRead = this.readSync(this.scalarScratch, 1, pos)
     this.position =
       position !== undefined ? position + bytesRead : this.position + bytesRead
-    return buffer[0]
+    return this.scalarScratch[0]
   }
 
   /**

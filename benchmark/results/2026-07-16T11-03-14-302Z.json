@@ -1,0 +1,1172 @@
+{
+  "environment": {
+    "node": "v24.18.0",
+    "platform": "linux-x64",
+    "baselineCommit": "ecff0b5f627ac9b933194d1ed4e2b598f858dc4a",
+    "targetCommit": "31e49973e7236f0c0a4b8e4fbbb82af78d8f8c92+dirty:244238a27b63",
+    "fixture": "/home/user/pst-extractor/src/__tests__/testdata/enron.pst",
+    "fixtureSha256": "6152489de3472be6f1f840935d34b6dbf5f62b025dd015929ea9cf66eb5a5b46",
+    "warmups": 1,
+    "rounds": 3
+  },
+  "scenarios": {
+    "path-c1": {
+      "sync": {
+        "baseline": [
+          {
+            "durationMs": 65.44411500000001,
+            "timerDelayMs": 65.59403599999999,
+            "eventLoopP99Ms": 66.650111,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 72.80078125
+          },
+          {
+            "durationMs": 68.56717500000002,
+            "timerDelayMs": 68.72687400000001,
+            "eventLoopP99Ms": 69.795839,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 72.921875
+          },
+          {
+            "durationMs": 69.23997299999999,
+            "timerDelayMs": 69.39058600000001,
+            "eventLoopP99Ms": 70.451199,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 73.5625
+          }
+        ],
+        "target": [
+          {
+            "durationMs": 50.66632600000001,
+            "timerDelayMs": 50.85680599999999,
+            "eventLoopP99Ms": 51.838975,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 72.60546875
+          },
+          {
+            "durationMs": 50.75834500000002,
+            "timerDelayMs": 50.90665299999999,
+            "eventLoopP99Ms": 52.002815,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 72.890625
+          },
+          {
+            "durationMs": 52.766211999999996,
+            "timerDelayMs": 52.97604799999999,
+            "eventLoopP99Ms": 53.968895,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 75.31640625
+          }
+        ]
+      },
+      "async": {
+        "baseline": [
+          {
+            "durationMs": 45.99504999999999,
+            "timerDelayMs": 1.4781380000000013,
+            "eventLoopP99Ms": 1.390591,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 101.6171875
+          },
+          {
+            "durationMs": 47.80314899999999,
+            "timerDelayMs": 1.5259460000000047,
+            "eventLoopP99Ms": 1.477631,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 99.90625
+          },
+          {
+            "durationMs": 46.821302999999986,
+            "timerDelayMs": 0.12197700000000111,
+            "eventLoopP99Ms": 1.618943,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 100.07421875
+          }
+        ],
+        "target": [
+          {
+            "durationMs": 45.09234000000001,
+            "timerDelayMs": 2.6202550000000002,
+            "eventLoopP99Ms": 1.619967,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 96.79296875,
+            "diagnostics": {
+              "readCalls": 102,
+              "bytesRead": 26396672,
+              "cacheHits": 116818,
+              "cacheMisses": 110,
+              "evictions": 296,
+              "copies": 6233246,
+              "decompressions": 0,
+              "yields": 453
+            }
+          },
+          {
+            "durationMs": 48.058015,
+            "timerDelayMs": 0.4050969999999978,
+            "eventLoopP99Ms": 1.727487,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 98.5,
+            "diagnostics": {
+              "readCalls": 102,
+              "bytesRead": 26396672,
+              "cacheHits": 116818,
+              "cacheMisses": 110,
+              "evictions": 296,
+              "copies": 6233246,
+              "decompressions": 0,
+              "yields": 454
+            }
+          },
+          {
+            "durationMs": 46.253923,
+            "timerDelayMs": 0.7703049999999934,
+            "eventLoopP99Ms": 1.794047,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 98.421875,
+            "diagnostics": {
+              "readCalls": 102,
+              "bytesRead": 26396672,
+              "cacheHits": 116818,
+              "cacheMisses": 110,
+              "evictions": 296,
+              "copies": 6233246,
+              "decompressions": 0,
+              "yields": 452
+            }
+          }
+        ]
+      }
+    },
+    "path-c4": {
+      "sync": {
+        "baseline": [
+          {
+            "durationMs": 250.75885000000005,
+            "timerDelayMs": 251.12560200000007,
+            "eventLoopP99Ms": 252.182527,
+            "counts": {
+              "folders": 44,
+              "messages": 284,
+              "attachments": 280,
+              "bodyBytes": 386152,
+              "attachmentBytes": 47350116,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 86.2265625
+          },
+          {
+            "durationMs": 250.097527,
+            "timerDelayMs": 250.42696600000005,
+            "eventLoopP99Ms": 250.609663,
+            "counts": {
+              "folders": 44,
+              "messages": 284,
+              "attachments": 280,
+              "bodyBytes": 386152,
+              "attachmentBytes": 47350116,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 84.60546875
+          },
+          {
+            "durationMs": 252.91825099999994,
+            "timerDelayMs": 253.17872599999998,
+            "eventLoopP99Ms": 254.279679,
+            "counts": {
+              "folders": 44,
+              "messages": 284,
+              "attachments": 280,
+              "bodyBytes": 386152,
+              "attachmentBytes": 47350116,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 84.52734375
+          }
+        ],
+        "target": [
+          {
+            "durationMs": 188.52709799999997,
+            "timerDelayMs": 189.46064,
+            "eventLoopP99Ms": 189.530111,
+            "counts": {
+              "folders": 44,
+              "messages": 284,
+              "attachments": 280,
+              "bodyBytes": 386152,
+              "attachmentBytes": 47350116,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 85.04296875
+          },
+          {
+            "durationMs": 193.464881,
+            "timerDelayMs": 194.05627900000002,
+            "eventLoopP99Ms": 194.772991,
+            "counts": {
+              "folders": 44,
+              "messages": 284,
+              "attachments": 280,
+              "bodyBytes": 386152,
+              "attachmentBytes": 47350116,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 84.7265625
+          },
+          {
+            "durationMs": 201.448646,
+            "timerDelayMs": 201.842269,
+            "eventLoopP99Ms": 202.768383,
+            "counts": {
+              "folders": 44,
+              "messages": 284,
+              "attachments": 280,
+              "bodyBytes": 386152,
+              "attachmentBytes": 47350116,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 83.796875
+          }
+        ]
+      },
+      "async": {
+        "baseline": [
+          {
+            "durationMs": 156.218478,
+            "timerDelayMs": 0.5604769999999917,
+            "eventLoopP99Ms": 2.936831,
+            "counts": {
+              "folders": 44,
+              "messages": 284,
+              "attachments": 280,
+              "bodyBytes": 386152,
+              "attachmentBytes": 47350116,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 187.7890625
+          },
+          {
+            "durationMs": 193.41274,
+            "timerDelayMs": 0.4661450000000116,
+            "eventLoopP99Ms": 3.399679,
+            "counts": {
+              "folders": 44,
+              "messages": 284,
+              "attachments": 280,
+              "bodyBytes": 386152,
+              "attachmentBytes": 47350116,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 162.19921875
+          },
+          {
+            "durationMs": 157.96635,
+            "timerDelayMs": 0.35442599999998947,
+            "eventLoopP99Ms": 2.414591,
+            "counts": {
+              "folders": 44,
+              "messages": 284,
+              "attachments": 280,
+              "bodyBytes": 386152,
+              "attachmentBytes": 47350116,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 159.11328125
+          }
+        ],
+        "target": [
+          {
+            "durationMs": 141.477573,
+            "timerDelayMs": 1.1198530000000062,
+            "eventLoopP99Ms": 2.406399,
+            "counts": {
+              "folders": 44,
+              "messages": 284,
+              "attachments": 280,
+              "bodyBytes": 386152,
+              "attachmentBytes": 47350116,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 139.64453125,
+            "diagnostics": {
+              "readCalls": 408,
+              "bytesRead": 105586688,
+              "cacheHits": 467272,
+              "cacheMisses": 440,
+              "evictions": 1184,
+              "copies": 24932984,
+              "decompressions": 0,
+              "yields": 1946
+            }
+          },
+          {
+            "durationMs": 141.461611,
+            "timerDelayMs": 0.965834000000001,
+            "eventLoopP99Ms": 2.721791,
+            "counts": {
+              "folders": 44,
+              "messages": 284,
+              "attachments": 280,
+              "bodyBytes": 386152,
+              "attachmentBytes": 47350116,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 134.390625,
+            "diagnostics": {
+              "readCalls": 408,
+              "bytesRead": 105586688,
+              "cacheHits": 467272,
+              "cacheMisses": 440,
+              "evictions": 1184,
+              "copies": 24932984,
+              "decompressions": 0,
+              "yields": 1951
+            }
+          },
+          {
+            "durationMs": 138.81320700000003,
+            "timerDelayMs": 0.7716929999999991,
+            "eventLoopP99Ms": 2.494463,
+            "counts": {
+              "folders": 44,
+              "messages": 284,
+              "attachments": 280,
+              "bodyBytes": 386152,
+              "attachmentBytes": 47350116,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 140.83984375,
+            "diagnostics": {
+              "readCalls": 408,
+              "bytesRead": 105586688,
+              "cacheHits": 467272,
+              "cacheMisses": 440,
+              "evictions": 1184,
+              "copies": 24932984,
+              "decompressions": 0,
+              "yields": 1934
+            }
+          }
+        ]
+      }
+    },
+    "buffer-c1": {
+      "sync": {
+        "baseline": [
+          {
+            "durationMs": 44.388177999999996,
+            "timerDelayMs": 44.83390100000001,
+            "eventLoopP99Ms": 45.907967,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 99.0390625
+          },
+          {
+            "durationMs": 42.067486,
+            "timerDelayMs": 42.22111299999999,
+            "eventLoopP99Ms": 43.286527,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 100.125
+          },
+          {
+            "durationMs": 40.508297999999996,
+            "timerDelayMs": 40.714628000000005,
+            "eventLoopP99Ms": 41.713663,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 100.0078125
+          }
+        ],
+        "target": [
+          {
+            "durationMs": 28.98145700000002,
+            "timerDelayMs": 29.13742900000001,
+            "eventLoopP99Ms": 30.212095,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 100.609375
+          },
+          {
+            "durationMs": 31.104526000000007,
+            "timerDelayMs": 31.258825,
+            "eventLoopP99Ms": 32.292863,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 99.61328125
+          },
+          {
+            "durationMs": 30.30351500000002,
+            "timerDelayMs": 30.444256999999993,
+            "eventLoopP99Ms": 31.490047,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 100.01953125
+          }
+        ]
+      },
+      "async": {
+        "baseline": [
+          {
+            "durationMs": 59.74030300000001,
+            "timerDelayMs": 1.0487800000000078,
+            "eventLoopP99Ms": 1.968127,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 125.26953125
+          },
+          {
+            "durationMs": 59.436526,
+            "timerDelayMs": 0.970097999999993,
+            "eventLoopP99Ms": 1.907711,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 125.30078125
+          },
+          {
+            "durationMs": 59.85458899999999,
+            "timerDelayMs": 0.6710839999999934,
+            "eventLoopP99Ms": 2.619391,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 125.62109375
+          }
+        ],
+        "target": [
+          {
+            "durationMs": 40.19674400000001,
+            "timerDelayMs": 1.0119690000000077,
+            "eventLoopP99Ms": 2.648063,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 101.99609375,
+            "diagnostics": {
+              "readCalls": 0,
+              "bytesRead": 0,
+              "cacheHits": 0,
+              "cacheMisses": 0,
+              "evictions": 0,
+              "copies": 0,
+              "decompressions": 0,
+              "yields": 439
+            }
+          },
+          {
+            "durationMs": 40.863725,
+            "timerDelayMs": 1.3184320000000014,
+            "eventLoopP99Ms": 3.643391,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 102.03515625,
+            "diagnostics": {
+              "readCalls": 0,
+              "bytesRead": 0,
+              "cacheHits": 0,
+              "cacheMisses": 0,
+              "evictions": 0,
+              "copies": 0,
+              "decompressions": 0,
+              "yields": 439
+            }
+          },
+          {
+            "durationMs": 40.773482000000016,
+            "timerDelayMs": 0.27492300000000114,
+            "eventLoopP99Ms": 2.406399,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 99.54296875,
+            "diagnostics": {
+              "readCalls": 0,
+              "bytesRead": 0,
+              "cacheHits": 0,
+              "cacheMisses": 0,
+              "evictions": 0,
+              "copies": 0,
+              "decompressions": 0,
+              "yields": 441
+            }
+          }
+        ]
+      }
+    },
+    "attachments-c1": {
+      "sync": {
+        "baseline": [
+          {
+            "durationMs": 185.13697,
+            "timerDelayMs": 185.55494,
+            "eventLoopP99Ms": 186.384383,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 83.82421875
+          },
+          {
+            "durationMs": 192.63918199999998,
+            "timerDelayMs": 193.26706800000002,
+            "eventLoopP99Ms": 193.855487,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 85.8125
+          },
+          {
+            "durationMs": 190.211343,
+            "timerDelayMs": 190.63465300000001,
+            "eventLoopP99Ms": 191.496191,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 84.71875
+          }
+        ],
+        "target": [
+          {
+            "durationMs": 147.49399899999997,
+            "timerDelayMs": 147.654019,
+            "eventLoopP99Ms": 148.766719,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 77.92578125
+          },
+          {
+            "durationMs": 146.76396599999998,
+            "timerDelayMs": 147.25013700000002,
+            "eventLoopP99Ms": 147.980287,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 78.4609375
+          },
+          {
+            "durationMs": 147.43686799999998,
+            "timerDelayMs": 147.88836199999997,
+            "eventLoopP99Ms": 148.635647,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 76.72265625
+          }
+        ]
+      },
+      "async": {
+        "baseline": [
+          {
+            "durationMs": 111.99104000000003,
+            "timerDelayMs": 1.5165059999999926,
+            "eventLoopP99Ms": 2.912255,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 105.85546875
+          },
+          {
+            "durationMs": 112.28801399999998,
+            "timerDelayMs": 0.23184899999998265,
+            "eventLoopP99Ms": 3.358719,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 102.2421875
+          },
+          {
+            "durationMs": 110.46364399999999,
+            "timerDelayMs": 1.4287249999999858,
+            "eventLoopP99Ms": 3.100671,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 102.09765625
+          }
+        ],
+        "target": [
+          {
+            "durationMs": 106.86006799999998,
+            "timerDelayMs": 2.4374679999999955,
+            "eventLoopP99Ms": 2.877439,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 109.3359375,
+            "diagnostics": {
+              "readCalls": 132,
+              "bytesRead": 34260992,
+              "cacheHits": 292956,
+              "cacheMisses": 140,
+              "evictions": 404,
+              "copies": 37606228,
+              "decompressions": 0,
+              "yields": 543
+            }
+          },
+          {
+            "durationMs": 103.60697100000002,
+            "timerDelayMs": 0.6693349999999896,
+            "eventLoopP99Ms": 2.697215,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 109.65625,
+            "diagnostics": {
+              "readCalls": 132,
+              "bytesRead": 34260992,
+              "cacheHits": 292956,
+              "cacheMisses": 140,
+              "evictions": 404,
+              "copies": 37606228,
+              "decompressions": 0,
+              "yields": 543
+            }
+          },
+          {
+            "durationMs": 104.32313699999997,
+            "timerDelayMs": 0.4354529999999954,
+            "eventLoopP99Ms": 2.766847,
+            "counts": {
+              "folders": 11,
+              "messages": 71,
+              "attachments": 70,
+              "bodyBytes": 96538,
+              "attachmentBytes": 11837529,
+              "skippedErrors": 0
+            },
+            "peakRssMiB": 105.84765625,
+            "diagnostics": {
+              "readCalls": 132,
+              "bytesRead": 34260992,
+              "cacheHits": 292956,
+              "cacheMisses": 140,
+              "evictions": 404,
+              "copies": 37606228,
+              "decompressions": 0,
+              "yields": 540
+            }
+          }
+        ]
+      }
+    }
+  },
+  "summaries": {
+    "path-c1": {
+      "sync": {
+        "baseline": {
+          "medianMs": 68.56717500000002,
+          "p95Ms": 69.23997299999999,
+          "throughput": 1035.4808988411726,
+          "attachmentThroughput": 172641340.40814713,
+          "eventLoopP99Ms": 69.795839,
+          "peakRssMiB": 72.921875,
+          "counts": {
+            "folders": 11,
+            "messages": 71,
+            "attachments": 70,
+            "bodyBytes": 96538,
+            "attachmentBytes": 11837529,
+            "skippedErrors": 0
+          }
+        },
+        "target": {
+          "medianMs": 50.75834500000002,
+          "p95Ms": 52.766211999999996,
+          "throughput": 1398.7847712528842,
+          "attachmentThroughput": 233213454.85161102,
+          "eventLoopP99Ms": 52.002815,
+          "peakRssMiB": 72.890625,
+          "counts": {
+            "folders": 11,
+            "messages": 71,
+            "attachments": 70,
+            "bodyBytes": 96538,
+            "attachmentBytes": 11837529,
+            "skippedErrors": 0
+          }
+        },
+        "throughputRatio": 1.350855214053965,
+        "p95Ratio": 0.7620773046806358,
+        "throughputRatio95CI": [1.2402655509931244, 1.366587602977172]
+      },
+      "async": {
+        "baseline": {
+          "medianMs": 46.821302999999986,
+          "p95Ms": 47.80314899999999,
+          "throughput": 1516.4037617663057,
+          "attachmentThroughput": 252823570.50165826,
+          "eventLoopP99Ms": 1.477631,
+          "peakRssMiB": 100.07421875,
+          "counts": {
+            "folders": 11,
+            "messages": 71,
+            "attachments": 70,
+            "bodyBytes": 96538,
+            "attachmentBytes": 11837529,
+            "skippedErrors": 0
+          }
+        },
+        "target": {
+          "medianMs": 46.253923,
+          "p95Ms": 48.058015,
+          "throughput": 1535.0049335274762,
+          "attachmentThroughput": 255924865.01090944,
+          "eventLoopP99Ms": 1.727487,
+          "peakRssMiB": 98.421875,
+          "counts": {
+            "folders": 11,
+            "messages": 71,
+            "attachments": 70,
+            "bodyBytes": 96538,
+            "attachmentBytes": 11837529,
+            "skippedErrors": 0
+          }
+        },
+        "throughputRatio": 1.012266635199786,
+        "p95Ratio": 1.0053315734492723,
+        "throughputRatio95CI": [0.9570734455012341, 1.0601168402438192]
+      }
+    },
+    "path-c4": {
+      "sync": {
+        "baseline": {
+          "medianMs": 250.75885000000005,
+          "p95Ms": 252.91825099999994,
+          "throughput": 1132.5622206354828,
+          "attachmentThroughput": 188827297.6208018,
+          "eventLoopP99Ms": 252.182527,
+          "peakRssMiB": 84.60546875,
+          "counts": {
+            "folders": 44,
+            "messages": 284,
+            "attachments": 280,
+            "bodyBytes": 386152,
+            "attachmentBytes": 47350116,
+            "skippedErrors": 0
+          }
+        },
+        "target": {
+          "medianMs": 193.464881,
+          "p95Ms": 201.448646,
+          "throughput": 1467.9666848682477,
+          "attachmentThroughput": 244747862.01636258,
+          "eventLoopP99Ms": 194.772991,
+          "peakRssMiB": 84.7265625,
+          "counts": {
+            "folders": 44,
+            "messages": 284,
+            "attachments": 280,
+            "bodyBytes": 386152,
+            "attachmentBytes": 47350116,
+            "skippedErrors": 0
+          }
+        },
+        "throughputRatio": 1.296146611746036,
+        "p95Ratio": 0.7964970705099492,
+        "throughputRatio95CI": [1.2414951997244996, 1.3415485290077502]
+      },
+      "async": {
+        "baseline": {
+          "medianMs": 157.96635,
+          "p95Ms": 193.41274,
+          "throughput": 1797.8512512316704,
+          "attachmentThroughput": 299748117.24142516,
+          "eventLoopP99Ms": 2.936831,
+          "peakRssMiB": 162.19921875,
+          "counts": {
+            "folders": 44,
+            "messages": 284,
+            "attachments": 280,
+            "bodyBytes": 386152,
+            "attachmentBytes": 47350116,
+            "skippedErrors": 0
+          }
+        },
+        "target": {
+          "medianMs": 141.461611,
+          "p95Ms": 141.477573,
+          "throughput": 2007.6118036009075,
+          "attachmentThroughput": 334720604.8713809,
+          "eventLoopP99Ms": 2.494463,
+          "peakRssMiB": 139.64453125,
+          "counts": {
+            "folders": 44,
+            "messages": 284,
+            "attachments": 280,
+            "bodyBytes": 386152,
+            "attachmentBytes": 47350116,
+            "skippedErrors": 0
+          }
+        },
+        "throughputRatio": 1.1166729184216628,
+        "p95Ratio": 0.7314801134609851,
+        "throughputRatio95CI": [1.1041925210294639, 1.3933309674201244]
+      }
+    },
+    "buffer-c1": {
+      "sync": {
+        "baseline": {
+          "medianMs": 42.067486,
+          "p95Ms": 44.388177999999996,
+          "throughput": 1687.7642747655516,
+          "attachmentThroughput": 281393782.36198854,
+          "eventLoopP99Ms": 43.286527,
+          "peakRssMiB": 100.0078125,
+          "counts": {
+            "folders": 11,
+            "messages": 71,
+            "attachments": 70,
+            "bodyBytes": 96538,
+            "attachmentBytes": 11837529,
+            "skippedErrors": 0
+          }
+        },
+        "target": {
+          "medianMs": 30.30351500000002,
+          "p95Ms": 31.104526000000007,
+          "throughput": 2342.9625243144224,
+          "attachmentThroughput": 390632208.8378194,
+          "eventLoopP99Ms": 31.490047,
+          "peakRssMiB": 100.01953125,
+          "counts": {
+            "folders": 11,
+            "messages": 71,
+            "attachments": 70,
+            "bodyBytes": 96538,
+            "attachmentBytes": 11837529,
+            "skippedErrors": 0
+          }
+        },
+        "throughputRatio": 1.388204833663685,
+        "p95Ratio": 0.7007389670285635,
+        "throughputRatio95CI": [1.3023280920596567, 1.5316061576890343]
+      },
+      "async": {
+        "baseline": {
+          "medianMs": 59.74030300000001,
+          "p95Ms": 59.85458899999999,
+          "throughput": 1188.4774002569084,
+          "attachmentThroughput": 198149798.470222,
+          "eventLoopP99Ms": 1.968127,
+          "peakRssMiB": 125.30078125,
+          "counts": {
+            "folders": 11,
+            "messages": 71,
+            "attachments": 70,
+            "bodyBytes": 96538,
+            "attachmentBytes": 11837529,
+            "skippedErrors": 0
+          }
+        },
+        "target": {
+          "medianMs": 40.773482000000016,
+          "p95Ms": 40.863725,
+          "throughput": 1741.3278561786794,
+          "attachmentThroughput": 290324211.2115908,
+          "eventLoopP99Ms": 2.648063,
+          "peakRssMiB": 101.99609375,
+          "counts": {
+            "folders": 11,
+            "messages": 71,
+            "attachments": 70,
+            "bodyBytes": 96538,
+            "attachmentBytes": 11837529,
+            "skippedErrors": 0
+          }
+        },
+        "throughputRatio": 1.4651754049359824,
+        "p95Ratio": 0.6827166585339014,
+        "throughputRatio95CI": [1.4545058239306374, 1.4890407292690166]
+      }
+    },
+    "attachments-c1": {
+      "sync": {
+        "baseline": {
+          "medianMs": 190.211343,
+          "p95Ms": 192.63918199999998,
+          "throughput": 373.26901161725146,
+          "attachmentThroughput": 62233559.85662748,
+          "eventLoopP99Ms": 191.496191,
+          "peakRssMiB": 84.71875,
+          "counts": {
+            "folders": 11,
+            "messages": 71,
+            "attachments": 70,
+            "bodyBytes": 96538,
+            "attachmentBytes": 11837529,
+            "skippedErrors": 0
+          }
+        },
+        "target": {
+          "medianMs": 147.43686799999998,
+          "p95Ms": 147.49399899999997,
+          "throughput": 481.56204728928464,
+          "attachmentThroughput": 80288798.59276448,
+          "eventLoopP99Ms": 148.635647,
+          "peakRssMiB": 77.92578125,
+          "counts": {
+            "folders": 11,
+            "messages": 71,
+            "attachments": 70,
+            "bodyBytes": 96538,
+            "attachmentBytes": 11837529,
+            "skippedErrors": 0
+          }
+        },
+        "throughputRatio": 1.290120616235554,
+        "p95Ratio": 0.7656490100752192,
+        "throughputRatio95CI": [1.2552169664882435, 1.3125781978391071]
+      },
+      "async": {
+        "baseline": {
+          "medianMs": 111.99104000000003,
+          "p95Ms": 112.28801399999998,
+          "throughput": 633.979289771753,
+          "attachmentThroughput": 105700679.26862718,
+          "eventLoopP99Ms": 3.100671,
+          "peakRssMiB": 102.2421875,
+          "counts": {
+            "folders": 11,
+            "messages": 71,
+            "attachments": 70,
+            "bodyBytes": 96538,
+            "attachmentBytes": 11837529,
+            "skippedErrors": 0
+          }
+        },
+        "target": {
+          "medianMs": 104.32313699999997,
+          "p95Ms": 106.86006799999998,
+          "throughput": 680.5776939012103,
+          "attachmentThroughput": 113469833.63815069,
+          "eventLoopP99Ms": 2.766847,
+          "peakRssMiB": 109.3359375,
+          "counts": {
+            "folders": 11,
+            "messages": 71,
+            "attachments": 70,
+            "bodyBytes": 96538,
+            "attachmentBytes": 11837529,
+            "skippedErrors": 0
+          }
+        },
+        "throughputRatio": 1.0735014611380032,
+        "p95Ratio": 0.9516605040320689,
+        "throughputRatio95CI": [1.0337223816851775, 1.0837882134398076]
+      }
+    }
+  },
+  "failures": [
+    "parallel async RSS reduction below 25%",
+    "parallel async event-loop p99 reduction below 20%"
+  ]
+}

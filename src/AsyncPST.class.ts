@@ -1,6 +1,6 @@
 import { Readable } from 'node:stream'
 import { performance } from 'node:perf_hooks'
-import { setImmediate as yieldToEventLoop } from 'node:timers/promises'
+import { scheduler } from 'node:timers/promises'
 import {
   AsyncBlockCache,
   AsyncCacheMissError,
@@ -21,10 +21,14 @@ import { PSTObject } from './PSTObject.class.js'
 import { PSTRecipient } from './PSTRecipient.class.js'
 import { PSTTask } from './PSTTask.class.js'
 import { PSTError, asPSTError, throwIfAborted } from './PSTError.js'
+import { recordDiagnostic } from './PerformanceDiagnostics.js'
 
 async function yieldFor(signal?: AbortSignal): Promise<void> {
   try {
-    await yieldToEventLoop(undefined, { signal })
+    throwIfAborted(signal)
+    await scheduler.yield()
+    recordDiagnostic('yields')
+    throwIfAborted(signal)
   } catch (error) {
     if (signal?.aborted) {
       throwIfAborted(signal)
@@ -152,10 +156,18 @@ export class AsyncPSTFile {
         maxCacheBytes: 64 * 1024 * 1024,
         ...(options.limits ?? {})
       })
+      const configuredCacheBytes = limits.maxCacheBytes
+      const activeCacheBytes =
+        configuredCacheBytes === Number.POSITIVE_INFINITY
+          ? configuredCacheBytes
+          : Math.min(
+              configuredCacheBytes,
+              3 * 1024 * 1024 + Math.floor((reader.size ?? 0) * 0.01)
+            )
       const cache = new AsyncBlockCache(
         reader,
-        limits.maxCacheBytes,
-        1024 * 1024,
+        activeCacheBytes,
+        64 * 1024,
         limits.maxDecompressedBytes
       )
       let syncFile: PSTFile
@@ -274,7 +286,7 @@ export class AsyncPSTFile {
   public async cooperate(signal?: AbortSignal): Promise<void> {
     throwIfAborted(signal)
     const now = performance.now()
-    if (now - this.lastYield >= 2) {
+    if (now - this.lastYield >= 1) {
       this.lastYield = now
       await yieldFor(signal)
     }
@@ -283,7 +295,8 @@ export class AsyncPSTFile {
   private async run<T>(operation: () => T, signal: AbortSignal): Promise<T> {
     this.assertOpen()
     throwIfAborted(signal)
-    await this.cooperate(signal)
+    this.lastYield = performance.now()
+    await yieldFor(signal)
     while (true) {
       this.assertOpen()
       throwIfAborted(signal)
@@ -347,7 +360,7 @@ export class AsyncPSTObject<T extends PSTObject = PSTObject> {
         this.value as unknown as { getBinaryItem(id: number): Buffer | null }
       ).getBinaryItem(propertyId)
       this.owner.enforceValueLimit(result)
-      return result
+      return result === null ? null : Buffer.from(result)
     })
   }
 
@@ -396,20 +409,29 @@ export class AsyncPSTFolder extends AsyncPSTObject<PSTFolder> {
   public async getNextChild(
     options: AsyncOperationOptions = {}
   ): Promise<AsyncPSTObject | null> {
-    return this.owner.execute(() => {
+    const value = await this.owner.execute(() => {
       const checkpoint = this.value.childCursorPosition
       try {
-        const value = this.value.getNextChild()
-        if (value instanceof PSTMessage) {
-          void value.numberOfAttachments
-          void value.numberOfRecipients
-        }
-        return wrapObject(this.owner, value)
+        return this.value.getNextChildDescriptor()
       } catch (error) {
         this.value.moveChildCursorTo(checkpoint)
         throw error
       }
     }, options)
+    if (value === null) return null
+    const table = await this.owner.execute(
+      () => this.value.loadChildTable(value),
+      options
+    )
+    const localDescriptors = await this.owner.execute(
+      () => this.value.loadChildLocalDescriptors(value),
+      options
+    )
+    return prepareWrappedObject(
+      this.owner,
+      this.value.createChildFromTable(value, table, localDescriptors),
+      options
+    )
   }
 
   public subFolders(
@@ -454,12 +476,7 @@ export class AsyncPSTFolder extends AsyncPSTObject<PSTFolder> {
           const next = await owner.execute(() => {
             const checkpoint = cursor.childCursorPosition
             try {
-              const value = cursor.getNextChild()
-              if (value instanceof PSTMessage) {
-                void value.numberOfAttachments
-                void value.numberOfRecipients
-              }
-              return value
+              return cursor.getNextChildDescriptor()
             } catch (error) {
               cursor.moveChildCursorTo(checkpoint)
               throw error
@@ -474,7 +491,19 @@ export class AsyncPSTFolder extends AsyncPSTObject<PSTFolder> {
               `Folder table exceeds configured row limit ${limit}`
             )
           }
-          const wrapped = wrapObject(owner, next)
+          const table = await owner.execute(
+            () => cursor.loadChildTable(next),
+            options
+          )
+          const localDescriptors = await owner.execute(
+            () => cursor.loadChildLocalDescriptors(next),
+            options
+          )
+          const wrapped = await prepareWrappedObject(
+            owner,
+            cursor.createChildFromTable(next, table, localDescriptors),
+            options
+          )
           if (wrapped) {
             yield wrapped
           }
@@ -492,6 +521,22 @@ export interface AsyncPSTFolder extends Readonly<
 export class AsyncPSTMessage<
   T extends PSTMessage = PSTMessage
 > extends AsyncPSTObject<T> {
+  public constructor(
+    owner: AsyncPSTFile,
+    value: T,
+    private readonly metadata?: MessageMetadata
+  ) {
+    super(owner, value)
+  }
+
+  public get numberOfAttachments(): number {
+    return this.metadata?.numberOfAttachments ?? this.value.numberOfAttachments
+  }
+
+  public get numberOfRecipients(): number {
+    return this.metadata?.numberOfRecipients ?? this.value.numberOfRecipients
+  }
+
   public getBody(options: AsyncOperationOptions = {}): Promise<string> {
     return this.cached('body', options, () => {
       const result = this.value.body
@@ -668,16 +713,20 @@ export interface AsyncPSTAttachment extends Readonly<
 
 function wrapObject(
   owner: AsyncPSTFile,
-  value: unknown
+  value: unknown,
+  metadata?: MessageMetadata
 ): AsyncPSTObject | null {
   if (value === null || value === undefined) return null
   if (value instanceof PSTFolder) return new AsyncPSTFolder(owner, value)
   if (value instanceof PSTAppointment)
-    return new AsyncPSTAppointment(owner, value)
-  if (value instanceof PSTContact) return new AsyncPSTContact(owner, value)
-  if (value instanceof PSTTask) return new AsyncPSTTask(owner, value)
-  if (value instanceof PSTActivity) return new AsyncPSTActivity(owner, value)
-  if (value instanceof PSTMessage) return new AsyncPSTMessage(owner, value)
+    return new AsyncPSTAppointment(owner, value, metadata)
+  if (value instanceof PSTContact)
+    return new AsyncPSTContact(owner, value, metadata)
+  if (value instanceof PSTTask) return new AsyncPSTTask(owner, value, metadata)
+  if (value instanceof PSTActivity)
+    return new AsyncPSTActivity(owner, value, metadata)
+  if (value instanceof PSTMessage)
+    return new AsyncPSTMessage(owner, value, metadata)
   if (value instanceof PSTAttachment)
     return new AsyncPSTAttachment(owner, value)
   if (value instanceof PSTRecipient) return new AsyncPSTRecipient(owner, value)
@@ -688,4 +737,32 @@ function wrapObject(
     'CORRUPT_DATA',
     'Parser returned an unsupported PST object'
   )
+}
+
+interface MessageMetadata {
+  numberOfAttachments: number
+  numberOfRecipients: number
+}
+
+async function prepareWrappedObject(
+  owner: AsyncPSTFile,
+  value: unknown,
+  options: AsyncOperationOptions
+): Promise<AsyncPSTObject | null> {
+  if (!(value instanceof PSTMessage)) return wrapObject(owner, value)
+
+  await owner.cooperate(options.signal)
+  const numberOfAttachments = await owner.execute(
+    () => value.numberOfAttachments,
+    options
+  )
+  await owner.cooperate(options.signal)
+  const numberOfRecipients = await owner.execute(
+    () => value.numberOfRecipients,
+    options
+  )
+  return wrapObject(owner, value, {
+    numberOfAttachments,
+    numberOfRecipients
+  })
 }

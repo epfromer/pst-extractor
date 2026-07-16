@@ -254,6 +254,65 @@ export class PSTFolder extends PSTObject {
     return null
   }
 
+  /** @internal Fetch the next row descriptor without materializing its object. */
+  public getNextChildDescriptor(): DescriptorIndexNode | null {
+    this.initEmailsTable()
+    if (this.emailsTable) {
+      if (this.currentEmailIndex == this.contentCount) return null
+      const rows = this.emailsTable.getItems(this.currentEmailIndex, 1)
+      const emailRow = rows[0].get(0x67f2)
+      if ((emailRow && emailRow.itemIndex == -1) || !emailRow) return null
+      const descriptor = this.pstFile.getDescriptorIndexNode(
+        Long.fromNumber(emailRow.entryValueReference)
+      )
+      this.currentEmailIndex++
+      return descriptor
+    }
+    if (
+      !this.fallbackEmailsTable ||
+      this.currentEmailIndex >= this.contentCount ||
+      this.currentEmailIndex >= this.fallbackEmailsTable.length
+    ) {
+      return null
+    }
+    return this.fallbackEmailsTable[this.currentEmailIndex++]
+  }
+
+  /** @internal Load a message property table independently from subnodes. */
+  public loadChildTable(descriptor: DescriptorIndexNode): PSTTableBC {
+    return new PSTTableBC(
+      new PSTNodeInputStream(
+        this.pstFile,
+        this.pstFile.getOffsetIndexNode(descriptor.dataOffsetIndexIdentifier)
+      )
+    )
+  }
+
+  /** @internal Load subnode metadata independently from the property table. */
+  public loadChildLocalDescriptors(
+    descriptor: DescriptorIndexNode
+  ): Map<number, PSTDescriptorItem> | undefined {
+    return descriptor.localDescriptorsOffsetIndexIdentifier.equals(Long.ZERO)
+      ? undefined
+      : this.pstFile.getPSTDescriptorItems(
+          descriptor.localDescriptorsOffsetIndexIdentifier
+        )
+  }
+
+  /** @internal Create an object from parser data already loaded. */
+  public createChildFromTable(
+    descriptor: DescriptorIndexNode,
+    table: PSTTableBC,
+    localDescriptors?: Map<number, PSTDescriptorItem>
+  ): PSTObject {
+    return PSTUtil.createAppropriatePSTMessageObject(
+      this.pstFile,
+      descriptor,
+      table,
+      localDescriptors
+    )
+  }
+
   /**
    *  Move the internal folder cursor to the desired position position 0 is before the first record.
    * @param {number} newIndex
