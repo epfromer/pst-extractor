@@ -5,6 +5,15 @@ import { OffsetIndexItem } from './OffsetIndexItem.class.js'
 import { PSTFile } from './PSTFile.class.js'
 import { PSTError } from './PSTError.js'
 
+function hasZlibHeader(first: number, second: number): boolean {
+  return (
+    (first & 0x0f) === 8 &&
+    first >> 4 <= 7 &&
+    (second & 0x20) === 0 &&
+    ((first << 8) | second) % 31 === 0
+  )
+}
+
 export class PSTNodeInputStream {
   private skipPoints: Long[] = []
   private indexItems: OffsetIndexItem[] = []
@@ -70,7 +79,7 @@ export class PSTNodeInputStream {
         pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE
       // we want to get the first block of data and see what we are dealing with
       this.loadFromOffsetItem(
-        pstFile.getOffsetIndexNode(Long.fromNumber(arg.offsetIndexIdentifier))
+        pstFile.getOffsetIndexNode(arg.offsetIndexIdentifierLong)
       )
     } else if (arg instanceof Buffer) {
       this.allData = arg
@@ -99,18 +108,23 @@ export class PSTNodeInputStream {
       return
     }
     try {
-      if (this.read() === 0x78 && this.read() === 0x9c) {
-        let multiStreams = false
-        if (this.indexItems.length > 1) {
-          const i: OffsetIndexItem = this.indexItems[1]
-          this.pstFile.seek(i.fileOffset)
-          multiStreams =
-            this.pstFile.read() === 0x78 && this.pstFile.read() === 0x9c
-        }
+      const firstLeafIsCompressed = hasZlibHeader(this.read(), this.read())
+      const physicalTreeLength = this.indexItems.reduce(
+        (length, item) => length + item.size,
+        0
+      )
+      const dataTreeHasCompression =
+        this.indexItems.length > 1 &&
+        this.length.greaterThan(physicalTreeLength)
+      if (firstLeafIsCompressed || dataTreeHasCompression) {
+        // Compression belongs to individual data-tree leaves. Large nodes can
+        // legitimately mix compressed and raw leaves.
+        const multiStreams = this.indexItems.length > 1
         // we are a compressed block, decompress the whole thing into a buffer
         // and replace our contents with that. firstly, if we have blocks, use that as the length
         let outputStream: Buffer | null = null
         if (multiStreams) {
+          let decompressedLeaf = false
           // debugger
 
           // console.log('list of all index items')
@@ -123,10 +137,33 @@ export class PSTNodeInputStream {
             const inData: Buffer = Buffer.alloc(i.size)
             this.pstFile.seek(i.fileOffset)
             this.pstFile.readCompletely(inData)
-            const buf = this.pstFile.decompress(inData)
+            if (this.encrypted) PSTUtil.decode(inData)
+            let buf = inData
+            if (hasZlibHeader(inData[0], inData[1])) {
+              try {
+                buf = this.pstFile.decompress(inData)
+                decompressedLeaf = true
+              } catch (error) {
+                if (
+                  typeof error !== 'object' ||
+                  error === null ||
+                  !('code' in error) ||
+                  (error.code !== 'Z_DATA_ERROR' &&
+                    error.code !== 'Z_BUF_ERROR')
+                ) {
+                  throw error
+                }
+              }
+            }
             outputStream = outputStream
               ? Buffer.concat([outputStream, buf])
               : buf
+          }
+          if (dataTreeHasCompression && !decompressedLeaf) {
+            throw new PSTError(
+              'CORRUPT_DATA',
+              'PST data tree length exceeds its raw leaves without compressed data'
+            )
           }
           this.indexItems = []
           this.skipPoints = []
@@ -152,6 +189,18 @@ export class PSTNodeInputStream {
       }
       this.seek(Long.ZERO)
     } catch (err) {
+      if (
+        typeof err === 'object' &&
+        err !== null &&
+        'code' in err &&
+        (err.code === 'Z_DATA_ERROR' || err.code === 'Z_BUF_ERROR')
+      ) {
+        // Raw payloads can coincidentally have a valid zlib header. Since PST
+        // compression is identified heuristically, a rejected stream remains
+        // raw; downstream table validation still exposes structural damage.
+        this.reset()
+        return
+      }
       throw new PSTError('CORRUPT_DATA', 'Unable to decompress PST block', {
         cause: err
       })
@@ -230,7 +279,7 @@ export class PSTNodeInputStream {
           offset,
           offset + arraySize
         )
-        bid = bid.and(0xfffffffe)
+        bid = bid.and(Long.NEG_ONE.subtract(1))
         // get the details in this block and
         const offsetItem = this.pstFile.getOffsetIndexNode(bid)
         const blockData = Buffer.alloc(offsetItem.size)
@@ -250,7 +299,7 @@ export class PSTNodeInputStream {
           offset,
           offset + arraySize
         )
-        bid = bid.and(0xfffffffe)
+        bid = bid.and(Long.NEG_ONE.subtract(1))
         // get the details in this block and add it to the list
         const offsetItem = this.pstFile.getOffsetIndexNode(bid)
         this.indexItems.push(offsetItem)
@@ -406,6 +455,12 @@ export class PSTNodeInputStream {
       // the output
       const offset: OffsetIndexItem = this.indexItems[this.currentBlock]
       const skipPoint = this.skipPoints[this.currentBlock]
+      if (!offset || !skipPoint) {
+        throw new PSTError(
+          'CORRUPT_DATA',
+          'PST data tree ended before its declared logical length'
+        )
+      }
       const currentPosInBlock = this.currentLocation
         .subtract(skipPoint)
         .toNumber()
@@ -523,7 +578,7 @@ export class PSTNodeInputStream {
    */
   public seek(location: Long): void {
     // not past the end!
-    if (location.greaterThan(this.length)) {
+    if (location.isNegative() || location.greaterThan(this.length)) {
       throw new Error(
         'PSTNodeInputStream::seek Attempt to seek past end of item! size = ' +
           this.length +
@@ -541,17 +596,15 @@ export class PSTNodeInputStream {
     let skipPoint: Long = Long.ZERO
     this.currentBlock = 0
     if (this.allData == null) {
-      skipPoint = this.skipPoints[this.currentBlock + 1]
-      while (location.greaterThanOrEqual(skipPoint)) {
+      let nextSkipPoint = this.skipPoints[this.currentBlock + 1]
+      while (
+        nextSkipPoint !== undefined &&
+        location.greaterThanOrEqual(nextSkipPoint)
+      ) {
         this.currentBlock++
-        // is this the last block?
-        if (this.currentBlock == this.skipPoints.length - 1) {
-          // that's all folks
-          break
-        } else {
-          skipPoint = this.skipPoints[this.currentBlock + 1]
-        }
+        nextSkipPoint = this.skipPoints[this.currentBlock + 1]
       }
+      skipPoint = this.skipPoints[this.currentBlock]
     }
 
     // now move us to the right position in there

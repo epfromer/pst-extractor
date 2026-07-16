@@ -1,5 +1,6 @@
 import {
   AsyncBlockCache,
+  AsyncDecompressionMissError,
   BufferRandomAccessReader,
   FileHandleRandomAccessReader,
   readAll
@@ -101,5 +102,24 @@ describe('AsyncRandomAccessReader', () => {
 
     expect(ranges).toEqual([[0, 8]])
     expect(cache.readSync(0, 8)).toEqual(Buffer.from('abcdefgh'))
+  })
+
+  it('caches raw data when heuristic zlib decompression is rejected', async () => {
+    const data = Buffer.from([0x78, 0xda, 1, 2, 3, 4])
+    const cache = new AsyncBlockCache(
+      new BufferRandomAccessReader(data),
+      1024,
+      64,
+      Number.POSITIVE_INFINITY
+    )
+    let miss: AsyncDecompressionMissError | undefined
+    try {
+      cache.decompressSync(data)
+    } catch (error) {
+      if (error instanceof AsyncDecompressionMissError) miss = error
+    }
+    expect(miss).toBeDefined()
+    await cache.ensureDecompressed(miss!)
+    expect(cache.decompressSync(data)).toEqual(data)
   })
 })

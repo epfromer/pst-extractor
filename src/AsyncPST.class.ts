@@ -466,9 +466,13 @@ export class AsyncPSTFolder extends AsyncPSTObject<PSTFolder> {
         if (!descriptor) {
           return
         }
-        const cursor = new PSTFolder(
-          pstFile,
-          descriptor as ConstructorParameters<typeof PSTFolder>[1]
+        const cursor = await owner.execute(
+          () =>
+            new PSTFolder(
+              pstFile,
+              descriptor as ConstructorParameters<typeof PSTFolder>[1]
+            ),
+          options
         )
         let row = 0
         const limit = owner.limits.maxTableRows ?? Number.POSITIVE_INFINITY

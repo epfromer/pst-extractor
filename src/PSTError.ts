@@ -80,3 +80,15 @@ export function rethrowAsyncCacheMiss(error: unknown): void {
     current = current instanceof Error ? current.cause : undefined
   }
 }
+
+/** Test an error and its cause chain for a parser error code. */
+export function hasPSTErrorCode(error: unknown, code: PSTErrorCode): boolean {
+  const visited = new Set<unknown>()
+  let current = error
+  while (current && !visited.has(current)) {
+    if (current instanceof PSTError && current.code === code) return true
+    visited.add(current)
+    current = current instanceof Error ? current.cause : undefined
+  }
+  return false
+}

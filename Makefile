@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help lint format test build package-smoke check security license hooks benchmark-smoke
+.PHONY: help lint format test test-large build package-smoke check security license hooks benchmark-smoke
 
 help: ## Show available targets
 	@awk 'BEGIN {FS = ":.*## "} /^[a-zA-Z_-]+:.*## / {printf "%-12s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -13,6 +13,10 @@ format: ## Check formatting
 
 test: ## Run the test suite with coverage
 	pnpm run test
+
+test-large: ## Traverse the opt-in fixture from PST_LARGE_FIXTURE
+	@test -n "$$PST_LARGE_FIXTURE" || (echo "PST_LARGE_FIXTURE is required" >&2; exit 2)
+	pnpm run test:large
 
 build: ## Build JavaScript and declarations
 	pnpm run build

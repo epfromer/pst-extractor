@@ -104,10 +104,12 @@ export class PSTAttachment extends PSTObject {
           )
           if (
             descriptorItemNested &&
-            descriptorItemNested.subNodeOffsetIndexIdentifier > 0
+            descriptorItemNested.subNodeOffsetIndexIdentifierLong.greaterThan(
+              Long.ZERO
+            )
           ) {
             this.localDescriptorItems = this.pstFile.getPSTDescriptorItems(
-              Long.fromNumber(descriptorItemNested.subNodeOffsetIndexIdentifier)
+              descriptorItemNested.subNodeOffsetIndexIdentifierLong
             )
           }
         }

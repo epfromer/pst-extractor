@@ -2,7 +2,7 @@ import Long from 'long'
 import { NodeInfo } from './NodeInfo.class.js'
 import { PSTNodeInputStream } from './PSTNodeInputStream.class.js'
 import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
-import { rethrowAsyncCacheMiss } from './PSTError.js'
+import { PSTError, rethrowAsyncCacheMiss } from './PSTError.js'
 
 // The PST Table is the workhorse of the whole system.
 // It allows for an item to be read and broken down into the individual properties that it consists of.
@@ -57,6 +57,12 @@ export abstract class PSTTable {
         this.tableType = 'bc' // Property Context (PC/BTH)
         break
       default:
+        if (headdata[3] === 0 || headdata[3] === 1) {
+          throw new PSTError(
+            'NOT_FOUND',
+            'PST descriptor does not reference a table block'
+          )
+        }
         throw new Error(
           'PSTTable::constructor Unable to parse table, bad table type.  Unknown identifier: 0x' +
             headdata[3].toString(16)
@@ -160,23 +166,26 @@ export abstract class PSTTable {
     }
 
     const whichBlock: number = hnid >>> 16
-    if (whichBlock > this.arrayBlocks.length) {
-      throw new Error(
+    const logicalPageCount = this.arrayBlocks.length
+    if (whichBlock >= logicalPageCount) {
+      throw new PSTError(
+        'NOT_FOUND',
         "PSTTable::getNodeInfo: block doesn't exist: " +
           hnid +
           ', ' +
           whichBlock +
           ', ' +
-          this.arrayBlocks.length
+          logicalPageCount
       )
     }
 
     // A normal node in a local heap
     const index = (hnid & 0xffff) >> 5
-    let blockOffset = 0
-    if (whichBlock > 0) {
-      blockOffset = this.arrayBlocks[whichBlock - 1].toNumber()
-    }
+    // HID block indexes address data pages in the logical node stream. These
+    // accumulated offsets are independent of the leaves' physical file
+    // positions and retain irregular page sizes used by large OSTs.
+    const blockOffset =
+      whichBlock === 0 ? 0 : this.arrayBlocks[whichBlock - 1].toNumber()
     let offsets = this.heapPageOffsets.get(whichBlock)
     if (!offsets) {
       const pageMap =
@@ -196,7 +205,8 @@ export abstract class PSTTable {
       this.heapPageOffsets.set(whichBlock, offsets)
     }
     if (index + 1 >= offsets.length) {
-      throw new Error(
+      throw new PSTError(
+        'NOT_FOUND',
         "PSTTable::getNodeInfo: node index doesn't exist! nid = " + hnid
       )
     }

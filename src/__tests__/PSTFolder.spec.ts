@@ -1,5 +1,8 @@
 import { PSTFile } from '../PSTFile.class.js'
 import { PSTFolder } from '../PSTFolder.class.js'
+import { PSTError } from '../PSTError.js'
+import { PSTTableItem } from '../PSTTableItem.class.js'
+import { jest } from '@jest/globals'
 import { resolve } from 'node:path'
 let pstFile: PSTFile
 
@@ -65,5 +68,134 @@ describe('PSTFolder tests', () => {
     folder.moveChildCursorTo(0)
     folder.moveChildCursorTo(1)
     folder.moveChildCursorTo(100)
+  })
+
+  it('falls back to the descriptor tree when the hierarchy table is absent', () => {
+    const isolated = new PSTFile(resolve('./src/__tests__/testdata/enron.pst'))
+    try {
+      const root = isolated.getRootFolder()
+      isolated.getChildDescriptorTree()
+      const original = isolated.getDescriptorIndexNode.bind(isolated)
+      jest
+        .spyOn(isolated, 'getDescriptorIndexNode')
+        .mockImplementation((id) => {
+          if (id.equals(root.descriptorNodeId.add(11))) {
+            throw new PSTError('NOT_FOUND', 'missing hierarchy table')
+          }
+          return original(id)
+        })
+
+      const folders = root.getSubFolders()
+      expect(
+        folders.map((folder) => folder.descriptorNodeId.toNumber())
+      ).toEqual([
+        ...new Set(folders.map((folder) => folder.descriptorNodeId.toNumber()))
+      ])
+      expect(root.subFolderCount).toBe(folders.length)
+      expect(folders.length).toBeGreaterThan(0)
+    } finally {
+      isolated.close()
+    }
+  })
+
+  it('falls back to deduplicated message descriptors when contents are absent', () => {
+    const isolated = new PSTFile(resolve('./src/__tests__/testdata/enron.pst'))
+    try {
+      let folder = isolated.getRootFolder().getSubFolders()[0]
+      folder = folder.getSubFolders()[1].getSubFolders()[0]
+      const tree = isolated.getChildDescriptorTree()
+      const children = tree.get(folder.descriptorNodeId.toNumber()) ?? []
+      const message = children.find(
+        (node) => (node.descriptorIdentifier & 0x1f) === 0x04
+      )
+      expect(message).toBeDefined()
+      if (message) children.push(message)
+      const original = isolated.getDescriptorIndexNode.bind(isolated)
+      jest
+        .spyOn(isolated, 'getDescriptorIndexNode')
+        .mockImplementation((id) => {
+          if (id.equals(folder.descriptorNodeId.add(12))) {
+            throw new PSTError('NOT_FOUND', 'missing contents table')
+          }
+          return original(id)
+        })
+
+      expect(folder.emailCount).toBe(1)
+      expect(folder.getNextChild()).not.toBeNull()
+      expect(folder.getNextChild()).toBeNull()
+    } finally {
+      isolated.close()
+    }
+  })
+
+  it('skips missing content rows without ending traversal', () => {
+    const isolated = new PSTFile(resolve('./src/__tests__/testdata/enron.pst'))
+    try {
+      let folder = isolated.getRootFolder().getSubFolders()[0]
+      folder = folder.getSubFolders()[1].getSubFolders()[0]
+      const descriptor = isolated
+        .getChildDescriptorTree()
+        .get(folder.descriptorNodeId.toNumber())
+        ?.find((node) => (node.descriptorIdentifier & 0x1f) === 0x04)
+      expect(descriptor).toBeDefined()
+      const rowId = new PSTTableItem()
+      rowId.itemIndex = 0
+      rowId.entryValueReference = descriptor!.descriptorIdentifier
+      Object.assign(folder as object, {
+        emailsTable: {
+          rowCount: 2,
+          getItems: (start: number) =>
+            start === 0 ? [new Map()] : [new Map([[0x67f2, rowId]])]
+        },
+        currentEmailIndex: 0
+      })
+
+      expect(folder.getNextChild()).not.toBeNull()
+      expect(folder.getNextChild()).toBeNull()
+    } finally {
+      isolated.close()
+    }
+  })
+
+  it('skips hierarchy rows that do not reference folders', () => {
+    const root = pstFile.getRootFolder()
+    const rowId = new PSTTableItem()
+    rowId.entryValueReference = 0x104
+    Object.assign(root as object, {
+      subfoldersTable: {
+        getItems: () => [new Map([[26610, rowId]])]
+      }
+    })
+    expect(root.getSubFolders()).toEqual([])
+  })
+
+  it('does not hide corrupt hierarchy tables behind the fallback', () => {
+    const isolated = new PSTFile(resolve('./src/__tests__/testdata/enron.pst'))
+    try {
+      const root = isolated.getRootFolder()
+      const original = isolated.getDescriptorIndexNode.bind(isolated)
+      jest
+        .spyOn(isolated, 'getDescriptorIndexNode')
+        .mockImplementation((id) => {
+          if (id.equals(root.descriptorNodeId.add(11))) {
+            throw new PSTError('CORRUPT_DATA', 'invalid hierarchy page')
+          }
+          return original(id)
+        })
+      expect(() => root.getSubFolders()).toThrow(
+        expect.objectContaining({ code: 'CORRUPT_DATA' })
+      )
+    } finally {
+      isolated.close()
+    }
+  })
+
+  it('treats search folders without contents as structurally empty', () => {
+    const searchFolder = pstFile
+      .getRootFolder()
+      .getSubFolders()
+      .find((folder) => folder.getNodeType() === 0x03)
+    expect(searchFolder).toBeDefined()
+    expect(searchFolder?.getNextChild()).toBeNull()
   })
 })

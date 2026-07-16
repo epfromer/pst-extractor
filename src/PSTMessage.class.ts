@@ -11,7 +11,7 @@ import { PSTUtil } from './PSTUtil.class.js'
 import { LZFu } from './LZFu.class.js'
 import { PSTAttachment } from './PSTAttachment.class.js'
 import { PSTRecipient } from './PSTRecipient.class.js'
-import { rethrowAsyncCacheMiss } from './PSTError.js'
+import { PSTError, rethrowAsyncCacheMiss } from './PSTError.js'
 
 enum PidTagMessageFlags {
   MSGFLAG_READ = 0x01,
@@ -206,9 +206,12 @@ export class PSTMessage extends PSTObject {
         const item: PSTDescriptorItem | undefined =
           this.localDescriptorItems.get(recipientTableKey)
         let descriptorItems: Map<number, PSTDescriptorItem> | null = new Map()
-        if (item && item.subNodeOffsetIndexIdentifier > 0) {
+        if (
+          item &&
+          item.subNodeOffsetIndexIdentifierLong.greaterThan(Long.ZERO)
+        ) {
           descriptorItems = this.pstFile.getPSTDescriptorItems(
-            Long.fromNumber(item.subNodeOffsetIndexIdentifier)
+            item.subNodeOffsetIndexIdentifierLong
           )
         }
         this.recipientTable = new PSTTable7C(
@@ -471,9 +474,12 @@ export class PSTMessage extends PSTObject {
     ) {
       const item = this.localDescriptorItems.get(attachmentTableKey)
       let descriptorItems: Map<number, PSTDescriptorItem> = new Map()
-      if (item && item.subNodeOffsetIndexIdentifier > 0) {
+      if (
+        item &&
+        item.subNodeOffsetIndexIdentifierLong.greaterThan(Long.ZERO)
+      ) {
         descriptorItems = this.pstFile.getPSTDescriptorItems(
-          Long.fromValue(item.subNodeOffsetIndexIdentifier)
+          item.subNodeOffsetIndexIdentifierLong
         )
       }
       this.attachmentTable = new PSTTable7C(
@@ -516,7 +522,10 @@ export class PSTMessage extends PSTObject {
       throw new Error('PSTMessage::getAttachment attachmentTable is null')
     }
     if (!this.localDescriptorItems) {
-      throw new Error('PSTMessage::getAttachment localDescriptorItems is null')
+      throw new PSTError(
+        'NOT_FOUND',
+        'Attachment table has no local descriptors'
+      )
     }
     if (attachmentNumber >= attachmentCount) {
       throw new Error(
@@ -529,7 +538,7 @@ export class PSTMessage extends PSTObject {
     const attachmentDetails = this.attachmentTable.getItems()[attachmentNumber]
     const attachmentTableItem = attachmentDetails.get(0x67f2)
     if (!attachmentTableItem) {
-      throw new Error('PSTMessage::getAttachment attachmentTableItem is null')
+      throw new PSTError('NOT_FOUND', 'Attachment table row has no descriptor')
     }
     const descriptorItemId = attachmentTableItem.entryValueReference
     if (!descriptorItemId) {
@@ -539,7 +548,10 @@ export class PSTMessage extends PSTObject {
     // get the local descriptor for the attachmentDetails table.
     const descriptorItem = this.localDescriptorItems.get(descriptorItemId)
     if (!descriptorItem) {
-      throw new Error('PSTMessage::getAttachment descriptorItem is null')
+      throw new PSTError(
+        'NOT_FOUND',
+        `Attachment descriptor ${descriptorItemId} is missing`
+      )
     }
 
     // try and decode it
@@ -554,9 +566,11 @@ export class PSTMessage extends PSTObject {
       // repeated in the eb table in attachment data.
       // so no need to pass it...
       let attachmentDescriptorItems: Map<number, PSTDescriptorItem> = new Map()
-      if (descriptorItem.subNodeOffsetIndexIdentifier > 0) {
+      if (
+        descriptorItem.subNodeOffsetIndexIdentifierLong.greaterThan(Long.ZERO)
+      ) {
         attachmentDescriptorItems = this.pstFile.getPSTDescriptorItems(
-          Long.fromNumber(descriptorItem.subNodeOffsetIndexIdentifier)
+          descriptorItem.subNodeOffsetIndexIdentifierLong
         )
       }
       return new PSTAttachment(

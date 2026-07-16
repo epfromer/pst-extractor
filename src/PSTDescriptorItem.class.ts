@@ -8,8 +8,12 @@ export class PSTDescriptorItem {
   private dataBlockOffsets: number[] = []
   private _pstFile: PSTFile
 
-  private _subNodeOffsetIndexIdentifier: number
+  private _subNodeOffsetIndexIdentifier: Long
   public get subNodeOffsetIndexIdentifier(): number {
+    return this._subNodeOffsetIndexIdentifier.toNumber()
+  }
+  /** Lossless BID used by parser internals. */
+  public get subNodeOffsetIndexIdentifierLong(): Long {
     return this._subNodeOffsetIndexIdentifier
   }
 
@@ -18,8 +22,12 @@ export class PSTDescriptorItem {
     return this._descriptorIdentifier
   }
 
-  private _offsetIndexIdentifier: number
+  private _offsetIndexIdentifier: Long
   public get offsetIndexIdentifier(): number {
+    return this._offsetIndexIdentifier.toNumber()
+  }
+  /** Lossless BID used by parser internals. */
+  public get offsetIndexIdentifierLong(): Long {
     return this._offsetIndexIdentifier
   }
 
@@ -44,12 +52,11 @@ export class PSTDescriptorItem {
         offset,
         offset + 4
       ).toNumber()
-      this._offsetIndexIdentifier =
-        PSTUtil.convertLittleEndianBytesToLong(
-          data,
-          offset + 4,
-          offset + 8
-        ).toNumber() & 0xfffffffe
+      this._offsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(
+        data,
+        offset + 4,
+        offset + 8
+      ).and(Long.NEG_ONE.subtract(1))
 
       if (entryType == PSTFile.SLBLOCK_ENTRY) {
         this._subNodeOffsetIndexIdentifier =
@@ -57,9 +64,9 @@ export class PSTDescriptorItem {
             data,
             offset + 8,
             offset + 12
-          ).toNumber() & 0xfffffffe
+          ).and(Long.NEG_ONE.subtract(1))
       } else {
-        this._subNodeOffsetIndexIdentifier = 0
+        this._subNodeOffsetIndexIdentifier = Long.ZERO
       }
     } else {
       this._descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(
@@ -67,21 +74,20 @@ export class PSTDescriptorItem {
         offset,
         offset + 4
       ).toNumber()
-      this._offsetIndexIdentifier =
-        PSTUtil.convertLittleEndianBytesToLong(
-          data,
-          offset + 8,
-          offset + 16
-        ).toNumber() & 0xfffffffe
+      this._offsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(
+        data,
+        offset + 8,
+        offset + 16
+      ).and(Long.NEG_ONE.subtract(1))
       if (entryType == PSTFile.SLBLOCK_ENTRY) {
         this._subNodeOffsetIndexIdentifier =
           PSTUtil.convertLittleEndianBytesToLong(
             data,
             offset + 16,
             offset + 24
-          ).toNumber() & 0xfffffffe
+          ).and(Long.NEG_ONE.subtract(1))
       } else {
-        this._subNodeOffsetIndexIdentifier = 0
+        this._subNodeOffsetIndexIdentifier = Long.ZERO
       }
     }
   }
@@ -97,7 +103,7 @@ export class PSTDescriptorItem {
     }
 
     const pstNodeInputStream: PSTNodeInputStream = this._pstFile.readLeaf(
-      Long.fromValue(this.offsetIndexIdentifier)
+      this.offsetIndexIdentifierLong
     )
     const out = Buffer.alloc(pstNodeInputStream.length.toNumber())
     pstNodeInputStream.readCompletely(out)
@@ -115,7 +121,7 @@ export class PSTDescriptorItem {
       return this.dataBlockOffsets
     }
     const offsets: Long[] = this._pstFile
-      .readLeaf(Long.fromNumber(this.offsetIndexIdentifier))
+      .readLeaf(this.offsetIndexIdentifierLong)
       .getBlockOffsets()
     const offsetsOut: number[] = []
     for (let x = 0; x < offsets.length; x++) {
@@ -131,9 +137,7 @@ export class PSTDescriptorItem {
    * @memberof PSTDescriptorItem
    */
   public get dataSize(): number {
-    return this._pstFile.getLeafSize(
-      Long.fromNumber(this.offsetIndexIdentifier)
-    )
+    return this._pstFile.getLeafSize(this.offsetIndexIdentifierLong)
   }
 
   /**

@@ -28,6 +28,7 @@
     "lint": "oxlint --type-aware --type-check --tsconfig tsconfig.esm.json --deny-warnings --report-unused-disable-directives src/*.ts && oxlint --type-aware --deny-warnings --report-unused-disable-directives src/__tests__ benchmark scripts tests && tsc -p tsconfig.test.json",
     "format:check": "prettier --check .",
     "test": "CI=1 NODE_OPTIONS=--experimental-vm-modules jest --coverage --reporters=default --reporters=jest-junit",
+    "test:large": "CI=1 NODE_OPTIONS=--experimental-vm-modules jest src/__tests__/LargeFixture.spec.ts --runInBand --coverage=false",
     "package:smoke": "node tests/package-smoke.mjs",
     "license:check": "node scripts/license-check.mjs",
     "check": "pnpm run lint && pnpm run format:check && pnpm run test && pnpm run build && pnpm run package:smoke",

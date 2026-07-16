@@ -126,6 +126,18 @@ coverage tests, the TypeScript 7 ESM/CommonJS/declaration build, and a packed
 consumer smoke test. TypeScript is the only production build compiler; Babel 8
 is scoped to Jest transformation.
 
+Large private PST/OST fixtures are opt-in and remain outside the repository:
+
+```bash
+PST_LARGE_FIXTURE=/path/to/archive.ost make test-large
+```
+
+The acceptance test traverses sync and async structures without printing
+folder names or content. Defaults require at least 716 folders, 2,875 messages,
+and 2,678 attachments. Override them with `PST_LARGE_MIN_FOLDERS`,
+`PST_LARGE_MIN_MESSAGES`, and `PST_LARGE_MIN_ATTACHMENTS` when validating a
+different known fixture.
+
 Version 2 consumers should read [`docs/migration-v3.md`](docs/migration-v3.md).
 
 ### Synchronous API

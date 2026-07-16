@@ -177,7 +177,20 @@ export class AsyncBlockCache {
   ): Promise<void> {
     throwIfAborted(signal)
     if (this.decompressed.has(miss.key)) return
-    const result = await unzipAsync(miss.data)
+    let result: Buffer
+    try {
+      result = await unzipAsync(miss.data)
+    } catch (error) {
+      if (
+        typeof error !== 'object' ||
+        error === null ||
+        !('code' in error) ||
+        (error.code !== 'Z_DATA_ERROR' && error.code !== 'Z_BUF_ERROR')
+      ) {
+        throw error
+      }
+      result = miss.data
+    }
     recordDiagnostic('decompressions')
     throwIfAborted(signal)
     if (result.length > this.maxDecompressedBytes) {

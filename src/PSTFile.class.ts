@@ -605,55 +605,42 @@ export class PSTFile {
       const itemSize = this.read() // itemSize
       const levelsToLeaf = this.read()
 
+      if (numberOfItems < 1 || itemSize < 1) {
+        throw new PSTError(
+          'CORRUPT_DATA',
+          `Invalid ${descTree ? 'descriptor' : 'offset'} B-tree page metadata`
+        )
+      }
+
       if (levelsToLeaf > 0) {
-        let found = false
+        const branchItemSize =
+          this._pstFileType === PSTFile.PST_TYPE_ANSI ? 12 : 24
+        if (itemSize !== branchItemSize) {
+          throw new PSTError(
+            'CORRUPT_DATA',
+            `Invalid B-tree branch item size ${itemSize}`
+          )
+        }
+        // Branch entries contain the lowest key in each child. Navigate to
+        // the rightmost entry whose key is <= the requested key (lower-bound
+        // predecessor), retaining child zero for keys below the first entry.
+        let childIndex = 0
         for (let x = 0; x < numberOfItems; x++) {
-          if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-            const indexIdOfFirstChildNode = this.extractLEFileOffset(
-              btreeStartOffset.add(x * 12)
-            )
-            if (indexIdOfFirstChildNode > index) {
-              // get the address for the child first node in this group
-              btreeStartOffset = this.extractLEFileOffset(
-                btreeStartOffset.add((x - 1) * 12 + 8)
-              )
-              this.seek(btreeStartOffset.add(500))
-              this.readCompletely(buffer)
-              found = true
-              break
-            }
-          } else {
-            const indexIdOfFirstChildNode = this.extractLEFileOffset(
-              btreeStartOffset.add(x * 24)
-            )
-            if (indexIdOfFirstChildNode.greaterThan(index)) {
-              // get the address for the child first node in this group
-              btreeStartOffset = this.extractLEFileOffset(
-                btreeStartOffset.add((x - 1) * 24 + 16)
-              )
-              this.seek(btreeStartOffset.add(fileTypeAdjustment))
-              this.readCompletely(buffer)
-              found = true
-              break
-            }
+          const firstKey = this.extractLEFileOffset(
+            btreeStartOffset.add(x * branchItemSize)
+          )
+          if (firstKey.greaterThan(index)) {
+            break
           }
+          childIndex = x
         }
-        if (!found) {
-          // it must be in the very last branch...
-          if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-            btreeStartOffset = this.extractLEFileOffset(
-              btreeStartOffset.add((numberOfItems - 1) * 12 + 8)
-            )
-            this.seek(btreeStartOffset.add(500))
-            this.readCompletely(buffer)
-          } else {
-            btreeStartOffset = this.extractLEFileOffset(
-              btreeStartOffset.add((numberOfItems - 1) * 24 + 16)
-            )
-            this.seek(btreeStartOffset.add(fileTypeAdjustment))
-            this.readCompletely(buffer)
-          }
-        }
+        const childOffsetField =
+          this._pstFileType === PSTFile.PST_TYPE_ANSI ? 8 : 16
+        btreeStartOffset = this.extractLEFileOffset(
+          btreeStartOffset.add(childIndex * branchItemSize + childOffsetField)
+        )
+        this.seek(btreeStartOffset.add(fileTypeAdjustment))
+        this.readCompletely(buffer)
       } else {
         // we are at the bottom of the tree...
         // we want to get our file offset!
@@ -719,19 +706,15 @@ export class PSTFile {
             }
           }
         }
-        throw new Error(
-          'PSTFile::findBtreeItem Unable to find ' +
-            index +
-            ' is desc: ' +
-            descTree
+        throw new PSTError(
+          'NOT_FOUND',
+          `B-tree item ${index.toUnsigned().toString()} was not found (${descTree ? 'descriptor' : 'offset'} tree)`
         )
       }
     }
-    throw new Error(
-      'PSTFile::findBtreeItem Unable to find node: ' +
-        index +
-        ' is desc: ' +
-        descTree
+    throw new PSTError(
+      'CORRUPT_DATA',
+      `Invalid ${descTree ? 'descriptor' : 'offset'} B-tree page signature at ${btreeStartOffset.toString()}`
     )
   }
 
@@ -772,74 +755,114 @@ export class PSTFile {
     inputStream: PSTNodeInputStream
   ): Map<number, PSTDescriptorItem>
   public getPSTDescriptorItems(arg: any): Map<number, PSTDescriptorItem> {
-    let inputStream: PSTNodeInputStream = arg
-    if (typeof arg === 'object' && arg.hasOwnProperty('low')) {
-      inputStream = this.readLeaf(arg)
-    }
+    const output = new Map<number, PSTDescriptorItem>()
+    const pending: Array<{
+      bid: Long | null
+      stream?: PSTNodeInputStream
+      exit?: boolean
+    }> = [
+      Long.isLong(arg)
+        ? { bid: Long.fromValue(arg) }
+        : { bid: null, stream: arg }
+    ]
+    const visited = new Set<string>()
+    const active = new Set<string>()
 
-    // make sure the signature is correct
-    inputStream.seek(Long.ZERO)
-    const sig = inputStream.read()
-    if (sig != 0x2) {
-      throw new Error(
-        'PSTFile::getPSTDescriptorItems Unable to process descriptor node, bad signature: ' +
-          sig
-      )
-    }
-
-    // NID nodes defines in subnode can be either SLBLOCK (0) or SIBLOCK_ENTRY (1)
-    const blockType = inputStream.read()
-    if (
-      blockType !== PSTFile.SLBLOCK_ENTRY &&
-      blockType !== PSTFile.SIBLOCK_ENTRY
-    ) {
-      throw new Error(
-        'Unable to process descriptor node, unknown BLOCK type: ' + blockType
-      )
-    }
-
-    const output = new Map()
-    const numberOfItems = inputStream.seekAndReadLong(Long.fromValue(2), 2)
-    let offset
-    if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
-      offset = 4
-    } else {
-      offset = 8
-    }
-
-    const data = Buffer.alloc(inputStream.length.toNumber())
-    inputStream.seek(Long.ZERO)
-    inputStream.readCompletely(data)
-
-    for (let x = 0; x < numberOfItems.toNumber(); x++) {
-      const item: PSTDescriptorItem = new PSTDescriptorItem(
-        data,
-        offset,
-        this,
-        blockType
-      )
-      if (blockType == PSTFile.SLBLOCK_ENTRY) {
-        output.set(item.descriptorIdentifier, item)
-      } else {
-        const subItems = this.getPSTDescriptorItems(
-          Long.fromNumber(item.offsetIndexIdentifier)
-        )
-        subItems.forEach((value, key) => {
-          output.set(key, value)
-        })
+    while (pending.length > 0) {
+      const current = pending.pop()!
+      let inputStream = current.stream
+      if (current.bid) {
+        const bid = current.bid.and(Long.NEG_ONE.subtract(1))
+        const key = bid.toUnsigned().toString()
+        if (current.exit) {
+          active.delete(key)
+          continue
+        }
+        if (active.has(key)) {
+          throw new PSTError(
+            'CORRUPT_DATA',
+            `Cycle detected in descriptor subnode blocks at BID ${key}`
+          )
+        }
+        if (visited.has(key)) continue
+        visited.add(key)
+        active.add(key)
+        pending.push({ bid, exit: true })
+        try {
+          inputStream = this.readLeaf(bid)
+        } catch (error) {
+          throw new PSTError(
+            'CORRUPT_DATA',
+            `Descriptor subnode references missing BID ${key}`,
+            { cause: error }
+          )
+        }
+      }
+      if (!(inputStream instanceof PSTNodeInputStream)) {
+        throw new TypeError('Expected a descriptor BID or PSTNodeInputStream')
       }
 
-      if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+      const data = Buffer.alloc(inputStream.length.toNumber())
+      inputStream.seek(Long.ZERO)
+      inputStream.readCompletely(data)
+      if (data.length < 4 || data[0] !== 0x02) {
+        throw new PSTError(
+          'CORRUPT_DATA',
+          `Invalid descriptor block signature: ${data[0] ?? 'missing'}`
+        )
+      }
+      const blockType = data[1]
+      if (
+        blockType !== PSTFile.SLBLOCK_ENTRY &&
+        blockType !== PSTFile.SIBLOCK_ENTRY
+      ) {
+        throw new PSTError(
+          'CORRUPT_DATA',
+          `Unknown descriptor block type: ${blockType}`
+        )
+      }
+
+      const numberOfItems = data.readUInt16LE(2)
+      const headerSize = this._pstFileType === PSTFile.PST_TYPE_ANSI ? 4 : 8
+      const entrySize =
+        this._pstFileType === PSTFile.PST_TYPE_ANSI
+          ? blockType === PSTFile.SLBLOCK_ENTRY
+            ? 12
+            : 8
+          : blockType === PSTFile.SLBLOCK_ENTRY
+            ? 24
+            : 16
+      if (numberOfItems > Math.floor((data.length - headerSize) / entrySize)) {
+        throw new PSTError(
+          'CORRUPT_DATA',
+          `Descriptor block declares ${numberOfItems} entries beyond its bounds`
+        )
+      }
+
+      for (let x = 0; x < numberOfItems; x++) {
+        const item = new PSTDescriptorItem(
+          data,
+          headerSize + x * entrySize,
+          this,
+          blockType
+        )
         if (blockType === PSTFile.SLBLOCK_ENTRY) {
-          offset += 12
-        } else {
-          offset += 8
+          // Keep the first physical occurrence for deterministic recovery from
+          // duplicated rows in otherwise traversable stores.
+          if (!output.has(item.descriptorIdentifier)) {
+            output.set(item.descriptorIdentifier, item)
+          }
         }
-      } else {
-        if (blockType === PSTFile.SLBLOCK_ENTRY) {
-          offset += 24
-        } else {
-          offset += 16
+      }
+      if (blockType === PSTFile.SIBLOCK_ENTRY) {
+        for (let x = numberOfItems - 1; x >= 0; x--) {
+          const item = new PSTDescriptorItem(
+            data,
+            headerSize + x * entrySize,
+            this,
+            blockType
+          )
+          pending.push({ bid: item.offsetIndexIdentifierLong })
         }
       }
     }

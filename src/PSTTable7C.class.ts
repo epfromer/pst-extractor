@@ -6,6 +6,7 @@ import { PSTNodeInputStream } from './PSTNodeInputStream.class.js'
 import { PSTTable } from './PSTTable.class.js'
 import { PSTTableItem } from './PSTTableItem.class.js'
 import { ColumnDescriptor } from './ColumnDescriptor.class.js'
+import { hasPSTErrorCode, rethrowAsyncCacheMiss } from './PSTError.js'
 
 export class PSTTable7C extends PSTTable {
   private items: Map<number, PSTTableItem>[] = []
@@ -323,7 +324,17 @@ export class PSTTable7C extends PSTTable {
               item.data = Buffer.alloc(0)
               break
             } else {
-              const entryInfo = this.getNodeInfo(item.entryValueReference)
+              let entryInfo: NodeInfo | null
+              try {
+                entryInfo = this.getNodeInfo(item.entryValueReference)
+              } catch (error) {
+                rethrowAsyncCacheMiss(error)
+                if (hasPSTErrorCode(error, 'NOT_FOUND')) {
+                  col++
+                  continue
+                }
+                throw error
+              }
               if (entryInfo) {
                 item.data = Buffer.alloc(entryInfo.length())
                 entryInfo.pstNodeInputStream.seek(
