@@ -274,5 +274,5 @@ export enum OutlookProperties {
   PidLidTaskOrdinal = 0x00008123,
   PidLidTaskFRecurring = 0x00008126,
   PidLidTaskOwnership = 0x00008129,
-  PidLidTaskAcceptanceState = 0x0000812a,
+  PidLidTaskAcceptanceState = 0x0000812a
 }

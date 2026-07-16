@@ -8,14 +8,14 @@ const OFFSETS = {
   OccurrenceCount: 26,
   FirstDOW: 30,
   StartDate: -8,
-  EndDate: -4,
+  EndDate: -4
 }
 
 export enum RecurFrequency {
   Daily = 0x200a,
   Weekly = 0x200b,
   Monthly = 0x200c,
-  Yearly = 0x200d,
+  Yearly = 0x200d
 }
 
 export enum PatternType {
@@ -23,13 +23,13 @@ export enum PatternType {
   Week = 0x0001,
   Month = 0x0002,
   MonthEnd = 0x0004,
-  MonthNth = 0x0003,
+  MonthNth = 0x0003
 }
 
 export enum EndType {
   AfterDate = 0x00002021,
   AfterNOccurrences = 0x00002022,
-  NeverEnd = 0x00002023,
+  NeverEnd = 0x00002023
 }
 
 export enum NthOccurrence {
@@ -37,7 +37,7 @@ export enum NthOccurrence {
   Second = 0x0002,
   Third = 0x0003,
   Fourth = 0x0004,
-  Last = 0x0005,
+  Last = 0x0005
 }
 
 export type WeekSpecific = boolean[] & { length: 7 }
@@ -100,7 +100,7 @@ export class RecurrencePattern {
       occurrenceCount: this.occurrenceCount,
       firstDOW: this.firstDOW,
       startDate: this.startDate,
-      endDate: this.endDate,
+      endDate: this.endDate
     }
   }
 
@@ -129,7 +129,7 @@ export class RecurrencePattern {
           weekdays: readWeekByte(
             this.buffer.readInt8(OFFSETS.PatternTypeSpecific)
           ),
-          nth: this.readInt(OFFSETS.PatternTypeSpecific + 4, 2),
+          nth: this.readInt(OFFSETS.PatternTypeSpecific + 4, 2)
         }
     }
   }

@@ -4,7 +4,11 @@
 
 Extract objects from MS Outlook/Exchange PST files
 
-Version 2 requires Node.js 22 or newer. pnpm is the supported package manager for development.
+Version 3 requires Node.js 24.12 or newer. Development and CI use Node.js
+24.18.0 with pnpm 11.9.0.
+
+The package exposes the same public API to both ESM `import` and CommonJS
+`require`. Type declarations are shared between both entry points.
 
 ## Features
 
@@ -72,10 +76,17 @@ const pst = await AsyncPSTFile.open(reader, {
     maxFileBytes: 2 * 1024 ** 3,
     maxBufferedValueBytes: 16 * 1024 ** 2,
     maxDecompressedBytes: 64 * 1024 ** 2,
-    maxTableRows: 100_000
+    maxTableRows: 100_000,
+    maxCacheBytes: 64 * 1024 ** 2
   }
 })
 ```
+
+The asynchronous path never opens or reads a file synchronously and does not
+materialize the complete PST. It uses a per-file coalescing page cache with a
+64-MiB LRU limit by default. Set `maxCacheBytes: Infinity` only when an
+unbounded cache is an intentional choice. Concurrent reads of the same page
+are deduplicated, and compressed parser blocks use asynchronous zlib.
 
 ### Benchmark
 
@@ -93,6 +104,29 @@ pnpm run benchmark -- /path/to/archive.pst \
 ```
 
 `--stream-attachments` liest zusätzlich sämtliche Attachment-Daten und verlängert den Lauf entsprechend.
+
+The short CI workload is available as `make benchmark-smoke`. Reproducible
+comparison results, fixture hashes, commit IDs, environment details, and raw
+samples belong in `benchmark/results/`; see
+[`benchmark/README.md`](benchmark/README.md) for the acceptance gates.
+
+## Development
+
+Run the complete local verification before committing:
+
+```bash
+make hooks
+make check
+make security
+make license
+```
+
+`make check` runs type-aware Oxlint and TypeScript diagnostics, Prettier,
+coverage tests, the TypeScript 7 ESM/CommonJS/declaration build, and a packed
+consumer smoke test. TypeScript is the only production build compiler; Babel 8
+is scoped to Jest transformation.
+
+Version 2 consumers should read [`docs/migration-v3.md`](docs/migration-v3.md).
 
 ### Synchronous API
 

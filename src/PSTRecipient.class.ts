@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { OutlookProperties } from './OutlookProperties'
-import { PSTFile } from './PSTFile.class'
-import { PSTObject } from './PSTObject.class'
-import { PSTTableItem } from './PSTTableItem.class'
+import { OutlookProperties } from './OutlookProperties.js'
+import { PSTFile } from './PSTFile.class.js'
+import { PSTObject } from './PSTObject.class.js'
+import { PSTTableItem } from './PSTTableItem.class.js'
 
 // Class containing recipient information
 export class PSTRecipient extends PSTObject {
@@ -103,7 +102,7 @@ export class PSTRecipient extends PSTObject {
         addrType: this.addrType,
         emailAddress: this.emailAddress,
         recipientFlags: this.recipientFlags,
-        recipientOrder: this.recipientOrder,
+        recipientOrder: this.recipientOrder
       },
       this
     )

@@ -1,99 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="35" failures="0" errors="0" time="1.943">
-  <testsuite name="AsyncRandomAccessReader" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="0.348" tests="4">
-    <testcase classname="AsyncRandomAccessReader reads exact ranges from buffers" name="AsyncRandomAccessReader reads exact ranges from buffers" time="0.004">
+<testsuites name="jest tests" tests="36" failures="0" errors="0" time="5.486">
+  <testsuite name="RecurrencePattern tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:31" time="0.711" tests="2">
+    <testcase classname="RecurrencePattern tests should have a Calendar folder" name="RecurrencePattern tests should have a Calendar folder" time="0.001">
     </testcase>
-    <testcase classname="AsyncRandomAccessReader reads exact ranges from file handles and closes idempotently" name="AsyncRandomAccessReader reads exact ranges from file handles and closes idempotently" time="0.004">
+    <testcase classname="RecurrencePattern tests should have repeating events" name="RecurrencePattern tests should have repeating events" time="0.019">
+    </testcase>
+  </testsuite>
+  <testsuite name="Async PST API" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:32" time="1.06" tests="7">
+    <testcase classname="Async PST API opens paths without synchronous filesystem I/O and matches sync metadata" name="Async PST API opens paths without synchronous filesystem I/O and matches sync metadata" time="0.041">
+    </testcase>
+    <testcase classname="Async PST API provides independent child iterators and cached lazy values" name="Async PST API provides independent child iterators and cached lazy values" time="0.035">
+    </testcase>
+    <testcase classname="Async PST API honors reader ownership and opening limits" name="Async PST API honors reader ownership and opening limits" time="0.028">
+    </testcase>
+    <testcase classname="Async PST API rejects pre-aborted operations without poisoning lazy caches" name="Async PST API rejects pre-aborted operations without poisoning lazy caches" time="0.007">
+    </testcase>
+    <testcase classname="Async PST API enforces lazy value and table row limits" name="Async PST API enforces lazy value and table row limits" time="0.053">
+    </testcase>
+    <testcase classname="Async PST API streams attachments in order and enforces materialization limits" name="Async PST API streams attachments in order and enforces materialization limits" time="0.341">
+    </testcase>
+    <testcase classname="Async PST API preserves specialized object types and their primitive metadata" name="Async PST API preserves specialized object types and their primitive metadata" time="0.319">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTAttachment tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:33" time="0.655" tests="5">
+    <testcase classname="PSTAttachment tests should have a contact with an attachment" name="PSTAttachment tests should have a contact with an attachment" time="0.103">
+    </testcase>
+    <testcase classname="PSTAttachment tests should have a task with an attachment" name="PSTAttachment tests should have a task with an attachment" time="0.067">
+    </testcase>
+    <testcase classname="PSTAttachment tests should have email with word attachment" name="PSTAttachment tests should have email with word attachment" time="0.084">
+    </testcase>
+    <testcase classname="PSTAttachment tests should have email with excel attachment" name="PSTAttachment tests should have email with excel attachment" time="0.086">
+    </testcase>
+    <testcase classname="PSTAttachment tests should have email with jpg attachment" name="PSTAttachment tests should have email with jpg attachment" time="0.094">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTContact tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:34" time="0.307" tests="2">
+    <testcase classname="PSTContact tests should have a Contact folder" name="PSTContact tests should have a Contact folder" time="0.001">
+    </testcase>
+    <testcase classname="PSTContact tests should have a contact with several fields" name="PSTContact tests should have a contact with several fields" time="0.018">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTAppointment tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:34" time="0.323" tests="2">
+    <testcase classname="PSTAppointment tests should have a Calendar folder" name="PSTAppointment tests should have a Calendar folder" time="0.001">
+    </testcase>
+    <testcase classname="PSTAppointment tests should have two calendar items" name="PSTAppointment tests should have two calendar items" time="0.014">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTActivity tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:34" time="0.314" tests="2">
+    <testcase classname="PSTActivity tests should have a Journal folder" name="PSTActivity tests should have a Journal folder" time="0.001">
+    </testcase>
+    <testcase classname="PSTActivity tests root folder should have a journal entry" name="PSTActivity tests root folder should have a journal entry" time="0.006">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTTask tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:35" time="0.422" tests="2">
+    <testcase classname="PSTTask tests should have a Tasks folder" name="PSTTask tests should have a Tasks folder" time="0.002">
+    </testcase>
+    <testcase classname="PSTTask tests should have two tasks" name="PSTTask tests should have two tasks" time="0.016">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTfile tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:35" time="0.261" tests="3">
+    <testcase classname="PSTfile tests should open the file" name="PSTfile tests should open the file" time="0.003">
+    </testcase>
+    <testcase classname="PSTfile tests keeps named property maps isolated between files" name="PSTfile tests keeps named property maps isolated between files" time="0.017">
+    </testcase>
+    <testcase classname="PSTfile tests closes idempotently and rejects reads after close" name="PSTfile tests closes idempotently and rejects reads after close" time="0.021">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTRecipient tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:35" time="0.281" tests="1">
+    <testcase classname="PSTRecipient tests should have email messages" name="PSTRecipient tests should have email messages" time="0.028">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTMessage tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:36" time="0.269" tests="2">
+    <testcase classname="PSTMessage tests should have email messages" name="PSTMessage tests should have email messages" time="0.012">
+    </testcase>
+    <testcase classname="PSTMessage tests should have email message which uses block skip points" name="PSTMessage tests should have email message which uses block skip points" time="0.007">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTObject tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:36" time="0.256" tests="1">
+    <testcase classname="PSTObject tests should have basic attributes" name="PSTObject tests should have basic attributes" time="0.018">
+    </testcase>
+  </testsuite>
+  <testsuite name="PSTFolder tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:36" time="0.277" tests="2">
+    <testcase classname="PSTFolder tests should have a root folder" name="PSTFolder tests should have a root folder" time="0.003">
+    </testcase>
+    <testcase classname="PSTFolder tests root folder should have sub folders" name="PSTFolder tests root folder should have sub folders" time="0.015">
+    </testcase>
+  </testsuite>
+  <testsuite name="AsyncRandomAccessReader" errors="0" failures="0" skipped="0" timestamp="2026-07-16T09:58:36" time="0.242" tests="5">
+    <testcase classname="AsyncRandomAccessReader reads exact ranges from buffers" name="AsyncRandomAccessReader reads exact ranges from buffers" time="0.002">
+    </testcase>
+    <testcase classname="AsyncRandomAccessReader reads exact ranges from file handles and closes idempotently" name="AsyncRandomAccessReader reads exact ranges from file handles and closes idempotently" time="0.001">
     </testcase>
     <testcase classname="AsyncRandomAccessReader supports readers without a declared size" name="AsyncRandomAccessReader supports readers without a declared size" time="0">
     </testcase>
     <testcase classname="AsyncRandomAccessReader uses a standard, distinguishable abort error" name="AsyncRandomAccessReader uses a standard, distinguishable abort error" time="0.001">
     </testcase>
-  </testsuite>
-  <testsuite name="PSTFolder tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="1.035" tests="2">
-    <testcase classname="PSTFolder tests should have a root folder" name="PSTFolder tests should have a root folder" time="0.004">
-    </testcase>
-    <testcase classname="PSTFolder tests root folder should have sub folders" name="PSTFolder tests root folder should have sub folders" time="0.016">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTMessage tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="1.068" tests="2">
-    <testcase classname="PSTMessage tests should have email messages" name="PSTMessage tests should have email messages" time="0.022">
-    </testcase>
-    <testcase classname="PSTMessage tests should have email message which uses block skip points" name="PSTMessage tests should have email message which uses block skip points" time="0.009">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTfile tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="1.077" tests="3">
-    <testcase classname="PSTfile tests should open the file" name="PSTfile tests should open the file" time="0.005">
-    </testcase>
-    <testcase classname="PSTfile tests keeps named property maps isolated between files" name="PSTfile tests keeps named property maps isolated between files" time="0.022">
-    </testcase>
-    <testcase classname="PSTfile tests closes idempotently and rejects reads after close" name="PSTfile tests closes idempotently and rejects reads after close" time="0.051">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTRecipient tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="1.073" tests="1">
-    <testcase classname="PSTRecipient tests should have email messages" name="PSTRecipient tests should have email messages" time="0.049">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTObject tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="1.13" tests="1">
-    <testcase classname="PSTObject tests should have basic attributes" name="PSTObject tests should have basic attributes" time="0.026">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTActivity tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="1.146" tests="2">
-    <testcase classname="PSTActivity tests should have a Journal folder" name="PSTActivity tests should have a Journal folder" time="0.003">
-    </testcase>
-    <testcase classname="PSTActivity tests root folder should have a journal entry" name="PSTActivity tests root folder should have a journal entry" time="0.005">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTContact tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="1.161" tests="2">
-    <testcase classname="PSTContact tests should have a Contact folder" name="PSTContact tests should have a Contact folder" time="0.004">
-    </testcase>
-    <testcase classname="PSTContact tests should have a contact with several fields" name="PSTContact tests should have a contact with several fields" time="0.02">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTAppointment tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="1.172" tests="2">
-    <testcase classname="PSTAppointment tests should have a Calendar folder" name="PSTAppointment tests should have a Calendar folder" time="0.002">
-    </testcase>
-    <testcase classname="PSTAppointment tests should have two calendar items" name="PSTAppointment tests should have two calendar items" time="0.014">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTTask tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="1.202" tests="2">
-    <testcase classname="PSTTask tests should have a Tasks folder" name="PSTTask tests should have a Tasks folder" time="0.003">
-    </testcase>
-    <testcase classname="PSTTask tests should have two tasks" name="PSTTask tests should have two tasks" time="0.01">
-    </testcase>
-  </testsuite>
-  <testsuite name="RecurrencePattern tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="1.239" tests="2">
-    <testcase classname="RecurrencePattern tests should have a Calendar folder" name="RecurrencePattern tests should have a Calendar folder" time="0.002">
-    </testcase>
-    <testcase classname="RecurrencePattern tests should have repeating events" name="RecurrencePattern tests should have repeating events" time="0.022">
-    </testcase>
-  </testsuite>
-  <testsuite name="PSTAttachment tests" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="1.334" tests="5">
-    <testcase classname="PSTAttachment tests should have a contact with an attachment" name="PSTAttachment tests should have a contact with an attachment" time="0.088">
-    </testcase>
-    <testcase classname="PSTAttachment tests should have a task with an attachment" name="PSTAttachment tests should have a task with an attachment" time="0.057">
-    </testcase>
-    <testcase classname="PSTAttachment tests should have email with word attachment" name="PSTAttachment tests should have email with word attachment" time="0.058">
-    </testcase>
-    <testcase classname="PSTAttachment tests should have email with excel attachment" name="PSTAttachment tests should have email with excel attachment" time="0.051">
-    </testcase>
-    <testcase classname="PSTAttachment tests should have email with jpg attachment" name="PSTAttachment tests should have email with jpg attachment" time="0.054">
-    </testcase>
-  </testsuite>
-  <testsuite name="Async PST API" errors="0" failures="0" skipped="0" timestamp="2026-07-16T08:33:15" time="1.665" tests="7">
-    <testcase classname="Async PST API opens paths without synchronous filesystem I/O and matches sync metadata" name="Async PST API opens paths without synchronous filesystem I/O and matches sync metadata" time="0.052">
-    </testcase>
-    <testcase classname="Async PST API provides independent child iterators and cached lazy values" name="Async PST API provides independent child iterators and cached lazy values" time="0.032">
-    </testcase>
-    <testcase classname="Async PST API honors reader ownership and opening limits" name="Async PST API honors reader ownership and opening limits" time="0.054">
-    </testcase>
-    <testcase classname="Async PST API rejects pre-aborted operations without poisoning lazy caches" name="Async PST API rejects pre-aborted operations without poisoning lazy caches" time="0.012">
-    </testcase>
-    <testcase classname="Async PST API enforces lazy value and table row limits" name="Async PST API enforces lazy value and table row limits" time="0.048">
-    </testcase>
-    <testcase classname="Async PST API streams attachments in order and enforces materialization limits" name="Async PST API streams attachments in order and enforces materialization limits" time="0.159">
-    </testcase>
-    <testcase classname="Async PST API preserves specialized object types and their primitive metadata" name="Async PST API preserves specialized object types and their primitive metadata" time="0.088">
+    <testcase classname="AsyncRandomAccessReader deduplicates page loads and evicts least-recently-used pages" name="AsyncRandomAccessReader deduplicates page loads and evicts least-recently-used pages" time="0.01">
     </testcase>
   </testsuite>
 </testsuites>

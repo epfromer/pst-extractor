@@ -1,6 +1,6 @@
 import Long from 'long'
-import { PSTFile } from './PSTFile.class'
-import { PSTUtil } from './PSTUtil.class'
+import { PSTFile } from './PSTFile.class.js'
+import { PSTUtil } from './PSTUtil.class.js'
 
 // DescriptorIndexNode is a leaf item from the Descriptor index b-tree
 // It is like a pointer to an element in the PST file, everything has one...
@@ -44,16 +44,10 @@ export class DescriptorIndexNode {
         4,
         8
       )
-      this._localDescriptorsOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(
-        buffer,
-        8,
-        12
-      )
-      this._parentDescriptorIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(
-        buffer,
-        12,
-        16
-      ).toNumber()
+      this._localDescriptorsOffsetIndexIdentifier =
+        PSTUtil.convertLittleEndianBytesToLong(buffer, 8, 12)
+      this._parentDescriptorIndexIdentifier =
+        PSTUtil.convertLittleEndianBytesToLong(buffer, 12, 16).toNumber()
     } else {
       this._descriptorIdentifier = PSTUtil.convertLittleEndianBytesToLong(
         buffer,
@@ -65,16 +59,10 @@ export class DescriptorIndexNode {
         8,
         16
       )
-      this._localDescriptorsOffsetIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(
-        buffer,
-        16,
-        24
-      )
-      this._parentDescriptorIndexIdentifier = PSTUtil.convertLittleEndianBytesToLong(
-        buffer,
-        24,
-        28
-      ).toNumber()
+      this._localDescriptorsOffsetIndexIdentifier =
+        PSTUtil.convertLittleEndianBytesToLong(buffer, 16, 24)
+      this._parentDescriptorIndexIdentifier =
+        PSTUtil.convertLittleEndianBytesToLong(buffer, 24, 28).toNumber()
       this.itemType = PSTUtil.convertLittleEndianBytesToLong(
         buffer,
         28,
@@ -88,7 +76,6 @@ export class DescriptorIndexNode {
    * @returns {string}
    * @memberof DescriptorIndexNode
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJSON(): any {
     return this
   }

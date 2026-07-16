@@ -63,3 +63,20 @@ export function asPSTError(error: unknown, fallback: PSTErrorCode): PSTError {
   const message = error instanceof Error ? error.message : String(error)
   return new PSTError(fallback, message, { cause: error })
 }
+
+/** Preserve asynchronous cache misses through legacy parser fallback blocks. */
+export function rethrowAsyncCacheMiss(error: unknown): void {
+  const visited = new Set<unknown>()
+  let current = error
+  while (current && !visited.has(current)) {
+    if (
+      current instanceof Error &&
+      (current.name === 'AsyncCacheMissError' ||
+        current.name === 'AsyncDecompressionMissError')
+    ) {
+      throw current
+    }
+    visited.add(current)
+    current = current instanceof Error ? current.cause : undefined
+  }
+}

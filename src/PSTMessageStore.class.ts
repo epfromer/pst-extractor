@@ -1,6 +1,6 @@
-import { DescriptorIndexNode } from './DescriptorIndexNode.class'
-import { PSTFile } from './PSTFile.class'
-import { PSTObject } from './PSTObject.class'
+import { DescriptorIndexNode } from './DescriptorIndexNode.class.js'
+import { PSTFile } from './PSTFile.class.js'
+import { PSTObject } from './PSTObject.class.js'
 
 export class PSTMessageStore extends PSTObject {
   /**

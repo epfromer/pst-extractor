@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Long from 'long'
-import { PSTNodeInputStream } from './PSTNodeInputStream.class'
-import { PSTUtil } from './PSTUtil.class'
-import { PSTFile } from './PSTFile.class'
+import { PSTNodeInputStream } from './PSTNodeInputStream.class.js'
+import { PSTUtil } from './PSTUtil.class.js'
+import { PSTFile } from './PSTFile.class.js'
 
 export class PSTDescriptorItem {
   private dataBlockData: Buffer | null = null
@@ -35,7 +34,7 @@ export class PSTDescriptorItem {
     data: Buffer,
     offset: number,
     pstFile: PSTFile,
-    entryType: number,
+    entryType: number
   ) {
     this._pstFile = pstFile
 
@@ -112,8 +111,6 @@ export class PSTDescriptorItem {
    * @memberof PSTDescriptorItem
    */
   public getBlockOffsets(): number[] {
-    debugger
-
     if (this.dataBlockOffsets != null) {
       return this.dataBlockOffsets
     }

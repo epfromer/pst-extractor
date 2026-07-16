@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Long from 'long'
-import { PSTDescriptorItem } from './PSTDescriptorItem.class'
-import { PSTNodeInputStream } from './PSTNodeInputStream.class'
-import { PSTTable } from './PSTTable.class'
-import { PSTTableItem } from './PSTTableItem.class'
-import { PSTUtil } from './PSTUtil.class'
+import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
+import { PSTNodeInputStream } from './PSTNodeInputStream.class.js'
+import { PSTTable } from './PSTTable.class.js'
+import { PSTTableItem } from './PSTTableItem.class.js'
+import { PSTUtil } from './PSTUtil.class.js'
 
 export class PSTTableBC extends PSTTable {
   private items: Map<number, PSTTableItem> = new Map()

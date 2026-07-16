@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { PSTFile } from './PSTFile.class'
-import { DescriptorIndexNode } from './DescriptorIndexNode.class'
-import { PSTTableBC } from './PSTTableBC.class'
-import { PSTDescriptorItem } from './PSTDescriptorItem.class'
-import { PSTMessage } from './PSTMessage.class'
-import { OutlookProperties } from './OutlookProperties'
+import { PSTFile } from './PSTFile.class.js'
+import { DescriptorIndexNode } from './DescriptorIndexNode.class.js'
+import { PSTTableBC } from './PSTTableBC.class.js'
+import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
+import { PSTMessage } from './PSTMessage.class.js'
+import { OutlookProperties } from './OutlookProperties.js'
 
 export class PSTActivity extends PSTMessage {
   /**
@@ -206,7 +205,7 @@ export class PSTActivity extends PSTMessage {
         isDocumentSaved: this.isDocumentSaved,
         isDocumentRouted: this.isDocumentRouted,
         isDocumentPosted: this.isDocumentPosted,
-        logTypeDesc: this.logTypeDesc,
+        logTypeDesc: this.logTypeDesc
       },
       this
     )

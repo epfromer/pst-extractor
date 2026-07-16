@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Long from 'long'
-import { PSTFile } from './PSTFile.class'
-import { PSTUtil } from './PSTUtil.class'
+import { PSTFile } from './PSTFile.class.js'
+import { PSTUtil } from './PSTUtil.class.js'
 
 export class OffsetIndexItem {
   private _indexIdentifier: Long

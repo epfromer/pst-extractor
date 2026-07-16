@@ -1,18 +1,29 @@
 import * as fs from 'fs'
+import * as zlib from 'node:zlib'
 import Long from 'long'
-import { DescriptorIndexNode } from './DescriptorIndexNode.class'
-import { OffsetIndexItem } from './OffsetIndexItem.class'
-import { PSTDescriptorItem } from './PSTDescriptorItem.class'
-import { PSTFolder } from './PSTFolder.class'
-import { PSTMessageStore } from './PSTMessageStore.class'
-import { PSTNodeInputStream } from './PSTNodeInputStream.class'
-import { PSTTableBC } from './PSTTableBC.class'
-import { PSTTableItem } from './PSTTableItem.class'
-import { PSTUtil } from './PSTUtil.class'
-import { NodeMap } from './NodeMap.class'
-import { PSTEOFError, PSTError } from './PSTError'
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const uuidparse = require('uuid-parse')
+import { DescriptorIndexNode } from './DescriptorIndexNode.class.js'
+import { OffsetIndexItem } from './OffsetIndexItem.class.js'
+import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
+import { PSTFolder } from './PSTFolder.class.js'
+import { PSTMessageStore } from './PSTMessageStore.class.js'
+import { PSTNodeInputStream } from './PSTNodeInputStream.class.js'
+import { PSTTableBC } from './PSTTableBC.class.js'
+import { PSTTableItem } from './PSTTableItem.class.js'
+import { PSTUtil } from './PSTUtil.class.js'
+import { NodeMap } from './NodeMap.class.js'
+import { PSTEOFError, PSTError } from './PSTError.js'
+
+export interface PSTRandomAccessSource {
+  readonly size?: number
+  readSync(position: number, length: number): Buffer
+  readIntoSync?(target: Buffer, position: number, length: number): number
+  decompressSync?(data: Buffer): Buffer
+}
+
+function formatGuid(bytes: readonly number[]): string {
+  const hex = bytes.map((byte) => byte.toString(16).padStart(2, '0')).join('')
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`
+}
 
 export class PSTFile {
   public static ENCRYPTION_TYPE_NONE = 0
@@ -33,8 +44,8 @@ export class PSTFile {
   public static PS_MAPI = 12
   public static PSETID_AirSync = 13
   public static PSETID_Sharing = 14
-  public static SLBLOCK_ENTRY = 0;
-  public static SIBLOCK_ENTRY = 1;
+  public static SLBLOCK_ENTRY = 0
+  public static SIBLOCK_ENTRY = 1
 
   private guidMap: Map<string, number> = new Map([
     ['00020329-0000-0000-C000-000000000046', 0],
@@ -51,7 +62,7 @@ export class PSTFile {
     ['4442858E-A9E3-4E80-B900-317A210CC15B', 11],
     ['00020328-0000-0000-C000-000000000046', 12],
     ['71035549-0739-4DCB-9163-00F0580DBBDF', 13],
-    ['00062040-0000-0000-C000-000000000046', 14],
+    ['00062040-0000-0000-C000-000000000046', 14]
   ])
 
   // the type of encryption the files uses
@@ -72,10 +83,8 @@ export class PSTFile {
   }
 
   // b-tree
-  private childrenDescriptorTree: Map<
-    number,
-    DescriptorIndexNode[]
-  > | null = null
+  private childrenDescriptorTree: Map<number, DescriptorIndexNode[]> | null =
+    null
 
   // node tree maps
   private readonly nodeMap: NodeMap = new NodeMap()
@@ -86,6 +95,7 @@ export class PSTFile {
 
   // in-memory file buffer (instead of filesystem)
   private pstBuffer: Buffer = Buffer.alloc(0)
+  private pstSource: PSTRandomAccessSource | null = null
 
   // position in file
   private position = 0
@@ -97,12 +107,13 @@ export class PSTFile {
    */
   public constructor(pstBuffer: Buffer)
   public constructor(fileName: string)
+  public constructor(source: PSTRandomAccessSource)
   public constructor(arg: any) {
     if (arg instanceof Buffer) {
       // use an in-memory buffer of PST
       this.pstBuffer = arg
       this.pstFD = -1
-    } else {
+    } else if (typeof arg === 'string') {
       // use PST in filesystem
       this._pstFilename = arg
       try {
@@ -114,6 +125,12 @@ export class PSTFile {
           { cause: error }
         )
       }
+    } else if (arg && typeof arg.readSync === 'function') {
+      this.pstSource = arg
+    } else {
+      throw new TypeError(
+        'PST source must be a path, Buffer, or random-access source'
+      )
     }
 
     try {
@@ -183,6 +200,13 @@ export class PSTFile {
       fs.closeSync(this.pstFD)
       this.pstFD = -1
     }
+  }
+
+  /** Decompress parser data using the source-specific implementation. */
+  public decompress(data: Buffer): Buffer {
+    return this.pstSource?.decompressSync
+      ? this.pstSource.decompressSync(data)
+      : zlib.unzipSync(data)
   }
 
   /**
@@ -255,7 +279,7 @@ export class PSTFile {
       const leastBuffer: number[] = (leastSigBits as any).toBytes()
 
       const arrUID = mostBuffer.concat(leastBuffer)
-      const strUID: string = uuidparse.unparse(arrUID).toUpperCase()
+      const strUID = formatGuid(arrUID).toUpperCase()
 
       const guid = this.guidMap.get(strUID)
       if (guid) {
@@ -432,9 +456,10 @@ export class PSTFile {
    * @memberof PSTFile
    */
   public getMessageStore(): PSTMessageStore {
-    const messageStoreDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(
-      Long.fromNumber(PSTFile.MESSAGE_STORE_DESCRIPTOR_IDENTIFIER)
-    )
+    const messageStoreDescriptor: DescriptorIndexNode =
+      this.getDescriptorIndexNode(
+        Long.fromNumber(PSTFile.MESSAGE_STORE_DESCRIPTOR_IDENTIFIER)
+      )
     return new PSTMessageStore(this, messageStoreDescriptor)
   }
 
@@ -444,9 +469,10 @@ export class PSTFile {
    * @memberof PSTFile
    */
   public getRootFolder(): PSTFolder {
-    const rootFolderDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(
-      Long.fromValue(PSTFile.ROOT_FOLDER_DESCRIPTOR_IDENTIFIER)
-    )
+    const rootFolderDescriptor: DescriptorIndexNode =
+      this.getDescriptorIndexNode(
+        Long.fromValue(PSTFile.ROOT_FOLDER_DESCRIPTOR_IDENTIFIER)
+      )
     const output: PSTFolder = new PSTFolder(this, rootFolderDescriptor)
     return output
   }
@@ -588,9 +614,8 @@ export class PSTFile {
       if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
         const numberOfItemsBytes = Buffer.alloc(2)
         this.readCompletely(numberOfItemsBytes)
-        numberOfItems = PSTUtil.convertLittleEndianBytesToLong(
-          numberOfItemsBytes
-        ).toNumber()
+        numberOfItems =
+          PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes).toNumber()
         this.readCompletely(numberOfItemsBytes)
       } else {
         numberOfItems = this.read()
@@ -780,13 +805,18 @@ export class PSTFile {
           sig
       )
     }
-    
+
     // NID nodes defines in subnode can be either SLBLOCK (0) or SIBLOCK_ENTRY (1)
     const blockType = inputStream.read()
-    if ((blockType !== PSTFile.SLBLOCK_ENTRY) && (blockType !== PSTFile.SIBLOCK_ENTRY)) {
-      throw new Error("Unable to process descriptor node, unknown BLOCK type: " + blockType)
+    if (
+      blockType !== PSTFile.SLBLOCK_ENTRY &&
+      blockType !== PSTFile.SIBLOCK_ENTRY
+    ) {
+      throw new Error(
+        'Unable to process descriptor node, unknown BLOCK type: ' + blockType
+      )
     }
-    
+
     const output = new Map()
     const numberOfItems = inputStream.seekAndReadLong(Long.fromValue(2), 2)
     let offset
@@ -801,11 +831,18 @@ export class PSTFile {
     inputStream.readCompletely(data)
 
     for (let x = 0; x < numberOfItems.toNumber(); x++) {
-      const item: PSTDescriptorItem = new PSTDescriptorItem(data, offset, this, blockType)
+      const item: PSTDescriptorItem = new PSTDescriptorItem(
+        data,
+        offset,
+        this,
+        blockType
+      )
       if (blockType == PSTFile.SLBLOCK_ENTRY) {
         output.set(item.descriptorIdentifier, item)
       } else {
-        const subItems = this.getPSTDescriptorItems(Long.fromNumber(item.offsetIndexIdentifier))
+        const subItems = this.getPSTDescriptorItems(
+          Long.fromNumber(item.offsetIndexIdentifier)
+        )
         subItems.forEach((value, key) => {
           output.set(key, value)
         })
@@ -882,13 +919,11 @@ export class PSTFile {
       if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
         const numberOfItemsBytes = Buffer.alloc(2)
         this.readCompletely(numberOfItemsBytes)
-        numberOfItems = PSTUtil.convertLittleEndianBytesToLong(
-          numberOfItemsBytes
-        ).toNumber()
+        numberOfItems =
+          PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes).toNumber()
         this.readCompletely(numberOfItemsBytes)
-        const maxNumberOfItems = PSTUtil.convertLittleEndianBytesToLong(
-          numberOfItemsBytes
-        ).toNumber()
+        const maxNumberOfItems =
+          PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes).toNumber()
       } else {
         numberOfItems = this.read()
         this.read() // maxNumberOfItems
@@ -1009,7 +1044,17 @@ export class PSTFile {
     if (this.closed) {
       throw new PSTError('CLOSED', 'The PST file is closed')
     }
-    if (this.pstFD >= 0) {
+    if (this.pstSource) {
+      if (this.pstSource.readIntoSync) {
+        return this.pstSource.readIntoSync(buffer, position, length)
+      }
+      const data = this.pstSource.readSync(position, length)
+      if (data.length !== length) {
+        throw new PSTEOFError(position, length, data)
+      }
+      data.copy(buffer)
+      return length
+    } else if (this.pstFD >= 0) {
       // read from file system
       const bytesRead = fs.readSync(this.pstFD, buffer, 0, length, position)
       if (bytesRead !== length) {

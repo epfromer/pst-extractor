@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Long from 'long'
-import * as zlib from 'zlib'
-import { PSTDescriptorItem } from './PSTDescriptorItem.class'
-import { PSTUtil } from './PSTUtil.class'
-import { OffsetIndexItem } from './OffsetIndexItem.class'
-import { PSTFile } from './PSTFile.class'
-import { PSTError } from './PSTError'
+import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
+import { PSTUtil } from './PSTUtil.class.js'
+import { OffsetIndexItem } from './OffsetIndexItem.class.js'
+import { PSTFile } from './PSTFile.class.js'
+import { PSTError } from './PSTError.js'
 
 export class PSTNodeInputStream {
   private skipPoints: Long[] = []
@@ -30,6 +28,11 @@ export class PSTNodeInputStream {
   private _length: Long = Long.ZERO
   public get length(): Long {
     return this._length
+  }
+
+  /** Current logical stream position, used to resume retryable async reads. */
+  public tell(): Long {
+    return Long.fromValue(this.currentLocation)
   }
 
   private _encrypted = false
@@ -119,8 +122,10 @@ export class PSTNodeInputStream {
             const inData: Buffer = Buffer.alloc(i.size)
             this.pstFile.seek(i.fileOffset)
             this.pstFile.readCompletely(inData)
-            const buf = zlib.unzipSync(inData)
-            outputStream = outputStream ? Buffer.concat([outputStream, buf]) : buf
+            const buf = this.pstFile.decompress(inData)
+            outputStream = outputStream
+              ? Buffer.concat([outputStream, buf])
+              : buf
           }
           this.indexItems = []
           this.skipPoints = []
@@ -135,7 +140,7 @@ export class PSTNodeInputStream {
           const inData: Buffer = Buffer.alloc(compressedLength)
           this.seek(Long.ZERO)
           this.readCompletely(inData)
-          outputStream = zlib.unzipSync(inData)
+          outputStream = this.pstFile.decompress(inData)
         }
         this.allData = outputStream
         this.currentLocation = Long.ZERO
@@ -520,9 +525,9 @@ export class PSTNodeInputStream {
     if (location.greaterThan(this.length)) {
       throw new Error(
         'PSTNodeInputStream::seek Attempt to seek past end of item! size = ' +
-        this.length +
-        ', seeking to:' +
-        location
+          this.length +
+          ', seeking to:' +
+          location
       )
     }
 
@@ -580,7 +585,7 @@ export class PSTNodeInputStream {
   public toJSON(): any {
     return {
       currentBlock: this.currentBlock,
-      isZlib: this.isZlib,
+      isZlib: this.isZlib
     }
   }
 }

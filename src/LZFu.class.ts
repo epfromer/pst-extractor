@@ -1,4 +1,4 @@
-import { PSTUtil } from './PSTUtil.class'
+import { PSTUtil } from './PSTUtil.class.js'
 
 // An implementation of the LZFu algorithm to decompress RTF content
 export class LZFu {
@@ -28,7 +28,6 @@ export class LZFu {
       8,
       12
     ).toNumber()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const compressedCRC: number = PSTUtil.convertLittleEndianBytesToLong(
       data,
       12,

@@ -1,23 +1,26 @@
 import { Readable } from 'node:stream'
+import { performance } from 'node:perf_hooks'
 import { setImmediate as yieldToEventLoop } from 'node:timers/promises'
 import {
-  AsyncRandomAccessReader,
+  AsyncBlockCache,
+  AsyncCacheMissError,
+  AsyncDecompressionMissError,
   BufferRandomAccessReader,
-  FileHandleRandomAccessReader,
-  readAll
-} from './AsyncRandomAccessReader'
-import { PSTFile } from './PSTFile.class'
-import { PSTActivity } from './PSTActivity.class'
-import { PSTAppointment } from './PSTAppointment.class'
-import { PSTAttachment } from './PSTAttachment.class'
-import { PSTContact } from './PSTContact.class'
-import { PSTFolder } from './PSTFolder.class'
-import { PSTMessage } from './PSTMessage.class'
-import { PSTMessageStore } from './PSTMessageStore.class'
-import { PSTObject } from './PSTObject.class'
-import { PSTRecipient } from './PSTRecipient.class'
-import { PSTTask } from './PSTTask.class'
-import { PSTError, asPSTError, throwIfAborted } from './PSTError'
+  FileHandleRandomAccessReader
+} from './AsyncRandomAccessReader.js'
+import type { AsyncRandomAccessReader } from './AsyncRandomAccessReader.js'
+import { PSTFile } from './PSTFile.class.js'
+import { PSTActivity } from './PSTActivity.class.js'
+import { PSTAppointment } from './PSTAppointment.class.js'
+import { PSTAttachment } from './PSTAttachment.class.js'
+import { PSTContact } from './PSTContact.class.js'
+import { PSTFolder } from './PSTFolder.class.js'
+import { PSTMessage } from './PSTMessage.class.js'
+import { PSTMessageStore } from './PSTMessageStore.class.js'
+import { PSTObject } from './PSTObject.class.js'
+import { PSTRecipient } from './PSTRecipient.class.js'
+import { PSTTask } from './PSTTask.class.js'
+import { PSTError, asPSTError, throwIfAborted } from './PSTError.js'
 
 async function yieldFor(signal?: AbortSignal): Promise<void> {
   try {
@@ -39,6 +42,8 @@ export interface AsyncPSTLimits {
   maxDecompressedBytes?: number
   /** Maximum rows returned or traversed from a table. */
   maxTableRows?: number
+  /** Maximum bytes retained by the per-file block cache. Defaults to 64 MiB. */
+  maxCacheBytes?: number
 }
 
 export interface AsyncPSTOpenOptions {
@@ -60,12 +65,40 @@ function isReader(source: unknown): source is AsyncRandomAccessReader {
   )
 }
 
+function findCacheMiss(error: unknown): AsyncCacheMissError | undefined {
+  const visited = new Set<unknown>()
+  let current = error
+  while (current && !visited.has(current)) {
+    if (current instanceof AsyncCacheMissError) return current
+    visited.add(current)
+    current = current instanceof Error ? current.cause : undefined
+  }
+  return undefined
+}
+
+function findDecompressionMiss(
+  error: unknown
+): AsyncDecompressionMissError | undefined {
+  const visited = new Set<unknown>()
+  let current = error
+  while (current && !visited.has(current)) {
+    if (current instanceof AsyncDecompressionMissError) return current
+    visited.add(current)
+    current = current instanceof Error ? current.cause : undefined
+  }
+  return undefined
+}
+
 export class AsyncPSTFile {
   private closed = false
+  private readonly closeController = new AbortController()
+  private readonly active = new Set<Promise<unknown>>()
+  private lastYield = performance.now()
 
   private constructor(
     private readonly syncFile: PSTFile,
     private readonly reader: AsyncRandomAccessReader,
+    private readonly cache: AsyncBlockCache,
     private readonly ownsReader: boolean,
     public readonly limits: Readonly<AsyncPSTLimits>
   ) {}
@@ -85,9 +118,13 @@ export class AsyncPSTFile {
         if (options.signal?.aborted) {
           throwIfAborted(options.signal)
         }
-        throw new PSTError('NOT_FOUND', `Unable to open PST source: ${source}`, {
-          cause: error
-        })
+        throw new PSTError(
+          'NOT_FOUND',
+          `Unable to open PST source: ${source}`,
+          {
+            cause: error
+          }
+        )
       }
       ownsReader = true
     } else if (Buffer.isBuffer(source)) {
@@ -103,20 +140,47 @@ export class AsyncPSTFile {
     }
 
     try {
-      const data = await readAll(reader, {
-        signal: options.signal,
-        maxBytes: options.limits?.maxFileBytes
+      const maxFileBytes =
+        options.limits?.maxFileBytes ?? Number.POSITIVE_INFINITY
+      if (reader.size !== undefined && reader.size > maxFileBytes) {
+        throw new PSTError(
+          'LIMIT_EXCEEDED',
+          `PST size ${reader.size} exceeds configured limit ${maxFileBytes}`
+        )
+      }
+      const limits = Object.freeze({
+        maxCacheBytes: 64 * 1024 * 1024,
+        ...(options.limits ?? {})
       })
-      throwIfAborted(options.signal)
-      await yieldFor(options.signal)
-      const syncFile = new PSTFile(data)
-      throwIfAborted(options.signal)
-      return new AsyncPSTFile(
-        syncFile,
+      const cache = new AsyncBlockCache(
         reader,
-        ownsReader,
-        Object.freeze({ ...(options.limits ?? {}) })
+        limits.maxCacheBytes,
+        1024 * 1024,
+        limits.maxDecompressedBytes
       )
+      let syncFile: PSTFile
+      while (true) {
+        throwIfAborted(options.signal)
+        try {
+          syncFile = new PSTFile(cache)
+          cache.releaseDecompressed()
+          break
+        } catch (error) {
+          const cacheMiss = findCacheMiss(error)
+          if (cacheMiss) {
+            await cache.ensure(cacheMiss.position, cacheMiss.length, options)
+            continue
+          }
+          const decompressionMiss = findDecompressionMiss(error)
+          if (decompressionMiss) {
+            await cache.ensureDecompressed(decompressionMiss, options.signal)
+            continue
+          }
+          throw error
+        }
+      }
+      throwIfAborted(options.signal)
+      return new AsyncPSTFile(syncFile, reader, cache, ownsReader, limits)
     } catch (error) {
       if (ownsReader) {
         await reader.close().catch(() => undefined)
@@ -151,7 +215,12 @@ export class AsyncPSTFile {
       return
     }
     this.closed = true
+    this.closeController.abort(
+      new PSTError('CLOSED', 'The PST file is closing')
+    )
+    await Promise.allSettled(this.active)
     this.syncFile.close()
+    this.cache.clear()
     if (this.ownsReader) {
       await this.reader.close()
     }
@@ -190,20 +259,55 @@ export class AsyncPSTFile {
     operation: () => T,
     options: AsyncOperationOptions = {}
   ): Promise<T> {
-    this.assertOpen()
-    throwIfAborted(options.signal)
-    await yieldFor(options.signal)
-    this.assertOpen()
-    throwIfAborted(options.signal)
+    const signal = options.signal
+      ? AbortSignal.any([options.signal, this.closeController.signal])
+      : this.closeController.signal
+    const pending = this.run(operation, signal)
+    this.active.add(pending)
     try {
-      const result = operation()
-      throwIfAborted(options.signal)
-      return result
-    } catch (error) {
-      if (options.signal?.aborted) {
-        throwIfAborted(options.signal)
+      return await pending
+    } finally {
+      this.active.delete(pending)
+    }
+  }
+
+  public async cooperate(signal?: AbortSignal): Promise<void> {
+    throwIfAborted(signal)
+    const now = performance.now()
+    if (now - this.lastYield >= 2) {
+      this.lastYield = now
+      await yieldFor(signal)
+    }
+  }
+
+  private async run<T>(operation: () => T, signal: AbortSignal): Promise<T> {
+    this.assertOpen()
+    throwIfAborted(signal)
+    await this.cooperate(signal)
+    while (true) {
+      this.assertOpen()
+      throwIfAborted(signal)
+      try {
+        const result = operation()
+        this.cache.releaseDecompressed()
+        return result
+      } catch (error) {
+        const cacheMiss = findCacheMiss(error)
+        if (cacheMiss) {
+          await this.cache.ensure(cacheMiss.position, cacheMiss.length, {
+            signal
+          })
+          continue
+        }
+        const decompressionMiss = findDecompressionMiss(error)
+        if (decompressionMiss) {
+          await this.cache.ensureDecompressed(decompressionMiss, signal)
+          continue
+        }
+        if (signal.aborted) throwIfAborted(signal)
+        this.cache.releaseDecompressed()
+        throw asPSTError(error, 'CORRUPT_DATA')
       }
-      throw asPSTError(error, 'CORRUPT_DATA')
     }
   }
 }
@@ -292,10 +396,20 @@ export class AsyncPSTFolder extends AsyncPSTObject<PSTFolder> {
   public async getNextChild(
     options: AsyncOperationOptions = {}
   ): Promise<AsyncPSTObject | null> {
-    return this.owner.execute(
-      () => wrapObject(this.owner, this.value.getNextChild()),
-      options
-    )
+    return this.owner.execute(() => {
+      const checkpoint = this.value.childCursorPosition
+      try {
+        const value = this.value.getNextChild()
+        if (value instanceof PSTMessage) {
+          void value.numberOfAttachments
+          void value.numberOfRecipients
+        }
+        return wrapObject(this.owner, value)
+      } catch (error) {
+        this.value.moveChildCursorTo(checkpoint)
+        throw error
+      }
+    }, options)
   }
 
   public subFolders(
@@ -308,7 +422,7 @@ export class AsyncPSTFolder extends AsyncPSTObject<PSTFolder> {
         for (const child of children) {
           throwIfAborted(options.signal)
           yield child
-          await yieldFor(options.signal)
+          await folder.owner.cooperate(options.signal)
         }
       }
     }
@@ -337,7 +451,20 @@ export class AsyncPSTFolder extends AsyncPSTObject<PSTFolder> {
         let row = 0
         const limit = owner.limits.maxTableRows ?? Number.POSITIVE_INFINITY
         while (true) {
-          const next = await owner.execute(() => cursor.getNextChild(), options)
+          const next = await owner.execute(() => {
+            const checkpoint = cursor.childCursorPosition
+            try {
+              const value = cursor.getNextChild()
+              if (value instanceof PSTMessage) {
+                void value.numberOfAttachments
+                void value.numberOfRecipients
+              }
+              return value
+            } catch (error) {
+              cursor.moveChildCursorTo(checkpoint)
+              throw error
+            }
+          }, options)
           if (next === null) {
             return
           }
@@ -352,7 +479,7 @@ export class AsyncPSTFolder extends AsyncPSTObject<PSTFolder> {
             yield wrapped
           }
           row++
-          await yieldFor(options.signal)
+          await owner.cooperate(options.signal)
         }
       }
     }
@@ -403,10 +530,11 @@ export class AsyncPSTMessage<
     index: number,
     options: AsyncOperationOptions = {}
   ): Promise<AsyncPSTAttachment> {
-    return this.owner.execute(
-      () => new AsyncPSTAttachment(this.owner, this.value.getAttachment(index)),
-      options
-    )
+    return this.owner.execute(() => {
+      const value = this.value.getAttachment(index)
+      void value.filesize
+      return new AsyncPSTAttachment(this.owner, value)
+    }, options)
   }
 }
 export interface AsyncPSTMessage extends Readonly<
@@ -473,14 +601,18 @@ export class AsyncPSTAttachment extends AsyncPSTObject<PSTAttachment> {
         while (true) {
           throwIfAborted(options.signal)
           const output = Buffer.alloc(chunkSize)
-          const bytesRead = input.read(output)
+          const checkpoint = input.tell()
+          const bytesRead = await attachment.owner.execute(() => {
+            input.seek(checkpoint)
+            return input.read(output)
+          }, options)
           if (bytesRead <= 0) {
             return
           }
           yield bytesRead === output.length
             ? output
             : output.subarray(0, bytesRead)
-          await yieldFor(options.signal)
+          await attachment.owner.cooperate(options.signal)
         }
       }
     }

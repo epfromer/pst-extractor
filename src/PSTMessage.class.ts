@@ -1,17 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Long from 'long'
-import { DescriptorIndexNode } from './DescriptorIndexNode.class'
-import { OutlookProperties } from './OutlookProperties'
-import { PSTDescriptorItem } from './PSTDescriptorItem.class'
-import { PSTFile } from './PSTFile.class'
-import { PSTNodeInputStream } from './PSTNodeInputStream.class'
-import { PSTObject } from './PSTObject.class'
-import { PSTTable7C } from './PSTTable7C.class'
-import { PSTTableBC } from './PSTTableBC.class'
-import { PSTUtil } from './PSTUtil.class'
-import { LZFu } from './LZFu.class'
-import { PSTAttachment } from './PSTAttachment.class'
-import { PSTRecipient } from './PSTRecipient.class'
+import { DescriptorIndexNode } from './DescriptorIndexNode.class.js'
+import { OutlookProperties } from './OutlookProperties.js'
+import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
+import { PSTFile } from './PSTFile.class.js'
+import { PSTNodeInputStream } from './PSTNodeInputStream.class.js'
+import { PSTObject } from './PSTObject.class.js'
+import { PSTTable7C } from './PSTTable7C.class.js'
+import { PSTTableBC } from './PSTTableBC.class.js'
+import { PSTUtil } from './PSTUtil.class.js'
+import { LZFu } from './LZFu.class.js'
+import { PSTAttachment } from './PSTAttachment.class.js'
+import { PSTRecipient } from './PSTRecipient.class.js'
+import { rethrowAsyncCacheMiss } from './PSTError.js'
 
 enum PidTagMessageFlags {
   MSGFLAG_READ = 0x01,
@@ -21,7 +21,7 @@ enum PidTagMessageFlags {
   MSGFLAG_HASATTACH = 0x10,
   MSGFLAG_FROMME = 0x20,
   MSGFLAG_ASSOCIATED = 0x40,
-  MSGFLAG_RESEND = 0x80,
+  MSGFLAG_RESEND = 0x80
 }
 
 export class PSTMessage extends PSTObject {
@@ -200,9 +200,8 @@ export class PSTMessage extends PSTObject {
         this.localDescriptorItems != null &&
         this.localDescriptorItems.has(recipientTableKey)
       ) {
-        const item:
-          | PSTDescriptorItem
-          | undefined = this.localDescriptorItems.get(recipientTableKey)
+        const item: PSTDescriptorItem | undefined =
+          this.localDescriptorItems.get(recipientTableKey)
         let descriptorItems: Map<number, PSTDescriptorItem> | null = new Map()
         if (item && item.subNodeOffsetIndexIdentifier > 0) {
           descriptorItems = this.pstFile.getPSTDescriptorItems(
@@ -215,6 +214,7 @@ export class PSTMessage extends PSTObject {
         )
       }
     } catch (_err) {
+      rethrowAsyncCacheMiss(_err)
       this.recipientTable = null
     }
   }
@@ -490,6 +490,7 @@ export class PSTMessage extends PSTObject {
     try {
       this.processAttachments()
     } catch (_err) {
+      rethrowAsyncCacheMiss(_err)
       return 0
     }
     return this.attachmentTable ? this.attachmentTable.rowCount : 0
@@ -1291,9 +1292,8 @@ export class PSTMessage extends PSTObject {
    * @memberof PSTMessage
    */
   public get colorCategories(): string[] {
-    const keywordCategory: number = this.pstFile.getPublicStringToIdMapItem(
-      'Keywords'
-    )
+    const keywordCategory: number =
+      this.pstFile.getPublicStringToIdMapItem('Keywords')
 
     const categories: string[] = []
     if (this.pstTableItems && this.pstTableItems.has(keywordCategory)) {
@@ -1455,8 +1455,8 @@ export class PSTMessage extends PSTObject {
         isAssociated: this.isAssociated,
         isResent: this.isResent,
         acknowledgementMode: this.acknowledgementMode,
-        originatorDeliveryReportRequested: this
-          .originatorDeliveryReportRequested,
+        originatorDeliveryReportRequested:
+          this.originatorDeliveryReportRequested,
         readReceiptRequested: this.readReceiptRequested,
         recipientReassignmentProhibited: this.recipientReassignmentProhibited,
         originalSensitivity: this.originalSensitivity,
@@ -1473,10 +1473,10 @@ export class PSTMessage extends PSTObject {
         originalDisplayTo: this.originalDisplayTo,
         rcvdRepresentingAddrtype: this.rcvdRepresentingAddrtype,
         rcvdRepresentingEmailAddress: this.rcvdRepresentingEmailAddress,
-        isNonReceiptNotificationRequested: this
-          .isNonReceiptNotificationRequested,
-        isOriginatorNonDeliveryReportRequested: this
-          .isOriginatorNonDeliveryReportRequested,
+        isNonReceiptNotificationRequested:
+          this.isNonReceiptNotificationRequested,
+        isOriginatorNonDeliveryReportRequested:
+          this.isOriginatorNonDeliveryReportRequested,
         recipientType: this.recipientType,
         isReplyRequested: this.isReplyRequested,
         senderName: this.senderName,
@@ -1516,7 +1516,7 @@ export class PSTMessage extends PSTObject {
         numberOfAttachments: this.numberOfAttachments,
         conversationId: this.conversationId,
         isConversationIndexTracking: this.isConversationIndexTracking,
-        recipientTable: this.recipientTable,
+        recipientTable: this.recipientTable
       },
       this
     )

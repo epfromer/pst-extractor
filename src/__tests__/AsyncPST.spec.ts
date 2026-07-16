@@ -1,5 +1,8 @@
 import { readFile } from 'node:fs/promises'
+import fs from 'node:fs'
 import { resolve } from 'node:path'
+import zlib from 'node:zlib'
+import { jest } from '@jest/globals'
 import {
   AsyncPSTActivity,
   AsyncPSTAppointment,
@@ -7,15 +10,13 @@ import {
   AsyncPSTFile,
   AsyncPSTMessage,
   AsyncPSTTask
-} from '../AsyncPST.class'
-import { AsyncRandomAccessReader } from '../AsyncRandomAccessReader'
+} from '../AsyncPST.class.js'
+import type { AsyncRandomAccessReader } from '../AsyncRandomAccessReader.js'
 
 const enronPath = resolve('./src/__tests__/testdata/enron.pst')
 
 describe('Async PST API', () => {
   it('opens paths without synchronous filesystem I/O and matches sync metadata', async () => {
-    const fs = require('node:fs') as typeof import('node:fs')
-    const zlib = require('node:zlib') as typeof import('node:zlib')
     const openSync = jest.spyOn(fs, 'openSync').mockImplementation(() => {
       throw new Error('synchronous open used by async API')
     })
@@ -102,9 +103,11 @@ describe('Async PST API', () => {
   it('honors reader ownership and opening limits', async () => {
     const data = await readFile(enronPath)
     let closes = 0
+    const readLengths: number[] = []
     const reader: AsyncRandomAccessReader = {
       size: data.length,
       async read(position, length) {
+        readLengths.push(length)
         return Buffer.from(data.subarray(position, position + length))
       },
       async close() {
@@ -113,6 +116,7 @@ describe('Async PST API', () => {
     }
 
     const borrowed = await AsyncPSTFile.open(reader)
+    expect(Math.max(...readLengths)).toBeLessThan(data.length)
     await borrowed.close()
     expect(closes).toBe(0)
 

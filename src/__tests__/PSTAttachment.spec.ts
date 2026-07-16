@@ -1,10 +1,10 @@
-import { PSTContact } from '../PSTContact.class'
-import { PSTFile } from '../PSTFile.class'
-import { PSTFolder } from '../PSTFolder.class'
-import { PSTMessage } from '../PSTMessage.class'
-import { PSTTask } from '../PSTTask.class'
-import { PSTAttachment } from '../PSTAttachment.class'
-const resolve = require('path').resolve
+import { PSTContact } from '../PSTContact.class.js'
+import { PSTFile } from '../PSTFile.class.js'
+import { PSTFolder } from '../PSTFolder.class.js'
+import { PSTMessage } from '../PSTMessage.class.js'
+import { PSTTask } from '../PSTTask.class.js'
+import { PSTAttachment } from '../PSTAttachment.class.js'
+import { resolve } from 'node:path'
 let pstFile: PSTFile
 let subtreeFolder: PSTFolder
 

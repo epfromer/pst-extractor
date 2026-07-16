@@ -1,5 +1,5 @@
 import Long from 'long'
-import { PSTNodeInputStream } from './PSTNodeInputStream.class'
+import { PSTNodeInputStream } from './PSTNodeInputStream.class.js'
 
 export class NodeInfo {
   private _startOffset: number
@@ -62,7 +62,6 @@ export class NodeInfo {
    * @returns {string}
    * @memberof NodeInfo
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJSON(): any {
     return this
   }

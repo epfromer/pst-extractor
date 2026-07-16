@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { DescriptorIndexNode } from './DescriptorIndexNode.class'
-import { OutlookProperties } from './OutlookProperties'
-import { PSTDescriptorItem } from './PSTDescriptorItem.class'
-import { PSTFile } from './PSTFile.class'
-import { PSTMessage } from './PSTMessage.class'
-import { PSTTableBC } from './PSTTableBC.class'
+import { DescriptorIndexNode } from './DescriptorIndexNode.class.js'
+import { OutlookProperties } from './OutlookProperties.js'
+import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
+import { PSTFile } from './PSTFile.class.js'
+import { PSTMessage } from './PSTMessage.class.js'
+import { PSTTableBC } from './PSTTableBC.class.js'
 
 export class PSTContact extends PSTMessage {
   constructor(
@@ -1371,7 +1370,7 @@ export class PSTContact extends PSTMessage {
         fax3OriginalDisplayName: this.fax3OriginalDisplayName,
         freeBusyLocation: this.freeBusyLocation,
         birthday: this.birthday,
-        anniversary: this.anniversary,
+        anniversary: this.anniversary
       },
       this
     )

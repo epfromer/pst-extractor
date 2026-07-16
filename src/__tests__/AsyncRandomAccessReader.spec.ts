@@ -1,10 +1,11 @@
 import {
-  AsyncRandomAccessReader,
+  AsyncBlockCache,
   BufferRandomAccessReader,
   FileHandleRandomAccessReader,
   readAll
-} from '../AsyncRandomAccessReader'
-import { PSTEOFError, PSTError } from '../PSTError'
+} from '../AsyncRandomAccessReader.js'
+import type { AsyncRandomAccessReader } from '../AsyncRandomAccessReader.js'
+import { PSTEOFError, PSTError } from '../PSTError.js'
 import { resolve } from 'node:path'
 
 describe('AsyncRandomAccessReader', () => {
@@ -52,5 +53,27 @@ describe('AsyncRandomAccessReader', () => {
     ).rejects.toEqual(
       expect.objectContaining<PSTError>({ name: 'AbortError', code: 'ABORTED' })
     )
+  })
+
+  it('deduplicates page loads and evicts least-recently-used pages', async () => {
+    const data = Buffer.from('abcdefghijkl')
+    let reads = 0
+    const reader: AsyncRandomAccessReader = {
+      size: data.length,
+      async read(position, length) {
+        reads++
+        return Buffer.from(data.subarray(position, position + length))
+      },
+      async close() {}
+    }
+    const cache = new AsyncBlockCache(reader, 8, 4)
+    await cache.ensure(0, 1)
+    await Promise.all([cache.ensure(4, 1), cache.ensure(4, 1)])
+    expect(reads).toBe(2)
+    expect(cache.readSync(0, 4)).toEqual(Buffer.from('abcd'))
+    await cache.ensure(8, 1)
+    expect(cache.bytes).toBeLessThanOrEqual(8)
+    expect(() => cache.readSync(4, 1)).toThrow('cache miss')
+    expect(cache.readSync(0, 1)).toEqual(Buffer.from('a'))
   })
 })

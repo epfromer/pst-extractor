@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Long from 'long'
-import { NodeInfo } from './NodeInfo.class'
-import { PSTDescriptorItem } from './PSTDescriptorItem.class'
-import { PSTFile } from './PSTFile.class'
-import { PSTNodeInputStream } from './PSTNodeInputStream.class'
-import { PSTTable } from './PSTTable.class'
-import { PSTTableItem } from './PSTTableItem.class'
-import { ColumnDescriptor } from './ColumnDescriptor.class'
+import { NodeInfo } from './NodeInfo.class.js'
+import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
+import { PSTFile } from './PSTFile.class.js'
+import { PSTNodeInputStream } from './PSTNodeInputStream.class.js'
+import { PSTTable } from './PSTTable.class.js'
+import { PSTTableItem } from './PSTTableItem.class.js'
+import { ColumnDescriptor } from './ColumnDescriptor.class.js'
 
 export class PSTTable7C extends PSTTable {
   private items: Map<number, PSTTableItem>[] = []

@@ -1,14 +1,14 @@
-export { PSTFile } from './PSTFile.class'
-export { PSTTask } from './PSTTask.class'
-export { PSTRecipient } from './PSTRecipient.class'
-export { PSTAttachment } from './PSTAttachment.class'
-export { PSTMessage } from './PSTMessage.class'
-export { PSTFolder } from './PSTFolder.class'
-export { PSTObject } from './PSTObject.class'
-export { PSTMessageStore } from './PSTMessageStore.class'
-export { PSTAppointment } from './PSTAppointment.class'
-export { PSTContact } from './PSTContact.class'
-export { PSTActivity } from './PSTActivity.class'
+export { PSTFile } from './PSTFile.class.js'
+export { PSTTask } from './PSTTask.class.js'
+export { PSTRecipient } from './PSTRecipient.class.js'
+export { PSTAttachment } from './PSTAttachment.class.js'
+export { PSTMessage } from './PSTMessage.class.js'
+export { PSTFolder } from './PSTFolder.class.js'
+export { PSTObject } from './PSTObject.class.js'
+export { PSTMessageStore } from './PSTMessageStore.class.js'
+export { PSTAppointment } from './PSTAppointment.class.js'
+export { PSTContact } from './PSTContact.class.js'
+export { PSTActivity } from './PSTActivity.class.js'
 export {
   AsyncPSTFile,
   AsyncPSTObject,
@@ -21,21 +21,22 @@ export {
   AsyncPSTActivity,
   AsyncPSTRecipient,
   AsyncPSTAttachment
-} from './AsyncPST.class'
+} from './AsyncPST.class.js'
 export type {
   AsyncPSTLimits,
   AsyncPSTOpenOptions,
   AsyncOperationOptions,
   AttachmentChunkOptions,
   AttachmentReadOptions
-} from './AsyncPST.class'
+} from './AsyncPST.class.js'
 export {
   BufferRandomAccessReader,
-  FileHandleRandomAccessReader
-} from './AsyncRandomAccessReader'
+  FileHandleRandomAccessReader,
+  AsyncBlockCache
+} from './AsyncRandomAccessReader.js'
 export type {
   AsyncRandomAccessReader,
   AsyncReadOptions
-} from './AsyncRandomAccessReader'
-export { PSTError, PSTEOFError } from './PSTError'
-export type { PSTErrorCode } from './PSTError'
+} from './AsyncRandomAccessReader.js'
+export { PSTError, PSTEOFError } from './PSTError.js'
+export type { PSTErrorCode } from './PSTError.js'

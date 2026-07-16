@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "jest", "import"],
+  "ignorePatterns": ["dist/**", "coverage/**", "src/__tests__/testdata/**"],
+  "rules": {
+    "typescript/no-explicit-any": "off",
+    "typescript/no-require-imports": "off",
+    "typescript/no-unused-vars": "off",
+    "typescript/no-this-alias": "off",
+    "typescript/no-duplicate-enum-values": "off",
+    "typescript/no-empty-object-type": "off",
+    "typescript/no-unsafe-declaration-merging": "off",
+    "typescript/await-thenable": "off",
+    "no-control-regex": "off",
+    "no-duplicate-case": "off",
+    "jest/no-standalone-expect": "off",
+    "jest/no-conditional-expect": "off"
+  },
+  "overrides": [
+    {
+      "files": ["src/__tests__/**/*.ts"],
+      "env": { "jest": true }
+    }
+  ]
+}

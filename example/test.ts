@@ -20,7 +20,8 @@ const ANSI_RED = 31
 const ANSI_YELLOW = 93
 const ANSI_GREEN = 32
 const ANSI_BLUE = 34
-const highlight = (str: string, code: number = ANSI_RED) => '\u001b[' + code + 'm' + str + '\u001b[0m'
+const highlight = (str: string, code: number = ANSI_RED) =>
+  '\u001b[' + code + 'm' + str + '\u001b[0m'
 
 /**
  * Returns a string with visual indication of depth in tree.
@@ -51,7 +52,7 @@ function doSaveToFS(
   msg: PSTMessage,
   emailFolder: string,
   sender: string,
-  recipients: string
+  recipients: string,
 ): void {
   try {
     // save the msg as a txt file
@@ -166,10 +167,10 @@ function processFolder(folder: PSTFolder): void {
       if (verbose) {
         console.log(
           getDepth(depth) +
-          'Email: ' +
-          email.descriptorNodeId +
-          ' - ' +
-          email.subject
+            'Email: ' +
+            email.descriptorNodeId +
+            ' - ' +
+            email.subject,
         )
       } else {
         printDot()
@@ -255,6 +256,11 @@ directoryListing.forEach((filename) => {
     processFolder(pstFile.getRootFolder())
 
     const end = Date.now()
-    console.log(highlight(pstFolder + filename + ' processed in ' + (end - start) + ' ms', ANSI_GREEN))
+    console.log(
+      highlight(
+        pstFolder + filename + ' processed in ' + (end - start) + ' ms',
+        ANSI_GREEN,
+      ),
+    )
   }
 })

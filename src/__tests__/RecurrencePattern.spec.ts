@@ -1,8 +1,8 @@
-import { PSTFile } from '../PSTFile.class'
-import { PSTFolder } from '../PSTFolder.class'
-import { PSTAppointment } from '../PSTAppointment.class'
-import { PatternType, RecurrencePattern } from '../RecurrencePattern.class'
-const resolve = require('path').resolve
+import { PSTFile } from '../PSTFile.class.js'
+import { PSTFolder } from '../PSTFolder.class.js'
+import { PSTAppointment } from '../PSTAppointment.class.js'
+import { PatternType, RecurrencePattern } from '../RecurrencePattern.class.js'
+import { resolve } from 'node:path'
 let pstFile: PSTFile
 let folder: PSTFolder
 
@@ -146,7 +146,9 @@ describe('RecurrencePattern tests', () => {
     expect(appt.subject).toEqual('repeats every monday for 10 weeks')
     expect(appt.startTime).toEqual(new Date('2021-08-09T17:00:00.000Z'))
     expect(appt.endTime).toEqual(new Date('2021-08-09T18:00:00.000Z'))
-    expect(appt.recurrencePattern).toEqual('every Monday from 10:00 AM to 11:00 AM')
+    expect(appt.recurrencePattern).toEqual(
+      'every Monday from 10:00 AM to 11:00 AM'
+    )
     expect(appt.duration).toEqual(60)
     let recurrencePattern = new RecurrencePattern(appt.recurrenceStructure)
     expect(recurrencePattern.occurrenceCount).toEqual(10)
@@ -158,7 +160,9 @@ describe('RecurrencePattern tests', () => {
     expect(appt.subject).toEqual('repeats for 3 days')
     expect(appt.startTime).toEqual(new Date('2021-08-10T19:00:00.000Z'))
     expect(appt.endTime).toEqual(new Date('2021-08-10T19:30:00.000Z'))
-    expect(appt.recurrencePattern).toEqual('every day from 12:00 PM to 12:30 PM')
+    expect(appt.recurrencePattern).toEqual(
+      'every day from 12:00 PM to 12:30 PM'
+    )
     expect(appt.duration).toEqual(30)
     recurrencePattern = new RecurrencePattern(appt.recurrenceStructure)
     // console.log(JSON.stringify(recurrencePattern, null, 2));

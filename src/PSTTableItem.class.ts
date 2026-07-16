@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Long from 'long'
-import { PSTUtil } from './PSTUtil.class'
+import { PSTUtil } from './PSTUtil.class.js'
 
 // Generic table item
 // Provides some basic string functions
@@ -67,7 +66,6 @@ export class PSTTableItem {
    * @returns
    * @memberof PSTTableItem
    */
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public getLongValue() {
     if (this.data.length > 0) {
       return PSTUtil.convertLittleEndianBytesToLong(this.data)
@@ -118,7 +116,7 @@ export class PSTTableItem {
         isExternalValueReference: this.isExternalValueReference,
         entryValueReference: this.entryValueReference,
         entryValueType: this.entryValueType,
-        data: this.data,
+        data: this.data
       },
       this
     )

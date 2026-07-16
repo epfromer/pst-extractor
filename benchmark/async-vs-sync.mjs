@@ -3,6 +3,8 @@ import { promisify } from 'node:util'
 import { performance, monitorEventLoopDelay } from 'node:perf_hooks'
 import { resolve } from 'node:path'
 import { createRequire } from 'node:module'
+import { readFileSync } from 'node:fs'
+import { readFile } from 'node:fs/promises'
 
 const execFileAsync = promisify(execFile)
 const require = createRequire(import.meta.url)
@@ -15,6 +17,8 @@ function parseArguments(argv) {
     warmup: 1,
     concurrency: 2,
     streamAttachments: false,
+    reader: 'path',
+    packageRoot: resolve('.'),
     worker: undefined
   }
   for (let index = 0; index < argv.length; index++) {
@@ -25,6 +29,9 @@ function parseArguments(argv) {
       options.concurrency = Number(argv[++index])
     else if (argument === '--stream-attachments')
       options.streamAttachments = true
+    else if (argument === '--reader') options.reader = argv[++index]
+    else if (argument === '--package-root')
+      options.packageRoot = resolve(argv[++index])
     else if (argument === '--worker') options.worker = argv[++index]
     else if (!argument.startsWith('--')) options.fixture = argument
     else throw new Error(`Unknown argument: ${argument}`)
@@ -40,6 +47,9 @@ function parseArguments(argv) {
     }
   }
   options.fixture = resolve(options.fixture)
+  if (!['path', 'buffer'].includes(options.reader)) {
+    throw new Error('reader must be path or buffer')
+  }
   return options
 }
 
@@ -65,8 +75,8 @@ function traverseSyncFolder(folder, PSTMessage, streamAttachments) {
   let childFolders = []
   try {
     if (folder.hasSubfolders) childFolders = folder.getSubFolders()
-  } catch (_error) {
-    counts.skippedErrors++
+  } catch (error) {
+    throw new Error('Synchronous folder traversal failed', { cause: error })
   }
   for (const childFolder of childFolders) {
     addCounts(
@@ -97,8 +107,8 @@ function traverseSyncFolder(folder, PSTMessage, streamAttachments) {
       }
       child = folder.getNextChild()
     }
-  } catch (_error) {
-    counts.skippedErrors++
+  } catch (error) {
+    throw new Error('Synchronous message traversal failed', { cause: error })
   }
   return counts
 }
@@ -119,8 +129,8 @@ async function traverseAsyncFolder(folder, AsyncPSTMessage, streamAttachments) {
         )
       }
     }
-  } catch (_error) {
-    counts.skippedErrors++
+  } catch (error) {
+    throw new Error('Asynchronous folder traversal failed', { cause: error })
   }
   try {
     for await (const child of folder.children()) {
@@ -139,8 +149,8 @@ async function traverseAsyncFolder(folder, AsyncPSTMessage, streamAttachments) {
         }
       }
     }
-  } catch (_error) {
-    counts.skippedErrors++
+  } catch (error) {
+    throw new Error('Asynchronous message traversal failed', { cause: error })
   }
   return counts
 }
@@ -172,16 +182,17 @@ async function measure(operation) {
 }
 
 async function runWorker(options) {
-  const {
-    AsyncPSTFile,
-    AsyncPSTMessage,
-    PSTFile,
-    PSTMessage
-  } = require('../dist/index.js')
+  const { AsyncPSTFile, AsyncPSTMessage, PSTFile, PSTMessage } = require(
+    options.packageRoot
+  )
   const syncOperation = () => {
     const total = emptyCounts()
     for (let index = 0; index < options.concurrency; index++) {
-      const pst = new PSTFile(options.fixture)
+      const source =
+        options.reader === 'buffer'
+          ? readFileSync(options.fixture)
+          : options.fixture
+      const pst = new PSTFile(source)
       try {
         addCounts(
           total,
@@ -200,7 +211,11 @@ async function runWorker(options) {
   const asyncOperation = async () => {
     const results = await Promise.all(
       Array.from({ length: options.concurrency }, async () => {
-        const pst = await AsyncPSTFile.open(options.fixture)
+        const source =
+          options.reader === 'buffer'
+            ? await readFile(options.fixture)
+            : options.fixture
+        const pst = await AsyncPSTFile.open(source)
         try {
           return await traverseAsyncFolder(
             await pst.getRootFolder(),
@@ -263,7 +278,11 @@ async function runCoordinator(options) {
     String(options.warmup),
     '--concurrency',
     String(options.concurrency),
-    ...(options.streamAttachments ? ['--stream-attachments'] : [])
+    ...(options.streamAttachments ? ['--stream-attachments'] : []),
+    '--reader',
+    options.reader,
+    '--package-root',
+    options.packageRoot
   ]
   const results = {}
   for (const variant of ['sync', 'async']) {
@@ -290,6 +309,11 @@ async function runCoordinator(options) {
   if (JSON.stringify(workload) !== JSON.stringify(results.async.counts)) {
     throw new Error(
       `Sync and async traversed different workloads: ${JSON.stringify({ sync: workload, async: results.async.counts })}`
+    )
+  }
+  if (workload.skippedErrors !== 0) {
+    throw new Error(
+      `Benchmark encountered ${workload.skippedErrors} unexpected parser error(s)`
     )
   }
   console.log(`Fixture: ${options.fixture}`)

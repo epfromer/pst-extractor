@@ -1,14 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Long from 'long'
-import { DescriptorIndexNode } from './DescriptorIndexNode.class'
-import { OffsetIndexItem } from './OffsetIndexItem.class'
-import { OutlookProperties } from './OutlookProperties'
-import { PSTDescriptorItem } from './PSTDescriptorItem.class'
-import { PSTFile } from './PSTFile.class'
-import { PSTNodeInputStream } from './PSTNodeInputStream.class'
-import { PSTTableBC } from './PSTTableBC.class'
-import { PSTTableItem } from './PSTTableItem.class'
-import { PSTUtil } from './PSTUtil.class'
+import { DescriptorIndexNode } from './DescriptorIndexNode.class.js'
+import { OffsetIndexItem } from './OffsetIndexItem.class.js'
+import { OutlookProperties } from './OutlookProperties.js'
+import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
+import { PSTFile } from './PSTFile.class.js'
+import { PSTNodeInputStream } from './PSTNodeInputStream.class.js'
+import { PSTTableBC } from './PSTTableBC.class.js'
+import { PSTTableItem } from './PSTTableItem.class.js'
+import { PSTUtil } from './PSTUtil.class.js'
+import { rethrowAsyncCacheMiss } from './PSTError.js'
 
 export abstract class PSTObject {
   protected pstFile: PSTFile
@@ -272,6 +272,7 @@ export abstract class PSTObject {
 
           return PSTUtil.createJavascriptString(data, stringType, codepage)
         } catch (_err) {
+          rethrowAsyncCacheMiss(_err)
           return ''
         }
       }

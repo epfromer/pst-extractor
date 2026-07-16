@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Long from 'long'
-import { NodeInfo } from './NodeInfo.class'
-import { PSTNodeInputStream } from './PSTNodeInputStream.class'
-import { PSTDescriptorItem } from './PSTDescriptorItem.class'
+import { NodeInfo } from './NodeInfo.class.js'
+import { PSTNodeInputStream } from './PSTNodeInputStream.class.js'
+import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
+import { rethrowAsyncCacheMiss } from './PSTError.js'
 
 // The PST Table is the workhorse of the whole system.
 // It allows for an item to be read and broken down into the individual properties that it consists of.
@@ -143,6 +143,7 @@ export abstract class PSTTable {
         )
         subNodeInfo = new NodeInfo(0, subNodeIn.length.toNumber(), subNodeIn)
       } catch (err) {
+        rethrowAsyncCacheMiss(err)
         throw new Error(
           'PSTTable::getNodeInfo: IOException reading subNode:\n' + err
         )
@@ -216,7 +217,7 @@ export abstract class PSTTable {
         sizeOfItemValue: this.sizeOfItemValue,
         hidRoot: this.hidRoot,
         numberOfKeys: this.numberOfKeys,
-        numberOfIndexLevels: this.numberOfIndexLevels,
+        numberOfIndexLevels: this.numberOfIndexLevels
       },
       this
     )

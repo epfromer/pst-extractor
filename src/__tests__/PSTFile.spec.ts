@@ -1,5 +1,5 @@
-import { PSTFile } from '../PSTFile.class'
-const resolve = require('path').resolve
+import { PSTFile } from '../PSTFile.class.js'
+import { resolve } from 'node:path'
 let pstFile: PSTFile
 
 beforeAll(() => {
@@ -34,9 +34,7 @@ describe('PSTfile tests', () => {
   })
 
   it('closes idempotently and rejects reads after close', () => {
-    const isolated = new PSTFile(
-      resolve('./src/__tests__/testdata/enron.pst')
-    )
+    const isolated = new PSTFile(resolve('./src/__tests__/testdata/enron.pst'))
     isolated.close()
     isolated.close()
     expect(() => isolated.read(0)).toThrow(

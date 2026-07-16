@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { DescriptorIndexNode } from './DescriptorIndexNode.class'
-import { OutlookProperties } from './OutlookProperties'
-import { PSTDescriptorItem } from './PSTDescriptorItem.class'
-import { PSTMessage } from './PSTMessage.class'
-import { PSTTableBC } from './PSTTableBC.class'
-import { PSTFile } from './PSTFile.class'
-import { RecurrencePattern } from './RecurrencePattern.class'
+import { DescriptorIndexNode } from './DescriptorIndexNode.class.js'
+import { OutlookProperties } from './OutlookProperties.js'
+import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
+import { PSTMessage } from './PSTMessage.class.js'
+import { PSTTableBC } from './PSTTableBC.class.js'
+import { PSTFile } from './PSTFile.class.js'
+import { RecurrencePattern } from './RecurrencePattern.class.js'
 
 export class PSTTask extends PSTMessage {
   /**
@@ -302,7 +301,7 @@ export class PSTTask extends PSTMessage {
         taskOrdinal: this.taskOrdinal,
         isTaskRecurring: this.isTaskRecurring,
         taskOwnership: this.taskOwnership,
-        acceptanceState: this.acceptanceState,
+        acceptanceState: this.acceptanceState
       },
       this
     )

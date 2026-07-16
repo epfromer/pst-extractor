@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Long from 'long'
-import { OutlookProperties } from './OutlookProperties'
-import { PSTDescriptorItem } from './PSTDescriptorItem.class'
-import { PSTFile } from './PSTFile.class'
-import { PSTMessage } from './PSTMessage.class'
-import { PSTNodeInputStream } from './PSTNodeInputStream.class'
-import { PSTObject } from './PSTObject.class'
-import { PSTTableBC } from './PSTTableBC.class'
-import { PSTUtil } from './PSTUtil.class'
+import { OutlookProperties } from './OutlookProperties.js'
+import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
+import { PSTFile } from './PSTFile.class.js'
+import { PSTMessage } from './PSTMessage.class.js'
+import { PSTNodeInputStream } from './PSTNodeInputStream.class.js'
+import { PSTObject } from './PSTObject.class.js'
+import { PSTTableBC } from './PSTTableBC.class.js'
+import { PSTUtil } from './PSTUtil.class.js'
 
 // Class containing attachment information.
 export class PSTAttachment extends PSTObject {
@@ -355,7 +354,7 @@ export class PSTAttachment extends PSTObject {
         mimeSequence: this.mimeSequence,
         contentId: this.contentId,
         isAttachmentInvisibleInHtml: this.isAttachmentInvisibleInHtml,
-        isAttachmentInvisibleInRTF: this.isAttachmentInvisibleInRTF,
+        isAttachmentInvisibleInRTF: this.isAttachmentInvisibleInRTF
       },
       this
     )

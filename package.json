@@ -1,46 +1,60 @@
 {
   "name": "pst-extractor",
-  "version": "2.0.0",
+  "version": "3.0.0",
+  "type": "module",
   "description": "Extract objects from MS Outlook/Exchange PST files",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "readme.md",
+    "LICENSE"
+  ],
   "engines": {
-    "node": ">=22"
+    "node": ">=24.12"
   },
   "packageManager": "pnpm@11.9.0",
   "scripts": {
-    "prebuild": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
-    "build": "tsc",
-    "lint": "eslint src benchmark --max-warnings=0",
-    "test": "cross-env CI=1 jest --coverage --reporters=default --reporters=jest-junit",
-    "check": "pnpm run lint && pnpm run test && pnpm run build",
+    "prebuild": "node scripts/clean.mjs",
+    "build": "tsc -p tsconfig.esm.json && tsc -p tsconfig.types.json && node scripts/prepare-cjs.mjs && tsc -p tsconfig.cjs.json && node scripts/finalize-build.mjs",
+    "lint": "oxlint --type-aware --type-check --tsconfig tsconfig.esm.json --deny-warnings --report-unused-disable-directives src/*.ts && oxlint --type-aware --deny-warnings --report-unused-disable-directives src/__tests__ benchmark scripts tests && tsc -p tsconfig.test.json",
+    "format:check": "prettier --check .",
+    "test": "CI=1 NODE_OPTIONS=--experimental-vm-modules jest --coverage --reporters=default --reporters=jest-junit",
+    "package:smoke": "node tests/package-smoke.mjs",
+    "license:check": "node scripts/license-check.mjs",
+    "check": "pnpm run lint && pnpm run format:check && pnpm run test && pnpm run build && pnpm run package:smoke",
     "benchmark": "pnpm run build && node benchmark/async-vs-sync.mjs",
-    "security:audit": "pnpm audit --audit-level high"
+    "benchmark:compare": "node benchmark/compare.mjs",
+    "security:audit": "pnpm audit --audit-level high",
+    "benchmark:smoke": "pnpm run build && node benchmark/async-vs-sync.mjs --iterations 2 --warmup 1 --concurrency 4"
   },
   "repository": "epfromer/pst-extractor",
   "author": "Ed Pfromer (epfromer@gmail.com)",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.29.7",
-    "@babel/preset-env": "^7.29.7",
-    "@babel/preset-typescript": "^7.29.7",
+    "@babel/core": "8.0.1",
+    "@babel/preset-env": "8.0.2",
+    "@babel/preset-typescript": "8.0.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^22.20.1",
-    "@typescript-eslint/eslint-plugin": "^8.64.0",
-    "@typescript-eslint/parser": "^8.64.0",
-    "babel-jest": "^30.4.1",
-    "cross-env": "^10.1.0",
-    "eslint": "^10.7.0",
-    "eslint-config-prettier": "^10.1.8",
+    "@types/node": "^24.10.0",
     "jest": "^30.4.2",
     "jest-junit": "^17.0.0",
+    "oxlint": "1.74.0",
+    "oxlint-tsgolint": "0.24.0",
     "prettier": "^3.9.5",
-    "typescript": "^5.9.3"
+    "typescript": "7.0.2"
   },
   "dependencies": {
     "iconv-lite": "^0.7.3",
-    "long": "^5.3.2",
-    "uuid-parse": "^1.1.0"
+    "long": "^5.3.2"
   },
   "prettier": {
     "semi": false,
@@ -48,13 +62,18 @@
     "trailingComma": "none",
     "endOfLine": "auto"
   },
-  "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-typescript"
-    ]
-  },
   "jest": {
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "transform": {
+      "^.+\\.ts$": [
+        "<rootDir>/scripts/babel8-jest-transformer.cjs"
+      ]
+    },
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
     "testMatch": [
       "<rootDir>/src/__tests__/**/*.spec.ts"
     ],
@@ -65,6 +84,7 @@
     "coverageReporters": [
       "text",
       "cobertura"
-    ]
+    ],
+    "coverageProvider": "v8"
   }
 }

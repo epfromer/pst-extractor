@@ -1,15 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Long from 'long'
-import { DescriptorIndexNode } from './DescriptorIndexNode.class'
-import { OutlookProperties } from './OutlookProperties'
-import { PSTDescriptorItem } from './PSTDescriptorItem.class'
-import { PSTFile } from './PSTFile.class'
-import { PSTNodeInputStream } from './PSTNodeInputStream.class'
-import { PSTTable7C } from './PSTTable7C.class'
-import { PSTTableBC } from './PSTTableBC.class'
-import { PSTTableItem } from './PSTTableItem.class'
-import { PSTObject } from './PSTObject.class'
-import { PSTUtil } from './PSTUtil.class'
+import { DescriptorIndexNode } from './DescriptorIndexNode.class.js'
+import { OutlookProperties } from './OutlookProperties.js'
+import { PSTDescriptorItem } from './PSTDescriptorItem.class.js'
+import { PSTFile } from './PSTFile.class.js'
+import { PSTNodeInputStream } from './PSTNodeInputStream.class.js'
+import { PSTTable7C } from './PSTTable7C.class.js'
+import { PSTTableBC } from './PSTTableBC.class.js'
+import { PSTTableItem } from './PSTTableItem.class.js'
+import { PSTObject } from './PSTObject.class.js'
+import { PSTUtil } from './PSTUtil.class.js'
+import { rethrowAsyncCacheMiss } from './PSTError.js'
 
 /**
  * Represents a folder in the PST File.  Allows you to access child folders or items.
@@ -24,6 +24,11 @@ export class PSTFolder extends PSTObject {
   private subfoldersTable: PSTTable7C | null = null
   private emailsTable: PSTTable7C | null = null
   private fallbackEmailsTable: DescriptorIndexNode[] | null = null
+
+  /** Current child cursor index for transactional asynchronous retries. */
+  public get childCursorPosition(): number {
+    return this.currentEmailIndex
+  }
 
   /**
    * Creates an instance of PSTFolder.
@@ -165,6 +170,7 @@ export class PSTFolder extends PSTObject {
       )
       this.emailsTable = new PSTTable7C(pstNodeInputStream, tmp, 0x67f2)
     } catch (err) {
+      rethrowAsyncCacheMiss(err)
       // fallback to children as listed in the descriptor b-tree
       // console.log(`PSTFolder::initEmailsTable Can't get child folders for folder {this.displayName}, resorting to using alternate tree`);
       const tree = this.pstFile.getChildDescriptorTree()
@@ -221,6 +227,7 @@ export class PSTFolder extends PSTObject {
       try {
         child = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor)
       } catch (_err) {
+        rethrowAsyncCacheMiss(_err)
         this.currentEmailIndex++
         return this.getNextChild()
       }
@@ -378,7 +385,7 @@ export class PSTFolder extends PSTObject {
         unreadCount: this.unreadCount,
         hasSubfolders: this.hasSubfolders,
         containerClass: this.containerClass,
-        containerFlags: this.containerFlags,
+        containerFlags: this.containerFlags
       },
       this
     )

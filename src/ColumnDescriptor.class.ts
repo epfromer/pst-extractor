@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Long from 'long'
-import { NodeInfo } from './NodeInfo.class'
+import { NodeInfo } from './NodeInfo.class.js'
 
 export class ColumnDescriptor {
   private _ibData: number
