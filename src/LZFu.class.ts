@@ -45,8 +45,9 @@ export class LZFu {
         const bytes: Buffer = Buffer.from(LZFu.LZFU_HEADER) //getBytes("US-ASCII");
         PSTUtil.arraycopy(bytes, 0, lzBuffer, 0, LZFu.LZFU_HEADER.length)
       } catch (err) {
-        console.error('LZFu::decode cant preload buffer\n' + err)
-        throw err
+        throw new Error('Unable to preload the LZFu decode buffer', {
+          cause: err
+        })
       }
       let bufferPosition = LZFu.LZFU_HEADER.length
       let currentDataPosition = 16
@@ -82,10 +83,9 @@ export class LZFu {
                 index %= 4096
               }
             } catch (err) {
-              console.error(
-                'LZFu::decode copy the data from the buffer\n' + err
-              )
-              throw err
+              throw new Error('Unable to copy LZFu decoded data', {
+                cause: err
+              })
             }
           } else {
             // copy the byte over

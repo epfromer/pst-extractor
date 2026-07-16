@@ -73,13 +73,10 @@ export class PSTFolder extends PSTObject {
         }
       }
     } catch (err) {
-      console.error(
-        "PSTFolder::getSubFolders Can't get child folders for folder " +
-          this.displayName +
-          '\n' +
-          err
+      throw new Error(
+        `Unable to get subfolders for folder ${this.displayName}`,
+        { cause: err }
       )
-      throw err
     }
     return output
   }
@@ -123,13 +120,10 @@ export class PSTFolder extends PSTObject {
       )
       this.subfoldersTable = new PSTTable7C(pstNodeInputStream, tmp)
     } catch (err) {
-      console.error(
-        "PSTFolder::initSubfoldersTable Can't get child folders for folder " +
-          this.displayName +
-          '\n' +
-          err
+      throw new Error(
+        `Unable to initialize subfolders for folder ${this.displayName}`,
+        { cause: err }
       )
-      throw err
     }
   }
 
@@ -226,8 +220,7 @@ export class PSTFolder extends PSTObject {
       let child
       try {
         child = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor)
-      } catch (err) {
-        console.log('Exception Error in No: ', this.currentEmailIndex)
+      } catch (_err) {
         this.currentEmailIndex++
         return this.getNextChild()
       }

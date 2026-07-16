@@ -4,6 +4,8 @@
 
 Extract objects from MS Outlook/Exchange PST files
 
+Version 2 requires Node.js 22 or newer. pnpm is the supported package manager for development.
+
 ## Features
 
 Extract objects from MS Outlook/Exchange PST files.
@@ -16,13 +18,83 @@ Note that this tool does NOT work with corrupt PST files.
 
 ## Install
 
-```npm install --save pst-extractor```
+`npm install --save pst-extractor`
 
 or
 
-```yarn add pst-extractor```
+`yarn add pst-extractor`
 
 ## Usage
+
+### Async API (recommended)
+
+`AsyncPSTFile` opens paths through positional asynchronous reads. Folder traversals are lazy and independent, and attachment chunks naturally honor consumer backpressure.
+
+```typescript
+import { AsyncPSTFile, AsyncPSTMessage } from 'pst-extractor'
+
+const pst = await AsyncPSTFile.open('/path/to/archive.pst')
+try {
+  const root = await pst.getRootFolder()
+
+  for await (const folder of root.subFolders()) {
+    for await (const object of folder.children()) {
+      if (object instanceof AsyncPSTMessage) {
+        console.log(object.subject, await object.getBody())
+
+        for (let index = 0; index < object.numberOfAttachments; index++) {
+          const attachment = await object.getAttachment(index)
+          for await (const chunk of attachment.chunks({
+            chunkSize: 64 * 1024
+          })) {
+            // Forward the chunk to a backpressure-aware destination.
+          }
+        }
+      }
+    }
+  }
+} finally {
+  await pst.close()
+}
+```
+
+Paths, `Buffer` instances, and custom `AsyncRandomAccessReader` implementations are accepted. A supplied reader remains caller-owned unless `ownsReader: true` is set. All asynchronous operations accept an optional `AbortSignal`.
+
+`children()` and `subFolders()` create reusable, independent traversals. `getNextChild()` remains available for migration from the synchronous API, but its cursor is stateful and must not be used concurrently.
+
+`readBuffer()` deliberately requires callers to consider memory limits. Server applications should configure `maxFileBytes` and `maxBufferedValueBytes` and prefer `chunks()` or `createReadStream()` for attachments:
+
+```typescript
+const pst = await AsyncPSTFile.open(reader, {
+  ownsReader: true,
+  signal: request.signal,
+  limits: {
+    maxFileBytes: 2 * 1024 ** 3,
+    maxBufferedValueBytes: 16 * 1024 ** 2,
+    maxDecompressedBytes: 64 * 1024 ** 2,
+    maxTableRows: 100_000
+  }
+})
+```
+
+### Benchmark
+
+Der Benchmark traversiert rekursiv alle Ordner und Nachrichten, lädt Nachrichtentexte und erfasst Attachment-Metadaten. Sync und Async laufen in getrennten Prozessen. Standardmäßig werden ein Warm-up, fünf Messläufe und zwei Archive pro Messlauf verwendet:
+
+```bash
+pnpm run benchmark
+```
+
+Parameter können nach `--` übergeben werden:
+
+```bash
+pnpm run benchmark -- /path/to/archive.pst \
+  --warmup 2 --iterations 10 --concurrency 4 --stream-attachments
+```
+
+`--stream-attachments` liest zusätzlich sämtliche Attachment-Daten und verlängert den Lauf entsprechend.
+
+### Synchronous API
 
 Start with the example app to walk the PST and print out the folder structure to the console. Also, most of the major objects have Jest test specs which show how the object attributes can be accessed.
 
@@ -80,8 +152,8 @@ function processFolder(folder: PSTFolder) {
         depth++;
         let email: PSTMessage = folder.getNextChild();
         while (email != null) {
-            console.log(getDepth(depth) + 
-                'Sender: ' + email.senderName + 
+            console.log(getDepth(depth) +
+                'Sender: ' + email.senderName +
                 ', Subject: ' + email.subject);
             email = folder.getNextChild();
         }
@@ -187,7 +259,7 @@ Personal folders
  |  |  |  |  |- Sender: Hitschel  Bonnie V. BHitschel@tesoropetroleum.com@ENRON, Subject: Just for fun
  |  |  |  |  |- Sender: Stevens  Missy, Subject: RE: Enron Efforts to the Flood victims
  |  |  |  |  |- Sender: Stuart  Charla, Subject: RE: OPEN ENROLLMENT FOR ENRON KIDS' CENTER IS UNDERWAY!!!
- |  |  |  |  |- Sender: Goradia, Subject: 
+ |  |  |  |  |- Sender: Goradia, Subject:
  |  |  |  |  |- Sender: jacammarano@pplweb.com@ENRON, Subject: Invitation to Golf Outing
  |  |  |  |  |- Sender: Horton  Stanley, Subject: GOOD JOB!
  |  |  |  |  |- Sender: tsschuler@pplweb.com@ENRON, Subject: PPL EnergyPlus Golf Outing
@@ -195,25 +267,26 @@ Personal folders
  |- Search Root
  |- SPAM Search Folder 2
 ```
+
 ## Commonly Used Properties - PSTMessage
 
 Note that this is a subset, and all properties are outlined in the respective object .ts file.
 
-Property | Type | Description | Detailed Doco
---- |:---:|---|---
-body | string | Plain text message body. | https://msdn.microsoft.com/en-us/library/office/cc765874.aspx
-clientSubmitTime | date | Contains the date and time the message sender submitted a message. | https://technet.microsoft.com/en-us/library/cc839781
-displayBCC | string | Contains an ASCII list of the display names of any blind carbon copy (BCC) message recipients, separated by semicolons (;). | https://msdn.microsoft.com/en-us/library/office/cc815730.aspx
-displayCC | string | Contains an ASCII list of the display names of any carbon copy (CC) message recipients, separated by semicolons (;). | https://msdn.microsoft.com/en-us/library/office/cc765528.aspx
-displayTo | string | Contains a list of the display names of the primary (To) message recipients, separated by semicolons (;). | https://msdn.microsoft.com/en-us/library/office/cc839687.aspx
-getAttachment | PSTAttachment | Get specific attachment from table using index. | 
-hasAttachments | boolean | The message has at least one attachment. | https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
-isRead | boolean | The message is marked as having been read. | https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx
-messageClass | string | Contains a text string that identifies the sender-defined message class, such as IPM.Note. | https://msdn.microsoft.com/en-us/library/office/cc765765.aspx
-receivedByName | string | Contains the display name of the messaging user who receives the message. | https://msdn.microsoft.com/en-us/library/office/cc840015.aspx
-senderEmailAddress | string | Contains the message sender's e-mail address. | https://msdn.microsoft.com/en-us/library/office/cc839670.aspx
-senderName | string | Contains the message sender's display name. | https://msdn.microsoft.com/en-us/library/office/cc815457.aspx
-subject | string | Contains the full subject of a message. | https://technet.microsoft.com/en-us/library/cc815720
+| Property           |     Type      | Description                                                                                                                 | Detailed Doco                                                      |
+| ------------------ | :-----------: | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| body               |    string     | Plain text message body.                                                                                                    | https://msdn.microsoft.com/en-us/library/office/cc765874.aspx      |
+| clientSubmitTime   |     date      | Contains the date and time the message sender submitted a message.                                                          | https://technet.microsoft.com/en-us/library/cc839781               |
+| displayBCC         |    string     | Contains an ASCII list of the display names of any blind carbon copy (BCC) message recipients, separated by semicolons (;). | https://msdn.microsoft.com/en-us/library/office/cc815730.aspx      |
+| displayCC          |    string     | Contains an ASCII list of the display names of any carbon copy (CC) message recipients, separated by semicolons (;).        | https://msdn.microsoft.com/en-us/library/office/cc765528.aspx      |
+| displayTo          |    string     | Contains a list of the display names of the primary (To) message recipients, separated by semicolons (;).                   | https://msdn.microsoft.com/en-us/library/office/cc839687.aspx      |
+| getAttachment      | PSTAttachment | Get specific attachment from table using index.                                                                             |
+| hasAttachments     |    boolean    | The message has at least one attachment.                                                                                    | https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx |
+| isRead             |    boolean    | The message is marked as having been read.                                                                                  | https://msdn.microsoft.com/en-us/library/ee160304(v=exchg.80).aspx |
+| messageClass       |    string     | Contains a text string that identifies the sender-defined message class, such as IPM.Note.                                  | https://msdn.microsoft.com/en-us/library/office/cc765765.aspx      |
+| receivedByName     |    string     | Contains the display name of the messaging user who receives the message.                                                   | https://msdn.microsoft.com/en-us/library/office/cc840015.aspx      |
+| senderEmailAddress |    string     | Contains the message sender's e-mail address.                                                                               | https://msdn.microsoft.com/en-us/library/office/cc839670.aspx      |
+| senderName         |    string     | Contains the message sender's display name.                                                                                 | https://msdn.microsoft.com/en-us/library/office/cc815457.aspx      |
+| subject            |    string     | Contains the full subject of a message.                                                                                     | https://technet.microsoft.com/en-us/library/cc815720               |
 
 ## Author
 

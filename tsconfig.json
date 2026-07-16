@@ -1,18 +1,14 @@
 {
-    "compilerOptions": {
-        "declaration": true,
-        "esModuleInterop": true,
-        "module": "commonjs",
-        "noImplicitAny": true,
-        "outDir": "./dist",
-        "strict": true,
-        "target": "es6"
-    },
-    "exclude": [
-        "node_modules",
-        "src/__tests__/*"
-    ],
-    "include": [
-        "src/**/*"
-    ]
+  "compilerOptions": {
+    "declaration": true,
+    "esModuleInterop": true,
+    "lib": ["ES2023", "ESNext.Disposable"],
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "outDir": "./dist",
+    "strict": true,
+    "target": "ES2022"
+  },
+  "exclude": ["node_modules", "src/__tests__/*"],
+  "include": ["src/**/*"]
 }

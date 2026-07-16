@@ -934,10 +934,7 @@ export class PSTUtil {
           localDescriptorItems
         )
       default:
-        console.error(
-          'PSTUtil::createAppropriatePSTMessageObject unknown message type: ' +
-          messageClass
-        )
+        break
     }
     return new PSTMessage(theFile, folderIndexNode, table, localDescriptorItems)
   }

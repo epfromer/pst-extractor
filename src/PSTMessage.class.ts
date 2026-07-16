@@ -214,8 +214,7 @@ export class PSTMessage extends PSTObject {
           descriptorItems
         )
       }
-    } catch (err) {
-      console.error('PSTMessage::processRecipients\n' + err)
+    } catch (_err) {
       this.recipientTable = null
     }
   }
@@ -490,8 +489,7 @@ export class PSTMessage extends PSTObject {
   public get numberOfAttachments(): number {
     try {
       this.processAttachments()
-    } catch (err) {
-      console.error('PSTMessage::numberOfAttachments\n' + err)
+    } catch (_err) {
       return 0
     }
     return this.attachmentTable ? this.attachmentTable.rowCount : 0
@@ -1293,7 +1291,7 @@ export class PSTMessage extends PSTObject {
    * @memberof PSTMessage
    */
   public get colorCategories(): string[] {
-    const keywordCategory: number = PSTFile.getPublicStringToIdMapItem(
+    const keywordCategory: number = this.pstFile.getPublicStringToIdMapItem(
       'Keywords'
     )
 
@@ -1335,10 +1333,9 @@ export class PSTMessage extends PSTObject {
           }
         }
       } catch (err) {
-        console.error(
-          'PSTMessage::colorCategories Unable to decode category data\n' + err
-        )
-        throw err
+        throw new Error('Unable to decode message category data', {
+          cause: err
+        })
       }
     }
     return categories

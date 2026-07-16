@@ -216,12 +216,6 @@ export abstract class PSTObject {
         // we are a long
         if (item.data != null && item.data.length == 8) {
           return PSTUtil.convertLittleEndianBytesToLong(item.data, 0, 8)
-        } else {
-          console.error(
-            'PSTObject::getLongItem Invalid data length for long id ' +
-              identifier
-          )
-          // Return the default value for now...
         }
       }
     }
@@ -277,10 +271,7 @@ export abstract class PSTObject {
           }
 
           return PSTUtil.createJavascriptString(data, stringType, codepage)
-        } catch (err) {
-          console.error(
-            'PSTObject::getStringItem error decoding string\n' + err
-          )
+        } catch (_err) {
           return ''
         }
       }
@@ -352,8 +343,9 @@ export abstract class PSTObject {
           try {
             return descItem ? descItem.getData() : null
           } catch (err) {
-            console.error('PSTObject::Exception reading binary item\n' + err)
-            throw err
+            throw new Error('Unable to read binary PST property', {
+              cause: err
+            })
           }
         }
       }

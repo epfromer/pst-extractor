@@ -5,6 +5,7 @@ import { PSTDescriptorItem } from './PSTDescriptorItem.class'
 import { PSTUtil } from './PSTUtil.class'
 import { OffsetIndexItem } from './OffsetIndexItem.class'
 import { PSTFile } from './PSTFile.class'
+import { PSTError } from './PSTError'
 
 export class PSTNodeInputStream {
   private skipPoints: Long[] = []
@@ -145,11 +146,9 @@ export class PSTNodeInputStream {
       }
       this.seek(Long.ZERO)
     } catch (err) {
-      console.error(
-        'PSTNodeInputStream::detectZlib Unable to decompress reportedly compressed block\n' +
-        err
-      )
-      throw err
+      throw new PSTError('CORRUPT_DATA', 'Unable to decompress PST block', {
+        cause: err
+      })
     }
   }
 

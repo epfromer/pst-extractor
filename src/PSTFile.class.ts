@@ -10,6 +10,7 @@ import { PSTTableBC } from './PSTTableBC.class'
 import { PSTTableItem } from './PSTTableItem.class'
 import { PSTUtil } from './PSTUtil.class'
 import { NodeMap } from './NodeMap.class'
+import { PSTEOFError, PSTError } from './PSTError'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const uuidparse = require('uuid-parse')
 
@@ -77,10 +78,11 @@ export class PSTFile {
   > | null = null
 
   // node tree maps
-  private static nodeMap: NodeMap = new NodeMap()
+  private readonly nodeMap: NodeMap = new NodeMap()
 
   // file descriptor
-  private pstFD: number
+  private pstFD = -1
+  private closed = false
 
   // in-memory file buffer (instead of filesystem)
   private pstBuffer: Buffer = Buffer.alloc(0)
@@ -103,60 +105,83 @@ export class PSTFile {
     } else {
       // use PST in filesystem
       this._pstFilename = arg
-      this.pstFD = fs.openSync(this._pstFilename, 'r')
+      try {
+        this.pstFD = fs.openSync(this._pstFilename, 'r')
+      } catch (error) {
+        throw new PSTError(
+          'NOT_FOUND',
+          `Unable to open PST source: ${this._pstFilename}`,
+          { cause: error }
+        )
+      }
     }
 
-    // confirm first 4 bytes are !BDN
-    const buffer = Buffer.alloc(514)
-    this.readSync(buffer, 514, 0)
-    const key = '!BDN'
-    if (
-      buffer[0] != key.charCodeAt(0) ||
-      buffer[1] != key.charCodeAt(1) ||
-      buffer[2] != key.charCodeAt(2) ||
-      buffer[3] != key.charCodeAt(3)
-    ) {
-      throw new Error(
-        'PSTFile::open Invalid file header (expected: "!BDN"): ' + buffer
-      )
-    }
+    try {
+      // confirm first 4 bytes are !BDN
+      const buffer = Buffer.alloc(514)
+      this.readSync(buffer, 514, 0)
+      const key = '!BDN'
+      if (
+        buffer[0] != key.charCodeAt(0) ||
+        buffer[1] != key.charCodeAt(1) ||
+        buffer[2] != key.charCodeAt(2) ||
+        buffer[3] != key.charCodeAt(3)
+      ) {
+        throw new PSTError(
+          'INVALID_HEADER',
+          'Invalid PST file header (expected "!BDN")'
+        )
+      }
 
-    // make sure we are using a supported version of a PST...
-    if (buffer[10] === PSTFile.PST_TYPE_ANSI_2) {
-      buffer[10] = PSTFile.PST_TYPE_ANSI
-    }
-    if (
-      buffer[10] !== PSTFile.PST_TYPE_ANSI &&
-      buffer[10] !== PSTFile.PST_TYPE_UNICODE &&
-      buffer[10] !== PSTFile.PST_TYPE_2013_UNICODE
-    ) {
-      throw new Error(
-        'PSTFile::open Unrecognised PST File version: ' + buffer[10]
-      )
-    }
-    this._pstFileType = buffer[10]
+      // make sure we are using a supported version of a PST...
+      if (buffer[10] === PSTFile.PST_TYPE_ANSI_2) {
+        buffer[10] = PSTFile.PST_TYPE_ANSI
+      }
+      if (
+        buffer[10] !== PSTFile.PST_TYPE_ANSI &&
+        buffer[10] !== PSTFile.PST_TYPE_UNICODE &&
+        buffer[10] !== PSTFile.PST_TYPE_2013_UNICODE
+      ) {
+        throw new PSTError(
+          'UNSUPPORTED_VERSION',
+          'Unrecognised PST file version: ' + buffer[10]
+        )
+      }
+      this._pstFileType = buffer[10]
 
-    // make sure no encryption
-    if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
-      this._encryptionType = buffer[461]
-    } else {
-      this._encryptionType = buffer[513]
-    }
-    if (this._encryptionType === 0x02) {
-      throw new Error('PSTFile::open PST is encrypted')
-    }
+      // make sure no encryption
+      if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+        this._encryptionType = buffer[461]
+      } else {
+        this._encryptionType = buffer[513]
+      }
+      if (this._encryptionType === 0x02) {
+        throw new PSTError(
+          'UNSUPPORTED_VERSION',
+          'Encrypted PST files are unsupported'
+        )
+      }
 
-    // build out name to id map
-    this.processNameToIDMap()
+      // build out name to id map
+      this.processNameToIDMap()
+    } catch (error) {
+      this.close()
+      throw error
+    }
   }
 
   /**
    * Close the file.
    * @memberof PSTFile
    */
-  public close() {
-    if (this.pstFD > 0) {
+  public close(): void {
+    if (this.closed) {
+      return
+    }
+    this.closed = true
+    if (this.pstFD >= 0) {
       fs.closeSync(this.pstFD)
+      this.pstFD = -1
     }
   }
 
@@ -287,7 +312,7 @@ export class PSTFile {
         } else {
           guidIndex = guidIndexes[guid - 3]
         }
-        PSTFile.nodeMap.setId(key, propId, guidIndex)
+        this.nodeMap.setId(key, propId, guidIndex)
       } else {
         // identifier is a string
         // key is byte offset into the String stream in which the string name of the property is stored.
@@ -306,7 +331,7 @@ export class PSTFile {
             keyByteValue.length
           )
           propId += 0x8000
-          PSTFile.nodeMap.setId(
+          this.nodeMap.setId(
             keyByteValue.toString('utf16le').replace(/\0/g, ''),
             propId
           )
@@ -360,7 +385,7 @@ export class PSTFile {
    * @memberof PSTFile
    */
   public getNameToIdMapItem(key: number, idx: number): number {
-    return PSTFile.nodeMap.getId(key, idx)
+    return this.nodeMap.getId(key, idx)
   }
 
   /**
@@ -370,8 +395,8 @@ export class PSTFile {
    * @returns {number}
    * @memberof PSTFile
    */
-  public static getPublicStringToIdMapItem(key: string): number {
-    return PSTFile.nodeMap.getId(key)
+  public getPublicStringToIdMapItem(key: string): number {
+    return this.nodeMap.getId(key)
   }
 
   /**
@@ -382,7 +407,7 @@ export class PSTFile {
    * @returns {string}
    * @memberof PSTFile
    */
-  public static getPropertyName(
+  public getPropertyName(
     propertyId: number,
     bNamed: boolean
   ): string | undefined {
@@ -396,8 +421,8 @@ export class PSTFile {
    * @returns {long}
    * @memberof PSTFile
    */
-  public static getNameToIdMapKey(propId: number): Long | undefined {
-    return PSTFile.nodeMap.getNumericName(propId)
+  public getNameToIdMapKey(propId: number): Long | undefined {
+    return this.nodeMap.getNumericName(propId)
   }
 
   /**
@@ -950,10 +975,11 @@ export class PSTFile {
    * @memberof PSTFile
    */
   public read(position?: number): number {
-    const pos = position ? position : this.position
+    const pos = position !== undefined ? position : this.position
     const buffer = Buffer.alloc(1)
     const bytesRead = this.readSync(buffer, buffer.length, pos)
-    this.position = position ? position + bytesRead : this.position + bytesRead
+    this.position =
+      position !== undefined ? position + bytesRead : this.position + bytesRead
     return buffer[0]
   }
 
@@ -964,10 +990,11 @@ export class PSTFile {
    * @returns
    * @memberof PSTFile
    */
-  public readCompletely(buffer: Buffer, position?: number) {
-    const pos = position ? position : this.position
+  public readCompletely(buffer: Buffer, position?: number): void {
+    const pos = position !== undefined ? position : this.position
     const bytesRead = this.readSync(buffer, buffer.length, pos)
-    this.position = position ? position + bytesRead : this.position + bytesRead
+    this.position =
+      position !== undefined ? position + bytesRead : this.position + bytesRead
   }
 
   /**
@@ -979,10 +1006,24 @@ export class PSTFile {
    * @memberof PSTFile
    */
   private readSync(buffer: Buffer, length: number, position: number): number {
-    if (this.pstFD > 0) {
+    if (this.closed) {
+      throw new PSTError('CLOSED', 'The PST file is closed')
+    }
+    if (this.pstFD >= 0) {
       // read from file system
-      return fs.readSync(this.pstFD, buffer, 0, length, position)
+      const bytesRead = fs.readSync(this.pstFD, buffer, 0, length, position)
+      if (bytesRead !== length) {
+        throw new PSTEOFError(position, length, buffer.subarray(0, bytesRead))
+      }
+      return bytesRead
     } else {
+      if (position + length > this.pstBuffer.length) {
+        throw new PSTEOFError(
+          position,
+          length,
+          this.pstBuffer.subarray(position, this.pstBuffer.length)
+        )
+      }
       // copy from in-memory buffer
       this.pstBuffer.copy(buffer, 0, position, position + length)
       return length

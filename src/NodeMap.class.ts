@@ -42,14 +42,14 @@ export class NodeMap {
    */
   public getId(key: any, idx?: number): number {
     let id: number | undefined = undefined
-    if (typeof key === 'number' && idx) {
+    if (typeof key === 'number' && idx !== undefined) {
       id = this.nameToId.get(this.transformKey(key, idx).toString())
     } else if (typeof key === 'string') {
       id = this.nameToId.get(key)
     } else {
       throw new Error('NodeMap::getId bad param type ' + typeof key)
     }
-    if (!id) {
+    if (id === undefined) {
       return -1
     }
     return id

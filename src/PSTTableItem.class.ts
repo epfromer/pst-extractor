@@ -93,13 +93,7 @@ export class PSTTableItem {
           return 'External string reference!'
         }
         return this.data.toString('utf16le').replace(/\0/g, '')
-      } catch (err) {
-        console.error(
-          'Error decoding string: ' +
-            this.data.toString('utf16le').replace(/\0/g, '') +
-            '\n' +
-            err
-        )
+      } catch (_err) {
         return ''
       }
     }

@@ -129,11 +129,7 @@ export class PSTAttachment extends PSTObject {
           )
         }
       } catch (err) {
-        console.error(
-          'PSTAttachment::embeddedPSTMessage createAppropriatePSTMessageObject failed\n' +
-            err
-        )
-        throw err
+        throw new Error('Unable to create embedded PST message', { cause: err })
       }
     }
     return null
