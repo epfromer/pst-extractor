@@ -14,6 +14,11 @@ export class PSTDescriptorItem {
     return this._subNodeOffsetIndexIdentifier
   }
 
+  private _subNodeOffsetIndexIdentifierLong: Long = Long.ZERO
+  public get subNodeOffsetIndexIdentifierLong(): Long {
+    return this._subNodeOffsetIndexIdentifierLong
+  }
+
   private _descriptorIdentifier: number
   public get descriptorIdentifier(): number {
     return this._descriptorIdentifier
@@ -22,6 +27,11 @@ export class PSTDescriptorItem {
   private _offsetIndexIdentifier: number
   public get offsetIndexIdentifier(): number {
     return this._offsetIndexIdentifier
+  }
+
+  private _offsetIndexIdentifierLong: Long = Long.ZERO
+  public get offsetIndexIdentifierLong(): Long {
+    return this._offsetIndexIdentifierLong
   }
 
   /**
@@ -35,7 +45,7 @@ export class PSTDescriptorItem {
     data: Buffer,
     offset: number,
     pstFile: PSTFile,
-    entryType: number,
+    entryType: number
   ) {
     this._pstFile = pstFile
 
@@ -45,20 +55,22 @@ export class PSTDescriptorItem {
         offset,
         offset + 4
       ).toNumber()
-      this._offsetIndexIdentifier =
-        PSTUtil.convertLittleEndianBytesToLong(
-          data,
-          offset + 4,
-          offset + 8
-        ).toNumber() & 0xfffffffe
+      this._offsetIndexIdentifierLong = PSTUtil.convertLittleEndianBytesToLong(
+        data,
+        offset + 4,
+        offset + 8
+      ).and(Long.fromInt(-2))
+      this._offsetIndexIdentifier = this._offsetIndexIdentifierLong.toNumber()
 
       if (entryType == PSTFile.SLBLOCK_ENTRY) {
-        this._subNodeOffsetIndexIdentifier =
+        this._subNodeOffsetIndexIdentifierLong =
           PSTUtil.convertLittleEndianBytesToLong(
             data,
             offset + 8,
             offset + 12
-          ).toNumber() & 0xfffffffe
+          ).and(Long.fromInt(-2))
+        this._subNodeOffsetIndexIdentifier =
+          this._subNodeOffsetIndexIdentifierLong.toNumber()
       } else {
         this._subNodeOffsetIndexIdentifier = 0
       }
@@ -68,19 +80,21 @@ export class PSTDescriptorItem {
         offset,
         offset + 4
       ).toNumber()
-      this._offsetIndexIdentifier =
-        PSTUtil.convertLittleEndianBytesToLong(
-          data,
-          offset + 8,
-          offset + 16
-        ).toNumber() & 0xfffffffe
+      this._offsetIndexIdentifierLong = PSTUtil.convertLittleEndianBytesToLong(
+        data,
+        offset + 8,
+        offset + 16
+      ).and(Long.fromInt(-2))
+      this._offsetIndexIdentifier = this._offsetIndexIdentifierLong.toNumber()
       if (entryType == PSTFile.SLBLOCK_ENTRY) {
-        this._subNodeOffsetIndexIdentifier =
+        this._subNodeOffsetIndexIdentifierLong =
           PSTUtil.convertLittleEndianBytesToLong(
             data,
             offset + 16,
             offset + 24
-          ).toNumber() & 0xfffffffe
+          ).and(Long.fromInt(-2))
+        this._subNodeOffsetIndexIdentifier =
+          this._subNodeOffsetIndexIdentifierLong.toNumber()
       } else {
         this._subNodeOffsetIndexIdentifier = 0
       }
@@ -98,7 +112,7 @@ export class PSTDescriptorItem {
     }
 
     const pstNodeInputStream: PSTNodeInputStream = this._pstFile.readLeaf(
-      Long.fromValue(this.offsetIndexIdentifier)
+      this.offsetIndexIdentifierLong
     )
     const out = Buffer.alloc(pstNodeInputStream.length.toNumber())
     pstNodeInputStream.readCompletely(out)
@@ -118,7 +132,7 @@ export class PSTDescriptorItem {
       return this.dataBlockOffsets
     }
     const offsets: Long[] = this._pstFile
-      .readLeaf(Long.fromNumber(this.offsetIndexIdentifier))
+      .readLeaf(this.offsetIndexIdentifierLong)
       .getBlockOffsets()
     const offsetsOut: number[] = []
     for (let x = 0; x < offsets.length; x++) {
@@ -134,9 +148,7 @@ export class PSTDescriptorItem {
    * @memberof PSTDescriptorItem
    */
   public get dataSize(): number {
-    return this._pstFile.getLeafSize(
-      Long.fromNumber(this.offsetIndexIdentifier)
-    )
+    return this._pstFile.getLeafSize(this.offsetIndexIdentifierLong)
   }
 
   /**

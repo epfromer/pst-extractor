@@ -32,8 +32,8 @@ export class PSTFile {
   public static PS_MAPI = 12
   public static PSETID_AirSync = 13
   public static PSETID_Sharing = 14
-  public static SLBLOCK_ENTRY = 0;
-  public static SIBLOCK_ENTRY = 1;
+  public static SLBLOCK_ENTRY = 0
+  public static SIBLOCK_ENTRY = 1
 
   private guidMap: Map<string, number> = new Map([
     ['00020329-0000-0000-C000-000000000046', 0],
@@ -50,7 +50,7 @@ export class PSTFile {
     ['4442858E-A9E3-4E80-B900-317A210CC15B', 11],
     ['00020328-0000-0000-C000-000000000046', 12],
     ['71035549-0739-4DCB-9163-00F0580DBBDF', 13],
-    ['00062040-0000-0000-C000-000000000046', 14],
+    ['00062040-0000-0000-C000-000000000046', 14]
   ])
 
   // the type of encryption the files uses
@@ -71,10 +71,8 @@ export class PSTFile {
   }
 
   // b-tree
-  private childrenDescriptorTree: Map<
-    number,
-    DescriptorIndexNode[]
-  > | null = null
+  private childrenDescriptorTree: Map<number, DescriptorIndexNode[]> | null =
+    null
 
   // node tree maps
   private static nodeMap: NodeMap = new NodeMap()
@@ -407,9 +405,10 @@ export class PSTFile {
    * @memberof PSTFile
    */
   public getMessageStore(): PSTMessageStore {
-    const messageStoreDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(
-      Long.fromNumber(PSTFile.MESSAGE_STORE_DESCRIPTOR_IDENTIFIER)
-    )
+    const messageStoreDescriptor: DescriptorIndexNode =
+      this.getDescriptorIndexNode(
+        Long.fromNumber(PSTFile.MESSAGE_STORE_DESCRIPTOR_IDENTIFIER)
+      )
     return new PSTMessageStore(this, messageStoreDescriptor)
   }
 
@@ -419,9 +418,10 @@ export class PSTFile {
    * @memberof PSTFile
    */
   public getRootFolder(): PSTFolder {
-    const rootFolderDescriptor: DescriptorIndexNode = this.getDescriptorIndexNode(
-      Long.fromValue(PSTFile.ROOT_FOLDER_DESCRIPTOR_IDENTIFIER)
-    )
+    const rootFolderDescriptor: DescriptorIndexNode =
+      this.getDescriptorIndexNode(
+        Long.fromValue(PSTFile.ROOT_FOLDER_DESCRIPTOR_IDENTIFIER)
+      )
     const output: PSTFolder = new PSTFolder(this, rootFolderDescriptor)
     return output
   }
@@ -563,9 +563,8 @@ export class PSTFile {
       if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
         const numberOfItemsBytes = Buffer.alloc(2)
         this.readCompletely(numberOfItemsBytes)
-        numberOfItems = PSTUtil.convertLittleEndianBytesToLong(
-          numberOfItemsBytes
-        ).toNumber()
+        numberOfItems =
+          PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes).toNumber()
         this.readCompletely(numberOfItemsBytes)
       } else {
         numberOfItems = this.read()
@@ -575,53 +574,41 @@ export class PSTFile {
       const levelsToLeaf = this.read()
 
       if (levelsToLeaf > 0) {
-        let found = false
+        if (numberOfItems < 1) {
+          throw new Error('PSTFile::findBtreeItem Invalid B-tree page')
+        }
+        let selectedBranch = 0
         for (let x = 0; x < numberOfItems; x++) {
           if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
             const indexIdOfFirstChildNode = this.extractLEFileOffset(
               btreeStartOffset.add(x * 12)
             )
-            if (indexIdOfFirstChildNode > index) {
-              // get the address for the child first node in this group
-              btreeStartOffset = this.extractLEFileOffset(
-                btreeStartOffset.add((x - 1) * 12 + 8)
-              )
-              this.seek(btreeStartOffset.add(500))
-              this.readCompletely(buffer)
-              found = true
+            if (indexIdOfFirstChildNode.greaterThan(index)) {
               break
             }
+            selectedBranch = x
           } else {
             const indexIdOfFirstChildNode = this.extractLEFileOffset(
               btreeStartOffset.add(x * 24)
             )
             if (indexIdOfFirstChildNode.greaterThan(index)) {
-              // get the address for the child first node in this group
-              btreeStartOffset = this.extractLEFileOffset(
-                btreeStartOffset.add((x - 1) * 24 + 16)
-              )
-              this.seek(btreeStartOffset.add(fileTypeAdjustment))
-              this.readCompletely(buffer)
-              found = true
               break
             }
+            selectedBranch = x
           }
         }
-        if (!found) {
-          // it must be in the very last branch...
-          if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
-            btreeStartOffset = this.extractLEFileOffset(
-              btreeStartOffset.add((numberOfItems - 1) * 12 + 8)
-            )
-            this.seek(btreeStartOffset.add(500))
-            this.readCompletely(buffer)
-          } else {
-            btreeStartOffset = this.extractLEFileOffset(
-              btreeStartOffset.add((numberOfItems - 1) * 24 + 16)
-            )
-            this.seek(btreeStartOffset.add(fileTypeAdjustment))
-            this.readCompletely(buffer)
-          }
+        if (this._pstFileType == PSTFile.PST_TYPE_ANSI) {
+          btreeStartOffset = this.extractLEFileOffset(
+            btreeStartOffset.add(selectedBranch * 12 + 8)
+          )
+          this.seek(btreeStartOffset.add(500))
+          this.readCompletely(buffer)
+        } else {
+          btreeStartOffset = this.extractLEFileOffset(
+            btreeStartOffset.add(selectedBranch * 24 + 16)
+          )
+          this.seek(btreeStartOffset.add(fileTypeAdjustment))
+          this.readCompletely(buffer)
         }
       } else {
         // we are at the bottom of the tree...
@@ -741,67 +728,115 @@ export class PSTFile {
     inputStream: PSTNodeInputStream
   ): Map<number, PSTDescriptorItem>
   public getPSTDescriptorItems(arg: any): Map<number, PSTDescriptorItem> {
+    return this.getPSTDescriptorItemsInternal(arg, new Set<string>())
+  }
+
+  private getPSTDescriptorItemsInternal(
+    arg: any,
+    visitedBlocks: Set<string>
+  ): Map<number, PSTDescriptorItem> {
     let inputStream: PSTNodeInputStream = arg
+    let blockIdentifier: string | null = null
     if (typeof arg === 'object' && arg.hasOwnProperty('low')) {
+      blockIdentifier = (arg as Long).toString()
+      if (visitedBlocks.has(blockIdentifier)) {
+        throw new Error('PSTFile::getPSTDescriptorItems Cyclic subnode block')
+      }
+      visitedBlocks.add(blockIdentifier)
       inputStream = this.readLeaf(arg)
     }
 
-    // make sure the signature is correct
-    inputStream.seek(Long.ZERO)
-    const sig = inputStream.read()
-    if (sig != 0x2) {
-      throw new Error(
-        'PSTFile::getPSTDescriptorItems Unable to process descriptor node, bad signature: ' +
-          sig
-      )
-    }
-    
-    // NID nodes defines in subnode can be either SLBLOCK (0) or SIBLOCK_ENTRY (1)
-    const blockType = inputStream.read()
-    if ((blockType !== PSTFile.SLBLOCK_ENTRY) && (blockType !== PSTFile.SIBLOCK_ENTRY)) {
-      throw new Error("Unable to process descriptor node, unknown BLOCK type: " + blockType)
-    }
-    
-    const output = new Map()
-    const numberOfItems = inputStream.seekAndReadLong(Long.fromValue(2), 2)
-    let offset
-    if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
-      offset = 4
-    } else {
-      offset = 8
-    }
-
-    const data = Buffer.alloc(inputStream.length.toNumber())
-    inputStream.seek(Long.ZERO)
-    inputStream.readCompletely(data)
-
-    for (let x = 0; x < numberOfItems.toNumber(); x++) {
-      const item: PSTDescriptorItem = new PSTDescriptorItem(data, offset, this, blockType)
-      if (blockType == PSTFile.SLBLOCK_ENTRY) {
-        output.set(item.descriptorIdentifier, item)
-      } else {
-        const subItems = this.getPSTDescriptorItems(Long.fromNumber(item.offsetIndexIdentifier))
-        subItems.forEach((value, key) => {
-          output.set(key, value)
-        })
+    try {
+      // make sure the signature is correct
+      inputStream.seek(Long.ZERO)
+      const sig = inputStream.read()
+      if (sig != 0x2) {
+        throw new Error(
+          'PSTFile::getPSTDescriptorItems Unable to process descriptor node, bad signature: ' +
+            sig
+        )
       }
 
+      // NID nodes defines in subnode can be either SLBLOCK (0) or SIBLOCK_ENTRY (1)
+      const blockType = inputStream.read()
+      if (
+        blockType !== PSTFile.SLBLOCK_ENTRY &&
+        blockType !== PSTFile.SIBLOCK_ENTRY
+      ) {
+        throw new Error(
+          'Unable to process descriptor node, unknown BLOCK type: ' + blockType
+        )
+      }
+
+      const output = new Map()
+      const numberOfItems = inputStream.seekAndReadLong(Long.fromValue(2), 2)
+      let offset
       if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
-        if (blockType === PSTFile.SLBLOCK_ENTRY) {
-          offset += 12
-        } else {
-          offset += 8
-        }
+        offset = 4
       } else {
-        if (blockType === PSTFile.SLBLOCK_ENTRY) {
-          offset += 24
+        offset = 8
+      }
+
+      const entrySize =
+        this._pstFileType === PSTFile.PST_TYPE_ANSI
+          ? blockType === PSTFile.SLBLOCK_ENTRY
+            ? 12
+            : 8
+          : blockType === PSTFile.SLBLOCK_ENTRY
+            ? 24
+            : 16
+      if (
+        numberOfItems.lessThan(1) ||
+        8 + numberOfItems.toNumber() * entrySize > inputStream.length.toNumber()
+      ) {
+        throw new Error(
+          'PSTFile::getPSTDescriptorItems Invalid descriptor block metadata'
+        )
+      }
+      const data = Buffer.alloc(inputStream.length.toNumber())
+      inputStream.seek(Long.ZERO)
+      inputStream.readCompletely(data)
+
+      for (let x = 0; x < numberOfItems.toNumber(); x++) {
+        const item: PSTDescriptorItem = new PSTDescriptorItem(
+          data,
+          offset,
+          this,
+          blockType
+        )
+        if (blockType == PSTFile.SLBLOCK_ENTRY) {
+          output.set(item.descriptorIdentifier, item)
         } else {
-          offset += 16
+          const subItems = this.getPSTDescriptorItemsInternal(
+            item.offsetIndexIdentifierLong,
+            visitedBlocks
+          )
+          subItems.forEach((value, key) => {
+            output.set(key, value)
+          })
+        }
+
+        if (this._pstFileType === PSTFile.PST_TYPE_ANSI) {
+          if (blockType === PSTFile.SLBLOCK_ENTRY) {
+            offset += 12
+          } else {
+            offset += 8
+          }
+        } else {
+          if (blockType === PSTFile.SLBLOCK_ENTRY) {
+            offset += 24
+          } else {
+            offset += 16
+          }
         }
       }
-    }
 
-    return output
+      return output
+    } finally {
+      if (blockIdentifier) {
+        visitedBlocks.delete(blockIdentifier)
+      }
+    }
   }
 
   /**
@@ -857,13 +892,11 @@ export class PSTFile {
       if (this._pstFileType === PSTFile.PST_TYPE_2013_UNICODE) {
         const numberOfItemsBytes = Buffer.alloc(2)
         this.readCompletely(numberOfItemsBytes)
-        numberOfItems = PSTUtil.convertLittleEndianBytesToLong(
-          numberOfItemsBytes
-        ).toNumber()
+        numberOfItems =
+          PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes).toNumber()
         this.readCompletely(numberOfItemsBytes)
-        const maxNumberOfItems = PSTUtil.convertLittleEndianBytesToLong(
-          numberOfItemsBytes
-        ).toNumber()
+        const maxNumberOfItems =
+          PSTUtil.convertLittleEndianBytesToLong(numberOfItemsBytes).toNumber()
       } else {
         numberOfItems = this.read()
         this.read() // maxNumberOfItems

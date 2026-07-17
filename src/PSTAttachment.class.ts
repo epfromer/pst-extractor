@@ -105,10 +105,10 @@ export class PSTAttachment extends PSTObject {
           )
           if (
             descriptorItemNested &&
-            descriptorItemNested.subNodeOffsetIndexIdentifier > 0
+            descriptorItemNested.subNodeOffsetIndexIdentifierLong.greaterThan(0)
           ) {
             this.localDescriptorItems = this.pstFile.getPSTDescriptorItems(
-              Long.fromNumber(descriptorItemNested.subNodeOffsetIndexIdentifier)
+              descriptorItemNested.subNodeOffsetIndexIdentifierLong
             )
           }
         }
@@ -359,7 +359,7 @@ export class PSTAttachment extends PSTObject {
         mimeSequence: this.mimeSequence,
         contentId: this.contentId,
         isAttachmentInvisibleInHtml: this.isAttachmentInvisibleInHtml,
-        isAttachmentInvisibleInRTF: this.isAttachmentInvisibleInRTF,
+        isAttachmentInvisibleInRTF: this.isAttachmentInvisibleInRTF
       },
       this
     )

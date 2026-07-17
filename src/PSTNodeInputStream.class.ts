@@ -65,7 +65,7 @@ export class PSTNodeInputStream {
         pstFile.encryptionType == PSTFile.ENCRYPTION_TYPE_COMPRESSIBLE
       // we want to get the first block of data and see what we are dealing with
       this.loadFromOffsetItem(
-        pstFile.getOffsetIndexNode(Long.fromNumber(arg.offsetIndexIdentifier))
+        pstFile.getOffsetIndexNode(arg.offsetIndexIdentifierLong)
       )
     } else if (arg instanceof Buffer) {
       this.allData = arg
@@ -119,7 +119,9 @@ export class PSTNodeInputStream {
             this.pstFile.seek(i.fileOffset)
             this.pstFile.readCompletely(inData)
             const buf = zlib.unzipSync(inData)
-            outputStream = outputStream ? Buffer.concat([outputStream, buf]) : buf
+            outputStream = outputStream
+              ? Buffer.concat([outputStream, buf])
+              : buf
           }
           this.indexItems = []
           this.skipPoints = []
@@ -147,7 +149,7 @@ export class PSTNodeInputStream {
     } catch (err) {
       console.error(
         'PSTNodeInputStream::detectZlib Unable to decompress reportedly compressed block\n' +
-        err
+          err
       )
       throw err
     }
@@ -181,6 +183,11 @@ export class PSTNodeInputStream {
         this._length = PSTUtil.convertLittleEndianBytesToLong(data, 4, 8)
         // go through all of the blocks and create skip points.
         this.getBlockSkipPoints(data)
+        if (this._length.greaterThan(this.currentLocation)) {
+          throw new Error(
+            'PSTNodeInputStream::loadFromOffsetItem XBlock length exceeds available block data'
+          )
+        }
         return
       }
     }
@@ -200,7 +207,7 @@ export class PSTNodeInputStream {
    * @memberof PSTNodeInputStream
    */
   private getBlockSkipPoints(data: Buffer): void {
-    if (data[0] != 0x1) {
+    if (data.length < 8 || data[0] != 0x1) {
       throw new Error(
         'PSTNodeInputStream::loadFromOffsetItem Unable to process XBlock, incorrect identifier'
       )
@@ -216,6 +223,16 @@ export class PSTNodeInputStream {
     if (this.pstFile.pstFileType == PSTFile.PST_TYPE_ANSI) {
       arraySize = 4
     }
+    if (data[1] !== 0x1 && data[1] !== 0x2) {
+      throw new Error(
+        'PSTNodeInputStream::loadFromOffsetItem Unable to process XBlock, incorrect block type'
+      )
+    }
+    if (numberOfEntries < 1 || 8 + numberOfEntries * arraySize > data.length) {
+      throw new Error(
+        'PSTNodeInputStream::loadFromOffsetItem Invalid XBlock entry metadata'
+      )
+    }
     if (data[1] == 0x2) {
       // XXBlock
       let offset = 8
@@ -225,7 +242,7 @@ export class PSTNodeInputStream {
           offset,
           offset + arraySize
         )
-        bid = bid.and(0xfffffffe)
+        bid = bid.and(Long.fromInt(-2))
         // get the details in this block and
         const offsetItem = this.pstFile.getOffsetIndexNode(bid)
         const blockData = Buffer.alloc(offsetItem.size)
@@ -245,7 +262,7 @@ export class PSTNodeInputStream {
           offset,
           offset + arraySize
         )
-        bid = bid.and(0xfffffffe)
+        bid = bid.and(Long.fromInt(-2))
         // get the details in this block and add it to the list
         const offsetItem = this.pstFile.getOffsetIndexNode(bid)
         this.indexItems.push(offsetItem)
@@ -278,7 +295,7 @@ export class PSTNodeInputStream {
   public readSingleByte(): number {
     // first deal with items < 8K and we have all the data already
     if (this.allData != null) {
-      if (this.currentLocation == this.length) {
+      if (this.currentLocation.greaterThanOrEqual(this.length)) {
         // EOF
         return -1
       }
@@ -289,9 +306,12 @@ export class PSTNodeInputStream {
       }
       return value
     }
+    if (this.currentLocation.greaterThanOrEqual(this.length)) {
+      return -1
+    }
     let item: OffsetIndexItem = this.indexItems[this.currentBlock]
     let skipPoint = this.skipPoints[this.currentBlock]
-    if (this.currentLocation.add(1).greaterThan(skipPoint.add(item.size))) {
+    if (this.currentLocation.greaterThanOrEqual(skipPoint.add(item.size))) {
       // got to move to the next block
       this.currentBlock++
 
@@ -353,7 +373,7 @@ export class PSTNodeInputStream {
     // than the byte-by-byte read() crap above.
     // it's tricky 'cause we have to copy blocks from a few different areas.
 
-    if (this.currentLocation == this.length) {
+    if (this.currentLocation.greaterThanOrEqual(this.length)) {
       // EOF
       return -1
     }
@@ -400,6 +420,11 @@ export class PSTNodeInputStream {
       // get the current block, either to the end, or until the length of
       // the output
       const offset: OffsetIndexItem = this.indexItems[this.currentBlock]
+      if (!offset) {
+        throw new Error(
+          'PSTNodeInputStream::readBlock Invalid XBlock stream metadata'
+        )
+      }
       const skipPoint = this.skipPoints[this.currentBlock]
       const currentPosInBlock = this.currentLocation
         .subtract(skipPoint)
@@ -444,7 +469,7 @@ export class PSTNodeInputStream {
 
     // decode the array if required
     if (this.encrypted) {
-      PSTUtil.decode(output)
+      PSTUtil.decode(output.subarray(0, totalBytesFilled))
     }
 
     // fill up our chunk
@@ -465,7 +490,7 @@ export class PSTNodeInputStream {
     offset: number,
     length: number
   ): number {
-    if (this.currentLocation == this.length) {
+    if (this.currentLocation.greaterThanOrEqual(this.length)) {
       // EOF
       return -1
     }
@@ -521,9 +546,9 @@ export class PSTNodeInputStream {
     if (location.greaterThan(this.length)) {
       throw new Error(
         'PSTNodeInputStream::seek Attempt to seek past end of item! size = ' +
-        this.length +
-        ', seeking to:' +
-        location
+          this.length +
+          ', seeking to:' +
+          location
       )
     }
 
@@ -536,15 +561,21 @@ export class PSTNodeInputStream {
     let skipPoint: Long = Long.ZERO
     this.currentBlock = 0
     if (this.allData == null) {
-      skipPoint = this.skipPoints[this.currentBlock + 1]
-      while (location.greaterThanOrEqual(skipPoint)) {
-        this.currentBlock++
-        // is this the last block?
-        if (this.currentBlock == this.skipPoints.length - 1) {
-          // that's all folks
+      if (this.indexItems.length === 0) {
+        throw new Error(
+          'PSTNodeInputStream::seek Invalid XBlock stream metadata'
+        )
+      }
+      for (let block = 0; block < this.skipPoints.length; block++) {
+        const blockStart = this.skipPoints[block]
+        const blockEnd = blockStart.add(this.indexItems[block].size)
+        if (
+          location.lessThan(blockEnd) ||
+          block === this.skipPoints.length - 1
+        ) {
+          this.currentBlock = block
+          skipPoint = blockStart
           break
-        } else {
-          skipPoint = this.skipPoints[this.currentBlock + 1]
         }
       }
     }
@@ -581,7 +612,7 @@ export class PSTNodeInputStream {
   public toJSON(): any {
     return {
       currentBlock: this.currentBlock,
-      isZlib: this.isZlib,
+      isZlib: this.isZlib
     }
   }
 }

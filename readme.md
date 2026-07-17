@@ -109,7 +109,30 @@ function getDepth(depth: number): string {
 }
 ```
 
-and will generate the following output:
+To extract attachments synchronously, use `PSTMessage.getAttachment()` and
+`PSTAttachment.fileInputStream`:
+
+```javascript
+import { writeFileSync } from 'fs'
+import { PSTFile, PSTMessage } from 'pst-extractor'
+
+const pstFile = new PSTFile('/path/to/mail.pst')
+const message = pstFile.getRootFolder().getNextChild()
+
+for (let index = 0; index < message.numberOfAttachments; index++) {
+  const attachment = message.getAttachment(index)
+  const stream = attachment.fileInputStream
+  if (!stream) continue
+
+  const data = Buffer.alloc(stream.length.toNumber())
+  stream.readCompletely(data)
+  writeFileSync(attachment.longFilename || attachment.filename, data)
+}
+
+pstFile.close()
+```
+
+The folder-walking example will generate the following output:
 
 ```text
 Personal folders
