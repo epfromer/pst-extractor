@@ -203,37 +203,27 @@ export class PSTFolder extends PSTObject {
     this.initEmailsTable()
 
     if (this.emailsTable) {
-      if (this.currentEmailIndex == this.contentCount) {
-        // no more!
-        return null
-      }
-
-      // get the emails from the rows in the main email table
-      const rows: Map<number, PSTTableItem>[] = this.emailsTable.getItems(
-        this.currentEmailIndex,
-        1
-      )
-      const emailRow = rows[0].get(0x67f2)
-      if ((emailRow && emailRow.itemIndex == -1) || !emailRow) {
-        // no more!
-        return null
-      }
-
-      const childDescriptor = this.pstFile.getDescriptorIndexNode(
-        Long.fromNumber(emailRow.entryValueReference)
-      )
-
-      let child
-      try {
-        child = PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor)
-      } catch (err) {
-        console.log('Exception Error in No: ', this.currentEmailIndex)
+      while (this.currentEmailIndex < this.contentCount) {
+        const rows: Map<number, PSTTableItem>[] = this.emailsTable.getItems(
+          this.currentEmailIndex,
+          1
+        )
+        const emailRow = rows[0] && rows[0].get(0x67f2)
         this.currentEmailIndex++
-        return this.getNextChild()
-      }
+        if (!emailRow || emailRow.itemIndex == -1) {
+          continue
+        }
 
-      this.currentEmailIndex++
-      return child
+        try {
+          const childDescriptor = this.pstFile.getDescriptorIndexNode(
+            Long.fromNumber(emailRow.entryValueReference)
+          )
+          return PSTUtil.detectAndLoadPSTObject(this.pstFile, childDescriptor)
+        } catch (err) {
+          console.log('Exception Error in No: ', this.currentEmailIndex - 1)
+        }
+      }
+      return null
     } else if (this.fallbackEmailsTable) {
       if (
         this.currentEmailIndex >= this.contentCount ||
@@ -385,7 +375,7 @@ export class PSTFolder extends PSTObject {
         unreadCount: this.unreadCount,
         hasSubfolders: this.hasSubfolders,
         containerClass: this.containerClass,
-        containerFlags: this.containerFlags,
+        containerFlags: this.containerFlags
       },
       this
     )

@@ -21,7 +21,7 @@ enum PidTagMessageFlags {
   MSGFLAG_HASATTACH = 0x10,
   MSGFLAG_FROMME = 0x20,
   MSGFLAG_ASSOCIATED = 0x40,
-  MSGFLAG_RESEND = 0x80,
+  MSGFLAG_RESEND = 0x80
 }
 
 export class PSTMessage extends PSTObject {
@@ -200,13 +200,12 @@ export class PSTMessage extends PSTObject {
         this.localDescriptorItems != null &&
         this.localDescriptorItems.has(recipientTableKey)
       ) {
-        const item:
-          | PSTDescriptorItem
-          | undefined = this.localDescriptorItems.get(recipientTableKey)
+        const item: PSTDescriptorItem | undefined =
+          this.localDescriptorItems.get(recipientTableKey)
         let descriptorItems: Map<number, PSTDescriptorItem> | null = new Map()
-        if (item && item.subNodeOffsetIndexIdentifier > 0) {
+        if (item && item.subNodeOffsetIndexIdentifierLong.greaterThan(0)) {
           descriptorItems = this.pstFile.getPSTDescriptorItems(
-            Long.fromNumber(item.subNodeOffsetIndexIdentifier)
+            item.subNodeOffsetIndexIdentifierLong
           )
         }
         this.recipientTable = new PSTTable7C(
@@ -469,9 +468,9 @@ export class PSTMessage extends PSTObject {
     ) {
       const item = this.localDescriptorItems.get(attachmentTableKey)
       let descriptorItems: Map<number, PSTDescriptorItem> = new Map()
-      if (item && item.subNodeOffsetIndexIdentifier > 0) {
+      if (item && item.subNodeOffsetIndexIdentifierLong.greaterThan(0)) {
         descriptorItems = this.pstFile.getPSTDescriptorItems(
-          Long.fromValue(item.subNodeOffsetIndexIdentifier)
+          item.subNodeOffsetIndexIdentifierLong
         )
       }
       this.attachmentTable = new PSTTable7C(
@@ -552,9 +551,9 @@ export class PSTMessage extends PSTObject {
       // repeated in the eb table in attachment data.
       // so no need to pass it...
       let attachmentDescriptorItems: Map<number, PSTDescriptorItem> = new Map()
-      if (descriptorItem.subNodeOffsetIndexIdentifier > 0) {
+      if (descriptorItem.subNodeOffsetIndexIdentifierLong.greaterThan(0)) {
         attachmentDescriptorItems = this.pstFile.getPSTDescriptorItems(
-          Long.fromNumber(descriptorItem.subNodeOffsetIndexIdentifier)
+          descriptorItem.subNodeOffsetIndexIdentifierLong
         )
       }
       return new PSTAttachment(
@@ -1293,9 +1292,8 @@ export class PSTMessage extends PSTObject {
    * @memberof PSTMessage
    */
   public get colorCategories(): string[] {
-    const keywordCategory: number = PSTFile.getPublicStringToIdMapItem(
-      'Keywords'
-    )
+    const keywordCategory: number =
+      PSTFile.getPublicStringToIdMapItem('Keywords')
 
     const categories: string[] = []
     if (this.pstTableItems && this.pstTableItems.has(keywordCategory)) {
@@ -1458,8 +1456,8 @@ export class PSTMessage extends PSTObject {
         isAssociated: this.isAssociated,
         isResent: this.isResent,
         acknowledgementMode: this.acknowledgementMode,
-        originatorDeliveryReportRequested: this
-          .originatorDeliveryReportRequested,
+        originatorDeliveryReportRequested:
+          this.originatorDeliveryReportRequested,
         readReceiptRequested: this.readReceiptRequested,
         recipientReassignmentProhibited: this.recipientReassignmentProhibited,
         originalSensitivity: this.originalSensitivity,
@@ -1476,10 +1474,10 @@ export class PSTMessage extends PSTObject {
         originalDisplayTo: this.originalDisplayTo,
         rcvdRepresentingAddrtype: this.rcvdRepresentingAddrtype,
         rcvdRepresentingEmailAddress: this.rcvdRepresentingEmailAddress,
-        isNonReceiptNotificationRequested: this
-          .isNonReceiptNotificationRequested,
-        isOriginatorNonDeliveryReportRequested: this
-          .isOriginatorNonDeliveryReportRequested,
+        isNonReceiptNotificationRequested:
+          this.isNonReceiptNotificationRequested,
+        isOriginatorNonDeliveryReportRequested:
+          this.isOriginatorNonDeliveryReportRequested,
         recipientType: this.recipientType,
         isReplyRequested: this.isReplyRequested,
         senderName: this.senderName,
@@ -1519,7 +1517,7 @@ export class PSTMessage extends PSTObject {
         numberOfAttachments: this.numberOfAttachments,
         conversationId: this.conversationId,
         isConversationIndexTracking: this.isConversationIndexTracking,
-        recipientTable: this.recipientTable,
+        recipientTable: this.recipientTable
       },
       this
     )
